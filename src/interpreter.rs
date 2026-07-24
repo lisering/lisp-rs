@@ -779,12 +779,15 @@ pub fn default_env() -> LispEnv {
     }));
 
     // ── I/O 函数 ──
-    env.set(interner::intern("display"), LispExp::Func(|args| {
-        if let Some(arg) = args.first() {
-            print!("{}", arg);
-        }
-        Ok(LispExp::Nil)
-    }));
+env.set(interner::intern("display"), LispExp::Func(|args| {
+if let Some(arg) = args.first() {
+match arg {
+LispExp::String(s) => print!("{}", s),
+_ => print!("{}", arg),
+}
+}
+Ok(LispExp::Nil)
+}));
 
     env.set(interner::intern("newline"), LispExp::Func(|_args| {
         println!();

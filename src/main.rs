@@ -1,5 +1,7 @@
 // src/main.rs — 完整 REPL
 use std::io::{self, BufRead, Write};
+use std::env;
+use std::fs;
 use lisp_rs::{
     env::LispEnv,
     interpreter::{eval, default_env},
@@ -65,6 +67,33 @@ fn eval_input(input: &str, env: &mut LispEnv) -> Result<String, String> {
 }
 
 fn main() {
+    let args: Vec<String> = env::args().collect();
+
+    // 如果有命令行参数，当作脚本文件执行
+    if args.len() > 1 {
+        let filename = &args[1];
+        let content = match fs::read_to_string(filename) {
+            Ok(c) => c,
+            Err(e) => {
+                eprintln!("无法读取文件 '{}': {}", filename, e);
+                std::process::exit(1);
+            }
+        };
+        let mut env = default_env();
+        match eval_input(&content, &mut env) {
+            Ok(result) => {
+                if !result.is_empty() && result != "nil" {
+                    println!("{}", result);
+                }
+            }
+            Err(e) => {
+                eprintln!("错误: {}", e);
+                std::process::exit(1);
+            }
+        }
+        return;
+    }
+
     println!("Lisp-rs REPL v0.2.0");
     println!("输入 :help 查看帮助, :q 退出, Ctrl+D 退出\n");
     let mut env = default_env();
