@@ -4,6 +4,10 @@
 
 > **Zero knowledge required. Zero dependencies.** 74 steps. 173 tests. One working Lisp interpreter at the end. Each step first explains **what problem to solve**, then writes the code.
 
+### TCO in action — 1,000,000 iterations vs. stack overflow
+
+![TCO Demo](demo_tco.gif)
+
 ---
 
 ## 🧭 Choose Your Path
