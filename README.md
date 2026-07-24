@@ -1,3 +1,5 @@
+**[English](README.md) | [中文](README_zh.md)**
+
 # Building a Lisp Interpreter from Scratch — Rust Hands-On Tutorial
 
 > **Zero knowledge required. Zero dependencies.** 74 steps. 173 tests. One working Lisp interpreter at the end. Each step first explains **what problem to solve**, then writes the code.
