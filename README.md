@@ -6,7 +6,7 @@
 
 ### TCO in action — 1,000,000 iterations vs. stack overflow
 
-![TCO Demo](demo_tco.gif)
+![TCO Demo](demo_tco_en.gif)
 
 ---
 
