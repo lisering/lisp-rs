@@ -4539,7 +4539,7 @@ test result: ok. 21 passed; 0 failed
 
 ---
 
-### 步骤 37: Lambda 捕获环境 — 实现真正的闭包
+### 步骤 37: Lambda 捕获环境, 实现真正的闭包
 
 > **已经懂闭包了？** 一句话概括：求值 `lambda` 时，创建一个 `LispLambda`，其中保存对当前 `LispEnv` 的引用。变量查找沿 `env → env.outer → ...` 链式搜索，直到找到。这就是词法作用域。本步骤余下内容是为初学者准备的详细拆解。
 
@@ -5213,7 +5213,7 @@ eval → lambda调用 → eval → lambda调用 → eval → ... → 💥 栈溢
 
 
 
-### 步骤 39: TCO — 蹦床循环实现
+### 步骤 39: TCO, 蹦床循环实现
 
 **文件：`src/lib.rs`**，**替换整个 `eval` 函数**。
 
