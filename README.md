@@ -4651,6 +4651,8 @@ test result: ok. 21 passed; 0 failed
 
 ### Step 37: Lambda Captures Environment — Implementing True Closures
 
+> **Already know what closures are?** Here's the whole idea in one sentence: when a `lambda` is evaluated, we create a `LispLambda` that stores a reference to the current `LispEnv`. Variable lookup chains through `env → env.outer → ...` until found. That's lexical scoping. The rest of this step is a detailed walkthrough for readers who are new to the concept.
+
 **File: `src/lib.rs`**
 
 **Problem**: Currently lambda call uses `env.clone()` to create a new environment—but `env` is the **call-time** environment. Closures need to remember the **definition-time** environment.
