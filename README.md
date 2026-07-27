@@ -22,7 +22,7 @@ You don't have to read everything. Pick the lane that fits you:
 | Have **written an interpreter before** | Skim to [Step 37: Closures](#step-37-lambda-captures-environment-implementing-true-closures) and [Step 39: TCO](#step-39-tco-trampoline-loop-implementation) | ~30 minutes |
 | Just want to see **how closures are implemented** | Jump to [Step 37: Closures](#step-37-lambda-captures-environment-implementing-true-closures) | ~10 minutes |
 
-> **Already built something like this?** You might still find something new here: the backpack-closure trace (Step 37), the trampoline-loop TCO walkthrough (Step 39), and the three-pass performance optimization (Steps 40–43). Everything else you can skim.
+> **Already built something like this?** You might still find something new here: the backpack-closure trace (Step 37), the trampoline-loop TCO walkthrough (Step 39), and the three teaching-focused optimization passes (Steps 40–43). Everything else you can skim.
 
 ---
 
@@ -1011,6 +1011,11 @@ the `cond`/`let`/`lambda` family. The main differences from Scheme are:
 2. **Simpler number system** — only `f64`, while Scheme has distinct integer/rational/real/complex towers
 3. **No hygienic macros** — our macro system is simple text-based expansion
 4. **Zero external dependencies** — even the test framework is built-in (`#[cfg(test)]`)
+
+
+## What This Is NOT
+
+A production Lisp implementation. It's a teaching interpreter — tree-walking `eval`, no bytecode compiler, no JIT. The optimization steps (40–43) demonstrate *how* the techniques work, not that they're necessary. If you want a production-grade Scheme on Rust, check out [scheme-rs](https://www.scheme.rs).
 
 
 ## Preparation
