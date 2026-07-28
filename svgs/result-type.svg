@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-20 -20 840 340" width="840" height="340">
+
+  <text x="400" y="40" text-anchor="middle" font-size="26" font-family="sans-serif" font-weight="bold" fill="#333">Result = 快递包裹 📦</text>
+
+  <!-- Ok path -->
+  <rect x="30" y="65" width="350" height="105" rx="12" fill="#d4edda" stroke="#28a745" stroke-width="3"/>
+  <text x="205" y="108" text-anchor="middle" font-size="24" font-family="monospace" font-weight="bold" fill="#155724">Ok(Number(42.0))</text>
+  <text x="205" y="145" text-anchor="middle" font-size="20" font-family="sans-serif" fill="#155724">✅ 成功! 包裹里就是结果</text>
+
+  <!-- Err path -->
+  <rect x="420" y="65" width="350" height="105" rx="12" fill="#f8d7da" stroke="#dc3545" stroke-width="3"/>
+  <text x="595" y="108" text-anchor="middle" font-size="24" font-family="monospace" font-weight="bold" fill="#721c24">Err(Reason("..."))</text>
+  <text x="595" y="145" text-anchor="middle" font-size="20" font-family="sans-serif" fill="#721c24">❌ 失败! 包裹里是错误信息</text>
+
+  <!-- ? operator -->
+  <rect x="30" y="195" width="740" height="85" rx="12" fill="#fff3cd" stroke="#ffc107" stroke-width="3"/>
+  <text x="400" y="235" text-anchor="middle" font-size="22" font-family="monospace" fill="#856404">let x = parse("42")?;</text>
+  <text x="400" y="265" text-anchor="middle" font-size="20" font-family="sans-serif" fill="#856404">"? = 拆包裹: Ok → 取结果, Err → 马上返回错误"</text>
+</svg>

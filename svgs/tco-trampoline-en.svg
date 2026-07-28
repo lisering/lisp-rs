@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-20 -20 1280 580" width="1280" height="580">
+
+  <!-- BAD: Recursion -->
+  <text x="310" y="50" text-anchor="middle" font-size="26" font-family="sans-serif" font-weight="bold" fill="#dc3545">Recursion (stack overflow)</text>
+  <rect x="20" y="70" width="580" height="210" rx="12" fill="#f8d7da" stroke="#dc3545" stroke-width="3"/>
+
+  <text x="50" y="110" font-size="18" font-family="monospace" fill="#721c24">eval(List)</text>
+  <text x="70" y="140" font-size="18" font-family="monospace" fill="#721c24">├→ eval(List)  &lt;-- recursive!</text>
+  <text x="90" y="170" font-size="18" font-family="monospace" fill="#721c24">│   ├→ eval(List)</text>
+  <text x="110" y="200" font-size="18" font-family="monospace" fill="#721c24">│   │   ├→ eval(List)</text>
+  <text x="130" y="230" font-size="18" font-family="monospace" fill="#dc3545">│   │   │   ├→ ... stack overflow!</text>
+  <text x="50" y="260" font-size="18" font-family="sans-serif" fill="#dc3545">Each call = push a stack frame (saves params + return addr)</text>
+
+  <!-- GOOD: Trampoline -->
+  <text x="930" y="50" text-anchor="middle" font-size="26" font-family="sans-serif" font-weight="bold" fill="#28a745">Trampoline (never overflows)</text>
+  <rect x="640" y="70" width="580" height="210" rx="12" fill="#d4edda" stroke="#28a745" stroke-width="3"/>
+
+  <text x="670" y="110" font-size="18" font-family="monospace" fill="#155724">loop {</text>
+  <text x="700" y="140" font-size="18" font-family="monospace" fill="#155724">match exp:</text>
+  <text x="730" y="170" font-size="18" font-family="monospace" fill="#155724">tail call? update exp+env</text>
+  <text x="760" y="200" font-size="18" font-family="monospace" fill="#155724">no recursion! continue!</text>
+  <text x="730" y="230" font-size="18" font-family="monospace" fill="#155724">non-tail call? return result</text>
+  <text x="670" y="260" font-size="18" font-family="monospace" fill="#155724">}  // always same stack frame</text>
+
+  <!-- Middle note -->
+  <rect x="200" y="300" width="840" height="90" rx="12" fill="#fff3cd" stroke="#ffc107" stroke-width="3"/>
+  <text x="620" y="340" text-anchor="middle" font-size="22" font-family="sans-serif" fill="#856404">Key: tail call = last step, no need to save stack frame</text>
+  <text x="620" y="374" text-anchor="middle" font-size="20" font-family="monospace" fill="#555">(define (loop n) (if (= n 0) 'done (loop (- n 1))))  loop is a tail call</text>
+
+  <!-- Bottom -->
+  <text x="310" y="530" text-anchor="middle" font-size="40" font-family="sans-serif" fill="#dc3545">(loop 10000) → 💥</text>
+  <text x="930" y="530" text-anchor="middle" font-size="40" font-family="sans-serif" fill="#28a745">(loop 10000) → 'done ✅</text>
+</svg>

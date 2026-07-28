@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-20 -20 1280 580" width="1280" height="580">
+
+  <!-- BAD: Recursion -->
+  <text x="310" y="50" text-anchor="middle" font-size="26" font-family="sans-serif" font-weight="bold" fill="#dc3545">❌ 递归 (栈溢出)</text>
+  <rect x="20" y="70" width="580" height="210" rx="12" fill="#f8d7da" stroke="#dc3545" stroke-width="3"/>
+
+  <text x="50" y="110" font-size="18" font-family="monospace" fill="#721c24">eval(List)</text>
+  <text x="70" y="140" font-size="18" font-family="monospace" fill="#721c24">├→ eval(List)  &lt;-- 递归!</text>
+  <text x="90" y="170" font-size="18" font-family="monospace" fill="#721c24">│   ├→ eval(List)</text>
+  <text x="110" y="200" font-size="18" font-family="monospace" fill="#721c24">│   │   ├→ eval(List)</text>
+  <text x="130" y="230" font-size="18" font-family="monospace" fill="#dc3545">│   │   │   ├→ ... 💥 栈溢出!</text>
+  <text x="50" y="260" font-size="18" font-family="sans-serif" fill="#dc3545">每层调用 = 压一个栈帧 (用于保存所有参数和返回地址)</text>
+
+  <!-- GOOD: Trampoline -->
+  <text x="930" y="50" text-anchor="middle" font-size="26" font-family="sans-serif" font-weight="bold" fill="#28a745">✅ 蹦床 (永远不爆栈)</text>
+  <rect x="640" y="70" width="580" height="210" rx="12" fill="#d4edda" stroke="#28a745" stroke-width="3"/>
+
+  <text x="670" y="110" font-size="18" font-family="monospace" fill="#155724">loop {</text>
+  <text x="700" y="140" font-size="18" font-family="monospace" fill="#155724">match exp:</text>
+  <text x="730" y="170" font-size="18" font-family="monospace" fill="#155724">尾调用? → 更新 exp+env</text>
+  <text x="760" y="200" font-size="18" font-family="monospace" fill="#155724">不递归! continue!</text>
+  <text x="730" y="230" font-size="18" font-family="monospace" fill="#155724">非尾调用? → 返回结果</text>
+  <text x="670" y="260" font-size="18" font-family="monospace" fill="#155724">}  // 永远在同一个栈帧里</text>
+
+  <!-- Middle note -->
+  <rect x="200" y="300" width="840" height="90" rx="12" fill="#fff3cd" stroke="#ffc107" stroke-width="3"/>
+  <text x="620" y="340" text-anchor="middle" font-size="22" font-family="sans-serif" fill="#856404">🔑 关键: 尾调用 = 函数的最后一步，不需要保存当前栈帧</text>
+  <text x="620" y="374" text-anchor="middle" font-size="20" font-family="monospace" fill="#555">(define (loop n) (if (= n 0) 'done (loop (- n 1))))  ← loop 是尾调用</text>
+
+  <!-- Bottom -->
+  <text x="310" y="530" text-anchor="middle" font-size="40" font-family="sans-serif" fill="#dc3545">(loop 10000) → 💥</text>
+  <text x="930" y="530" text-anchor="middle" font-size="40" font-family="sans-serif" fill="#28a745">(loop 10000) → 'done ✅</text>
+</svg>

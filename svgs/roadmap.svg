@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-20 -20 930 580" width="930" height="580">
+  <defs>
+    <marker id="arrow" markerWidth="5" markerHeight="4" refX="5" refY="2" orient="auto">
+      <path d="M0,0 L5,2 L0,4 Z" fill="#6c757d"/>
+    </marker>
+  </defs>
+
+  <!-- Row 1 (L→R) y=15 -->
+  <rect x="25" y="15" width="260" height="76" rx="12" fill="#f8f9fa" stroke="#ced4da" stroke-width="2"/>
+  <text x="155" y="46" text-anchor="middle" font-size="26" font-family="sans-serif" fill="#495057">准备工作</text>
+  <text x="155" y="78" text-anchor="middle" font-size="20" font-family="sans-serif" fill="#868e96">步骤 1-4</text>
+  <line x1="285" y1="53" x2="312" y2="53" stroke="#6c757d" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="315" y="15" width="260" height="76" rx="12" fill="#e1f5fe" stroke="#4fc3f7" stroke-width="2"/>
+  <text x="445" y="46" text-anchor="middle" font-size="26" font-family="sans-serif" fill="#1565c0">认识值</text>
+  <text x="445" y="78" text-anchor="middle" font-size="20" font-family="sans-serif" fill="#4fc3f7">步骤 5-6</text>
+  <line x1="575" y1="53" x2="602" y2="53" stroke="#6c757d" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="605" y="15" width="260" height="76" rx="12" fill="#f8f9fa" stroke="#ced4da" stroke-width="2"/>
+  <text x="735" y="46" text-anchor="middle" font-size="26" font-family="sans-serif" fill="#495057">让程序算东西</text>
+  <text x="735" y="78" text-anchor="middle" font-size="20" font-family="sans-serif" fill="#868e96">步骤 7-8</text>
+  <line x1="735" y1="91" x2="735" y2="115" stroke="#6c757d" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Row 2 (R→L) y=125 -->
+  <rect x="605" y="125" width="260" height="76" rx="12" fill="#e1f5fe" stroke="#4fc3f7" stroke-width="2"/>
+  <text x="735" y="156" text-anchor="middle" font-size="26" font-family="sans-serif" fill="#1565c0">把句子拆成单词</text>
+  <text x="735" y="188" text-anchor="middle" font-size="20" font-family="sans-serif" fill="#4fc3f7">步骤 9-11</text>
+  <line x1="605" y1="163" x2="578" y2="163" stroke="#6c757d" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="315" y="125" width="260" height="76" rx="12" fill="#e1f5fe" stroke="#4fc3f7" stroke-width="2"/>
+  <text x="445" y="156" text-anchor="middle" font-size="26" font-family="sans-serif" fill="#1565c0">理解单词的意思</text>
+  <text x="445" y="188" text-anchor="middle" font-size="20" font-family="sans-serif" fill="#4fc3f7">步骤 12-15</text>
+  <line x1="315" y1="163" x2="288" y2="163" stroke="#6c757d" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="25" y="125" width="260" height="76" rx="12" fill="#f8f9fa" stroke="#ced4da" stroke-width="2"/>
+  <text x="155" y="156" text-anchor="middle" font-size="26" font-family="sans-serif" fill="#495057">给东西起名字</text>
+  <text x="155" y="188" text-anchor="middle" font-size="20" font-family="sans-serif" fill="#868e96">步骤 16-19</text>
+  <line x1="155" y1="201" x2="155" y2="225" stroke="#6c757d" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Row 3 (L→R) y=235 -->
+  <rect x="25" y="235" width="260" height="76" rx="12" fill="#f8f9fa" stroke="#ced4da" stroke-width="2"/>
+  <text x="155" y="266" text-anchor="middle" font-size="26" font-family="sans-serif" fill="#495057">做真正的计算</text>
+  <text x="155" y="298" text-anchor="middle" font-size="20" font-family="sans-serif" fill="#868e96">步骤 20-27</text>
+  <line x1="285" y1="273" x2="312" y2="273" stroke="#6c757d" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="315" y="235" width="260" height="76" rx="12" fill="#f8f9fa" stroke="#ced4da" stroke-width="2"/>
+  <text x="445" y="266" text-anchor="middle" font-size="26" font-family="sans-serif" fill="#495057">更多数据类型</text>
+  <text x="445" y="298" text-anchor="middle" font-size="20" font-family="sans-serif" fill="#868e96">步骤 28-31</text>
+  <line x1="575" y1="273" x2="602" y2="273" stroke="#6c757d" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="605" y="235" width="260" height="76" rx="12" fill="#fff3e0" stroke="#ffb74d" stroke-width="2"/>
+  <text x="735" y="266" text-anchor="middle" font-size="26" font-family="sans-serif" fill="#e65100">让程序做选择</text>
+  <text x="735" y="298" text-anchor="middle" font-size="20" font-family="sans-serif" fill="#ffb74d">步骤 32-35</text>
+  <line x1="735" y1="311" x2="735" y2="335" stroke="#6c757d" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Row 4 (R→L) y=345 -->
+  <rect x="605" y="345" width="260" height="76" rx="12" fill="#fff3e0" stroke="#ffb74d" stroke-width="2"/>
+  <text x="735" y="376" text-anchor="middle" font-size="26" font-family="sans-serif" fill="#e65100">记住过去的事情</text>
+  <text x="735" y="408" text-anchor="middle" font-size="20" font-family="sans-serif" fill="#ffb74d">步骤 36-39</text>
+  <line x1="605" y1="383" x2="578" y2="383" stroke="#6c757d" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="315" y="345" width="260" height="76" rx="12" fill="#fff3e0" stroke="#ffb74d" stroke-width="2"/>
+  <text x="445" y="376" text-anchor="middle" font-size="26" font-family="sans-serif" fill="#e65100">让程序跑得更快</text>
+  <text x="445" y="408" text-anchor="middle" font-size="20" font-family="sans-serif" fill="#ffb74d">步骤 40-43</text>
+  <line x1="315" y1="383" x2="288" y2="383" stroke="#6c757d" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="25" y="345" width="260" height="76" rx="12" fill="#f8f9fa" stroke="#ced4da" stroke-width="2"/>
+  <text x="155" y="376" text-anchor="middle" font-size="26" font-family="sans-serif" fill="#495057">更多魔法命令</text>
+  <text x="155" y="408" text-anchor="middle" font-size="20" font-family="sans-serif" fill="#868e96">步骤 44-51</text>
+  <line x1="155" y1="421" x2="155" y2="445" stroke="#6c757d" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Row 5 y=455 -->
+  <rect x="25" y="455" width="260" height="76" rx="12" fill="#f8f9fa" stroke="#ced4da" stroke-width="2"/>
+  <text x="155" y="486" text-anchor="middle" font-size="18" font-family="sans-serif" fill="#495057">内置函数 + 宏 + REPL</text>
+  <text x="155" y="518" text-anchor="middle" font-size="20" font-family="sans-serif" fill="#868e96">步骤 52-74</text>
+</svg>

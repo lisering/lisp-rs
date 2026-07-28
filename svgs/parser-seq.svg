@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="90 -20 1300 1040" width="1300" height="1040">
+  <defs>
+    <marker id="arrow-blue" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#0d6efd"/>
+    </marker>
+    <marker id="arrow-green" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#198754"/>
+    </marker>
+  </defs>
+
+  <g transform="scale(2)">
+
+  <!-- 生命线 -->
+  <line x1="160" y1="0" x2="160" y2="490" stroke="#adb5bd" stroke-width="1" stroke-dasharray="4,4"/>
+  <line x1="350" y1="40" x2="350" y2="450" stroke="#adb5bd" stroke-width="1" stroke-dasharray="4,4"/>
+  <line x1="530" y1="260" x2="530" y2="400" stroke="#adb5bd" stroke-width="1" stroke-dasharray="4,4"/>
+
+  <!-- 头部框 -->
+  <rect x="90" y="5" width="140" height="28" rx="6" fill="#cce5ff" stroke="#0d6efd" stroke-width="1.5"/>
+  <text x="160" y="24" text-anchor="middle" font-size="12" font-family="monospace" fill="#0d6efd">parse(tokens)</text>
+
+  <rect x="290" y="5" width="120" height="28" rx="6" fill="#d4edda" stroke="#198754" stroke-width="1.5"/>
+  <text x="350" y="24" text-anchor="middle" font-size="12" font-family="monospace" fill="#198754">read_seq()</text>
+
+  <rect x="470" y="5" width="120" height="28" rx="6" fill="#d4edda" stroke="#198754" stroke-width="1.5"/>
+  <text x="530" y="24" text-anchor="middle" font-size="12" font-family="monospace" fill="#198754">read_seq₂()</text>
+
+  <!-- 1. parse 检测到 '(' → 调用 read_seq -->
+  <rect x="68" y="50" width="185" height="26" rx="4" fill="#f8f9fa" stroke="#ced4da" stroke-width="1"/>
+  <text x="160" y="67" text-anchor="middle" font-size="9" font-family="sans-serif" fill="#495057">parse 检测到 '(' → 调用 read_seq(1)</text>
+  <line x1="253" y1="63" x2="348" y2="63" stroke="#0d6efd" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+
+  <!-- 2. read_seq 调用 parse -->
+  <rect x="268" y="95" width="165" height="26" rx="4" fill="#f8f9fa" stroke="#ced4da" stroke-width="1"/>
+  <text x="350" y="112" text-anchor="middle" font-size="9" font-family="sans-serif" fill="#495057">read_seq: 调用 parse(pos=1)</text>
+  <line x1="268" y1="108" x2="162" y2="108" stroke="#0d6efd" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+
+  <!-- 3. parse 返回 "+" -->
+  <rect x="83" y="140" width="155" height="26" rx="4" fill="#f8f9fa" stroke="#ced4da" stroke-width="1"/>
+  <text x="160" y="157" text-anchor="middle" font-size="9" font-family="sans-serif" fill="#495057">return Atom("+"), pos=2</text>
+  <line x1="238" y1="153" x2="348" y2="153" stroke="#198754" stroke-width="1.5" marker-end="url(#arrow-green)"/>
+
+  <!-- 4. read_seq 再次调用 parse -->
+  <rect x="268" y="185" width="165" height="26" rx="4" fill="#f8f9fa" stroke="#ced4da" stroke-width="1"/>
+  <text x="350" y="202" text-anchor="middle" font-size="9" font-family="sans-serif" fill="#495057">read_seq: 调用 parse(pos=2)</text>
+  <line x1="268" y1="198" x2="162" y2="198" stroke="#0d6efd" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+
+  <!-- 5. parse 返回 "1" -->
+  <rect x="83" y="230" width="155" height="26" rx="4" fill="#f8f9fa" stroke="#ced4da" stroke-width="1"/>
+  <text x="160" y="247" text-anchor="middle" font-size="9" font-family="sans-serif" fill="#495057">return Num(1.0), pos=3</text>
+  <line x1="238" y1="243" x2="348" y2="243" stroke="#198754" stroke-width="1.5" marker-end="url(#arrow-green)"/>
+
+  <!-- 6. read_seq 嵌套调用 read_seq₂ -->
+  <rect x="258" y="275" width="185" height="26" rx="4" fill="#f8f9fa" stroke="#ced4da" stroke-width="1"/>
+  <text x="350" y="292" text-anchor="middle" font-size="9" font-family="sans-serif" fill="#495057">read_seq: 检测到 '(' → 调用 read_seq₂</text>
+  <line x1="443" y1="288" x2="528" y2="288" stroke="#0d6efd" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+
+  <!-- 7. read_seq₂ 多次调用 parse -->
+  <rect x="445" y="320" width="170" height="26" rx="4" fill="#f8f9fa" stroke="#ced4da" stroke-width="1"/>
+  <text x="530" y="337" text-anchor="middle" font-size="9" font-family="sans-serif" fill="#495057">read_seq₂: 调用 parse — 遍历子列表</text>
+  <line x1="445" y1="328" x2="162" y2="328" stroke="#0d6efd" stroke-width="1.5" stroke-dasharray="3,2" marker-end="url(#arrow-blue)"/>
+  <text x="350" y="325" text-anchor="end" font-size="9" font-family="sans-serif" fill="#868e96">parse × 3</text>
+  <line x1="160" y1="338" x2="445" y2="338" stroke="#198754" stroke-width="1.5" marker-end="url(#arrow-green)"/>
+
+  <!-- 8. read_seq₂ 返回结果 -->
+  <rect x="448" y="365" width="165" height="26" rx="4" fill="#f8f9fa" stroke="#ced4da" stroke-width="1"/>
+  <text x="530" y="382" text-anchor="middle" font-size="9" font-family="sans-serif" fill="#495057">read_seq₂: 返回 List(* 2 3)</text>
+  <line x1="448" y1="378" x2="352" y2="378" stroke="#198754" stroke-width="1.5" marker-end="url(#arrow-green)"/>
+
+  <!-- 9. read_seq 检测到 ')' ，返回 List -->
+  <rect x="260" y="410" width="180" height="26" rx="4" fill="#f8f9fa" stroke="#ced4da" stroke-width="1"/>
+  <text x="350" y="427" text-anchor="middle" font-size="9" font-family="sans-serif" fill="#495057">read_seq: 检测到 ')' → 返回完整 List</text>
+  <line x1="260" y1="423" x2="162" y2="423" stroke="#198754" stroke-width="1.5" marker-end="url(#arrow-green)"/>
+
+  <!-- 10. parse 返回最终 AST -->
+  <rect x="55" y="455" width="210" height="26" rx="4" fill="#d4edda" stroke="#198754" stroke-width="1.5"/>
+  <text x="160" y="472" text-anchor="middle" font-size="10" font-family="monospace" font-weight="bold" fill="#155724">AST = List(+, 1, List(*, 2, 3))</text>
+
+  <!-- Token 流 -->
+  <rect x="620" y="40" width="65" height="450" rx="8" fill="#fff3cd" stroke="#ffc107" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <text x="652" y="156" text-anchor="middle" font-size="14" font-family="sans-serif" font-weight="bold" fill="#856404">Token 流</text>
+  <text x="652" y="180" text-anchor="middle" font-size="12" font-family="monospace" fill="#856404">0: (</text>
+  <text x="652" y="196" text-anchor="middle" font-size="12" font-family="monospace" fill="#856404">1: +</text>
+  <text x="652" y="212" text-anchor="middle" font-size="12" font-family="monospace" fill="#856404">2: 1</text>
+  <text x="652" y="228" text-anchor="middle" font-size="12" font-family="monospace" fill="#856404">3: (</text>
+  <text x="652" y="244" text-anchor="middle" font-size="12" font-family="monospace" fill="#856404">4: *</text>
+  <text x="652" y="260" text-anchor="middle" font-size="12" font-family="monospace" fill="#856404">5: 2</text>
+  <text x="652" y="276" text-anchor="middle" font-size="12" font-family="monospace" fill="#856404">6: 3</text>
+  <text x="652" y="292" text-anchor="middle" font-size="12" font-family="monospace" fill="#856404">7: )</text>
+  <text x="652" y="308" text-anchor="middle" font-size="12" font-family="monospace" fill="#856404">8: )</text>
+  </g>
+</svg>

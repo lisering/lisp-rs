@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-20 -20 1440 960" width="1440" height="960">
+  <defs>
+    <marker id="arrow" markerWidth="4.8" markerHeight="3.6" refX="4.8" refY="1.8" orient="auto">
+      <path d="M0,0 L4.8,1.8 L0,3.6 Z" fill="#6c757d"/>
+    </marker>
+  </defs>
+
+  <!-- Step 1 -->
+  <rect x="20" y="32" width="400" height="128" rx="12" fill="#fff3cd" stroke="#ffc107" stroke-width="3"/>
+  <text x="220" y="80" text-anchor="middle" font-size="35" font-family="sans-serif" font-weight="bold" fill="#856404">① 定义 make-adder</text>
+  <text x="220" y="128" text-anchor="middle" font-size="29" font-family="monospace" fill="#856404">(define make-adder (lambda (n) ...))</text>
+
+  <line x1="420" y1="96" x2="480" y2="96" stroke="#6c757d" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <!-- Lambda₁ -->
+  <rect x="490" y="32" width="400" height="176" rx="12" fill="#f8f9fa" stroke="#ced4da" stroke-width="3"/>
+  <text x="690" y="80" text-anchor="middle" font-size="35" font-family="sans-serif" font-weight="bold" fill="#495057">Lambda₁ 诞生</text>
+  <text x="690" y="125" text-anchor="middle" font-size="29" font-family="monospace" fill="#868e96">params = (n)</text>
+  <text x="690" y="170" text-anchor="middle" font-size="29" font-family="monospace" fill="#868e96">env → 全局环境</text>
+
+  <!-- 箭头到 Step 2 -->
+  <path d="M690,208 C690,288 220,288 220,336" fill="none" stroke="#6c757d" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <!-- Step 2 -->
+  <rect x="20" y="346" width="400" height="128" rx="12" fill="#fff3cd" stroke="#ffc107" stroke-width="3"/>
+  <text x="220" y="394" text-anchor="middle" font-size="35" font-family="sans-serif" font-weight="bold" fill="#856404">② 调用 (make-adder 5)</text>
+  <text x="220" y="442" text-anchor="middle" font-size="29" font-family="monospace" fill="#856404">n = 5, outer → 全局</text>
+
+  <line x1="420" y1="410" x2="480" y2="410" stroke="#6c757d" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <!-- Lambda₂ 闭包 -->
+  <rect x="490" y="336" width="440" height="192" rx="12" fill="#fff3cd" stroke="#ffc107" stroke-width="5"/>
+  <text x="710" y="384" text-anchor="middle" font-size="38" font-family="sans-serif" font-weight="bold" fill="#e65100">Lambda₂ 诞生 ← 闭包!</text>
+  <text x="710" y="435" text-anchor="middle" font-size="29" font-family="monospace" fill="#864">params = (x), body = (+ x n)</text>
+  <text x="710" y="486" text-anchor="middle" font-size="29" font-family="monospace" fill="#864">env → CallFrame₁ {n: 5}</text>
+
+  <!-- Key insight -->
+  <rect x="960" y="320" width="420" height="160" rx="12" fill="#f8d7da" stroke="#dc3545" stroke-width="3"/>
+  <text x="1170" y="378" text-anchor="middle" font-size="32" font-family="sans-serif" font-weight="bold" fill="#842029">关键</text>
+  <text x="1170" y="435" text-anchor="middle" font-size="29" font-family="sans-serif" fill="#842029">env 指向定义时的 CallFrame</text>
+
+  <!-- 箭头到 Step 3 -->
+  <path d="M710,528 C710,608 220,608 220,640" fill="none" stroke="#6c757d" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <!-- Step 3 -->
+  <rect x="20" y="650" width="400" height="128" rx="12" fill="#fff3cd" stroke="#ffc107" stroke-width="3"/>
+  <text x="220" y="698" text-anchor="middle" font-size="35" font-family="sans-serif" font-weight="bold" fill="#856404">③ 调用 (add5 10)</text>
+  <text x="220" y="746" text-anchor="middle" font-size="29" font-family="monospace" fill="#856404">x = 10, outer → Lambda₂.env</text>
+
+  <line x1="420" y1="714" x2="480" y2="714" stroke="#6c757d" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <!-- CallFrame₂ -->
+  <rect x="490" y="640" width="400" height="160" rx="12" fill="#f8f9fa" stroke="#ced4da" stroke-width="3"/>
+  <text x="690" y="691" text-anchor="middle" font-size="35" font-family="sans-serif" font-weight="bold" fill="#495057">CallFrame₂</text>
+  <text x="690" y="742" text-anchor="middle" font-size="29" font-family="monospace" fill="#868e96">x = 10</text>
+  <text x="690" y="781" text-anchor="middle" font-size="29" font-family="monospace" fill="#868e96">outer → CallFrame₁(n=5)</text>
+
+  <!-- 环境链箭头 -->
+  <path d="M890,720 C940,720 940,432 930,432" fill="none" stroke="#6c757d" stroke-width="3" stroke-dasharray="8,4" marker-end="url(#arrow)"/>
+  <text x="950" y="592" font-size="29" font-family="sans-serif" fill="#868e96">outer</text>
+</svg>

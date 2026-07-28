@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-20 -20 760 360" width="760" height="360">
+  <defs>
+    <marker id="arrow" markerWidth="5" markerHeight="4" refX="5" refY="2" orient="auto">
+      <path d="M0,0 L5,2 L0,4 Z" fill="#6c757d"/>
+    </marker>
+  </defs>
+
+  <!-- Global env -->
+  <rect x="0" y="0" width="440" height="280" rx="12" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+  <text x="220" y="30" text-anchor="middle" font-size="20" font-family="sans-serif" font-weight="bold" fill="#92400e">🌐 全局环境</text>
+
+  <rect x="20" y="45" width="400" height="35" rx="6" fill="#fef9e7" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="220" y="68" text-anchor="middle" font-size="16" font-family="monospace" fill="#92400e">make-counter → [函数]</text>
+
+  <rect x="20" y="88" width="400" height="35" rx="6" fill="#fef9e7" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="220" y="111" text-anchor="middle" font-size="16" font-family="monospace" fill="#92400e">counter → counter-函数</text>
+
+  <rect x="20" y="131" width="190" height="35" rx="6" fill="#fef9e7" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="115" y="154" text-anchor="middle" font-size="16" font-family="monospace" fill="#92400e">+ → 加法函数</text>
+
+  <rect x="220" y="131" width="190" height="35" rx="6" fill="#fef9e7" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="315" y="154" text-anchor="middle" font-size="16" font-family="monospace" fill="#92400e">- → 减法函数</text>
+
+  <rect x="20" y="174" width="400" height="35" rx="6" fill="#fef9e7" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="220" y="197" text-anchor="middle" font-size="16" font-family="monospace" fill="#92400e">...</text>
+
+  <!-- Arrow from counter to backpack -->
+  <line x1="420" y1="105" x2="500" y2="105" stroke="#6c757d" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="460" y="95" text-anchor="middle" font-size="14" font-family="sans-serif" fill="#6c757d">背包指向这里</text>
+
+  <!-- Backpack -->
+  <rect x="510" y="50" width="220" height="130" rx="12" fill="#d1fae5" stroke="#10b981" stroke-width="2"/>
+  <text x="620" y="80" text-anchor="middle" font-size="18" font-family="sans-serif" font-weight="bold" fill="#065f46">🎒 背包 (CallFrame)</text>
+
+  <rect x="530" y="95" width="180" height="32" rx="6" fill="#ecfdf5" stroke="#10b981" stroke-width="1.5"/>
+  <text x="620" y="116" text-anchor="middle" font-size="16" font-family="monospace" fill="#065f46">start → 0</text>
+
+  <rect x="530" y="135" width="180" height="32" rx="6" fill="#ecfdf5" stroke="#10b981" stroke-width="1.5"/>
+  <text x="620" y="156" text-anchor="middle" font-size="16" font-family="monospace" fill="#065f46">外层 → 全局</text>
+</svg>

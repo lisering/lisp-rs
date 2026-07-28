@@ -110,59 +110,7 @@ if (x > 0) { return x + 1; }
 
 动手之前，先看看各章节之间的依赖关系：
 
-```mermaid
-flowchart LR
-  A["🔧 准备工作<br/>步骤 1-4"] --> B["📦 认识值<br/>步骤 5-6"]
-  B --> C["⚙️ 让程序算东西<br/>步骤 7-8"]
-  C --> D["✂️ 把句子拆成单词<br/>步骤 9-11"]
-  D --> cont["⬇️"]
-
-  style A fill:#f0f7ff,stroke:#4a90d9,stroke-width:2px,color:#1a56db
-  style B fill:#dbeafe,stroke:#3b82f6,stroke-width:2.5px,color:#1e40af
-  style C fill:#f0f7ff,stroke:#4a90d9,stroke-width:2px,color:#1a56db
-  style D fill:#dbeafe,stroke:#3b82f6,stroke-width:2.5px,color:#1e40af
-  style cont fill:none,stroke:none,font-size:24px
-```
-
-
-```mermaid
-flowchart LR
-  E["🧩 理解单词的意思<br/>步骤 12-15"] --> F["🏷️ 给东西起名字<br/>步骤 16-19"]
-  F --> G["🧮 做真正的计算<br/>步骤 20-27"]
-  G --> H["📊 更多数据类型<br/>步骤 28-31"]
-  H --> cont2["⬇️"]
-
-  style E fill:#dbeafe,stroke:#3b82f6,stroke-width:2.5px,color:#1e40af
-  style F fill:#f0f7ff,stroke:#4a90d9,stroke-width:2px,color:#1a56db
-  style G fill:#f0f7ff,stroke:#4a90d9,stroke-width:2px,color:#1a56db
-  style H fill:#f0f7ff,stroke:#4a90d9,stroke-width:2px,color:#1a56db
-  style cont2 fill:none,stroke:none,font-size:24px
-```
-
-
-```mermaid
-flowchart LR
-  I["🔀 让程序做选择<br/>步骤 32-35"] --> J["🧠 记住过去的事情<br/>步骤 36-39"]
-  J --> K["🚀 让程序跑得更快<br/>步骤 40-43"]
-  K --> L["✨ 更多魔法命令<br/>步骤 44-51"]
-  L --> cont3["⬇️"]
-
-  style I fill:#fff7ed,stroke:#f97316,stroke-width:2.5px,color:#c2410c
-  style J fill:#fff7ed,stroke:#f97316,stroke-width:2.5px,color:#c2410c
-  style K fill:#fff7ed,stroke:#f97316,stroke-width:2.5px,color:#c2410c
-  style L fill:#f0f7ff,stroke:#4a90d9,stroke-width:2px,color:#1a56db
-  style cont3 fill:none,stroke:none,font-size:24px
-```
-
-
-```mermaid
-flowchart LR
-  M["🎯 内置函数补全 + 宏 + REPL<br/>步骤 52-74"] --- _end["🏁"]
-
-  style M fill:#f5f3ff,stroke:#8b5cf6,stroke-width:2.5px,color:#6d28d9
-  style _end fill:none,stroke:none,font-size:24px
-  linkStyle 0 stroke-width:0
-```
+![roadmap](svgs/roadmap.svg)
 
 
 每章都建立在前一章的基础上。蓝色高亮章节（认识值、词法分析、语法分析）是核心基础；橙色高亮章节（闭包、TCO）是最深的功能。感到迷茫时，可以回到这个图确认自己的位置。
@@ -207,20 +155,7 @@ flowchart LR
       (* x x)))              ← "这个函数要做的事：把 x 和自己相乘"
 ```
 
-```mermaid
-flowchart LR
-  subgraph SQ["🎒 square 函数"]
-    direction TB
-    P["📋 参数: [x] — 1 个参数"]
-    B["⚙️ 函数体: (* x x) — 乘法"]
-    E["📸 诞生环境: 全局"]
-  end
-
-  style SQ fill:#f0f7ff,stroke:#4a90d9,stroke-width:2px
-  style P fill:#dbeafe,stroke:#3b82f6,color:#1e40af
-  style B fill:#d1fae5,stroke:#10b981,color:#065f46
-  style E fill:#fef3c7,stroke:#f59e0b,color:#92400e
-```
+![square closure](svgs/square-closure.svg)
 
 ```
 调用过程：
@@ -448,20 +383,7 @@ special     = "+" | "-" | "*" | "/" | "=" | "<" | ">" | "!" | "?" | "_" ;
 
 make-counter 这个函数本身:
 
-```mermaid
-flowchart LR
-  subgraph MC["🎒 make-counter 函数"]
-    direction TB
-    P["📋 参数: [start]"]
-    B["⚙️ 函数体: (lambda ()<br/>(set! start (+ start 1))<br/>start)"]
-    E["📸 诞生环境: 全局"]
-  end
-
-  style MC fill:#f0f7ff,stroke:#4a90d9,stroke-width:2px
-  style P fill:#dbeafe,stroke:#3b82f6,color:#1e40af
-  style B fill:#d1fae5,stroke:#10b981,color:#065f46
-  style E fill:#fef3c7,stroke:#f59e0b,color:#92400e
-```
+![make counter](svgs/make-counter.svg)
 
 > ⚠️ **注意**: make-counter 的函数体本身又是一个 lambda! 调用 make-counter 会返回这个内层 lambda, 而不是一个数字。
 
@@ -520,17 +442,7 @@ flowchart LR
 全局环境里多了一条记录:
 ```
 
-```mermaid
-flowchart LR
-  subgraph GE["🌐 全局环境"]
-    MC["make-counter → [函数]<br/>参数: start<br/>函数体: (lambda () ...)<br/>背包: 全局 📸"]
-    Other["(其他内置函数...)"]
-  end
-
-  style GE fill:#fef3c7,stroke:#f59e0b,stroke-width:2px,color:#92400e
-  style MC fill:#fef9e7,stroke:#f59e0b,color:#92400e
-  style Other fill:#fef9e7,stroke:#f59e0b,color:#92400e
-```
+![global env make counter](svgs/global-env-make-counter.svg)
 
 ```
 这一步只是"注册了一个名字", 什么都没发生。make-counter 还没被调用过。
@@ -567,33 +479,7 @@ flowchart LR
 
 全局环境现在:
 
-```mermaid
-flowchart TD
-  subgraph GlobalEnv["🌐 全局环境"]
-    MC["make-counter → [函数]"]
-    Counter["counter → counter-函数"]
-    Plus["+ → 加法函数"]
-    Minus["- → 减法函数"]
-    Dots["..."]
-  end
-
-  Counter -->|"背包指向这里"| Backpack
-
-  subgraph Backpack["🎒 背包 (CallFrame · 在内存!)"]
-    Start["start → 0"]
-    Outer["外层 → 全局"]
-  end
-
-  style GlobalEnv fill:#fef3c7,stroke:#f59e0b,stroke-width:2px,color:#92400e
-  style Backpack fill:#d1fae5,stroke:#10b981,stroke-width:2px,color:#065f46
-  style MC fill:#fef9e7,stroke:#f59e0b,color:#92400e
-  style Counter fill:#fef9e7,stroke:#f59e0b,color:#92400e
-  style Plus fill:#fef9e7,stroke:#f59e0b,color:#92400e
-  style Minus fill:#fef9e7,stroke:#f59e0b,color:#92400e
-  style Dots fill:#fef9e7,stroke:#f59e0b,color:#92400e
-  style Start fill:#ecfdf5,stroke:#10b981,color:#065f46
-  style Outer fill:#ecfdf5,stroke:#10b981,color:#065f46
-```
+![counter backpack](svgs/counter-backpack.svg)
 
 ---
 
@@ -677,17 +563,7 @@ Lisp 里函数跟数字、字符串一样，可以传来传去：
   CallFrame 现在:
 ```
 
-```mermaid
-flowchart LR
-  subgraph CF["📋 CallFrame"]
-    F["f → square (Lambda)"]
-    X["x → Number(3)"]
-  end
-
-  style CF fill:#f0f7ff,stroke:#4a90d9,stroke-width:2px
-  style F fill:#dbeafe,stroke:#3b82f6,color:#1e40af
-  style X fill:#d1fae5,stroke:#10b981,color:#065f46
-```
+![callframe](svgs/callframe.svg)
 
 ```
   ③ 求值函数体: (f (f x))
@@ -799,17 +675,7 @@ flowchart LR
 
 > **🔍 上图就是整个项目的骨架**——源码从左边进去，经过四个阶段，从右边出来就变成了计算结果。后面 74 个步骤就是对这四个阶段的一刀一刀精修。
 
-```mermaid
-flowchart LR
-  A["📝 源码<br/>步骤 1-8"] -->|tokenize| B["🔍 词法分析<br/>步骤 9-11"]
-  B -->|parse| C["🌳 语法分析<br/>步骤 12-15"]
-  C -->|eval| D["⚡ 求值器<br/>步骤 16-74"]
-
-  style A fill:#e0f2fe,stroke:#0284c7,stroke-width:2px,color:#075985
-  style B fill:#dbeafe,stroke:#3b82f6,stroke-width:2px,color:#1e40af
-  style C fill:#d1fae5,stroke:#10b981,stroke-width:2px,color:#065f46
-  style D fill:#fef3c7,stroke:#f59e0b,stroke-width:2px,color:#92400e
-```
+![pipeline](svgs/pipeline.svg)
 
 ---
 
@@ -1820,19 +1686,7 @@ pub fn eval(exp: &LispExp) -> Result<LispExp, LispErr> {
 
 > **图解 — match 是怎么工作的**：
 
-```mermaid
-flowchart TD
-  Input["📥 输入: Number(42.0)"] --> Check{"🔢 是数字吗?"}
-  Check -->|是| Ok["✅ 把 42.0 取出来<br/>返回 Ok(Number(42.0))"]
-  Check -->|否| Wildcard["🔀 _ 兜底"]
-  Wildcard --> Err["❌ 返回 Err('暂不支持此类型')"]
-
-  style Input fill:#dbeafe,stroke:#3b82f6,color:#1e40af
-  style Check fill:#fef3c7,stroke:#f59e0b,stroke-width:2px,color:#92400e
-  style Ok fill:#d1fae5,stroke:#10b981,color:#065f46
-  style Wildcard fill:#f1f5f9,stroke:#64748b,color:#334155
-  style Err fill:#fee2e2,stroke:#ef4444,color:#991b1b
-```
+![enum pocket](svgs/enum-pocket.svg)
 
 🧠 **大白话 — `Result`**：Rust 里表示"可能成功，也可能失败"的类型。
 
@@ -1844,15 +1698,7 @@ Result<LispExp, LispErr>
 ```
 就像一个快递包裹：打开要么是你要的东西（Ok），要么是一张"配送失败"纸条（Err）。
 
-```mermaid
-flowchart TD
-  Result["📦 Result&lt;T, E&gt;"] --> Ok["✅ Ok(T)<br/>成功 — 包裹里的结果值"]
-  Result --> Err["❌ Err(E)<br/>失败 — 包裹里的错误信息"]
-
-  style Result fill:#f1f5f9,stroke:#475569,stroke-width:2.5px,color:#1e293b
-  style Ok fill:#d1fae5,stroke:#10b981,stroke-width:2px,color:#065f46
-  style Err fill:#fee2e2,stroke:#ef4444,stroke-width:2px,color:#991b1b
-```
+![result type](svgs/result-type.svg)
 
 - `Ok(Number(42.0))` → 成功！结果是个数字 42
 - `Err(LispErr::Reason("出错了"))` → 失败！原因是"出错了"
@@ -2402,23 +2248,7 @@ fn read_seq(tokens: &[String]) -> Result<(LispExp, &[String]), LispErr> {
   └─ ")" → 列表结束! 返回 List([+,1,[*,2,3]])
 
 结果像一棵树:
-```mermaid
-flowchart TD
-  List["🌿 List(+, 1, (*, 2, 3))"] --> Plus["➕ Symbol: +"]
-  List --> Num1["🔢 Number(1)"]
-  List --> Inner["🌿 List(*, 2, 3)"]
-  Inner --> Star["✖️ Symbol: *"]
-  Inner --> Num2["🔢 Number(2)"]
-  Inner --> Num3["🔢 Number(3)"]
-
-  style List fill:#fef3c7,stroke:#f59e0b,stroke-width:2.5px,color:#92400e
-  style Inner fill:#fef3c7,stroke:#f59e0b,stroke-width:2.5px,color:#92400e
-  style Plus fill:#dbeafe,stroke:#3b82f6,stroke-width:2px,color:#1e40af
-  style Star fill:#dbeafe,stroke:#3b82f6,stroke-width:2px,color:#1e40af
-  style Num1 fill:#d1fae5,stroke:#10b981,stroke-width:2px,color:#065f46
-  style Num2 fill:#d1fae5,stroke:#10b981,stroke-width:2px,color:#065f46
-  style Num3 fill:#d1fae5,stroke:#10b981,stroke-width:2px,color:#065f46
-```
+![ast tree](svgs/ast-tree.svg)
 
 🧠 **大白话 — 递归**：函数调用自己。就像"镜子里的镜子里的镜子"——无限嵌套下去，直到遇到停止条件（`)`）。
 
@@ -2431,29 +2261,7 @@ running 6 tests
 test result: ok. 6 passed; 0 failed
 ```
 
-```mermaid
-sequenceDiagram
-  participant P as 🔄 parse
-  participant RS as 📋 read_seq
-  participant PA as ⚛️ parse_atom
-
-  P->>RS: 遇到 "(" → 调用 read_seq
-  RS->>P: 递归调用 parse(token)
-
-  P->>PA: token = "42"
-  PA-->>P: Number(42.0)
-
-  P->>PA: token = "+"
-  PA-->>P: Symbol("+")
-
-  P->>PA: token = "3"
-  PA-->>P: Number(3.0)
-
-  P->>RS: 遇到 ")" → 列表结束
-  RS-->>P: List([Symbol(+), 42, 3])
-
-  Note over P: ✅ (+ 42 3) → AST 构建完成
-```
+![parser seq](svgs/parser-seq.svg)
 
 > 🔄 **递归解析的调用过程**：`parse()` 和 `read_seq()` 互相调用——`parse` 遇到 `(` 委托给 `read_seq`，`read_seq` 遇到子元素又调用 `parse`，形成递归下降。每次遇到 `)` 就"弹出一层"，最终构建出完整的嵌套 AST 树。
 
@@ -3323,34 +3131,7 @@ env.set("string-length".into(), LispExp::Func(|args| {
 
 > 🎯 **解决的问题**: 实现特殊形式 if/define/lambda——它们不是普通函数，有不规则的求值规则。这是 Lisp 控制流的基石。
 
-```mermaid
-classDiagram
-  class LispExp {
-    &lt;&lt;enum&gt;&gt;
-    +Number(f64)
-    +Symbol(u64)
-    +List(Vec~LispExp~)
-    +Func(fn 指针)
-    +Lambda(Box~LispLambda~)
-    +Bool(bool)
-    +Nil
-    +String(String)
-  }
-  class LispLambda {
-    &lt;&lt;struct&gt;&gt;
-    +params: Vec~u64~
-    +rest: Option~u64~
-    +body: Box~LispExp~
-    +env: Rc~RefCell~LispEnv~~
-  }
-  class LispErr {
-    &lt;&lt;enum&gt;&gt;
-    +Reason(String)
-  }
-  LispExp *-- LispLambda : Lambda(Box) 拥有
-  LispExp o-- LispExp : List(Vec) 递归引用
-  LispExp ..> LispErr : eval 返回
-```
+![class diagram](svgs/class-diagram.svg)
 
 > 📊 **类型全景图**：`LispExp` 的 8 个变体——自求值类型（Number/Bool/String/Nil）+ 符号（Symbol）+ 列表（List）+ 可调用类型（Func/Lambda）。`Lambda` 内部的 `env` 字段让它成为闭包。
 
@@ -4381,23 +4162,7 @@ lambda1.borrow_mut().push_str(", y=2");
 println!("{}", lambda2.borrow());  // "x=1, y=2"  ✅
 ```
 
-```mermaid
-flowchart TD
-  subgraph Problem["❌ 不用 Rc — 各拷贝一份"]
-    A1["Lambda₁<br/>env: {x→1}"] --> A3["set! x=2"]
-    A3 --> A4["Lambda₁ 的 env<br/>{x→2}"]
-    A2["Lambda₂<br/>env: {x→1}"] --> A5["看不到修改！<br/>{x→1}"]
-  end
-
-  subgraph Solution["✅ 用 Rc<RefCell> — 共享一份"]
-    B1["Lambda₁"] -->|"Rc::clone"| B3["📋 共享环境<br/>{x→1}"]
-    B2["Lambda₂"] -->|"Rc::clone"| B3
-    B3 -->|"set! x=2"| B4["📋 共享环境<br/>{x→2} ✅<br/>双方都看到"]
-  end
-
-  style Problem fill:#fef2f2,stroke:#ef4444,stroke-width:2px
-  style Solution fill:#f0fdf4,stroke:#22c55e,stroke-width:2px
-```
+![rc sharing](svgs/rc-sharing.svg)
 
 > 🧠 **大白话 — `Rc<RefCell<T>>`**：合租房 + 可写字的白板。多人共享（Rc），而且谁都能在白板上写字（RefCell）。一个人写了，其他人立刻能看到。这就是闭包的"背包🎒"——多个 lambda 背着同一个背包，一个人改了背包里的东西，其他人也知道。
 
@@ -4445,22 +4210,7 @@ pub struct LispEnv {
 
 > 🧠 **为什么不需要垃圾回收（GC）？** — 很多 Lisp 教程用 Java/Python 实现，要手动处理循环引用。我们用 Rust：`Rc` 自动计数引用（没人用了就释放），`RefCell` 允许共享修改。没有 `Rc` 之间的循环（outer 链是单向的），所以不会泄漏。Rust 的所有权系统帮我们免费做了 GC 的活。
 
-```mermaid
-flowchart TD
-  subgraph EnvChain["🔗 环境链 — 词法作用域"]
-    Local["🟢 局部环境<br/>y → 20<br/>outer ↓"] -->|outer 指针| Global["🟡 全局环境<br/>x → 10, + → Func(+)<br/>outer = None"]
-  end
-  LookupX["🔍 查找 x:<br/>① 局部环境 → ❌ 没找到<br/>② 沿 outer → 全局环境<br/>③ ✅ 找到 x = 10"]
-  LookupY["🔍 查找 y:<br/>① 局部环境 → ✅ 找到 y = 20"]
-
-  Local -.->|查找 x 时遍历| LookupX
-  Local -.->|查找 y 时遍历| LookupY
-
-  style Global fill:#fef3c7,stroke:#f59e0b,stroke-width:2.5px,color:#92400e
-  style Local fill:#d1fae5,stroke:#10b981,stroke-width:2.5px,color:#065f46
-  style LookupX fill:#f1f5f9,stroke:#64748b,stroke-width:2px,color:#334155
-  style LookupY fill:#f1f5f9,stroke:#64748b,stroke-width:2px,color:#334155
-```
+![env chain](svgs/env-chain.svg)
 
 > 🔗 **环境链 = 单向链表**：每个环境帧都有一个 `outer` 指针指向外层。查找变量时沿着这条链从内向外搜索——这就是词法作用域的运行时实现。`Rc<RefCell<>>` 允许多个地方共享同一帧（比如两个闭包捕获同一个外层环境）。
 
@@ -4659,26 +4409,7 @@ test tests::test_closure ... ok
 test result: ok. 22 passed; 0 failed
 ```
 
-```mermaid
-sequenceDiagram
-  participant U as 👤 用户
-  participant D as 📝 define
-  participant C as 🎒 闭包
-  participant E as ⚡ 求值器
-
-  U->>D: (define make-adder<br/>(lambda (n)<br/>  (lambda (x) (+ x n))))
-  D->>C: 创建外层闭包 make-adder
-  Note over C: params → [n]<br/>body → (lambda (x) (+ x n))<br/>env → 📸 全局环境
-
-  U->>E: ((make-adder 5) 3)
-  E->>C: 调用 make-adder(n=5)
-  Note over C: 创建内层闭包<br/>params → [x]<br/>body → (+ x n)<br/>env → {n:5} ← 背包!
-
-  E->>C: 调用内层闭包(x=3)
-  Note over C: 查找 n → 背包里有! n=5<br/>计算: 3 + 5 = 8
-  C-->>E: 返回 8
-  E-->>U: ✅ 8
-```
+![closure](svgs/closure.svg)
 
 > 🎯 **闭包 = 函数体 + 诞生时的环境**。所谓"函数记住了它诞生时的环境"，技术上就是 `Lambda.env` 字段指向定义时的 `CallFrame`。调用时创建的新帧以这个捕获的帧为 `outer`——所以内层函数能"看见"外层函数的变量。
 
@@ -5384,36 +5115,7 @@ pub fn eval(exp: &LispExp, env: &mut LispEnv) -> Result<LispExp, LispErr> {
 - 所有原来用 `env` 的地方 → 改成 `current_env`
 - 递归调用 `eval(xxx, env)` → 改成 `eval(xxx, &mut current_env)`
 
-```mermaid
-flowchart TD
-  subgraph Recursion["❌ 普通递归 · O(n) 栈帧"]
-    direction TB
-    A["📥 (loop 10000)"] --> B["📥 调用 loop(10000)"]
-    B --> C["📥 调用 loop(9999)"]
-    C --> D["📥 ... 10000 层栈帧"]
-    D --> E["💥 Stack Overflow!"]
-  end
-  subgraph Trampoline["✅ 蹦床循环 · O(1) 栈帧"]
-    direction TB
-    F["🔄 (loop 10000)"] --> G["🔄 迭代 #1<br/>current_exp = (loop 9999)"]
-    G --> H["🔄 迭代 #2<br/>current_exp = (loop 9998)"]
-    H --> I["🔄 迭代 #N<br/>current_exp = (loop 0)"]
-    I --> J["✅ 直接返回值"]
-  end
-
-  style Recursion fill:#fef2f2,stroke:#ef4444,stroke-width:2px
-  style Trampoline fill:#f0fdf4,stroke:#22c55e,stroke-width:2px
-  style A fill:#fee2e2,stroke:#ef4444
-  style B fill:#fee2e2,stroke:#ef4444
-  style C fill:#fee2e2,stroke:#ef4444
-  style D fill:#fee2e2,stroke:#ef4444
-  style E fill:#dc2626,color:#fff,stroke-width:2.5px
-  style F fill:#d1fae5,stroke:#22c55e
-  style G fill:#d1fae5,stroke:#22c55e
-  style H fill:#d1fae5,stroke:#22c55e
-  style I fill:#d1fae5,stroke:#22c55e
-  style J fill:#16a34a,color:#fff,stroke-width:2.5px
-```
+![tco trampoline](svgs/tco-trampoline.svg)
 
 > 🔑 **图中的颜色含义**：🟢 绿色 = TCO 路径（`continue` 不增栈），🔵 蓝色 = 返回路径（出结果）。注意所有尾调用位置（`if` 分支、`lambda` 体调用）都走绿色路径。
 
@@ -5561,35 +5263,7 @@ pub fn intern(s: &str) -> u64 {
        比较: 1 == 1  (1 条 CPU 指令) vs "define" == "define" (6 次字符比较)
 ```
 
-```mermaid
-flowchart LR
-  subgraph Input["输入"]
-    Symbol["🏷️ 符号名 (String)"]
-    Example1[""defun""]
-    Example2[""定义""]
-  end
-  Symbol --> Intern["🔄 intern()"]
-  Example1 --> Intern
-  Example2 --> Intern
-  Intern --> ID["🆔 u64 ID"]
-
-  subgraph Benefits["📈 收益"]
-    Speed["⚡ 比较: O(1) 整数比较<br/>vs O(n) 字符串比较"]
-    Memory["💾 内存: 每个唯一名仅存 1 次"]
-    Hash["#️⃣ 哈希: FX 哈希器 ~3 条 CPU 指令"]
-  end
-
-  ID -.->|提供| Speed
-  ID -.->|提供| Memory
-  ID -.->|提供| Hash
-
-  style Symbol fill:#dbeafe,stroke:#3b82f6,stroke-width:2px,color:#1e40af
-  style Intern fill:#fef3c7,stroke:#f59e0b,stroke-width:2.5px,color:#92400e
-  style ID fill:#d1fae5,stroke:#10b981,stroke-width:2.5px,color:#065f46
-  style Example1 fill:#f1f5f9,stroke:#64748b,color:#334155
-  style Example2 fill:#f1f5f9,stroke:#64748b,color:#334155
-  style Benefits fill:#f5f3ff,stroke:#8b5cf6,stroke-width:2px,color:#6d28d9
-```
+![string interning](svgs/string-interning.svg)
 
 > 🏗️ **双向映射**：`id_to_str` 用于 `lookup(id)` 输出调试信息，`str_to_id` 用于 `intern(str)` 快速去重。`OnceLock<RwLock<>>` 保证了全局唯一实例且线程安全。
 
@@ -5762,28 +5436,7 @@ test result: ok. 23 passed; 0 failed
 
 当前 `tokenize` 返回 `Vec<String>`——每个 token 都堆分配一个 String。改用 `Vec<&str>`——直接引用源码中的切片。
 
-```mermaid
-flowchart LR
-  subgraph Old["❌ 传统做法：复制"]
-    direction LR
-    O1["📄 源码"] --> O2["📋 String 拷贝<br/>(堆分配)"]
-    O2 --> O3["📦 Token 序列<br/>每个 token 堆分配"]
-  end
-  subgraph New["✅ 本解释器：零拷贝"]
-    direction LR
-    N1["📄 源码"] --> N2["🔗 &str 引用<br/>(零分配)"]
-    N2 --> N3["📦 Token 序列<br/>&str 切片引用"]
-  end
-
-  style Old fill:#fef2f2,stroke:#ef4444,stroke-width:2px
-  style New fill:#f0fdf4,stroke:#22c55e,stroke-width:2px
-  style O1 fill:#fee2e2,stroke:#ef4444,color:#991b1b
-  style O2 fill:#fee2e2,stroke:#ef4444,color:#991b1b
-  style O3 fill:#fee2e2,stroke:#ef4444,color:#991b1b
-  style N1 fill:#d1fae5,stroke:#22c55e,color:#065f46
-  style N2 fill:#d1fae5,stroke:#22c55e,color:#065f46
-  style N3 fill:#d1fae5,stroke:#22c55e,color:#065f46
-```
+![zero copy](svgs/zero-copy.svg)
 
 ```rust
 // src/lexer.rs — tokenize 函数
@@ -6025,30 +5678,7 @@ lisp-rs/
 
 **测试数**：所有测试通过（`cargo test` 验证）
 
-```mermaid
-flowchart TD
-  subgraph Pipeline["🔄 处理流水线"]
-    direction LR
-    L1["📄 词法分析器<br/>lexer.rs<br/>⟹ Vec&lt;&str&gt;"] --> L2["🌳 语法分析器<br/>parser.rs<br/>⟹ LispExp AST"]
-    L2 --> L3["🗂️ 环境层<br/>env.rs<br/>⟹ 词法作用域"]
-    L3 --> L4["⚡ 求值器<br/>interpreter.rs<br/>⟹ 值"]
-  end
-  subgraph Shared["🏗️ 共享基础设施"]
-    Interner["🔗 interner.rs<br/>字符串驻留器<br/>String ↔ u64"]
-  end
-
-  L2 -.->|引用符号| Interner
-  L4 -.->|符号 ID| Interner
-  L3 -.->|变量查找| Interner
-
-  style Pipeline fill:#f0f7ff,stroke:#4a90d9,stroke-width:2px
-  style Shared fill:#f5f3ff,stroke:#8b5cf6,stroke-width:2px,color:#6d28d9
-  style L1 fill:#e0f2fe,stroke:#0284c7,color:#075985
-  style L2 fill:#d1fae5,stroke:#10b981,color:#065f46
-  style L3 fill:#fef3c7,stroke:#f59e0b,color:#92400e
-  style L4 fill:#fee2e2,stroke:#ef4444,color:#991b1b
-  style Interner fill:#ede9fe,stroke:#8b5cf6,color:#6d28d9
-```
+![module pipeline](svgs/module-pipeline.svg)
 
 > 📦 **模块分层**：核心层（类型+环境+驻留）→ 解析层（词法+语法）→ 求值层。每层只依赖下面一层，不跨层依赖。
 
@@ -6090,35 +5720,7 @@ fn intern(&mut self, s: &str) -> u64 {
 
 > 🎯 **解决的问题**: begin/set!/let/cond/and/or/let*/letrec——补全 Lisp 的控制流和绑定能力。
 
-```mermaid
-flowchart TD
-  Start{"⚡ eval(exp, env)"} --> IsSelf{"自求值类型?<br/>Number/Bool/Nil/Str"}
-  IsSelf -->|是| Ret["✅ 直接返回"]
-  IsSelf -->|否| Sym{"Symbol?"}
-  Sym -->|是| Lookup["🔍 env.get(sym_id)"]
-  Sym -->|否| List{"List?"}
-  List -->|否| Err["❌ 错误"]
-  List -->|是| Special{"检查特殊形式"}
-
-  Special -->|if| If["🔀 判断条件<br/>取 then 或 else"]
-  Special -->|define| Define["📝 env.set(sym, val)"]
-  Special -->|lambda| Lambda["🎒 创建闭包<br/>LispLambda{params,body,env}"]
-  Special -->|函数调用| Call["📞 eval 参数 → 调用函数"]
-
-  If --> Tail["🔄 尾调用位置 →<br/>更新 current_exp + env<br/>continue 蹦床循环"]
-  Define --> NilR["⬜ 返回 nil"]
-  Lambda --> Clos["🎒 返回闭包"]
-  Call --> Tail
-
-  style Start fill:#fef3c7,stroke:#f59e0b,stroke-width:2.5px,color:#92400e
-  style Tail fill:#d1fae5,stroke:#22c55e,stroke-width:3px,color:#065f46
-  style Ret fill:#dbeafe,stroke:#3b82f6,color:#1e40af
-  style Err fill:#fee2e2,stroke:#ef4444,color:#991b1b
-  style If fill:#f0f7ff,stroke:#4a90d9,color:#1a56db
-  style Define fill:#f0f7ff,stroke:#4a90d9,color:#1a56db
-  style Lambda fill:#f0f7ff,stroke:#4a90d9,color:#1a56db
-  style Call fill:#f0f7ff,stroke:#4a90d9,color:#1a56db
-```
+![special forms](svgs/special-forms.svg)
 
 > 🗺️ **特殊形式全景图**：eval 遇到 List 时，先检查第一个元素是不是特殊形式关键字。🟢 绿色 = 尾调用优化的路径（`if`/`let`/`cond`/`and`/`or`/Lambda 调用都走 TCO），🔵 蓝色 = 直接返回（`quote`/`define`/`lambda`）。其余特殊形式（begin/set!/let/cond/and/or/let*/letrec）在步骤 44-51 逐一实现。
 
@@ -7812,32 +7414,7 @@ fn test_newline_returns_nil() {
 
 ### 步骤 74: 公开模块 + 创建 main.rs
 
-```mermaid
-sequenceDiagram
-  actor U as 👤 用户
-  participant M as 🖥️ main (REPL)
-  participant L as 🔍 lexer
-  participant P as 🌳 parser
-  participant E as ⚡ eval
-
-  U->>M: "(+ 1 2)"
-  Note over U,M: 📝 输入表达式
-
-  M->>L: tokenize("(+ 1 2)")
-  L-->>M: ["(", "+", "1", "2", ")"]
-  Note over L: 🔪 拆分为 Token
-
-  M->>P: parse(tokens)
-  P-->>M: AST: List(+, 1, 2)
-  Note over P: 🌳 构建 AST 树
-
-  M->>E: eval(ast, env)
-  E-->>M: Number(3)
-  Note over E: ⚡ 求值
-
-  M->>U: ✅ 3
-  Note over U,E: 🔄 循环：等待下一行输入
-```
+![repl seq](svgs/repl-seq.svg)
 
 > 🔄 **REPL 就是上面这个循环**——你输入一行代码，它经过词法分析 → 语法分析 → 求值，打印结果，然后等你输入下一行。直到你敲 `:q` 退出。
 
@@ -8008,28 +7585,7 @@ cargo run
 
 经过 74 步，这是我们构建的东西：
 
-```mermaid
-flowchart TD
-  Header["🏗️ Lisp 解释器架构全景"]
-
-  Header --> Lexer["🔍 词法分析<br/>src/lexer.rs<br/>有限状态机 · 零拷贝"]
-  Header --> Parser["🌳 语法分析<br/>src/parser.rs<br/>递归下降解析"]
-  Header --> Eval["⚡ 求值器<br/>src/interpreter.rs<br/>蹦床循环 · TCO"]
-  Header --> Env["🗂️ 环境<br/>src/env.rs<br/>HashMap · outer 链"]
-  Header --> Print["🖨️ 打印<br/>Display impl<br/>格式化输出"]
-
-  Lexer -.->|"源码 → Token"| Interner["🔗 字符串驻留<br/>src/interner.rs<br/>String ↔ u64"]
-  Eval -.->|符号 ID| Interner
-  Env -.->|变量名| Interner
-
-  style Header fill:#f1f5f9,stroke:#475569,stroke-width:4px,color:#1e293b
-  style Lexer fill:#dbeafe,stroke:#3b82f6,stroke-width:2px,color:#1e40af
-  style Parser fill:#d1fae5,stroke:#10b981,stroke-width:2px,color:#065f46
-  style Eval fill:#fef3c7,stroke:#f59e0b,stroke-width:2px,color:#92400e
-  style Env fill:#fee2e2,stroke:#ef4444,stroke-width:2px,color:#991b1b
-  style Print fill:#f1f5f9,stroke:#64748b,stroke-width:2px,color:#334155
-  style Interner fill:#ede9fe,stroke:#8b5cf6,stroke-width:2px,color:#6d28d9
-```
+![architecture overview](svgs/architecture-overview.svg)
 
 **关键数据：**
 - **~3000 行 Rust 代码**（零外部依赖）

@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-20 -20 1200 640" width="1200" height="640">
+  <!-- Global env -->
+  <rect x="40" y="60" width="360" height="160" rx="12" fill="#fff3cd" stroke="#ffc107" stroke-width="4"/>
+  <text x="220" y="116" text-anchor="middle" font-size="33" font-family="sans-serif" font-weight="bold" fill="#856404">全局环境 (outer = None)</text>
+  <text x="220" y="172" text-anchor="middle" font-size="30" font-family="monospace" fill="#555">x → 10,  + → Func(+)</text>
+
+  <!-- Local env (inner) -->
+  <rect x="40" y="290" width="440" height="150" rx="12" fill="#d4edda" stroke="#28a745" stroke-width="4"/>
+  <text x="260" y="340" text-anchor="middle" font-size="33" font-family="sans-serif" font-weight="bold" fill="#155724">局部环境 (outer = ↑ 全局)</text>
+  <text x="260" y="402" text-anchor="middle" font-size="30" font-family="monospace" fill="#555">y → 20</text>
+
+  <!-- Arrow: outer -->
+  <line x1="220" y1="290" x2="220" y2="230" stroke="#6c757d" stroke-width="3" stroke-dasharray="8,6"/>
+  <text x="250" y="268" font-size="27" font-family="sans-serif" fill="#6c757d">outer →</text>
+
+  <!-- Lookup explanation -->
+  <text x="560" y="130" font-size="33" font-family="sans-serif" fill="#333" font-weight="bold">查找过程: 查 x</text>
+  <text x="560" y="180" font-size="30" font-family="sans-serif" fill="#555">① 在"局部环境"里找 x</text>
+  <text x="560" y="226" font-size="30" font-family="sans-serif" fill="#555">② 没找到！→ 沿着 outer 往上</text>
+  <text x="560" y="272" font-size="30" font-family="sans-serif" fill="#555">③ 在"全局环境"里找到 x = 10 ✅</text>
+
+  <text x="560" y="350" font-size="33" font-family="sans-serif" fill="#333" font-weight="bold">查找过程: 查 y</text>
+  <text x="560" y="400" font-size="30" font-family="sans-serif" fill="#555">① 在"局部环境"里找 y</text>
+  <text x="560" y="446" font-size="30" font-family="sans-serif" fill="#555">② 找到了！直接返回 y = 20 ✅</text>
+
+  <!-- Closure note -->
+  <rect x="520" y="500" width="600" height="100" rx="12" fill="#f0f0f0" stroke="#bbb" stroke-width="2"/>
+  <text x="820" y="544" text-anchor="middle" font-size="30" font-family="sans-serif" fill="#555">闭包 = Lambda 创建时记住当时的 outer 环境</text>
+  <text x="820" y="586" text-anchor="middle" font-size="30" font-family="sans-serif" fill="#888">(define (make-adder n) (lambda (x) (+ x n)))</text>
+</svg>

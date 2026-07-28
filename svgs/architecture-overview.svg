@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-20 -20 1100 520" width="1100" height="520">
+  <defs>
+    <marker id="arrow" markerWidth="5" markerHeight="4" refX="5" refY="2" orient="auto">
+      <path d="M0,0 L5,2 L0,4 Z" fill="#6c757d"/>
+    </marker>
+    <marker id="arrow-down" markerWidth="5" markerHeight="4" refX="2.5" refY="4" orient="auto">
+      <path d="M0,0 L5,0 L2.5,4 Z" fill="#6c757d"/>
+    </marker>
+    <marker id="arrow-up" markerWidth="5" markerHeight="4" refX="2.5" refY="0" orient="auto">
+      <path d="M2.5,0 L5,4 L0,4 Z" fill="#6c757d"/>
+    </marker>
+  </defs>
+
+  <!-- Header -->
+  <rect x="200" y="20" width="680" height="56" rx="14" fill="#f8f9fa" stroke="#495057" stroke-width="4"/>
+  <text x="540" y="56" text-anchor="middle" font-size="26" font-family="sans-serif" font-weight="bold" fill="#495057">我们的 Lisp 解释器</text>
+
+  <!-- Branch lines -->
+  <line x1="540" y1="76" x2="540" y2="110" stroke="#6c757d" stroke-width="2"/>
+  <line x1="130" y1="110" x2="930" y2="110" stroke="#6c757d" stroke-width="2"/>
+
+  <line x1="130" y1="110" x2="130" y2="140" stroke="#6c757d" stroke-width="2" marker-end="url(#arrow-down)"/>
+  <line x1="330" y1="110" x2="330" y2="140" stroke="#6c757d" stroke-width="2" marker-end="url(#arrow-down)"/>
+  <line x1="530" y1="110" x2="530" y2="140" stroke="#6c757d" stroke-width="2" marker-end="url(#arrow-down)"/>
+  <line x1="730" y1="110" x2="730" y2="140" stroke="#6c757d" stroke-width="2" marker-end="url(#arrow-down)"/>
+  <line x1="930" y1="110" x2="930" y2="140" stroke="#6c757d" stroke-width="2" marker-end="url(#arrow-down)"/>
+
+  <!-- Box 1: 词法分析 -->
+  <rect x="40" y="148" width="180" height="96" rx="10" fill="#cce5ff" stroke="#0d6efd" stroke-width="2"/>
+  <text x="130" y="174" text-anchor="middle" font-size="18" font-family="sans-serif" font-weight="bold" fill="#0d6efd">词法分析</text>
+  <text x="130" y="196" text-anchor="middle" font-size="13" font-family="monospace" fill="#495057">src/lexer.rs</text>
+  <text x="130" y="216" text-anchor="middle" font-size="13" font-family="sans-serif" fill="#6c757d">有限状态机·零拷贝</text>
+
+  <!-- Box 2: 语法分析 -->
+  <rect x="240" y="148" width="180" height="96" rx="10" fill="#d4edda" stroke="#28a745" stroke-width="2"/>
+  <text x="330" y="174" text-anchor="middle" font-size="18" font-family="sans-serif" font-weight="bold" fill="#28a745">语法分析</text>
+  <text x="330" y="196" text-anchor="middle" font-size="13" font-family="monospace" fill="#495057">src/parser.rs</text>
+  <text x="330" y="216" text-anchor="middle" font-size="13" font-family="sans-serif" fill="#6c757d">递归下降解析</text>
+
+  <!-- Box 3: 求值器 -->
+  <rect x="440" y="148" width="180" height="96" rx="10" fill="#fff3cd" stroke="#ffc107" stroke-width="2"/>
+  <text x="530" y="174" text-anchor="middle" font-size="18" font-family="sans-serif" font-weight="bold" fill="#e65100">求值器</text>
+  <text x="530" y="196" text-anchor="middle" font-size="13" font-family="monospace" fill="#495057">src/interpreter.rs</text>
+  <text x="530" y="216" text-anchor="middle" font-size="13" font-family="sans-serif" fill="#6c757d">蹦床循环·TCO</text>
+
+  <!-- Box 4: 环境 -->
+  <rect x="640" y="148" width="180" height="96" rx="10" fill="#f8d7da" stroke="#dc3545" stroke-width="2"/>
+  <text x="730" y="174" text-anchor="middle" font-size="18" font-family="sans-serif" font-weight="bold" fill="#dc3545">环境</text>
+  <text x="730" y="196" text-anchor="middle" font-size="13" font-family="monospace" fill="#495057">src/env.rs</text>
+  <text x="730" y="216" text-anchor="middle" font-size="13" font-family="sans-serif" fill="#6c757d">HashMap·outer 链</text>
+
+  <!-- Box 5: 打印 -->
+  <rect x="840" y="148" width="180" height="96" rx="10" fill="#f0f0f0" stroke="#888" stroke-width="2"/>
+  <text x="930" y="174" text-anchor="middle" font-size="18" font-family="sans-serif" font-weight="bold" fill="#555">打印</text>
+  <text x="930" y="196" text-anchor="middle" font-size="13" font-family="monospace" fill="#495057">Display impl</text>
+  <text x="930" y="216" text-anchor="middle" font-size="13" font-family="sans-serif" fill="#6c757d">格式化输出</text>
+
+  <!-- Connector to interner -->
+  <line x1="530" y1="244" x2="530" y2="298" stroke="#6c757d" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arrow-down)"/>
+
+  <!-- Interner box -->
+  <rect x="410" y="298" width="240" height="130" rx="10" fill="#e8daef" stroke="#8e44ad" stroke-width="2"/>
+  <text x="530" y="338" text-anchor="middle" font-size="36" font-family="sans-serif" font-weight="bold" fill="#8e44ad">字符串驻留</text>
+  <text x="530" y="376" text-anchor="middle" font-size="26" font-family="monospace" fill="#495057">src/interner.rs</text>
+  <text x="530" y="410" text-anchor="middle" font-size="26" font-family="sans-serif" fill="#6c757d">String ↔ u64</text>
+
+  <!-- Data flow annotation -->
+  <text x="130" y="284" text-anchor="middle" font-size="24" font-family="sans-serif" fill="#adb5bd">源码 → Token</text>
+  <text x="330" y="284" text-anchor="middle" font-size="24" font-family="sans-serif" fill="#adb5bd">Token → AST</text>
+  <text x="730" y="284" text-anchor="middle" font-size="24" font-family="sans-serif" fill="#adb5bd">变量查找</text>
+  <text x="930" y="284" text-anchor="middle" font-size="24" font-family="sans-serif" fill="#adb5bd">值 → 文本</text>
+
+  <!-- Arrow annotations between boxes -->
+  <text x="225" y="200" text-anchor="middle" font-size="14" font-family="sans-serif" fill="#adb5bd">→</text>
+  <text x="425" y="200" text-anchor="middle" font-size="14" font-family="sans-serif" fill="#adb5bd">→</text>
+  <text x="625" y="200" text-anchor="middle" font-size="14" font-family="sans-serif" fill="#adb5bd">→</text>
+  <text x="825" y="200" text-anchor="middle" font-size="14" font-family="sans-serif" fill="#adb5bd">→</text>
+</svg>

@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="180 0 1140 550" width="1140" height="550">
+  <defs>
+    <marker id="arr2" markerWidth="12" markerHeight="10" refX="12" refY="5" orient="auto">
+      <path d="M0,0 L12,5 L0,10 Z" fill="#6c757d"/>
+    </marker>
+  </defs>
+
+  <!-- Root: List -->
+  <rect x="480" y="20" width="240" height="80" rx="12" fill="#fff3cd" stroke="#ffc107" stroke-width="4"/>
+  <text x="600" y="70" text-anchor="middle" font-size="26" font-family="sans-serif" font-weight="bold" fill="#856404">List</text>
+
+  <!-- Lines from root -->
+  <line x1="540" y1="100" x2="310" y2="170" stroke="#6c757d" stroke-width="3" marker-end="url(#arr2)"/>
+  <line x1="600" y1="100" x2="540" y2="170" stroke="#6c757d" stroke-width="3" marker-end="url(#arr2)"/>
+  <line x1="660" y1="100" x2="980" y2="170" stroke="#6c757d" stroke-width="3" marker-end="url(#arr2)"/>
+
+  <!-- Child 1: Symbol + -->
+  <rect x="200" y="180" width="220" height="80" rx="12" fill="#d4edda" stroke="#28a745" stroke-width="4"/>
+  <text x="310" y="230" text-anchor="middle" font-size="26" font-family="sans-serif" font-weight="bold" fill="#155724">Symbol("+")</text>
+  <text x="310" y="284" text-anchor="middle" font-size="18" font-family="sans-serif" fill="#6c757d">operator (function)</text>
+
+  <!-- Child 2: Number 1 -->
+  <rect x="444" y="180" width="192" height="80" rx="12" fill="#cce5ff" stroke="#0d6efd" stroke-width="4"/>
+  <text x="540" y="230" text-anchor="middle" font-size="26" font-family="sans-serif" font-weight="bold" fill="#004085">Number(1)</text>
+
+  <!-- Child 3: List (nested) -->
+  <rect x="660" y="180" width="640" height="80" rx="12" fill="#fff3cd" stroke="#ffc107" stroke-width="4"/>
+  <text x="980" y="230" text-anchor="middle" font-size="26" font-family="sans-serif" font-weight="bold" fill="#856404">List</text>
+
+  <!-- Lines from nested List -->
+  <line x1="800" y1="260" x2="800" y2="350" stroke="#6c757d" stroke-width="3" marker-end="url(#arr2)"/>
+  <line x1="1010" y1="260" x2="1010" y2="350" stroke="#6c757d" stroke-width="3" marker-end="url(#arr2)"/>
+  <line x1="1180" y1="260" x2="1180" y2="350" stroke="#6c757d" stroke-width="3" marker-end="url(#arr2)"/>
+
+  <!-- Grandchildren -->
+  <rect x="700" y="360" width="200" height="72" rx="12" fill="#d4edda" stroke="#28a745" stroke-width="3"/>
+  <text x="800" y="406" text-anchor="middle" font-size="24" font-family="sans-serif" fill="#155724">Symbol("*")</text>
+
+  <rect x="930" y="360" width="160" height="72" rx="12" fill="#cce5ff" stroke="#0d6efd" stroke-width="3"/>
+  <text x="1010" y="406" text-anchor="middle" font-size="24" font-family="sans-serif" fill="#004085">Number(2)</text>
+
+  <rect x="1120" y="360" width="120" height="72" rx="12" fill="#cce5ff" stroke="#0d6efd" stroke-width="3"/>
+  <text x="1180" y="406" text-anchor="middle" font-size="24" font-family="sans-serif" fill="#004085">Number(3)</text>
+
+  <!-- Title -->
+  <text x="600" y="480" text-anchor="middle" font-size="22" font-family="sans-serif" fill="#333">Lisp code: (+ 1 (* 2 3))  →  nested AST tree</text>
+  <text x="600" y="524" text-anchor="middle" font-size="20" font-family="sans-serif" fill="#888">Recursive parsing: parse() → read_seq() → parse() → read_seq() → ...</text>
+</svg>

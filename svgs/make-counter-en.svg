@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-10 0 400 280" width="400" height="280">
+  <rect x="10" y="10" width="380" height="260" rx="12" fill="#f0f7ff" stroke="#4a90d9" stroke-width="2"/>
+  <text x="200" y="40" text-anchor="middle" font-size="20" font-family="sans-serif" font-weight="bold" fill="#4a90d9">make-counter function</text>
+
+  <rect x="30" y="55" width="340" height="50" rx="8" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+  <text x="200" y="85" text-anchor="middle" font-size="17" font-family="sans-serif" fill="#1e40af">📋 Parameters: [start]</text>
+
+  <rect x="30" y="115" width="340" height="80" rx="8" fill="#d1fae5" stroke="#10b981" stroke-width="2"/>
+  <text x="200" y="142" text-anchor="middle" font-size="17" font-family="sans-serif" fill="#065f46">Body: (lambda ()</text>
+  <text x="200" y="165" text-anchor="middle" font-size="17" font-family="sans-serif" fill="#065f46">(set! start (+ start 1))</text>
+  <text x="200" y="188" text-anchor="middle" font-size="17" font-family="sans-serif" fill="#065f46">start)</text>
+
+  <rect x="30" y="205" width="340" height="50" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+  <text x="200" y="235" text-anchor="middle" font-size="17" font-family="sans-serif" fill="#92400e">Birth env: Global</text>
+</svg>

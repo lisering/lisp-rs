@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-20 -20 1120 440" width="1120" height="440">
+
+  <text x="540" y="44" text-anchor="middle" font-size="26" font-family="sans-serif" font-weight="bold" fill="#333">String Interning</text>
+
+  <!-- Input strings -->
+  <text x="140" y="100" text-anchor="middle" font-size="20" font-family="monospace" fill="#555">"define"</text>
+  <text x="340" y="100" text-anchor="middle" font-size="20" font-family="monospace" fill="#555">"lambda"</text>
+  <text x="540" y="100" text-anchor="middle" font-size="20" font-family="monospace" fill="#555">"define"</text>
+  <text x="740" y="100" text-anchor="middle" font-size="20" font-family="monospace" fill="#555">"if"</text>
+  <text x="960" y="100" text-anchor="middle" font-size="20" font-family="monospace" fill="#555">"define"</text>
+
+  <!-- Arrows down -->
+  <line x1="140" y1="120" x2="140" y2="180" stroke="#6c757d" stroke-width="2"/>
+  <line x1="340" y1="120" x2="340" y2="180" stroke="#6c757d" stroke-width="2"/>
+  <line x1="540" y1="120" x2="540" y2="180" stroke="#6c757d" stroke-width="2"/>
+  <line x1="740" y1="120" x2="740" y2="180" stroke="#6c757d" stroke-width="2"/>
+  <line x1="960" y1="120" x2="960" y2="180" stroke="#6c757d" stroke-width="2"/>
+
+  <!-- Interner table -->
+  <rect x="60" y="180" width="960" height="110" rx="12" fill="#e8daef" stroke="#8e44ad" stroke-width="4"/>
+  <text x="540" y="216" text-anchor="middle" font-size="20" font-family="sans-serif" fill="#6c3483">Intern table (global HashMap&lt;String to u64&gt;)</text>
+
+  <!-- Output IDs -->
+  <text x="140" y="264" text-anchor="middle" font-size="22" font-family="monospace" font-weight="bold" fill="#8e44ad">1</text>
+  <text x="340" y="264" text-anchor="middle" font-size="22" font-family="monospace" font-weight="bold" fill="#8e44ad">2</text>
+  <text x="540" y="264" text-anchor="middle" font-size="22" font-family="monospace" font-weight="bold" fill="#8e44ad">1</text>
+  <text x="740" y="264" text-anchor="middle" font-size="22" font-family="monospace" font-weight="bold" fill="#8e44ad">3</text>
+  <text x="960" y="264" text-anchor="middle" font-size="22" font-family="monospace" font-weight="bold" fill="#8e44ad">1</text>
+
+  <!-- Matching arrows -->
+  <path d="M540,280 C540,314 140,314 140,280" fill="none" stroke="#e74c3c" stroke-width="3" stroke-dasharray="6,4"/>
+  <path d="M960,280 C960,314 140,314 140,280" fill="none" stroke="#e74c3c" stroke-width="3" stroke-dasharray="6,4"/>
+
+  <!-- Note -->
+  <rect x="120" y="318" width="840" height="70" rx="8" fill="#f0f0f0" stroke="#ccc" stroke-width="2"/>
+  <text x="540" y="350" text-anchor="middle" font-size="20" font-family="sans-serif" fill="#555">Compare: Symbol(1)==Symbol(1) -> 1 CPU instruction (vs string: 6 char comparisons)</text>
+  <text x="540" y="376" text-anchor="middle" font-size="18" font-family="sans-serif" fill="#888">Hash: u64 FxHasher -> ~3 instructions (vs String SipHash -> ~20)</text>
+</svg>

@@ -108,59 +108,7 @@ That's it. You read that right—the entire syntax of the Lisp language, fully e
 
 Before we start building, here's a map of the chapters and their prerequisites:
 
-```mermaid
-flowchart LR
-  A["🔧 Preparation<br/>Steps 1-4"] --> B["📦 Meet the Values<br/>Steps 5-6"]
-  B --> C["⚙️ Make It Compute<br/>Steps 7-8"]
-  C --> D["✂️ Split into Words<br/>Steps 9-11"]
-  D --> cont["⬇️"]
-
-  style A fill:#f0f7ff,stroke:#4a90d9,stroke-width:2px,color:#1a56db
-  style B fill:#dbeafe,stroke:#3b82f6,stroke-width:2.5px,color:#1e40af
-  style C fill:#f0f7ff,stroke:#4a90d9,stroke-width:2px,color:#1a56db
-  style D fill:#dbeafe,stroke:#3b82f6,stroke-width:2.5px,color:#1e40af
-  style cont fill:none,stroke:none,font-size:24px
-```
-
-
-```mermaid
-flowchart LR
-  E["🧩 Understand Words<br/>Steps 12-15"] --> F["🏷️ Naming Things<br/>Steps 16-19"]
-  F --> G["🧮 Real Computation<br/>Steps 20-27"]
-  G --> H["📊 More Data Types<br/>Steps 28-31"]
-  H --> cont2["⬇️"]
-
-  style E fill:#dbeafe,stroke:#3b82f6,stroke-width:2.5px,color:#1e40af
-  style F fill:#f0f7ff,stroke:#4a90d9,stroke-width:2px,color:#1a56db
-  style G fill:#f0f7ff,stroke:#4a90d9,stroke-width:2px,color:#1a56db
-  style H fill:#f0f7ff,stroke:#4a90d9,stroke-width:2px,color:#1a56db
-  style cont2 fill:none,stroke:none,font-size:24px
-```
-
-
-```mermaid
-flowchart LR
-  I["🔀 Make Choices<br/>Steps 32-35"] --> J["🧠 Remember the Past<br/>Steps 36-39"]
-  J --> K["🚀 Go Faster<br/>Steps 40-43"]
-  K --> L["✨ More Magic<br/>Steps 44-51"]
-  L --> cont3["⬇️"]
-
-  style I fill:#fff7ed,stroke:#f97316,stroke-width:2.5px,color:#c2410c
-  style J fill:#fff7ed,stroke:#f97316,stroke-width:2.5px,color:#c2410c
-  style K fill:#fff7ed,stroke:#f97316,stroke-width:2.5px,color:#c2410c
-  style L fill:#f0f7ff,stroke:#4a90d9,stroke-width:2px,color:#1a56db
-  style cont3 fill:none,stroke:none,font-size:24px
-```
-
-
-```mermaid
-flowchart LR
-  M["🎯 Builtin Functions + REPL<br/>Steps 52-74"] --- _end["🏁"]
-
-  style M fill:#f5f3ff,stroke:#8b5cf6,stroke-width:2.5px,color:#6d28d9
-  style _end fill:none,stroke:none,font-size:24px
-  linkStyle 0 stroke-width:0
-```
+![roadmap](svgs/roadmap-en.svg)
 
 
 Each chapter builds on the previous one. The blue-highlighted chapters (Lexer, Parser, Values) are core foundations; the orange-highlighted ones (Closures, TCO) are the deepest features. If you ever feel lost, refer back to this map.
@@ -205,20 +153,7 @@ Full breakdown:
       (* x x)))              ← "What this function does: multiply x by itself"
 ```
 
-```mermaid
-flowchart LR
-  subgraph SQ["🎒 square function"]
-    direction TB
-    P["📋 Parameters: [x] — 1 parameter"]
-    B["⚙️ Body: (* x x) — multiplication"]
-    E["📸 Birth env: global"]
-  end
-
-  style SQ fill:#f0f7ff,stroke:#4a90d9,stroke-width:2px
-  style P fill:#dbeafe,stroke:#3b82f6,color:#1e40af
-  style B fill:#d1fae5,stroke:#10b981,color:#065f46
-  style E fill:#fef3c7,stroke:#f59e0b,color:#92400e
-```
+![square closure en](svgs/square-closure-en.svg)
 
 ```
 Call Process:
@@ -568,20 +503,7 @@ That first line looks a little dense—two `lambda`s nested inside each other. H
 
 make-counter itself:
 
-```mermaid
-flowchart LR
-  subgraph MC["🎒 make-counter function"]
-    direction TB
-    P["📋 Parameters: [start]"]
-    B["⚙️ Body: (lambda ()<br/>(set! start (+ start 1))<br/>start)"]
-    E["📸 Birth env: Global"]
-  end
-
-  style MC fill:#f0f7ff,stroke:#4a90d9,stroke-width:2px
-  style P fill:#dbeafe,stroke:#3b82f6,color:#1e40af
-  style B fill:#d1fae5,stroke:#10b981,color:#065f46
-  style E fill:#fef3c7,stroke:#f59e0b,color:#92400e
-```
+![make counter en](svgs/make-counter-en.svg)
 
 > ⚠️ **Heads-up**: make-counter's body is itself a lambda! Calling make-counter returns that inner lambda, not a number.
 
@@ -640,17 +562,7 @@ Breaking it down:
 Global environment now has one new entry:
 ```
 
-```mermaid
-flowchart LR
-  subgraph GE["🌐 Global env"]
-    MC["make-counter → [func]<br/>params: start<br/>body: (lambda () ...)<br/>backpack: Global 📸"]
-    Other["(other built-ins...)"]
-  end
-
-  style GE fill:#fef3c7,stroke:#f59e0b,stroke-width:2px,color:#92400e
-  style MC fill:#fef9e7,stroke:#f59e0b,color:#92400e
-  style Other fill:#fef9e7,stroke:#f59e0b,color:#92400e
-```
+![global env make counter en](svgs/global-env-make-counter-en.svg)
 
 ```
 All this step did was "register a name." Nothing happened yet—make-counter hasn't been called.
@@ -732,33 +644,7 @@ First, unpack 1:
 Global environment now:
 ```
 
-```mermaid
-flowchart TD
-  subgraph GlobalEnv["🌐 Global env"]
-    MC["make-counter → [func]"]
-    Counter["counter → counter-fn"]
-    Plus["+ → addition"]
-    Minus["- → subtraction"]
-    Dots["..."]
-  end
-
-  Counter -->|"backpack points here"| Backpack
-
-  subgraph Backpack["🎒 backpack (alive!)"]
-    Start["start → 0"]
-    Outer["outer → Global"]
-  end
-
-  style GlobalEnv fill:#fef3c7,stroke:#f59e0b,stroke-width:2px,color:#92400e
-  style Backpack fill:#d1fae5,stroke:#10b981,stroke-width:2px,color:#065f46
-  style MC fill:#fef9e7,stroke:#f59e0b,color:#92400e
-  style Counter fill:#fef9e7,stroke:#f59e0b,color:#92400e
-  style Plus fill:#fef9e7,stroke:#f59e0b,color:#92400e
-  style Minus fill:#fef9e7,stroke:#f59e0b,color:#92400e
-  style Dots fill:#fef9e7,stroke:#f59e0b,color:#92400e
-  style Start fill:#ecfdf5,stroke:#10b981,color:#065f46
-  style Outer fill:#ecfdf5,stroke:#10b981,color:#065f46
-```
+![counter backpack en](svgs/counter-backpack-en.svg)
 
 ---
 
@@ -842,17 +728,7 @@ Prepared:
   CallFrame now:
 ```
 
-```mermaid
-flowchart LR
-  subgraph CF["📋 CallFrame"]
-    F["f → square (Lambda)"]
-    X["x → Number(3)"]
-  end
-
-  style CF fill:#f0f7ff,stroke:#4a90d9,stroke-width:2px
-  style F fill:#dbeafe,stroke:#3b82f6,color:#1e40af
-  style X fill:#d1fae5,stroke:#10b981,color:#065f46
-```
+![callframe en](svgs/callframe-en.svg)
 
 ```
   3 Evaluate function body: (f (f x))
@@ -964,17 +840,7 @@ Can evaluate numbers
 
 > **The diagram above is the skeleton of the entire project** — source code enters from the left, passes through four stages, and comes out the right as the computed result. The 74 steps ahead flesh out these four stages in detail.
 
-```mermaid
-flowchart LR
-  A["📝 Source<br/>Steps 1-8"] -->|tokenize| B["🔍 Lexer<br/>Steps 9-11"]
-  B -->|parse| C["🌳 Parser<br/>Steps 12-15"]
-  C -->|eval| D["⚡ Eval<br/>Steps 16-74"]
-
-  style A fill:#e0f2fe,stroke:#0284c7,stroke-width:2px,color:#075985
-  style B fill:#dbeafe,stroke:#3b82f6,stroke-width:2px,color:#1e40af
-  style C fill:#d1fae5,stroke:#10b981,stroke-width:2px,color:#065f46
-  style D fill:#fef3c7,stroke:#f59e0b,stroke-width:2px,color:#92400e
-```
+![pipeline en](svgs/pipeline-en.svg)
 
 ---
 
@@ -1978,19 +1844,7 @@ Build the flood wall before the rain comes.
 
 > **Diagram — how match works**:
 
-```mermaid
-flowchart TD
-  Input["📥 Input: Number(42.0)"] --> Check{"🔢 Is it a number?"}
-  Check -->|yes| Ok["✅ Extract 42.0<br/>Return Ok(Number(42.0))"]
-  Check -->|no| Wildcard["🔀 _ catch-all"]
-  Wildcard --> Err["❌ Return Err('This type is not supported yet')"]
-
-  style Input fill:#dbeafe,stroke:#3b82f6,color:#1e40af
-  style Check fill:#fef3c7,stroke:#f59e0b,stroke-width:2px,color:#92400e
-  style Ok fill:#d1fae5,stroke:#10b981,color:#065f46
-  style Wildcard fill:#f1f5f9,stroke:#64748b,color:#334155
-  style Err fill:#fee2e2,stroke:#ef4444,color:#991b1b
-```
+![enum pocket en](svgs/enum-pocket-en.svg)
 
 💡 In short — `Result`: Rust's "might succeed, might fail" type.
 
@@ -2002,15 +1856,7 @@ Result<LispExp, LispErr>
 ```
 Like a delivery package: you get what you ordered (Ok) or a "sorry we missed you" note (Err).
 
-```mermaid
-flowchart TD
-  Result["📦 Result&lt;T, E&gt;"] --> Ok["✅ Ok(T)<br/>Success — the wrapped value"]
-  Result --> Err["❌ Err(E)<br/>Failure — the wrapped error"]
-
-  style Result fill:#f1f5f9,stroke:#475569,stroke-width:2.5px,color:#1e293b
-  style Ok fill:#d1fae5,stroke:#10b981,stroke-width:2px,color:#065f46
-  style Err fill:#fee2e2,stroke:#ef4444,stroke-width:2px,color:#991b1b
-```
+![result type en](svgs/result-type-en.svg)
 
 - `Ok(Number(42.0))` → Success! Result is the number 42
 - `Err(LispErr::Reason("Something went wrong"))` → Failure! Reason is "Something went wrong"
@@ -2533,23 +2379,7 @@ Layer 1: parse → "(" → read_seq starts reading
   └─ ")" → list ends! Return List([+,1,[*,2,3]])
 
 Result looks like a tree:
-```mermaid
-flowchart TD
-  List["🌿 List(+, 1, (*, 2, 3))"] --> Plus["➕ Symbol: +"]
-  List --> Num1["🔢 Number(1)"]
-  List --> Inner["🌿 List(*, 2, 3)"]
-  Inner --> Star["✖️ Symbol: *"]
-  Inner --> Num2["🔢 Number(2)"]
-  Inner --> Num3["🔢 Number(3)"]
-
-  style List fill:#fef3c7,stroke:#f59e0b,stroke-width:2.5px,color:#92400e
-  style Inner fill:#fef3c7,stroke:#f59e0b,stroke-width:2.5px,color:#92400e
-  style Plus fill:#dbeafe,stroke:#3b82f6,stroke-width:2px,color:#1e40af
-  style Star fill:#dbeafe,stroke:#3b82f6,stroke-width:2px,color:#1e40af
-  style Num1 fill:#d1fae5,stroke:#10b981,stroke-width:2px,color:#065f46
-  style Num2 fill:#d1fae5,stroke:#10b981,stroke-width:2px,color:#065f46
-  style Num3 fill:#d1fae5,stroke:#10b981,stroke-width:2px,color:#065f46
-```
+![ast tree en](svgs/ast-tree-en.svg)
 
 
 💡 In short — Recursion: a function that calls itself. Like Russian nesting dolls — open one, find another inside, repeat until the smallest one has nothing inside.
@@ -2563,29 +2393,7 @@ running 6 tests
 test result: ok. 6 passed; 0 failed
 ```
 
-```mermaid
-sequenceDiagram
-  participant P as 🔄 parse
-  participant RS as 📋 read_seq
-  participant PA as ⚛️ parse_atom
-
-  P->>RS: sees "(" → call read_seq
-  RS->>P: recursive parse(token)
-
-  P->>PA: token = "42"
-  PA-->>P: Number(42.0)
-
-  P->>PA: token = "+"
-  PA-->>P: Symbol("+")
-
-  P->>PA: token = "3"
-  PA-->>P: Number(3.0)
-
-  P->>RS: sees ")" → list ends
-  RS-->>P: List([Symbol(+), 42, 3])
-
-  Note over P: ✅ (+ 42 3) → AST built
-```
+![parser seq en](svgs/parser-seq-en.svg)
 
 > Recursive parsing call flow: `parse()` and `read_seq()` call each other—`parse` encountering `(` delegates to `read_seq`, `read_seq` encountering a child element calls `parse` again, forming recursive descent. Each time `)` is encountered, "pop one layer," ultimately building the complete nested AST tree.
 
@@ -3412,34 +3220,7 @@ Types are now complete—`Number` can compute, `Bool` and `Nil` represent truth/
 
 > What we're solving: Implement the special forms if/define/lambda—they aren't ordinary functions, they have special evaluation rules. This is the foundation of Lisp's control flow.
 
-```mermaid
-classDiagram
-  class LispExp {
-    &lt;&lt;enum&gt;&gt;
-    +Number(f64)
-    +Symbol(u64)
-    +List(Vec~LispExp~)
-    +Func(fn pointer)
-    +Lambda(Box~LispLambda~)
-    +Bool(bool)
-    +Nil
-    +String(String)
-  }
-  class LispLambda {
-    &lt;&lt;struct&gt;&gt;
-    +params: Vec~u64~
-    +rest: Option~u64~
-    +body: Box~LispExp~
-    +env: Rc~RefCell~LispEnv~~
-  }
-  class LispErr {
-    &lt;&lt;enum&gt;&gt;
-    +Reason(String)
-  }
-  LispExp *-- LispLambda : Lambda(Box) owns
-  LispExp o-- LispExp : List(Vec) recursive
-  LispExp ..> LispErr : eval returns
-```
+![class diagram en](svgs/class-diagram-en.svg)
 
 > 🏋️ **Exercises**
 > 1. (⭐) Write a test to verify that `(> 5 3)` returns `#t` and `(> 3 5)` returns `#f`
@@ -4490,23 +4271,7 @@ lambda1.borrow_mut().push_str(", y=2");
 println!("{}", lambda2.borrow());  // "x=1, y=2"  ✅
 ```
 
-```mermaid
-flowchart TD
-  subgraph Problem["❌ Without Rc — each gets a copy"]
-    A1["Lambda₁<br/>env: {x→1}"] --> A3["set! x=2"]
-    A3 --> A4["Lambda₁'s env<br/>{x→2}"]
-    A2["Lambda₂<br/>env: {x→1}"] --> A5["Can't see change!<br/>{x→1}"]
-  end
-
-  subgraph Solution["✅ With Rc<RefCell> — shared"]
-    B1["Lambda₁"] -->|"Rc::clone"| B3["📋 Shared env<br/>{x→1}"]
-    B2["Lambda₂"] -->|"Rc::clone"| B3
-    B3 -->|"set! x=2"| B4["📋 Shared env<br/>{x→2} ✅<br/>Both see it"]
-  end
-
-  style Problem fill:#fef2f2,stroke:#ef4444,stroke-width:2px
-  style Solution fill:#f0fdf4,stroke:#22c55e,stroke-width:2px
-```
+![rc sharing en](svgs/rc-sharing-en.svg)
 
 > 💡 In short — `Rc<RefCell<T>>`: shared apartment + writable whiteboard. Multiple people share it (Rc), and anyone can write on the whiteboard (RefCell). When one person writes, everyone else immediately sees it. This is the closure's "backpack🎒"—multiple lambdas carry the same backpack; if one changes something inside, everyone else knows.
 
@@ -4554,22 +4319,7 @@ pub struct LispEnv {
 
 > 💡 **Why don't we need a garbage collector?** Most Lisp-in-X tutorials (Java, Python) have to deal with reference cycles and GC. Rust's ownership system handles this for us: `Rc` auto-frees memory when the last reference drops, and the `outer` chain is a one-way linked list — no cycles. Rust gives us GC-like safety without a runtime collector.
 
-```mermaid
-flowchart TD
-  subgraph EnvChain["🔗 Environment Chain — Lexical Scope"]
-    Local["🟢 Local env<br/>y → 20<br/>outer ↓"] -->|outer pointer| Global["🟡 Global env<br/>x → 10, + → Func(+)<br/>outer = None"]
-  end
-  LookupX["🔍 Lookup x:<br/>① Local env → ❌ not found<br/>② follow outer → Global env<br/>③ ✅ found x = 10"]
-  LookupY["🔍 Lookup y:<br/>① Local env → ✅ found y = 20"]
-
-  Local -.->|lookup x traverses| LookupX
-  Local -.->|lookup y traverses| LookupY
-
-  style Global fill:#fef3c7,stroke:#f59e0b,stroke-width:2.5px,color:#92400e
-  style Local fill:#d1fae5,stroke:#10b981,stroke-width:2.5px,color:#065f46
-  style LookupX fill:#f1f5f9,stroke:#64748b,stroke-width:2px,color:#334155
-  style LookupY fill:#f1f5f9,stroke:#64748b,stroke-width:2px,color:#334155
-```
+![env chain en](svgs/env-chain-en.svg)
 
 > Environment chain = singly linked list: each environment frame has an `outer` pointer to the outer environment. Variable lookup follows this chain from inside to outside—this is the runtime implementation of lexical scoping. `Rc<RefCell<>>` allows multiple places to share the same frame (e.g., two closures capturing the same outer environment).
 
@@ -4770,26 +4520,7 @@ test tests::test_closure ... ok
 test result: ok. 22 passed; 0 failed
 ```
 
-```mermaid
-sequenceDiagram
-  participant U as 👤 User
-  participant D as 📝 define
-  participant C as 🎒 Closure
-  participant E as ⚡ Eval
-
-  U->>D: (define make-adder<br/>(lambda (n)<br/>(lambda (x) (+ x n))))
-  D->>C: Create outer closure make-adder
-  Note over C: params → [n]<br/>body → (lambda (x) (+ x n))<br/>env → 📸 global env
-
-  U->>E: ((make-adder 5) 3)
-  E->>C: Call make-adder(n=5)
-  Note over C: Create inner closure<br/>params → [x]<br/>body → (+ x n)<br/>env → {n:5} ← backpack!
-
-  E->>C: Call inner closure(x=3)
-  Note over C: Lookup n → in backpack! n=5<br/>Compute: 3 + 5 = 8
-  C-->>E: Return 8
-  E-->>U: ✅ 8
-```
+![closure en](svgs/closure-en.svg)
 
 > Closure = function body + birth environment. Technically, "a function remembers the environment it was born in" means `Lambda.env` points to the definition-time `CallFrame`. When calling, the new frame uses this captured frame as its `outer`—so the inner function can "see" the outer function's variables.
 
@@ -5454,36 +5185,7 @@ pub fn eval(exp: &LispExp, env: &mut LispEnv) -> Result<LispExp, LispErr> {
 - Every place that used `env` → change to `current_env`
 - Recursive call `eval(xxx, env)` → change to `eval(xxx, &mut current_env)`
 
-```mermaid
-flowchart TD
-  subgraph Recursion["❌ Regular Recursion · O(n) stack frames"]
-    direction TB
-    A["📥 (loop 10000)"] --> B["📥 call loop(10000)"]
-    B --> C["📥 call loop(9999)"]
-    C --> D["📥 ... 10000 stack frames"]
-    D --> E["💥 Stack Overflow!"]
-  end
-  subgraph Trampoline["✅ Trampoline Loop · O(1) stack frames"]
-    direction TB
-    F["🔄 (loop 10000)"] --> G["🔄 Iter #1<br/>current_exp = (loop 9999)"]
-    G --> H["🔄 Iter #2<br/>current_exp = (loop 9998)"]
-    H --> I["🔄 Iter #N<br/>current_exp = (loop 0)"]
-    I --> J["✅ Return value"]
-  end
-
-  style Recursion fill:#fef2f2,stroke:#ef4444,stroke-width:2px
-  style Trampoline fill:#f0fdf4,stroke:#22c55e,stroke-width:2px
-  style A fill:#fee2e2,stroke:#ef4444
-  style B fill:#fee2e2,stroke:#ef4444
-  style C fill:#fee2e2,stroke:#ef4444
-  style D fill:#fee2e2,stroke:#ef4444
-  style E fill:#dc2626,color:#fff,stroke-width:2.5px
-  style F fill:#d1fae5,stroke:#22c55e
-  style G fill:#d1fae5,stroke:#22c55e
-  style H fill:#d1fae5,stroke:#22c55e
-  style I fill:#d1fae5,stroke:#22c55e
-  style J fill:#16a34a,color:#fff,stroke-width:2.5px
-```
+![tco trampoline en](svgs/tco-trampoline-en.svg)
 
 > Color meanings: Green = TCO path (continue, no stack growth), Blue = return path (result produced). Note all tail call positions (if branches, lambda body calls) follow the green path.
 
@@ -5671,35 +5373,7 @@ String interning:
        Comparison: 1 == 1  (1 CPU instruction) vs "define" == "define" (6 character comparisons)
 ```
 
-```mermaid
-flowchart LR
-  subgraph Input["Input"]
-    Symbol["🏷️ Symbol name (String)"]
-    Example1[""+""]
-    Example2[""define""]
-  end
-  Symbol --> Intern["🔄 intern()"]
-  Example1 --> Intern
-  Example2 --> Intern
-  Intern --> ID["🆔 u64 ID"]
-
-  subgraph Benefits["📈 Benefits"]
-    Speed["⚡ Compare: O(1) int vs O(n) string"]
-    Memory["💾 Memory: 1 alloc per unique name"]
-    Hash["#️⃣ Hash: FX hasher ~3 CPU instr"]
-  end
-
-  ID -.->|provides| Speed
-  ID -.->|provides| Memory
-  ID -.->|provides| Hash
-
-  style Symbol fill:#dbeafe,stroke:#3b82f6,stroke-width:2px,color:#1e40af
-  style Intern fill:#fef3c7,stroke:#f59e0b,stroke-width:2.5px,color:#92400e
-  style ID fill:#d1fae5,stroke:#10b981,stroke-width:2.5px,color:#065f46
-  style Example1 fill:#f1f5f9,stroke:#64748b,color:#334155
-  style Example2 fill:#f1f5f9,stroke:#64748b,color:#334155
-  style Benefits fill:#f5f3ff,stroke:#8b5cf6,stroke-width:2px,color:#6d28d9
-```
+![string interning en](svgs/string-interning-en.svg)
 
 > Bidirectional mapping: `id_to_str` for `lookup(id)` to output debug info, `str_to_id` for `intern(str)` fast deduplication. `OnceLock<RwLock<>>` ensures a single global instance and thread safety.
 
@@ -5872,28 +5546,7 @@ test result: ok. 23 passed; 0 failed
 
 Currently `tokenize` returns `Vec<String>`—each token heap-allocates a String. Change to `Vec<&str>`—directly reference slices of the source.
 
-```mermaid
-flowchart LR
-  subgraph Old["❌ Traditional: copy"]
-    direction LR
-    O1["📄 Source"] --> O2["📋 String copy<br/>(heap alloc)"]
-    O2 --> O3["📦 Token vec<br/>each token heap-alloc"]
-  end
-  subgraph New["✅ This interpreter: zero-copy"]
-    direction LR
-    N1["📄 Source"] --> N2["🔗 &str ref<br/>(zero alloc)"]
-    N2 --> N3["📦 Token vec<br/>&str slices"]
-  end
-
-  style Old fill:#fef2f2,stroke:#ef4444,stroke-width:2px
-  style New fill:#f0fdf4,stroke:#22c55e,stroke-width:2px
-  style O1 fill:#fee2e2,stroke:#ef4444,color:#991b1b
-  style O2 fill:#fee2e2,stroke:#ef4444,color:#991b1b
-  style O3 fill:#fee2e2,stroke:#ef4444,color:#991b1b
-  style N1 fill:#d1fae5,stroke:#22c55e,color:#065f46
-  style N2 fill:#d1fae5,stroke:#22c55e,color:#065f46
-  style N3 fill:#d1fae5,stroke:#22c55e,color:#065f46
-```
+![zero copy en](svgs/zero-copy-en.svg)
 
 ```rust
 // src/lexer.rs — tokenize function
@@ -6135,30 +5788,7 @@ lisp-rs/
 
 **Test count**: All tests pass (verified with `cargo test`)
 
-```mermaid
-flowchart TD
-  subgraph Pipeline["🔄 Processing Pipeline"]
-    direction LR
-    L1["📄 Lexer<br/>lexer.rs<br/>⟹ Vec&lt;&str&gt;"] --> L2["🌳 Parser<br/>parser.rs<br/>⟹ LispExp AST"]
-    L2 --> L3["🗂️ Environment<br/>env.rs<br/>⟹ lexical scope"]
-    L3 --> L4["⚡ Eval<br/>interpreter.rs<br/>⟹ Value"]
-  end
-  subgraph Shared["🏗️ Shared Infrastructure"]
-    Interner["🔗 interner.rs<br/>string interner<br/>String ↔ u64"]
-  end
-
-  L2 -.->|symbol ref| Interner
-  L4 -.->|symbol ID| Interner
-  L3 -.->|var lookup| Interner
-
-  style Pipeline fill:#f0f7ff,stroke:#4a90d9,stroke-width:2px
-  style Shared fill:#f5f3ff,stroke:#8b5cf6,stroke-width:2px,color:#6d28d9
-  style L1 fill:#e0f2fe,stroke:#0284c7,color:#075985
-  style L2 fill:#d1fae5,stroke:#10b981,color:#065f46
-  style L3 fill:#fef3c7,stroke:#f59e0b,color:#92400e
-  style L4 fill:#fee2e2,stroke:#ef4444,color:#991b1b
-  style Interner fill:#ede9fe,stroke:#8b5cf6,color:#6d28d9
-```
+![module pipeline en](svgs/module-pipeline-en.svg)
 
 > Module layering: Core layer (types + environment + interner) → Parsing layer (lexer + parser) → Evaluation layer. Each layer only depends on layers below, no cross-layer dependencies.
 
@@ -6166,35 +5796,7 @@ flowchart TD
 
 > What we're solving: begin/set!/let/cond/and/or/let*/letrec—completing Lisp's control flow and binding capabilities.
 
-```mermaid
-flowchart TD
-  Start{"⚡ eval(exp, env)"} --> IsSelf{"Self-evaluating?<br/>Number/Bool/Nil/Str"}
-  IsSelf -->|yes| Ret["✅ Return directly"]
-  IsSelf -->|no| Sym{"Symbol?"}
-  Sym -->|yes| Lookup["🔍 env.get(sym_id)"]
-  Sym -->|no| List{"List?"}
-  List -->|no| Err["❌ Error"]
-  List -->|yes| Special{"Check special form"}
-
-  Special -->|if| If["🔀 Check condition<br/>take then or else"]
-  Special -->|define| Define["📝 env.set(sym, val)"]
-  Special -->|lambda| Lambda["🎒 Create closure<br/>LispLambda{params,body,env}"]
-  Special -->|function| Call["📞 eval args → call fn"]
-
-  If --> Tail["🔄 Tail position →<br/>update current_exp + env<br/>continue trampoline"]
-  Define --> NilR["⬜ return nil"]
-  Lambda --> Clos["🎒 return closure"]
-  Call --> Tail
-
-  style Start fill:#fef3c7,stroke:#f59e0b,stroke-width:2.5px,color:#92400e
-  style Tail fill:#d1fae5,stroke:#22c55e,stroke-width:3px,color:#065f46
-  style Ret fill:#dbeafe,stroke:#3b82f6,color:#1e40af
-  style Err fill:#fee2e2,stroke:#ef4444,color:#991b1b
-  style If fill:#f0f7ff,stroke:#4a90d9,color:#1a56db
-  style Define fill:#f0f7ff,stroke:#4a90d9,color:#1a56db
-  style Lambda fill:#f0f7ff,stroke:#4a90d9,color:#1a56db
-  style Call fill:#f0f7ff,stroke:#4a90d9,color:#1a56db
-```
+![special forms en](svgs/special-forms-en.svg)
 
 > 🏋️ **Exercises**
 > 1. (⭐) Run `cargo run --example bench --release` and record the TCO and factorial benchmark data on your machine
@@ -7912,32 +7514,7 @@ fn test_newline_returns_nil() {
 
 ### Step 74: Make Modules Public + Create main.rs
 
-```mermaid
-sequenceDiagram
-  actor U as 👤 User
-  participant M as 🖥️ main (REPL)
-  participant L as 🔍 lexer
-  participant P as 🌳 parser
-  participant E as ⚡ eval
-
-  U->>M: "(+ 1 2)"
-  Note over U,M: 📝 Input expression
-
-  M->>L: tokenize("(+ 1 2)")
-  L-->>M: ["(", "+", "1", "2", ")"]
-  Note over L: 🔪 Split into tokens
-
-  M->>P: parse(tokens)
-  P-->>M: AST: List(+, 1, 2)
-  Note over P: 🌳 Build AST tree
-
-  M->>E: eval(ast, env)
-  E-->>M: Number(3)
-  Note over E: ⚡ Evaluate
-
-  M->>U: ✅ 3
-  Note over U,E: 🔄 Loop: wait for next input
-```
+![repl seq en](svgs/repl-seq-en.svg)
 
 > The REPL is the loop above—you type a line of code, it goes through lexical analysis → syntax analysis → evaluation, prints the result, then waits for your next line. Until you type `:q` to exit.
 
@@ -8103,28 +7680,7 @@ cargo run
 
 After 74 steps, here's what we built:
 
-```mermaid
-flowchart TD
-  Header["🏗️ Lisp Interpreter Architecture"]
-
-  Header --> Lexer["🔍 Lexer<br/>src/lexer.rs<br/>FSM · Zero-Copy"]
-  Header --> Parser["🌳 Parser<br/>src/parser.rs<br/>Recursive Descent"]
-  Header --> Eval["⚡ Eval<br/>src/interpreter.rs<br/>Trampoline · TCO"]
-  Header --> Env["🗂️ Environment<br/>src/env.rs<br/>HashMap · outer chain"]
-  Header --> Print["🖨️ Print<br/>Display impl<br/>Format output"]
-
-  Lexer -.->|"Source → Token"| Interner["🔗 String Interner<br/>src/interner.rs<br/>String ↔ u64"]
-  Eval -.->|symbol ID| Interner
-  Env -.->|var name| Interner
-
-  style Header fill:#f1f5f9,stroke:#475569,stroke-width:4px,color:#1e293b
-  style Lexer fill:#dbeafe,stroke:#3b82f6,stroke-width:2px,color:#1e40af
-  style Parser fill:#d1fae5,stroke:#10b981,stroke-width:2px,color:#065f46
-  style Eval fill:#fef3c7,stroke:#f59e0b,stroke-width:2px,color:#92400e
-  style Env fill:#fee2e2,stroke:#ef4444,stroke-width:2px,color:#991b1b
-  style Print fill:#f1f5f9,stroke:#64748b,stroke-width:2px,color:#334155
-  style Interner fill:#ede9fe,stroke:#8b5cf6,stroke-width:2px,color:#6d28d9
-```
+![architecture overview en](svgs/architecture-overview-en.svg)
 
 **Key numbers:**
 - **~3000 lines of Rust** (zero external dependencies)

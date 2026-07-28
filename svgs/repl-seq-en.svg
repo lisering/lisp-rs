@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-20 -20 1240 1550" width="1240" height="1550">
+  <defs>
+    <marker id="arrow" markerWidth="5" markerHeight="4" refX="5" refY="2" orient="auto">
+      <path d="M0,0 L5,2 L0,4 Z" fill="#6c757d"/>
+    </marker>
+    <marker id="arrow-blue" markerWidth="5" markerHeight="4" refX="5" refY="2" orient="auto">
+      <path d="M0,0 L5,2 L0,4 Z" fill="#0d6efd"/>
+    </marker>
+    <marker id="arrow-green" markerWidth="5" markerHeight="4" refX="5" refY="2" orient="auto">
+      <path d="M0,0 L5,2 L0,4 Z" fill="#198754"/>
+    </marker>
+    <marker id="arrow-red" markerWidth="5" markerHeight="4" refX="5" refY="2" orient="auto">
+      <path d="M0,0 L5,2 L0,4 Z" fill="#dc3545"/>
+    </marker>
+  </defs>
+
+  <!-- 生命线 -->
+  <line x1="110" y1="66" x2="110" y2="1480" stroke="#adb5bd" stroke-width="2" stroke-dasharray="8,8"/>
+  <line x1="340" y1="66" x2="340" y2="1480" stroke="#adb5bd" stroke-width="2" stroke-dasharray="8,8"/>
+  <line x1="620" y1="66" x2="620" y2="1480" stroke="#adb5bd" stroke-width="2" stroke-dasharray="8,8"/>
+  <line x1="860" y1="66" x2="860" y2="1480" stroke="#adb5bd" stroke-width="2" stroke-dasharray="8,8"/>
+  <line x1="1060" y1="66" x2="1060" y2="1480" stroke="#adb5bd" stroke-width="2" stroke-dasharray="8,8"/>
+
+  <!-- 头部 -->
+  <rect x="20" y="10" width="180" height="56" rx="12" fill="#f8d7da" stroke="#dc3545" stroke-width="3"/>
+  <text x="110" y="46" text-anchor="middle" font-size="22" font-family="sans-serif" fill="#842029">User</text>
+
+  <rect x="240" y="10" width="200" height="56" rx="12" fill="#f8f9fa" stroke="#495057" stroke-width="3"/>
+  <text x="340" y="46" text-anchor="middle" font-size="22" font-family="monospace" fill="#495057">main.rs</text>
+
+  <rect x="520" y="10" width="200" height="56" rx="12" fill="#cce5ff" stroke="#0d6efd" stroke-width="3"/>
+  <text x="620" y="46" text-anchor="middle" font-size="22" font-family="monospace" fill="#0d6efd">lexer.rs</text>
+
+  <rect x="760" y="10" width="200" height="56" rx="12" fill="#d4edda" stroke="#198754" stroke-width="3"/>
+  <text x="860" y="46" text-anchor="middle" font-size="22" font-family="monospace" fill="#198754">parser.rs</text>
+
+  <rect x="980" y="10" width="200" height="56" rx="12" fill="#fff3cd" stroke="#ffc107" stroke-width="3"/>
+  <text x="1080" y="46" text-anchor="middle" font-size="22" font-family="monospace" fill="#856404">eval</text>
+
+  <!-- 1. User types -->
+  <rect x="20" y="130" width="180" height="80" rx="12" fill="#f8d7da" stroke="#dc3545" stroke-width="3"/>
+  <text x="110" y="160" text-anchor="middle" font-size="20" font-family="monospace" fill="#842029">"(+ 1 2)"</text>
+  <text x="110" y="188" text-anchor="middle" font-size="18" font-family="sans-serif" fill="#842029">input expression</text>
+  <line x1="200" y1="170" x2="336" y2="170" stroke="#6c757d" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <!-- 2. main → lexer -->
+  <rect x="210" y="324" width="260" height="52" rx="8" fill="#f8f9fa" stroke="#ced4da" stroke-width="2"/>
+  <text x="340" y="358" text-anchor="middle" font-size="18" font-family="sans-serif" fill="#495057">tokenize("(+ 1 2)")</text>
+  <line x1="470" y1="350" x2="616" y2="350" stroke="#0d6efd" stroke-width="3" marker-end="url(#arrow-blue)"/>
+
+  <!-- 3. lexer → main -->
+  <line x1="620" y1="516" x2="480" y2="516" stroke="#198754" stroke-width="3" marker-end="url(#arrow-green)"/>
+  <rect x="200" y="490" width="280" height="52" rx="8" fill="#f8f9fa" stroke="#ced4da" stroke-width="2"/>
+  <text x="340" y="524" text-anchor="middle" font-size="18" font-family="sans-serif" fill="#495057">return ["(","+","1","2",")"]</text>
+
+  <!-- 4. main → parser -->
+  <rect x="245" y="656" width="190" height="52" rx="8" fill="#f8f9fa" stroke="#ced4da" stroke-width="2"/>
+  <text x="340" y="690" text-anchor="middle" font-size="18" font-family="sans-serif" fill="#495057">parse(tokens)</text>
+  <line x1="435" y1="682" x2="856" y2="682" stroke="#0d6efd" stroke-width="3" marker-end="url(#arrow-blue)"/>
+
+  <!-- 5. parser → main -->
+  <line x1="860" y1="848" x2="480" y2="848" stroke="#198754" stroke-width="3" marker-end="url(#arrow-green)"/>
+  <rect x="200" y="822" width="280" height="52" rx="8" fill="#f8f9fa" stroke="#ced4da" stroke-width="2"/>
+  <text x="340" y="856" text-anchor="middle" font-size="18" font-family="sans-serif" fill="#495057">return AST: List(+, 1, 2)</text>
+
+  <!-- 6. main → eval -->
+  <rect x="245" y="988" width="190" height="52" rx="8" fill="#f8f9fa" stroke="#ced4da" stroke-width="2"/>
+  <text x="340" y="1022" text-anchor="middle" font-size="18" font-family="sans-serif" fill="#495057">eval(ast, env)</text>
+  <line x1="435" y1="1014" x2="1056" y2="1014" stroke="#0d6efd" stroke-width="3" marker-end="url(#arrow-blue)"/>
+
+  <!-- 7. eval → main -->
+  <line x1="1060" y1="1180" x2="450" y2="1180" stroke="#198754" stroke-width="3" marker-end="url(#arrow-green)"/>
+  <rect x="230" y="1154" width="220" height="52" rx="8" fill="#d4edda" stroke="#198754" stroke-width="3"/>
+  <text x="340" y="1188" text-anchor="middle" font-size="20" font-family="monospace" font-weight="bold" fill="#155724">return Number(3)</text>
+
+  <!-- 8. main → User -->
+  <line x1="340" y1="1346" x2="160" y2="1346" stroke="#dc3545" stroke-width="3" marker-end="url(#arrow-red)"/>
+  <rect x="60" y="1320" width="100" height="52" rx="12" fill="#f8d7da" stroke="#dc3545" stroke-width="3"/>
+  <text x="110" y="1354" text-anchor="middle" font-size="20" font-family="monospace" fill="#842029">"3"</text>
+
+  <!-- 循环箭头 -->
+  <path d="M1060,1416 L1060,1436 Q1060,1456 1040,1456 L160,1456 Q140,1456 140,1436 L140,1416 L104,1416" fill="none" stroke="#6c757d" stroke-width="3" stroke-dasharray="8,4" marker-end="url(#arrow)"/>
+  <text x="620" y="1396" text-anchor="middle" font-size="18" font-family="sans-serif" fill="#868e96">loop: wait for next input</text>
+</svg>

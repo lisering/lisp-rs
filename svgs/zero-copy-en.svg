@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-20 -20 1740 690" width="1740" height="690">
+
+  <text x="840" y="66" text-anchor="middle" font-size="39" font-family="sans-serif" font-weight="bold" fill="#333">Zero-copy tokenization: two approaches compared</text>
+
+  <!-- OLD: Copy -->
+  <text x="420" y="144" text-anchor="middle" font-size="33" font-family="sans-serif" fill="#dc3545">Old way: copy each Token</text>
+  <rect x="45" y="165" width="750" height="285" rx="18" fill="#f8d7da" stroke="#dc3545" stroke-width="4"/>
+
+  <text x="90" y="219" font-size="27" font-family="monospace" fill="#721c24">Source: "define x 42"</text>
+  <text x="90" y="264" font-size="27" font-family="monospace" fill="#721c24"> .replace("("," ( ")</text>
+  <text x="90" y="309" font-size="27" font-family="monospace" fill="#721c24"> .split_whitespace()</text>
+  <text x="90" y="354" font-size="27" font-family="monospace" fill="#dc3545"> .map(|s| s.to_string()) new String for each!</text>
+  <text x="90" y="399" font-size="27" font-family="sans-serif" fill="#dc3545">100 tokens = 100 heap allocations</text>
+
+  <!-- NEW: Zero copy -->
+  <text x="1260" y="144" text-anchor="middle" font-size="33" font-family="sans-serif" fill="#28a745">New way: sticky notes (slice refs)</text>
+  <rect x="885" y="165" width="750" height="285" rx="18" fill="#d4edda" stroke="#28a745" stroke-width="4"/>
+
+  <text x="930" y="219" font-size="27" font-family="monospace" fill="#155724">Source: "define x 42"</text>
+  <text x="930" y="264" font-size="27" font-family="monospace" fill="#155724"> &amp;input[0..=5] → "define"</text>
+  <text x="930" y="309" font-size="27" font-family="monospace" fill="#155724"> &amp;input[7..=7] → "x"</text>
+  <text x="930" y="354" font-size="27" font-family="monospace" fill="#28a745"> &amp;input[9..=10] → "42"</text>
+  <text x="930" y="399" font-size="27" font-family="sans-serif" fill="#28a745">No alloc! Just points to source</text>
+
+  <rect x="90" y="480" width="1500" height="72" rx="12" fill="#fff3cd" stroke="#ffc107" stroke-width="3"/>
+  <text x="840" y="528" text-anchor="middle" font-size="30" font-family="sans-serif" fill="#856404">Key: &amp;str doesn't own data, just peeks at source</text>
+</svg>

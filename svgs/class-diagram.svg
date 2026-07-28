@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-20 -20 1280 700" width="1280" height="700">
+  <defs>
+    <marker id="arrow" markerWidth="16" markerHeight="12" refX="16" refY="6" orient="auto">
+      <path d="M0,0 L16,6 L0,12 Z" fill="#6c757d"/>
+    </marker>
+  </defs>
+
+  <!-- LispExp -->
+  <rect x="20" y="20" width="500" height="440" rx="12" fill="#f8f9fa" stroke="#0d6efd" stroke-width="4"/>
+  <rect x="20" y="20" width="500" height="56" rx="12" fill="#0d6efd"/>
+  <rect x="20" y="56" width="500" height="20" fill="#0d6efd"/>
+  <text x="270" y="54" text-anchor="middle" font-size="26" font-family="monospace" font-weight="bold" fill="#fff">LispExp</text>
+  <text x="36" y="100" font-size="20" font-family="sans-serif" fill="#495057">«enum 枚举»</text>
+  <line x1="20" y1="110" x2="520" y2="110" stroke="#dee2e6" stroke-width="2"/>
+  <text x="36" y="140" font-size="22" font-family="monospace" fill="#495057">+Number(f64)</text>
+  <text x="36" y="174" font-size="22" font-family="monospace" fill="#495057">+Symbol(u64)</text>
+  <text x="36" y="208" font-size="22" font-family="monospace" fill="#495057">+List(Vec&lt;LispExp&gt;)</text>
+  <text x="36" y="242" font-size="22" font-family="monospace" fill="#495057">+Func(fn 指针)</text>
+  <text x="36" y="276" font-size="22" font-family="monospace" fill="#495057">+Lambda(Box&lt;LispLambda&gt;)</text>
+  <text x="36" y="310" font-size="22" font-family="monospace" fill="#495057">+Bool(bool)</text>
+  <text x="36" y="344" font-size="22" font-family="monospace" fill="#495057">+Nil</text>
+  <text x="36" y="378" font-size="22" font-family="monospace" fill="#495057">+String(String)</text>
+  <line x1="20" y1="390" x2="520" y2="390" stroke="#dee2e6" stroke-width="2"/>
+  <text x="36" y="414" font-size="18" font-family="sans-serif" fill="#6c757d">所有 Lisp 值类型</text>
+
+  <!-- LispLambda -->
+  <rect x="680" y="50" width="500" height="310" rx="12" fill="#f8f9fa" stroke="#198754" stroke-width="4"/>
+  <rect x="680" y="50" width="500" height="56" rx="12" fill="#198754"/>
+  <rect x="680" y="86" width="500" height="20" fill="#198754"/>
+  <text x="930" y="84" text-anchor="middle" font-size="26" font-family="monospace" font-weight="bold" fill="#fff">LispLambda</text>
+  <text x="696" y="130" font-size="20" font-family="sans-serif" fill="#495057">«struct 结构体»</text>
+  <line x1="680" y1="138" x2="1180" y2="138" stroke="#dee2e6" stroke-width="2"/>
+  <text x="696" y="168" font-size="22" font-family="monospace" fill="#495057">+params: Vec&lt;u64&gt;</text>
+  <text x="696" y="202" font-size="22" font-family="monospace" fill="#495057">+rest: Option&lt;u64&gt;</text>
+  <text x="696" y="236" font-size="22" font-family="monospace" fill="#495057">+body: Box&lt;LispExp&gt;</text>
+  <text x="696" y="270" font-size="22" font-family="monospace" fill="#495057">+env: Rc&lt;RefCell&lt;LispEnv&gt;&gt;</text>
+
+  <!-- LispErr -->
+  <rect x="680" y="440" width="260" height="180" rx="12" fill="#f8f9fa" stroke="#dc3545" stroke-width="4"/>
+  <rect x="680" y="440" width="260" height="56" rx="12" fill="#dc3545"/>
+  <rect x="680" y="476" width="260" height="20" fill="#dc3545"/>
+  <text x="810" y="474" text-anchor="middle" font-size="26" font-family="monospace" font-weight="bold" fill="#fff">LispErr</text>
+  <text x="696" y="520" font-size="20" font-family="sans-serif" fill="#495057">«enum 枚举»</text>
+  <line x1="680" y1="528" x2="940" y2="528" stroke="#dee2e6" stroke-width="2"/>
+  <text x="696" y="558" font-size="22" font-family="monospace" fill="#495057">+Reason(String)</text>
+
+  <!-- 关系线 -->
+  <path d="M520,210 C600,210 600,160 680,160" fill="none" stroke="#6c757d" stroke-width="3"/>
+  <text x="600" y="152" text-anchor="middle" font-size="18" font-family="sans-serif" fill="#868e96">Lambda(Box)</text>
+
+  <path d="M260,230 C400,230 400,290 680,290" fill="none" stroke="#6c757d" stroke-width="3"/>
+  <text x="470" y="224" text-anchor="middle" font-size="18" font-family="sans-serif" fill="#868e96">List(Vec) 递归</text>
+</svg>

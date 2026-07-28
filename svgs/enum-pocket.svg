@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="78 -12 747 390" width="747" height="390">
+  <!-- Pocket -->
+  <path d="M100,60 C100,40 360,30 500,50 L500,340 C500,360 100,360 100,340 Z" fill="#e8daef" stroke="#8e44ad" stroke-width="5" stroke-dasharray="12,6"/>
+  <text x="300" y="30" text-anchor="middle" font-size="28" font-family="sans-serif" font-weight="bold" fill="#8e44ad">enum LispExp { ... }</text>
+
+  <!-- Items in pocket -->
+  <rect x="140" y="90" width="320" height="44" rx="8" fill="#fff3cd" stroke="#ffc107" stroke-width="3"/>
+  <text x="300" y="120" text-anchor="middle" font-size="20" font-family="monospace" fill="#856404">Number(42.0)</text>
+
+  <rect x="140" y="150" width="320" height="44" rx="8" fill="#d4edda" stroke="#28a745" stroke-width="3"/>
+  <text x="300" y="180" text-anchor="middle" font-size="20" font-family="monospace" fill="#155724">Symbol("x") → Symbol(1)</text>
+
+  <rect x="140" y="210" width="320" height="44" rx="8" fill="#cce5ff" stroke="#0d6efd" stroke-width="3"/>
+  <text x="300" y="240" text-anchor="middle" font-size="20" font-family="monospace" fill="#004085">List([...])</text>
+
+  <rect x="140" y="270" width="320" height="44" rx="8" fill="#f8d7da" stroke="#dc3545" stroke-width="3"/>
+  <text x="300" y="300" text-anchor="middle" font-size="20" font-family="monospace" fill="#721c24">Func(fn 指针)</text>
+
+  <!-- Labels on right -->
+  <text x="520" y="100" font-size="24" font-family="sans-serif" fill="#555">⬅ 口袋里的每种</text>
+  <text x="520" y="140" font-size="24" font-family="sans-serif" fill="#555">"可能性"叫一个变体 (variant)</text>
+
+  <text x="520" y="200" font-size="24" font-family="sans-serif" fill="#555">想"往口袋里加东西"？</text>
+  <text x="520" y="240" font-size="24" font-family="sans-serif" fill="#555">→ 在 enum 里加一行就行！</text>
+
+  <text x="520" y="300" font-size="22" font-family="sans-serif" fill="#888">match 表达式 = "看看口袋里</text>
+  <text x="520" y="336" font-size="22" font-family="sans-serif" fill="#888">装的到底是哪一种"</text>
+</svg>

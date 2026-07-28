@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-5 30 808 195" width="808" height="195">
+  <defs>
+    <marker id="arrow" markerWidth="6" markerHeight="4.5" refX="6" refY="2.25" orient="auto">
+      <path d="M0,0 L6,2.25 L0,4.5 Z" fill="#555"/>
+    </marker>
+  </defs>
+
+  <!-- Node 1: Source -->
+  <rect x="15" y="50" width="100" height="80" rx="10" fill="#fff3cd" stroke="#ffc107" stroke-width="3"/>
+  <text x="65" y="82" text-anchor="middle" font-size="17.6" font-family="sans-serif" fill="#856404">Source</text>
+  <text x="65" y="110" text-anchor="middle" font-size="14" font-family="monospace" fill="#856404">"(+ 1 2)"</text>
+  <line x1="115" y1="90" x2="178" y2="90" stroke="#555" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="147" y="78" text-anchor="middle" font-size="15.6" font-family="sans-serif" fill="#888">string</text>
+
+  <!-- Node 2: Lexer -->
+  <rect x="182" y="50" width="100" height="80" rx="10" fill="#d4edda" stroke="#28a745" stroke-width="3"/>
+  <text x="232" y="82" text-anchor="middle" font-size="17.6" font-family="sans-serif" fill="#155724">Lexer</text>
+  <text x="232" y="110" text-anchor="middle" font-size="14" font-family="monospace" fill="#155724">tokenize()</text>
+  <line x1="282" y1="90" x2="345" y2="90" stroke="#555" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="314" y="78" text-anchor="middle" font-size="15.6" font-family="sans-serif" fill="#888">Token[]</text>
+
+  <!-- Node 3: Parser -->
+  <rect x="349" y="50" width="100" height="80" rx="10" fill="#d4edda" stroke="#28a745" stroke-width="3"/>
+  <text x="399" y="82" text-anchor="middle" font-size="17.6" font-family="sans-serif" fill="#155724">Parser</text>
+  <text x="399" y="110" text-anchor="middle" font-size="14" font-family="monospace" fill="#155724">parse()</text>
+  <line x1="449" y1="90" x2="512" y2="90" stroke="#555" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="481" y="78" text-anchor="middle" font-size="15.6" font-family="sans-serif" fill="#888">AST</text>
+
+  <!-- Node 4: Eval -->
+  <rect x="516" y="50" width="100" height="80" rx="10" fill="#d4edda" stroke="#28a745" stroke-width="3"/>
+  <text x="566" y="82" text-anchor="middle" font-size="17.6" font-family="sans-serif" fill="#155724">Eval</text>
+  <text x="566" y="110" text-anchor="middle" font-size="14" font-family="monospace" fill="#155724">eval()</text>
+  <line x1="616" y1="90" x2="679" y2="90" stroke="#555" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <!-- Node 5: Value -->
+  <rect x="683" y="50" width="100" height="80" rx="10" fill="#cce5ff" stroke="#0d6efd" stroke-width="3"/>
+  <text x="733" y="82" text-anchor="middle" font-size="17.6" font-family="sans-serif" fill="#004085">Value</text>
+  <text x="733" y="110" text-anchor="middle" font-size="14" font-family="monospace" fill="#004085">Number(3.0)</text>
+
+  <!-- Environment feedback arrow -->
+  <path d="M566,130 C566,148 399,148 399,130" fill="none" stroke="#6c757d" stroke-width="2.5" stroke-dasharray="5,4"/>
+  <text x="483" y="168" text-anchor="middle" font-size="21" font-family="sans-serif" fill="#6c757d">env read/write (define, set!)</text>
+
+  <!-- Step labels -->
+  <text x="65" y="200" text-anchor="middle" font-size="19.5" font-family="sans-serif" fill="#aaa">Steps 1-8</text>
+  <text x="232" y="200" text-anchor="middle" font-size="19.5" font-family="sans-serif" fill="#aaa">Steps 9-11</text>
+  <text x="399" y="200" text-anchor="middle" font-size="19.5" font-family="sans-serif" fill="#aaa">Steps 12-15</text>
+  <text x="566" y="200" text-anchor="middle" font-size="19.5" font-family="sans-serif" fill="#aaa">Steps 16-74</text>
+  <text x="733" y="200" text-anchor="middle" font-size="19.5" font-family="sans-serif" fill="#aaa">Output</text>
+</svg>

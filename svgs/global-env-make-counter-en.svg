@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-10 0 520 200" width="520" height="200">
+  <rect x="10" y="10" width="500" height="180" rx="12" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+  <text x="260" y="40" text-anchor="middle" font-size="20" font-family="sans-serif" font-weight="bold" fill="#92400e">Global env</text>
+
+  <rect x="30" y="55" width="460" height="75" rx="8" fill="#fef9e7" stroke="#f59e0b" stroke-width="2"/>
+  <text x="260" y="80" text-anchor="middle" font-size="16" font-family="monospace" fill="#92400e">make-counter → [function]</text>
+  <text x="260" y="102" text-anchor="middle" font-size="15" font-family="sans-serif" fill="#92400e">params: start / body: (lambda () ...)</text>
+  <text x="260" y="122" text-anchor="middle" font-size="15" font-family="sans-serif" fill="#92400e">backpack: Global</text>
+
+  <rect x="30" y="140" width="460" height="40" rx="8" fill="#fef9e7" stroke="#f59e0b" stroke-width="2"/>
+  <text x="260" y="166" text-anchor="middle" font-size="16" font-family="sans-serif" fill="#92400e">(other built-ins...)</text>
+</svg>

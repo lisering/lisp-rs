@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-10 0 400 260" width="400" height="260">
+  <rect x="10" y="10" width="380" height="240" rx="12" fill="#f0f7ff" stroke="#4a90d9" stroke-width="2"/>
+  <text x="200" y="40" text-anchor="middle" font-size="20" font-family="sans-serif" font-weight="bold" fill="#4a90d9">🎒 square 函数</text>
+
+  <rect x="30" y="55" width="340" height="50" rx="8" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+  <text x="200" y="85" text-anchor="middle" font-size="17" font-family="sans-serif" fill="#1e40af">📋 参数: [x] — 1 个参数</text>
+
+  <rect x="30" y="115" width="340" height="50" rx="8" fill="#d1fae5" stroke="#10b981" stroke-width="2"/>
+  <text x="200" y="145" text-anchor="middle" font-size="17" font-family="sans-serif" fill="#065f46">⚙️ 函数体: (* x x) — 乘法</text>
+
+  <rect x="30" y="175" width="340" height="50" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+  <text x="200" y="205" text-anchor="middle" font-size="17" font-family="sans-serif" fill="#92400e">📸 诞生环境: 全局</text>
+</svg>

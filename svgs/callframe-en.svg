@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-10 0 360 170" width="360" height="170">
+  <rect x="10" y="10" width="340" height="150" rx="12" fill="#f0f7ff" stroke="#4a90d9" stroke-width="2"/>
+  <text x="180" y="40" text-anchor="middle" font-size="20" font-family="sans-serif" font-weight="bold" fill="#4a90d9">📋 CallFrame</text>
+
+  <rect x="30" y="55" width="300" height="45" rx="8" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+  <text x="180" y="83" text-anchor="middle" font-size="17" font-family="monospace" fill="#1e40af">f → square (Lambda)</text>
+
+  <rect x="30" y="108" width="300" height="45" rx="8" fill="#d1fae5" stroke="#10b981" stroke-width="2"/>
+  <text x="180" y="136" text-anchor="middle" font-size="17" font-family="monospace" fill="#065f46">x → Number(3)</text>
+</svg>
