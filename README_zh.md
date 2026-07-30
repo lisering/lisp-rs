@@ -1,5 +1,15 @@
 **[English](README.md) | [中文](README_zh.md)**
 
+<p>
+  <a href="https://github.com/lisering/lisp-rs/stargazers"><img src="https://img.shields.io/github/stars/lisering/lisp-rs?style=social" alt="GitHub Stars"></a>
+  <a href="https://github.com/lisering/lisp-rs/network/members"><img src="https://img.shields.io/github/forks/lisering/lisp-rs?style=social" alt="GitHub Forks"></a>
+  <a href="https://github.com/lisering/lisp-rs/blob/main/LICENSE"><img src="https://img.shields.io/github/license/lisering/lisp-rs?color=blue" alt="License: MIT"></a>
+  <img src="https://img.shields.io/github/languages/top/lisering/lisp-rs?color=orange" alt="Language: Rust">
+  <img src="https://img.shields.io/github/last-commit/lisering/lisp-rs?color=green" alt="Last Commit">
+  <img src="https://img.shields.io/github/repo-size/lisering/lisp-rs?color=lightgrey" alt="Repo Size">
+  <a href="https://github.com/lisering/lisp-rs/issues"><img src="https://img.shields.io/github/issues/lisering/lisp-rs" alt="Open Issues"></a>
+</p>
+
 # 从零构建 Lisp 解释器 — Rust 实战教程
 
 > **零基础、零依赖。** 74 步，173 个测试，最终得到一个完整的 Lisp 解释器。每一步先说清楚**要解决什么问题**，再写代码。
@@ -7957,3 +7967,11 @@ fn test_closure() {
 |------|------|------|
 | 大量递归慢 | 未使用尾递归优化 | 改写为尾递归 |
 | 启动慢 | 首次加载需要初始化 | 正常现象，REPL 启动一次后可连续使用 |
+
+---
+
+## 开源许可证
+
+本项目基于 **MIT 许可证** 开源 —— 详见 [LICENSE](LICENSE) 文件。
+
+你可以自由地使用、复制、修改、合并、发布、分发、再授权和/或出售本软件的副本。

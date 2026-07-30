@@ -1,5 +1,15 @@
 **[English](README.md) | [中文](README_zh.md)**
 
+<p>
+  <a href="https://github.com/lisering/lisp-rs/stargazers"><img src="https://img.shields.io/github/stars/lisering/lisp-rs?style=social" alt="GitHub Stars"></a>
+  <a href="https://github.com/lisering/lisp-rs/network/members"><img src="https://img.shields.io/github/forks/lisering/lisp-rs?style=social" alt="GitHub Forks"></a>
+  <a href="https://github.com/lisering/lisp-rs/blob/main/LICENSE"><img src="https://img.shields.io/github/license/lisering/lisp-rs?color=blue" alt="License: MIT"></a>
+  <img src="https://img.shields.io/github/languages/top/lisering/lisp-rs?color=orange" alt="Language: Rust">
+  <img src="https://img.shields.io/github/last-commit/lisering/lisp-rs?color=green" alt="Last Commit">
+  <img src="https://img.shields.io/github/repo-size/lisering/lisp-rs?color=lightgrey" alt="Repo Size">
+  <a href="https://github.com/lisering/lisp-rs/issues"><img src="https://img.shields.io/github/issues/lisering/lisp-rs" alt="Open Issues"></a>
+</p>
+
 # Building a Lisp Interpreter from Scratch — Rust Hands-On Tutorial
 
 > **Zero knowledge required. Zero dependencies.** 74 steps. 173 tests. One working Lisp interpreter at the end. Each step first explains **what problem to solve**, then writes the code.
@@ -8057,3 +8067,11 @@ After 74 steps you've built an interpreter — what can you do with it? Here's a
 |-------|-------|----------|
 | Deep recursion is slow | Not using tail call optimization | Rewrite as tail-recursive |
 | Slow startup | Initial loading on first run | Normal behavior — REPL is ready to use after one-time initialization |
+
+---
+
+## License
+
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+
+You are free to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of this software.
