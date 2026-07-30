@@ -23,7 +23,10 @@ pub fn tokenize(input: &str) -> Vec<&str> {
             '"' => {
                 let start = i;
                 while let Some((j, c)) = chars.next() {
-                    if c == '\\' { chars.next(); continue; }
+                    if c == '\\' {
+                        chars.next();
+                        continue;
+                    }
                     if c == '"' {
                         tokens.push(&input[start..=j]);
                         break;
@@ -32,7 +35,9 @@ pub fn tokenize(input: &str) -> Vec<&str> {
             }
             ';' => {
                 while let Some((_, c)) = chars.peek() {
-                    if *c == '\n' { break; }
+                    if *c == '\n' {
+                        break;
+                    }
                     chars.next();
                 }
             }
@@ -40,8 +45,15 @@ pub fn tokenize(input: &str) -> Vec<&str> {
             _ => {
                 let start = i;
                 while let Some((_, c)) = chars.peek() {
-                    if c.is_whitespace() || *c == '(' || *c == ')' 
-                        || *c == '\'' || *c == '`' || *c == ',' { break; }
+                    if c.is_whitespace()
+                        || *c == '('
+                        || *c == ')'
+                        || *c == '\''
+                        || *c == '`'
+                        || *c == ','
+                    {
+                        break;
+                    }
                     chars.next();
                 }
                 let end = chars.peek().map_or(input.len(), |(j, _)| *j);
@@ -68,16 +80,16 @@ mod tests {
 
     #[test]
     fn test_tokenize_parens() {
-        assert_eq!(
-            tokenize("(+ 1 2)"),
-            ["(", "+", "1", "2", ")"]
-        );
+        assert_eq!(tokenize("(+ 1 2)"), ["(", "+", "1", "2", ")"]);
     }
 
     #[test]
     fn test_tokenize_empty() {
         let result = tokenize("");
-        assert!(result.is_empty(), "空字符串应该返回空 token 列表，不应 panic");
+        assert!(
+            result.is_empty(),
+            "空字符串应该返回空 token 列表，不应 panic"
+        );
     }
 
     #[test]

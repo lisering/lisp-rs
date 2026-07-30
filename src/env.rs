@@ -1,11 +1,11 @@
 // src/env.rs
 
-use std::collections::HashMap;
-use std::rc::Rc;
-use std::cell::RefCell;
-use std::hash::{BuildHasher, Hasher};
-use crate::{LispExp, LispErr};
 use crate::interner;
+use crate::{LispErr, LispExp};
+use std::cell::RefCell;
+use std::collections::HashMap;
+use std::hash::{BuildHasher, Hasher};
+use std::rc::Rc;
 
 /// FX 哈希器 — 用黄金比例常数做快速搅拌
 pub struct FxHasher {
@@ -18,7 +18,8 @@ impl FxHasher {
     }
 
     fn write_u64(&mut self, i: u64) {
-        self.hash = self.hash
+        self.hash = self
+            .hash
             .wrapping_add(i)
             .wrapping_add(0x9e3779b97f4a7c15)
             .rotate_left(5)
@@ -34,7 +35,9 @@ impl Hasher for FxHasher {
             self.write_u64(u64::from_le_bytes(buf));
         }
     }
-    fn finish(&self) -> u64 { self.hash }
+    fn finish(&self) -> u64 {
+        self.hash
+    }
 }
 
 /// 工厂类型 — 让 HashMap 能创建 FxHasher 实例
@@ -43,7 +46,9 @@ pub struct BuildFxHasher;
 
 impl BuildHasher for BuildFxHasher {
     type Hasher = FxHasher;
-    fn build_hasher(&self) -> FxHasher { FxHasher::new() }
+    fn build_hasher(&self) -> FxHasher {
+        FxHasher::new()
+    }
 }
 
 /// 环境 — 就像一个通讯录: 名字 → 值
@@ -55,11 +60,17 @@ pub struct LispEnv {
 
 impl LispEnv {
     pub fn new() -> Self {
-        LispEnv { data: HashMap::default(), outer: None }
+        LispEnv {
+            data: HashMap::default(),
+            outer: None,
+        }
     }
 
     pub fn with_outer(outer: Rc<RefCell<LispEnv>>) -> Self {
-        LispEnv { data: HashMap::default(), outer: Some(outer) }
+        LispEnv {
+            data: HashMap::default(),
+            outer: Some(outer),
+        }
     }
 
     pub fn set(&mut self, key: u64, value: LispExp) {
@@ -73,7 +84,10 @@ impl LispEnv {
         if let Some(outer) = &self.outer {
             return outer.borrow().get(key);
         }
-        Err(LispErr::Reason(format!("未定义的变量: {}", interner::lookup(key))))
+        Err(LispErr::Reason(format!(
+            "未定义的变量: {}",
+            interner::lookup(key)
+        )))
     }
 
     /// set! — 沿 outer 链找到已有绑定并修改
@@ -85,7 +99,10 @@ impl LispEnv {
         if let Some(outer) = &self.outer {
             return outer.borrow_mut().set_upward(key, value);
         }
-        Err(LispErr::Reason(format!("set! 失败: 变量 {} 未定义", interner::lookup(key))))
+        Err(LispErr::Reason(format!(
+            "set! 失败: 变量 {} 未定义",
+            interner::lookup(key)
+        )))
     }
 }
 
@@ -98,7 +115,10 @@ mod tests {
     fn test_env_set_get() {
         let mut env = LispEnv::new();
         env.set(interner::intern("x"), LispExp::Number(42.0));
-        assert_eq!(env.get(interner::intern("x")).unwrap(), LispExp::Number(42.0));
+        assert_eq!(
+            env.get(interner::intern("x")).unwrap(),
+            LispExp::Number(42.0)
+        );
     }
 
     #[test]
@@ -113,6 +133,9 @@ mod tests {
         outer.set(interner::intern("x"), LispExp::Number(10.0));
         let outer_rc = Rc::new(RefCell::new(outer));
         let inner = LispEnv::with_outer(outer_rc);
-        assert_eq!(inner.get(interner::intern("x")).unwrap(), LispExp::Number(10.0));
+        assert_eq!(
+            inner.get(interner::intern("x")).unwrap(),
+            LispExp::Number(10.0)
+        );
     }
 }

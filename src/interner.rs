@@ -16,7 +16,9 @@ impl Interner {
     }
 
     fn intern(&mut self, s: &str) -> u64 {
-        if let Some(&id) = self.str_to_id.get(s) { return id; }
+        if let Some(&id) = self.str_to_id.get(s) {
+            return id;
+        }
         let id = self.id_to_str.len() as u64;
         self.id_to_str.push(s.to_string());
         self.str_to_id.insert(s.to_string(), id);
@@ -24,7 +26,8 @@ impl Interner {
     }
 
     fn lookup(&self, id: u64) -> String {
-        self.id_to_str.get(id as usize)
+        self.id_to_str
+            .get(id as usize)
             .cloned()
             .unwrap_or_else(|| format!("<unknown:{}>", id))
     }
@@ -35,14 +38,16 @@ static INTERNER: OnceLock<RwLock<Interner>> = OnceLock::new();
 pub fn intern(s: &str) -> u64 {
     let mut interner = INTERNER
         .get_or_init(|| RwLock::new(Interner::new()))
-        .write().unwrap();
+        .write()
+        .unwrap();
     interner.intern(s)
 }
 
 pub fn lookup(id: u64) -> String {
     let interner = INTERNER
         .get_or_init(|| RwLock::new(Interner::new()))
-        .read().unwrap();
+        .read()
+        .unwrap();
     interner.lookup(id)
 }
 

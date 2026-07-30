@@ -1,13 +1,13 @@
 // src/main.rs — 完整 REPL
-use std::io::{self, BufRead, Write};
-use std::env;
-use std::fs;
 use lisp_rs::{
     env::LispEnv,
-    interpreter::{eval, default_env},
+    interpreter::{default_env, eval},
     lexer::tokenize,
     parser::parse,
 };
+use std::env;
+use std::fs;
+use std::io::{self, BufRead, Write};
 
 /// 读取可能跨多行的输入
 fn read_input(stdin: &io::Stdin) -> Option<String> {
@@ -18,7 +18,13 @@ fn read_input(stdin: &io::Stdin) -> Option<String> {
     loop {
         let mut line = String::new();
         match stdin.lock().read_line(&mut line) {
-            Ok(0) => { if got_input { break; } else { return None; } }
+            Ok(0) => {
+                if got_input {
+                    break;
+                } else {
+                    return None;
+                }
+            }
             Ok(_) => {
                 got_input = true;
                 buffer.push_str(&line);
@@ -33,8 +39,11 @@ fn read_input(stdin: &io::Stdin) -> Option<String> {
                         _ => escape = false,
                     }
                 }
-                if depth <= 0 { break; }
-                print!("... "); io::stdout().flush().unwrap();
+                if depth <= 0 {
+                    break;
+                }
+                print!("... ");
+                io::stdout().flush().unwrap();
             }
             Err(_) => break,
         }
@@ -45,7 +54,9 @@ fn read_input(stdin: &io::Stdin) -> Option<String> {
 /// 求值一行（或多行）Lisp 源码
 fn eval_input(input: &str, env: &mut LispEnv) -> Result<String, String> {
     let tokens = tokenize(input);
-    if tokens.is_empty() { return Ok("nil".to_string()); }
+    if tokens.is_empty() {
+        return Ok("nil".to_string());
+    }
     let mut remaining: &[&str] = &tokens;
     let mut results = Vec::new();
     while !remaining.is_empty() {
@@ -61,9 +72,17 @@ fn eval_input(input: &str, env: &mut LispEnv) -> Result<String, String> {
             },
         }
     }
-    if results.is_empty() { Ok("nil".to_string()) }
-    else if results.len() == 1 { Ok(format!("{}", results[0])) }
-    else { Ok(results.iter().map(|r| format!("{}", r)).collect::<Vec<_>>().join("\n")) }
+    if results.is_empty() {
+        Ok("nil".to_string())
+    } else if results.len() == 1 {
+        Ok(format!("{}", results[0]))
+    } else {
+        Ok(results
+            .iter()
+            .map(|r| format!("{}", r))
+            .collect::<Vec<_>>()
+            .join("\n"))
+    }
 }
 
 fn main() {
@@ -99,22 +118,34 @@ fn main() {
     let mut env = default_env();
     let stdin = io::stdin();
     loop {
-        print!(">>> "); io::stdout().flush().unwrap();
+        print!(">>> ");
+        io::stdout().flush().unwrap();
         let input = match read_input(&stdin) {
             Some(s) => s.trim().to_string(),
-            None => { println!("再见！"); break; }
+            None => {
+                println!("再见！");
+                break;
+            }
         };
-        if input.is_empty() { continue; }
+        if input.is_empty() {
+            continue;
+        }
         if input.starts_with(':') {
             match input.as_str() {
-                ":q" | ":quit" | ":exit" => { println!("再见！"); break; }
+                ":q" | ":quit" | ":exit" => {
+                    println!("再见！");
+                    break;
+                }
                 ":help" => {
                     println!("特殊形式: if define lambda begin set! let cond and or quote");
                     println!("内置函数: + - * / = > < >= <= not list cons car cdr cadr caddr");
                     println!("命令: :q 退出, :help 帮助");
                     continue;
                 }
-                _ => { println!("未知命令: {}", input); continue; }
+                _ => {
+                    println!("未知命令: {}", input);
+                    continue;
+                }
             }
         }
         match eval_input(&input, &mut env) {
