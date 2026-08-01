@@ -2228,21 +2228,46 @@ test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 ---
 
 > 🏋️ **Exercises**
-> 1. (⭐) Add comment support to `tokenize`: everything from `;` to end of line should be ignored. Hint: detect `;` in the loop and skip to the next line
+> 1. (⭐) Add comment support to `tokenize`: everything from `;` to end of line should be ignored. Hint: strip comments before `replace` — use `lines()` to iterate over each line and `find(';')` to keep only the part before `;`
 > 2. (⭐⭐) Write a test that inputs `"(+ 1 2) ; This is a comment"` and expects `["(", "+", "1", "2", ")"]`
 
 
 <details>
 <summary>Click for answer</summary>
 
-**1. Add comment support** (in lexer loop)
+**1. Add comment support**
+
+The current `tokenize` uses `replace` + `split_whitespace` — there's no character-level loop. So comment handling should strip comments **before** the `replace` step:
+
 ```rust
-';' => {
-    while pos < len && chars[pos] != '\n' {
-        pos += 1;
-    }
+// src/lexer.rs — complete tokenize function
+pub fn tokenize(input: &str) -> Vec<String> {
+    // Step 1: Strip comments
+    //   input.lines() splits source into lines (iterator, no allocation)
+    //   find(';') locates the semicolon; keep only the part before it
+    //   join("\n") reassembles into a single string
+    let without_comments = input
+        .lines()  // iterate over lines
+        .map(|line| {  // process each line
+            match line.find(';') {  // find position of ;
+                Some(pos) => &line[..pos],  // has comment: keep only before ;
+                None => line,               // no comment: keep entire line
+            }
+        })
+        .collect::<Vec<_>>()  // collect into Vec<&str>
+        .join("\n");  // reassemble into one string
+
+    // Step 2: original tokenize logic
+    without_comments
+        .replace("(", " ( ")   // each "(" → " ( "
+        .replace(")", " ) ")   // each ")" → " ) "
+        .split_whitespace()
+        .map(|s| s.to_string())
+        .collect()
 }
 ```
+
+> 💡 **Why not a character-level loop?** The current `tokenize` uses a "replace + split" style. Introducing `pos`/`len`/`chars` character loop variables would clash with the existing code style. Using `lines()` + `find(';')` to strip comments first, then running the original logic, keeps the change minimal and easy to follow. Step 42's zero-copy lexer naturally introduces `char_indices().peekable()` for character-level processing.
 
 **2. Test**
 ```rust

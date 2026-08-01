@@ -2113,21 +2113,46 @@ test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 ---
 
 > 🏋️ **练习**
-> 1. (⭐) 给 `tokenize` 加注释支持：`;` 之后到行尾的内容应该被忽略。提示：在循环中检测 `;` 然后跳到下一行
+> 1. (⭐) 给 `tokenize` 加注释支持：`;` 之后到行尾的内容应该被忽略。提示：在 `replace` 之前先去掉每行的注释——用 `lines()` 逐行遍历，找到 `;` 的位置后只保留它之前的部分
 > 2. (⭐⭐) 写一个测试，输入 `"(+ 1 2) ; 这是一条注释"`，期望输出 `["(", "+", "1", "2", ")"]`
 
 
 <details>
 <summary>点击查看答案</summary>
 
-**1. 加注释支持**（在 lexer 循环中）
+**1. 加注释支持**
+
+当前 `tokenize` 用的是 `replace` + `split_whitespace` 的方式，没有逐字符循环。所以注释处理应该在 `replace` **之前**先把每行的注释内容去掉：
+
 ```rust
-';' => {
-    while pos < len && chars[pos] != '\n' {
-        pos += 1;
-    }
+// src/lexer.rs — 完整的 tokenize 函数
+pub fn tokenize(input: &str) -> Vec<String> {
+    // 第一步：去掉注释
+    //   input.lines() 把源码按行拆开（迭代器，不分配新内存）
+    //   每行用 find(';') 找到分号位置，只保留分号之前的部分
+    //   最后 join("\n") 重新拼成完整字符串
+    let without_comments = input
+        .lines()  // 按行遍历，返回迭代器
+        .map(|line| {  // 对每一行做处理
+            match line.find(';') {  // 找 ; 的位置
+                Some(pos) => &line[..pos],  // 有注释：只保留 ; 之前的内容
+                None => line,               // 没注释：整行保留
+            }
+        })
+        .collect::<Vec<_>>()  // 收集成 Vec<&str>
+        .join("\n");  // 拼回一个字符串
+
+    // 第二步：原来的 tokenize 逻辑
+    without_comments
+        .replace("(", " ( ")   // 每个 "(" → " ( "
+        .replace(")", " ) ")   // 每个 ")" → " ) "
+        .split_whitespace()
+        .map(|s| s.to_string())
+        .collect()
 }
 ```
+
+> 💡 **为什么不用逐字符循环？** 当前的 `tokenize` 是「替换 + 切分」的风格，突然引入 `pos`/`len`/`chars` 的字符循环会和已有代码脱节。先用 `lines()` + `find(';')` 去掉注释，再走原来的逻辑，改动最小，读者也容易跟上。步骤 42 改为零拷贝词法分析器时，自然会引入 `char_indices().peekable()` 的逐字符循环。
 
 **2. 测试**
 ```rust
