@@ -36,8 +36,6 @@
 
 ---
 
----
-
 ## 目录
 
 - [准备工作](#准备工作) — 步骤 1-4
@@ -788,9 +786,6 @@ Rust 是我们要用的编程语言。先给电脑装上它。
 **方式一：用 RustRover（推荐新手）**
 
 打开 RustRover，点 **"新建项目"**，你会看到创建对话框。对话框分三块区域：
-
-```
-```
 
 ![zh-box-08](svgs/zh-box-08.svg)
 
@@ -2445,11 +2440,9 @@ test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 
 > 🧠 **大白话 — `unreachable pattern` 警告消失了！** 加了 `Symbol` 变体后，`_` 不再是死代码——它可以匹配 `Symbol`。只剩 `eval_str` 的 `dead_code` 警告还在。
 
-```
 
 ![parser seq](svgs/parser-seq.svg)
 
-```
 
 > 🔄 **递归解析的调用过程**：`parse()` 和 `read_seq()` 互相调用——`parse` 遇到 `(` 委托给 `read_seq`，`read_seq` 遇到子元素又调用 `parse`，形成递归下降。每次遇到 `)` 就"弹出一层"，最终构建出完整的嵌套 AST 树。
 
@@ -3331,11 +3324,9 @@ env.set("string-length".into(), LispExp::Func(|args| {
 
 > 🎯 **解决的问题**: 实现特殊形式 if/define/lambda——它们不是普通函数，有不规则的求值规则。这是 Lisp 控制流的基石。
 
-```
 
 ![class diagram](svgs/class-diagram.svg)
 
-```
 
 > 📊 **类型全景图**：`LispExp` 的 8 个变体——自求值类型（Number/Bool/String/Nil）+ 符号（Symbol）+ 列表（List）+ 可调用类型（Func/Lambda）。`Lambda` 内部的 `env` 字段让它成为闭包。
 
@@ -3912,11 +3903,9 @@ test result: ok. 20 passed; 0 failed
 
 执行 `(define add (lambda (a b) (+ a b)))` 之后，全局环境变成：
 
-```
 
 ![zh-box-11](svgs/zh-box-11.svg)
 
-```
 
 ---
 
@@ -4347,11 +4336,9 @@ lambda1.borrow_mut().push_str(", y=2");
 println!("{}", lambda2.borrow());  // "x=1, y=2"  ✅
 ```
 
-```
 
 ![rc sharing](svgs/rc-sharing.svg)
 
-```
 
 > 🧠 **大白话 — `Rc<RefCell<T>>`**：合租房 + 可写字的白板。多人共享（Rc），而且谁都能在白板上写字（RefCell）。一个人写了，其他人立刻能看到。这就是闭包的"背包🎒"——多个 lambda 背着同一个背包，一个人改了背包里的东西，其他人也知道。
 
@@ -4399,11 +4386,9 @@ pub struct LispEnv {
 
 > 🧠 **为什么不需要垃圾回收（GC）？** — 很多 Lisp 教程用 Java/Python 实现，要手动处理循环引用。我们用 Rust：`Rc` 自动计数引用（没人用了就释放），`RefCell` 允许共享修改。没有 `Rc` 之间的循环（outer 链是单向的），所以不会泄漏。Rust 的所有权系统帮我们免费做了 GC 的活。
 
-```
 
 ![env chain](svgs/env-chain.svg)
 
-```
 
 > 🔗 **环境链 = 单向链表**：每个环境帧都有一个 `outer` 指针指向外层。查找变量时沿着这条链从内向外搜索——这就是词法作用域的运行时实现。`Rc<RefCell<>>` 允许多个地方共享同一帧（比如两个闭包捕获同一个外层环境）。
 
@@ -4601,11 +4586,9 @@ test tests::test_closure ... ok
 test result: ok. 22 passed; 0 failed
 ```
 
-```
 
 ![closure](svgs/closure.svg)
 
-```
 
 > 🎯 **闭包 = 函数体 + 诞生时的环境**。所谓"函数记住了它诞生时的环境"，技术上就是 `Lambda.env` 字段指向定义时的 `CallFrame`。调用时创建的新帧以这个捕获的帧为 `outer`——所以内层函数能"看见"外层函数的变量。
 
@@ -5220,11 +5203,9 @@ pub fn eval(exp: &LispExp, env: &mut LispEnv) -> Result<LispExp, LispErr> {
 - 所有原来用 `env` 的地方 → 改成 `current_env`
 - 递归调用 `eval(xxx, env)` → 改成 `eval(xxx, &mut current_env)`
 
-```
 
 ![tco trampoline](svgs/tco-trampoline.svg)
 
-```
 
 > 🔑 **图中的颜色含义**：🟢 绿色 = TCO 路径（`continue` 不增栈），🔵 蓝色 = 返回路径（出结果）。注意所有尾调用位置（`if` 分支、`lambda` 体调用）都走绿色路径。
 
@@ -5372,11 +5353,9 @@ pub fn intern(s: &str) -> u64 {
        比较: 1 == 1  (1 条 CPU 指令) vs "define" == "define" (6 次字符比较)
 ```
 
-```
 
 ![string interning](svgs/string-interning.svg)
 
-```
 
 > 🏗️ **双向映射**：`id_to_str` 用于 `lookup(id)` 输出调试信息，`str_to_id` 用于 `intern(str)` 快速去重。`OnceLock<RwLock<>>` 保证了全局唯一实例且线程安全。
 
@@ -5793,11 +5772,9 @@ lisp-rs/
 
 **测试数**：所有测试通过（`cargo test` 验证）
 
-```
 
 ![module pipeline](svgs/module-pipeline.svg)
 
-```
 
 > 📦 **模块分层**：核心层（类型+环境+驻留）→ 解析层（词法+语法）→ 求值层。每层只依赖下面一层，不跨层依赖。
 
@@ -5839,11 +5816,9 @@ fn intern(&mut self, s: &str) -> u64 {
 
 > 🎯 **解决的问题**: begin/set!/let/cond/and/or/let*/letrec——补全 Lisp 的控制流和绑定能力。
 
-```
 
 ![special forms](svgs/special-forms.svg)
 
-```
 
 > 🗺️ **特殊形式全景图**：eval 遇到 List 时，先检查第一个元素是不是特殊形式关键字。🟢 绿色 = 尾调用优化的路径（`if`/`let`/`cond`/`and`/`or`/Lambda 调用都走 TCO），🔵 蓝色 = 直接返回（`quote`/`define`/`lambda`）。其余特殊形式（begin/set!/let/cond/and/or/let*/letrec）在步骤 44-51 逐一实现。
 
@@ -7507,11 +7482,9 @@ fn test_newline_returns_nil() {
 
 ### 步骤 74: 公开模块 + 创建 main.rs
 
-```
 
 ![repl seq](svgs/repl-seq.svg)
 
-```
 
 > 🔄 **REPL 就是上面这个循环**——你输入一行代码，它经过词法分析 → 语法分析 → 求值，打印结果，然后等你输入下一行。直到你敲 `:q` 退出。
 
@@ -7675,21 +7648,19 @@ cargo run
 
 
 ---
-> ✅ **本章总结**: 一个完整的交互式 Lisp 解释器，约 3000 行 Rust，零外部依赖。
+> ✅ **本章总结**: 一个完整的交互式 Lisp 解释器，约 2000 行 Rust，零外部依赖。
 
 
 ## 🏗️ 架构回顾
 
 经过 74 步，这是我们构建的东西：
 
-```
 
 ![architecture overview](svgs/architecture-overview.svg)
 
-```
 
 **关键数据：**
-- **~3000 行 Rust 代码**（零外部依赖）
+- **~2000 行 Rust 代码**（零外部依赖）
 - **36 个内置函数**（算术、比较、列表操作、类型判断、高阶函数）
 - **11 种特殊形式**（if, define, lambda, begin, set!, let, cond, and, or, let*, letrec）
 - **2 个语言扩展**：宏、变参 lambda
@@ -7724,6 +7695,7 @@ cargo run
 | `temporary value dropped while borrowed` | `&str` 指向一个已被释放的 String。检查生命周期 |
 | `expected struct LispExp, found &LispExp` | 你传了引用但需要所有权。加 `.clone()` 或解引用 |
 | `the trait Clone is not implemented` | 类型上缺少 `#[derive(Clone)]`。加上它 |
+| `no method named 'ev' found` | 方法名拼写错误——`ev` vs `eval` |
 | `mismatched types: expected u64, found &u64` | 你写了 `&interner::intern("x")` 而不是 `interner::intern("x")` |
 
 ### 调试策略
@@ -7803,14 +7775,15 @@ fn test_closure() {
 
 | 资源 | 为什么读 |
 |------|---------|
-| [**Crafting Interpreters**](https://craftinginterpreters.com/) (Nystrom) | 下一步的必读。构建 Lox 语言的字节码 VM——比我们的树遍历快 10-100 倍 |
+| [**Crafting Interpreters**](https://craftinginterpreters.com/) (Nystrom) | 下一步的必读。构建 Lox 语言的字节码 VM——比我们的树遍历快 10-100 倍。每章末尾的"挑战"练习会检验你的理解 |
 | [**Engineering a Compiler**](https://www.elsevier.com/books/engineering-a-compiler/cooper/978-0-12-815412-0) (Cooper & Torczon) | 标准编译器工程教科书。涵盖从词法分析到代码生成的所有阶段 |
+| [**TinyCC**](https://bellard.org/tcc/) (Bellard) | 仅约 100KB 的微型 C 编译器。阅读源码了解编译的实际过程 |
 
 ### 深入 Rust
 
 | 资源 | 为什么读 |
 |------|---------|
-| [**The Rust Book**](https://doc.rust-lang.org/book/) | 官方 Rust 资源。第 10 章（泛型）、13 章（迭代器/闭包）、15 章（智能指针）最相关 |
+| [**The Rust Book**](https://doc.rust-lang.org/book/) | 官方 Rust 资源。第 10 章（泛型）、13 章（迭代器/闭包）、15 章（智能指针）、16 章（并发）最相关 |
 | [**Rust by Example**](https://doc.rust-lang.org/stable/rust-by-example/) | 带注释例子的在线代码沙箱 |
 | [**Rustonomicon**](https://doc.rust-lang.org/nomicon/) | Unsafe Rust。如果你想实现自己的 GC 或底层优化 |
 

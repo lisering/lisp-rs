@@ -932,9 +932,6 @@ We'll use **RustRover** to write code—it gives you autocomplete, error checkin
 
 Open RustRover, click **"New Project"**, and you'll see the creation dialog. The dialog has three areas:
 
-```
-```
-
 ![en-box-15](svgs/en-box-15.svg)
 
 
@@ -2549,11 +2546,9 @@ running 6 tests
 test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
-```
 
 ![parser seq en](svgs/parser-seq-en.svg)
 
-```
 
 > Recursive parsing call flow: `parse()` and `read_seq()` call each other—`parse` encountering `(` delegates to `read_seq`, `read_seq` encountering a child element calls `parse` again, forming recursive descent. Each time `)` is encountered, "pop one layer," ultimately building the complete nested AST tree.
 
@@ -3392,11 +3387,9 @@ Types are now complete—`Number` can compute, `Bool` and `Nil` represent truth/
 
 > What we're solving: Implement the special forms if/define/lambda—they aren't ordinary functions, they have special evaluation rules. This is the foundation of Lisp's control flow.
 
-```
 
 ![class diagram en](svgs/class-diagram-en.svg)
 
-```
 
 > 🏋️ **Exercises**
 > 1. (⭐) Write a test to verify that `(> 5 3)` returns `#t` and `(> 3 5)` returns `#f`
@@ -3998,11 +3991,9 @@ Nesting doll structure (outside to inside):
 
 After executing `(define add (lambda (a b) (+ a b)))`, the global environment becomes:
 
-```
 
 ![en-box-17](svgs/en-box-17.svg)
 
-```
 
 ---
 
@@ -4427,11 +4418,9 @@ lambda1.borrow_mut().push_str(", y=2");
 println!("{}", lambda2.borrow());  // "x=1, y=2"  ✅
 ```
 
-```
 
 ![rc sharing en](svgs/rc-sharing-en.svg)
 
-```
 
 > 💡 In short — `Rc<RefCell<T>>`: shared apartment + writable whiteboard. Multiple people share it (Rc), and anyone can write on the whiteboard (RefCell). When one person writes, everyone else immediately sees it. This is the closure's "backpack🎒"—multiple lambdas carry the same backpack; if one changes something inside, everyone else knows.
 
@@ -4479,11 +4468,9 @@ pub struct LispEnv {
 
 > 💡 **Why don't we need a garbage collector?** Most Lisp-in-X tutorials (Java, Python) have to deal with reference cycles and GC. Rust's ownership system handles this for us: `Rc` auto-frees memory when the last reference drops, and the `outer` chain is a one-way linked list — no cycles. Rust gives us GC-like safety without a runtime collector.
 
-```
 
 ![env chain en](svgs/env-chain-en.svg)
 
-```
 
 > Environment chain = singly linked list: each environment frame has an `outer` pointer to the outer environment. Variable lookup follows this chain from inside to outside—this is the runtime implementation of lexical scoping. `Rc<RefCell<>>` allows multiple places to share the same frame (e.g., two closures capturing the same outer environment).
 
@@ -4683,11 +4670,9 @@ test tests::test_closure ... ok
 test result: ok. 22 passed; 0 failed
 ```
 
-```
 
 ![closure en](svgs/closure-en.svg)
 
-```
 
 > Closure = function body + birth environment. Technically, "a function remembers the environment it was born in" means `Lambda.env` points to the definition-time `CallFrame`. When calling, the new frame uses this captured frame as its `outer`—so the inner function can "see" the outer function's variables.
 
@@ -5261,11 +5246,9 @@ pub fn eval(exp: &LispExp, env: &mut LispEnv) -> Result<LispExp, LispErr> {
 - Every place that used `env` → change to `current_env`
 - Recursive call `eval(xxx, env)` → change to `eval(xxx, &mut current_env)`
 
-```
 
 ![tco trampoline en](svgs/tco-trampoline-en.svg)
 
-```
 
 > Color meanings: Green = TCO path (continue, no stack growth), Blue = return path (result produced). Note all tail call positions (if branches, lambda body calls) follow the green path.
 
@@ -5453,11 +5436,9 @@ String interning:
        Comparison: 1 == 1  (1 CPU instruction) vs "define" == "define" (6 character comparisons)
 ```
 
-```
 
 ![string interning en](svgs/string-interning-en.svg)
 
-```
 
 > Bidirectional mapping: `id_to_str` for `lookup(id)` to output debug info, `str_to_id` for `intern(str)` fast deduplication. `OnceLock<RwLock<>>` ensures a single global instance and thread safety.
 
@@ -5874,11 +5855,9 @@ lisp-rs/
 
 **Test count**: All tests pass (verified with `cargo test`)
 
-```
 
 ![module pipeline en](svgs/module-pipeline-en.svg)
 
-```
 
 > Module layering: Core layer (types + environment + interner) → Parsing layer (lexer + parser) → Evaluation layer. Each layer only depends on layers below, no cross-layer dependencies.
 
@@ -5886,11 +5865,9 @@ lisp-rs/
 
 > What we're solving: begin/set!/let/cond/and/or/let*/letrec—completing Lisp's control flow and binding capabilities.
 
-```
 
 ![special forms en](svgs/special-forms-en.svg)
 
-```
 
 > 🏋️ **Exercises**
 > 1. (⭐) Run `cargo run --example bench --release` and record the TCO and factorial benchmark data on your machine
@@ -7578,11 +7555,9 @@ fn test_newline_returns_nil() {
 
 ### Step 74: Make Modules Public + Create main.rs
 
-```
 
 ![repl seq en](svgs/repl-seq-en.svg)
 
-```
 
 > The REPL is the loop above—you type a line of code, it goes through lexical analysis → syntax analysis → evaluation, prints the result, then waits for your next line. Until you type `:q` to exit.
 
@@ -7741,21 +7716,19 @@ cargo run
 </details>
 
 ---
-> ✅ **Summary**: A complete, interactive Lisp interpreter in ~3000 lines of Rust — zero external dependencies.
+> ✅ **Summary**: A complete, interactive Lisp interpreter in ~2000 lines of Rust — zero external dependencies.
 
 
 ## 🏗️ Architecture Retrospective
 
 After 74 steps, here's what we built:
 
-```
 
 ![architecture overview en](svgs/architecture-overview-en.svg)
 
-```
 
 **Key numbers:**
-- **~3000 lines of Rust** (zero external dependencies)
+- **~2000 lines of Rust** (zero external dependencies)
 - **36 built-in functions** (arithmetic, comparison, list ops, predicates, higher-order)
 - **11 special forms** (if, define, lambda, begin, set!, let, cond, and, or, let*, letrec)
 - **2 language extensions**: macros, variadic lambda
