@@ -2527,12 +2527,12 @@ mod tests {
 
     #[test]
     fn test_unclosed_list_error() {
-        assert!(parse(&vec!["(".to_string(), "+".into(), "1".into()]).is_err());
+        assert!(parse(&["(".to_string(), "+".into(), "1".into()]).is_err());
     }
 
     #[test]
     fn test_unexpected_close_error() {
-        assert!(parse(&vec![")".to_string()]).is_err());
+        assert!(parse(&[")".to_string()]).is_err());
     }
 }
 ```
