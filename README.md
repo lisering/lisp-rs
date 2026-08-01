@@ -2371,6 +2371,22 @@ fn parse_atom(token: &str) -> LispExp {
 }
 ```
 
+💡 In short — `split_first()`: In Lisp, splitting a list is done with two classic operations—`car` returns the first element, `cdr` returns the rest. Every Lisp programmer uses them daily:
+
+```lisp
+(car '(+ 1 2 3))   ; → +          "the first one"
+(cdr '(+ 1 2 3))   ; → (1 2 3)    "the rest"
+```
+
+Rust's `split_first()` combines both into one call, returning the first element and the rest together:
+
+```rust
+// tokens = ["+", "1", "2", "3"]
+let (token, rest) = tokens.split_first();
+// token = "+", rest = ["1", "2", "3"]
+//  ↑ car              ↑ cdr
+```
+
 💡 In short — `use` imports things from other files into the current one. `use crate::{LispExp, LispErr}` says "bring these two types into this file." Without `use`, you'd have to type `crate::LispExp` everywhere.
 
 💡 In short — `if let Ok(num) = ...` is a shorthand: "if this parse succeeds, grab the result as `num` and use it."

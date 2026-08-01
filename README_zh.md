@@ -2261,6 +2261,22 @@ fn parse_atom(token: &str) -> LispExp {
 }
 ```
 
+🧠 **大白话 — `split_first()`（取头取尾）**：Lisp 里拆列表有两个老搭档——`car` 取第一个元素，`cdr` 取剩下的，写 Lisp 的人天天用：
+
+```lisp
+(car '(+ 1 2 3))   ; → +          "第一个人"
+(cdr '(+ 1 2 3))   ; → (1 2 3)    "后面的人"
+```
+
+Rust 的 `split_first()` 把这两步合二为一，一次返回第一个和剩下的：
+
+```rust
+// tokens = ["+", "1", "2", "3"]
+let (token, rest) = tokens.split_first();
+// token = "+", rest = ["1", "2", "3"]
+//  ↑ car              ↑ cdr
+```
+
 🧠 **大白话 — `use`（导入）**：就像你去图书馆借书——`use crate::{LispExp, LispErr}` 意思是"把项目里的 LispExp 和 LispErr 拿到这个文件来用"。不写 `use` 就得写全名 `crate::LispExp`，太啰嗦。
 
 🧠 **大白话 — `if let Ok(num) = ...`（模式匹配简写）**：
