@@ -221,14 +221,11 @@ if (x > 0) { return x + 1; }
   ① 算 if 的条件: (= 5 1)?
      这是三个东西: =、5、1。分别看它们是什么:
 
-     ┌───────────────────────────────────────┐
-     │ = 是什么? → 是"判断相等"这个功能         │
-     │ 5 是什么? → 就是数字 5                  │
-     │ 1 是什么? → 就是数字 1                  │
-     │                                       │
-     │ 用"判断相等"比较 (5, 1): 5 等于 1 吗?    │
-     │ → 不等! → 结果是 #f (假)                │
-     └───────────────────────────────────────┘
+```
+
+![zh-box-01](svgs/zh-box-01.svg)
+
+```
 
   ② if 看到条件是 #f → 不走进真分支, 走假分支:
      假分支: (* 5 (factorial (- 5 1)))
@@ -240,13 +237,11 @@ if (x > 0) { return x + 1; }
      要乘的第 2 个数: (factorial (- 5 1))
      这还是个嵌套! 先算最里面的 (- 5 1):
 
-     ┌─ 算 (- 5 1) ──────────────────┐
-     │ - 是什么? → "做减法"这个功能    │
-     │ 5 是什么? → 就是数字 5         │
-     │ 1 是什么? → 就是数字 1         │
-     │                              │
-     │ 用"减法"对 (5, 1): 5 - 1 = 4  │
-     └──────────────────────────────┘
+```
+
+![zh-box-02](svgs/zh-box-02.svg)
+
+```
 
      所以 (factorial (- 5 1)) 变成了 (factorial 4)
      → 但 (factorial 4) 是多少? 需要再调用 factorial!
@@ -259,13 +254,11 @@ if (x > 0) { return x + 1; }
 
   这三层和第一层完全一样的模式，只是 n 不同。快速过一遍：
 
-  ┌─ ┬ ──────────────────────────────────────────────────────────────────────┐
-  │ 层      │ 展开 n│ (= n 1)? │ (- n 1) = ? │ 暂停，等下一层                 │
-  ├────────────────────────────────────────────────────────────────────────┤
-  │ 第 2 层 │ n = 4 │ #f       │ 4-1 = 3     │ (fact 4)=(* 4 (fact 3 的结果))│
-  │ 第 3 层 │ n = 3 │ #f       │ 3-1 = 2     │ (fact 3)=(* 3 (fact 2 的结果))│
-  │ 第 4 层 │ n = 2 │ #f       │ 2-1 = 1     │ (fact 2)=(* 2 (fact 1 的结果))│
-  └─────────┴────────┴──────────┴─────────────┴────────────────────────────────┘
+```
+
+![zh-box-03](svgs/zh-box-03.svg)
+
+```
 
   每一层都在"等下一层的结果回来再乘"——直到第 5 层触底。
 
@@ -279,14 +272,11 @@ if (x > 0) { return x + 1; }
 
   ① 算 if 的条件: (= 1 1)?
 
-     ┌───────────────────────────────────────┐
-     │ = 是什么? → “判断相等”这个功能           │
-     │ 1 是什么? → 就是数字 1                  │
-     │ 1 是什么? → 就是数字 1                  │
-     │                                       │
-     │ 用“判断相等”比较 (1, 1): 1 等于 1 吗?    │
-     │ → 等于! → 结果是 #t (真)!!!            │
-     └───────────────────────────────────────┘
+```
+
+![zh-box-04](svgs/zh-box-04.svg)
+
+```
 
   ② if 看到条件是 #t → 走真分支: 1
      真分支就是一个光秃秃的 1, 不需要再算了!
@@ -505,10 +495,11 @@ make-counter 这个函数本身:
 ② 调用 counter-函数。它没有参数:
 
    当前环境:
-   ┌────────────────────────────┐
-   │ (空的)                      │
-   │ → 打开背包: start → 0       │
-   └────────────────────────────┘
+```
+
+![zh-box-05](svgs/zh-box-05.svg)
+
+```
 
 ③ 执行函数体:
 
@@ -579,22 +570,18 @@ Lisp 里函数跟数字、字符串一样，可以传来传去：
   ③ 求值函数体: (f (f x))
 
      先拆内层 (f x):
-     ┌────────────────────────────────────┐
-     │ f = square, x = 3                  │
-     │ → (square 3)                       │
-     │ → ((lambda (x) (* x x)) 3)         │
-     │ → (* 3 3)                          │
-     │ → 9                                │
-     └────────────────────────────────────┘
+```
+
+![zh-box-06](svgs/zh-box-06.svg)
+
+```
 
      内层返回 9, 现在变成 (f 9):
-     ┌────────────────────────────────────┐
-     │ f = square, 参数 = 9                │
-     │ → (square 9)                       │
-     │ → ((lambda (x) (* x x)) 9)         │
-     │ → (* 9 9)                          │
-     │ → 81                               │
-     └────────────────────────────────────┘
+```
+
+![zh-box-07](svgs/zh-box-07.svg)
+
+```
 
   最终: (apply-twice square 3) → 81 ✅
 
@@ -803,17 +790,10 @@ Rust 是我们要用的编程语言。先给电脑装上它。
 打开 RustRover，点 **"新建项目"**，你会看到创建对话框。对话框分三块区域：
 
 ```
-┌───────────────────────────────────────────────────────────────┐
-│  [左侧: 项目类型列表]  │  [中间: 配置表单]  │  [右侧: 模板]        │
-│                        │                    │                 │
-│  ● Rust                │  位置(L): /.../x   │  ○ 二进制文件     │
-│    Web                 │  工具链版本: 1.86  │  ● 库            │
-│    React               │  标准库: /.../src  │  ○ 过程宏        │
-│    ...                 │                    │  ○ WebAssembly  │
-│                        │                    │                 │
-│                        │                    │  [ Create ]     │
-└───────────────────────────────────────────────────────────────┘
 ```
+
+![zh-box-08](svgs/zh-box-08.svg)
+
 
 **① 左侧：点 "Rust"**（在列表最上面）。确保选中的是 Rust，不是下面的 Web/React 等。RustRover 会自动检测已安装的 Rust 工具链——"工具链版本"字段会自动填入类似 `1.86` 的版本号。
 
@@ -1942,9 +1922,11 @@ pub fn tokenize(input: &str) -> Vec<String> {
 
 ```
 Vec<String>：
-┌─ ┬ ───────────────┐
-│ "("  │ "+"│ "1"  │  ← 每个格子里是一个 String
-└──────┴──────┴──────┘
+```
+
+![zh-box-09](svgs/zh-box-09.svg)
+
+```
   0      1      2          ← 索引（从0开始）
 ```
 
@@ -2426,7 +2408,11 @@ fn read_seq(tokens: &[String]) -> Result<(LispExp, &[String]), LispErr> {
   └─ ")" → 列表结束! 返回 List([+,1,[*,2,3]])
 
 结果像一棵树:
+```
+
 ![ast tree](svgs/ast-tree.svg)
+
+```
 
 🧠 **大白话 — 递归**：函数调用自己。就像"镜子里的镜子里的镜子"——无限嵌套下去，直到遇到停止条件（`)`）。
 
@@ -2459,7 +2445,11 @@ test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 
 > 🧠 **大白话 — `unreachable pattern` 警告消失了！** 加了 `Symbol` 变体后，`_` 不再是死代码——它可以匹配 `Symbol`。只剩 `eval_str` 的 `dead_code` 警告还在。
 
+```
+
 ![parser seq](svgs/parser-seq.svg)
+
+```
 
 > 🔄 **递归解析的调用过程**：`parse()` 和 `read_seq()` 互相调用——`parse` 遇到 `(` 委托给 `read_seq`，`read_seq` 遇到子元素又调用 `parse`，形成递归下降。每次遇到 `)` 就"弹出一层"，最终构建出完整的嵌套 AST 树。
 
@@ -2635,11 +2625,9 @@ use crate::{LispExp, LispErr};
 /// 环境 — 就像一个通讯录: 名字 → 值
 ///
 /// 结构示意:
-┌────────────────────┐
-│ "x" → Number(10)   │  ← 变量 x 的值是 10
-│ "+" → Func(加法)    │  ← 变量 + 的值是加法函数
-│ "y" → Number(20)   │
-└────────────────────┘
+
+![zh-box-10](svgs/zh-box-10.svg)
+
 #[derive(Clone, Debug, PartialEq, Default)]
 pub struct LispEnv {
     pub data: HashMap<String, LispExp>,
@@ -3343,7 +3331,11 @@ env.set("string-length".into(), LispExp::Func(|args| {
 
 > 🎯 **解决的问题**: 实现特殊形式 if/define/lambda——它们不是普通函数，有不规则的求值规则。这是 Lisp 控制流的基石。
 
+```
+
 ![class diagram](svgs/class-diagram.svg)
+
+```
 
 > 📊 **类型全景图**：`LispExp` 的 8 个变体——自求值类型（Number/Bool/String/Nil）+ 符号（Symbol）+ 列表（List）+ 可调用类型（Func/Lambda）。`Lambda` 内部的 `env` 字段让它成为闭包。
 
@@ -3921,18 +3913,9 @@ test result: ok. 20 passed; 0 failed
 执行 `(define add (lambda (a b) (+ a b)))` 之后，全局环境变成：
 
 ```
-┌───────────────────────────────────┐
-│ 全局环境                           │
-│                                   │
-│  add → Lambda {                   │
-│           params = [a, b],        │
-│           body   = (+ a b),       │
-│           env    = 全局            │
-│         }                         │
-│  +   → Func(加法)                  │
-│  -   → Func(减法)                  │
-│  ... 其他内置函数 ...              │
-└───────────────────────────────────┘
+
+![zh-box-11](svgs/zh-box-11.svg)
+
 ```
 
 ---
@@ -4026,14 +4009,9 @@ eval 判断:                       eval 判断:
   let mut new_env = 全局.clone()
 
   clone 后的 new_env:
-  ┌────────────────────────────────────┐
-  │ new_env (当前)                      │
-  │  add → Lambda{...}                 │
-  │  +   → Func(加法)                  │
-  │  -   → Func(减法)                  │
-  │  ...                               │
-  │ outer = None  (clone 不复制 outer)  │
-  └────────────────────────────────────┘
+
+![zh-box-12](svgs/zh-box-12.svg)
+
 
 ② 把参数名和实参值"配对绑定"
   zip(["a", "b"], [Number(3), Number(4)]):
@@ -4041,21 +4019,16 @@ eval 判断:                       eval 判断:
     第 2 对: param="b", arg=Number(4) → new_env.set("b", 4)
 
   new_env 现在是:
-  ┌───────────────────────────────────┐
-  │ new_env (当前)                    │
-  │  a → Number(3)    ← 新绑定!        │
-  │  b → Number(4)    ← 新绑定!        │
-  │  add → Lambda{...}                │
-  │  +   → Func(加法)                  │
-  │  ...                              │
-  └───────────────────────────────────┘
+
+![zh-box-13](svgs/zh-box-13.svg)
+
 
 ③ 在新环境中求值函数体
   eval((+ a b), new_env)
 
-  ┌─ 注意 ────────────────────────────────────────┐
-  │ 这又触发了一个新的 eval 调用 —— 第三层套娃!     │
-  └─────────────────────────────────────────────┘
+
+![zh-box-14](svgs/zh-box-14.svg)
+
 ```
 
 ---
@@ -4374,7 +4347,11 @@ lambda1.borrow_mut().push_str(", y=2");
 println!("{}", lambda2.borrow());  // "x=1, y=2"  ✅
 ```
 
+```
+
 ![rc sharing](svgs/rc-sharing.svg)
+
+```
 
 > 🧠 **大白话 — `Rc<RefCell<T>>`**：合租房 + 可写字的白板。多人共享（Rc），而且谁都能在白板上写字（RefCell）。一个人写了，其他人立刻能看到。这就是闭包的"背包🎒"——多个 lambda 背着同一个背包，一个人改了背包里的东西，其他人也知道。
 
@@ -4422,7 +4399,11 @@ pub struct LispEnv {
 
 > 🧠 **为什么不需要垃圾回收（GC）？** — 很多 Lisp 教程用 Java/Python 实现，要手动处理循环引用。我们用 Rust：`Rc` 自动计数引用（没人用了就释放），`RefCell` 允许共享修改。没有 `Rc` 之间的循环（outer 链是单向的），所以不会泄漏。Rust 的所有权系统帮我们免费做了 GC 的活。
 
+```
+
 ![env chain](svgs/env-chain.svg)
+
+```
 
 > 🔗 **环境链 = 单向链表**：每个环境帧都有一个 `outer` 指针指向外层。查找变量时沿着这条链从内向外搜索——这就是词法作用域的运行时实现。`Rc<RefCell<>>` 允许多个地方共享同一帧（比如两个闭包捕获同一个外层环境）。
 
@@ -4484,16 +4465,15 @@ pub fn get(&self, key: &str) -> Result<LispExp, LispErr> {
 
 
 ```
-┌──────────────────────┐
-│  +  → Func(加法)      │
-│  x  → Number(10)     │
-└──────────────────────┘
+
+![zh-box-15](svgs/zh-box-15.svg)
+
           │ outer
           ▼
 调用 (lambda (y) (+ x y)) 时创建的环境 (outer = 全局)
-┌─────────────────────┐
-│  y  → Number(5)     │  ← get("x") 找不到 → 去 outer 找 → 找到 Number(10)!
-└─────────────────────┘
+
+![zh-box-16](svgs/zh-box-16.svg)
+
 ```
 
 ```bash
@@ -4621,7 +4601,11 @@ test tests::test_closure ... ok
 test result: ok. 22 passed; 0 failed
 ```
 
+```
+
 ![closure](svgs/closure.svg)
+
+```
 
 > 🎯 **闭包 = 函数体 + 诞生时的环境**。所谓"函数记住了它诞生时的环境"，技术上就是 `Lambda.env` 字段指向定义时的 `CallFrame`。调用时创建的新帧以这个捕获的帧为 `outer`——所以内层函数能"看见"外层函数的变量。
 
@@ -4725,17 +4709,9 @@ first 是特殊形式 "lambda"! → 不执行函数体，只是"打包"成一个
   → 全局.set("make-adder", Lambda₁)
 
 全局环境现在变成:
-  ┌──────────────────────────────────────┐
-  │ 全局环境                              │
-  │                                      │
-  │  make-adder → Lambda₁ {              │
-  │      params = ["n"],                 │
-  │      body   = (lambda (x) (+ x n)),  │
-  │      env    = 全局  ← 诞生环境        │
-  │  }                                   │
-  │  + → Func(加法)                      │
-  │  ...                                 │
-  └──────────────────────────────────────┘
+
+![zh-box-17](svgs/zh-box-17.svg)
+
 
 define 返回: Nil ✅ (define 总是返回 Nil)
 
@@ -4775,24 +4751,15 @@ eval 判断: List! → 首元素 = Symbol("make-adder")
 
   ① 求值函数位置:
 
-    ┌─────────────────────────────────────────────────┐
-    │ 🟢 子套娃: eval(Symbol("make-adder"), 全局)      │
-    │                                                 │
-    │   Symbol → 在全局中查 "make-adder"               │
-    │   → 找到了! Lambda₁ {                            │
-    │       params=["n"],                             │
-    │       body=(lambda (x) (+ x n)),                │
-    │       env=全局                                  │
-    │     }                                           │
-    │   返回: Lambda₁                                  │
-    └─────────────────────────────────────────────────┘
+
+![zh-box-18](svgs/zh-box-18.svg)
+
 
   ② 求值参数:
 
-    ┌─────────────────────────────────────────────────┐
-    │ 🟢 子套娃: eval(Number(5), 全局)                 │
-    │   Number → 自求值 → 返回 Number(5)               │
-    └─────────────────────────────────────────────────┘
+
+![zh-box-19](svgs/zh-box-19.svg)
+
 
   现在: func = Lambda₁, args = [Number(5)]
 
@@ -4816,19 +4783,15 @@ Lambda₁ 调用 — 创建新环境:
      zip(["n"], [Number(5)]) → CallFrame₁.set("n", Number(5))
 
      CallFrame₁ 现在:
-     ┌──────────────────────────────────┐
-     │ CallFrame₁                       │
-     │   n → Number(5)                  │
-     │   outer → 全局 (含 make-adder)    │
-     └──────────────────────────────────┘
+
+![zh-box-20](svgs/zh-box-20.svg)
+
 
   ③ 在 CallFrame₁ 中求值 Lambda₁ 的函数体:
      eval( (lambda (x) (+ x n)), CallFrame₁ )
-     ┌─────────────────────────────────────────────────┐
-     │ 注意! 这个 eval 在一个"特殊"的环境中执行            │
-     │ CallFrame₁.outer = 全局                          │
-     │ CallFrame₁.data  = { n → 5 }                    │
-     └─────────────────────────────────────────────────┘
+
+![zh-box-21](svgs/zh-box-21.svg)
+
 ```
 
 ---
@@ -4851,20 +4814,9 @@ eval 判断: List! → 首元素 = Symbol("lambda")
     body   = (+ x n),                  ← 函数体里有 n! n 不是局部参数!
     env    = CallFrame₁  ← 📸 咔嚓! 在 CallFrame₁ 环境中诞生!
   }
-  ┌─────────────────────────────────────────────────────┐
-  │ 🔑 这就是闭包!                                       │
-  │ Lambda₂.env = CallFrame₁                            │
-  │ 而 CallFrame₁ 里有 n=5!                              │
-  │                                                     │
-  │ 对比第 1 行的 Lambda₁:                               │
-  │   Lambda₁.env = 全局 (诞生在全局)                     │
-  │                                                     │
-  │ 第 2 行的 Lambda₂:                                   │
-  │   Lambda₂.env = CallFrame₁ (诞生在调用帧内!)          │
-  │   而 CallFrame₁.outer = 全局                         │
-  │                                                     │
-  │ Lambda₂ 带着 CallFrame₁ 一起"走"了!                  │
-  └─────────────────────────────────────────────────────┘
+
+![zh-box-22](svgs/zh-box-22.svg)
+
 
   返回: Lambda₂
 ```
@@ -4878,14 +4830,9 @@ eval 判断: List! → 首元素 = Symbol("lambda")
   → 全局.set("add5", Lambda₂)
 
 全局环境现在:
-  ┌────────────────────────────────────────────────────┐
-  │ 全局环境                                            │
-  │                                                    │
-  │  make-adder → Lambda₁ { env=全局 }                  │
-  │  add5       → Lambda₂ { env=CallFrame₁ }  ← 新增!  │
-  │  + → Func(加法)                                    │
-  │  ...                                               │
-  └────────────────────────────────────────────────────┘
+
+![zh-box-23](svgs/zh-box-23.svg)
+
 
 define 返回: Nil ✅
 
@@ -4906,21 +4853,15 @@ eval 判断: List! → 首元素 = Symbol("add5")
 
   ① 求值函数位置:
 
-    ┌────────────────────────────────────────────────────┐
-    │ 🟢 子套娃: eval(Symbol("add5"), 全局)               │
-    │   Symbol → 在全局中查 "add5"                        │
-    │   → Lambda₂ { params=["x"],                        │
-    │               body=(+ x n),                        │
-    │               env=CallFrame₁ }  ← 🔑 env 不是全局!  │
-    │   返回: Lambda₂                                    │
-    └────────────────────────────────────────────────────┘
+
+![zh-box-24](svgs/zh-box-24.svg)
+
 
   ② 求值参数:
 
-    ┌─────────────────────────────────────────────────┐
-    │ 🟢 子套娃: eval(Number(10), 全局)                │
-    │   Number → 自求值 → Number(10)                   │
-    └─────────────────────────────────────────────────┘
+
+![zh-box-25](svgs/zh-box-25.svg)
+
 
   现在: func = Lambda₂, args = [Number(10)]
 ```
@@ -4937,27 +4878,17 @@ Lambda₂ 调用 — 创建新环境:
        data  = {},
        outer = Lambda₂.env = CallFrame₁  ← 🔑🔑 这就是闭包发挥作用的地方!
      }
-     ┌────────────────────────────────────────────────────┐
-     │ 如果用 env.clone() (旧版做法):                       │
-     │   CallFrame₂.outer = 全局                          │
-     │   → 后面找 n 时, 在 CallFrame₂ 找不到,               │
-     │     去全局也找不到 → 💥 未定义的变量!                 │
-     │                                                    │
-     │ 用 with_outer(lambda.env) (新版做法):               │
-     │   CallFrame₂.outer = CallFrame₁                    │
-     │   → 后面找 n 时, 在 CallFrame₂ 找不到,               │
-     │     去 CallFrame₁ 找 → n=5 ✅ 找到了!                │
-     └────────────────────────────────────────────────────┘
+
+![zh-box-26](svgs/zh-box-26.svg)
+
 
   ② 绑定参数:
      zip(["x"], [Number(10)]) → CallFrame₂.set("x", Number(10))
 
      CallFrame₂ 现在:
-     ┌───────────────────────────────────────┐
-     │ CallFrame₂                            │
-     │   x → Number(10)                      │
-     │   outer → CallFrame₁ { n→5, ... }     │
-     └───────────────────────────────────────┘
+
+![zh-box-27](svgs/zh-box-27.svg)
+
 
   ③ 在 CallFrame₂ 中求值 Lambda₂ 的函数体:
      eval( (+ x n), CallFrame₂ )
@@ -4977,51 +4908,21 @@ eval 判断: List! → 首元素 = Symbol("+")
 
   ① 求值函数位置 "+":
 
-    ┌─────────────────────────────────────────────────┐
-    │ 🟢 叶子套娃: eval(Symbol("+"), CallFrame₂)       │
-    │                                                 │
-    │   查 CallFrame₂: 有没有 "+"?                     │
-    │     data = { x→10 } → 没有 "+"                  │
-    │                                                 │
-    │   沿 outer 向上: outer = CallFrame₁              │
-    │   查 CallFrame₁: 有没有 "+"?                     │
-    │     data = { n→5 } → 没有 "+"                    │
-    │                                                 │
-    │   继续沿 outer 向上: outer = 全局                 │
-    │   查 全局: 有没有 "+"?                            │
-    │     → ✅ 找到了! Func(加法)                      │
-    │                                                 │
-    │   返回: Func(加法)                               │
-    └─────────────────────────────────────────────────┘
+
+![zh-box-28](svgs/zh-box-28.svg)
+
 
   ② 求值第一个参数 "x":
 
-    ┌─────────────────────────────────────────────────┐
-    │ 🟢 叶子套娃: eval(Symbol("x"), CallFrame₂)       │
-    │                                                 │
-    │   查 CallFrame₂: 有没有 "x"?                     │
-    │     data = { x→10 } → ✅ 找到了! Number(10)      │
-    │                                                 │
-    │   返回: Number(10)                              │
-    └─────────────────────────────────────────────────┘
+
+![zh-box-29](svgs/zh-box-29.svg)
+
 
   ③ 求值第二个参数 "n": ← 🎯 这就是闭包的关键时刻!
 
-    ┌───────────────────────────────────────────────────┐
-    │ 🟢 叶子套娃: eval(Symbol("n"), CallFrame₂)         │
-    │                                                   │
-    │   查 CallFrame₂: 有没有 "n"?                       │
-    │     data = { x→10 } → 没有 "n" ❌                  │
-    │                                                   │
-    │   沿 outer 向上: outer = CallFrame₁  ← 🔑          │
-    │   查 CallFrame₁: 有没有 "n"?                       │
-    │     data = { n→5 } → ✅ 找到了! Number(5)          │
-    ┌───────────────────────────────────────────────────┐
-    │   │如果没有闭包（旧版 env.clone() 做法）│            │
-    │   │outer 链是: CallFrame₂ → 全局       │           │
-    │   │CallFrame₁ 根本不在 outer 链上!      │          │
-    │   │查全局: 没有 "n" → 💥 未定义变量!   │            │
-    └───────────────────────────────────────────────────┘
+
+![zh-box-30](svgs/zh-box-30.svg)
+
     │                                                   │
     │   返回: Number(5) ✅                              │
     └───────────────────────────────────────────────────┘
@@ -5047,25 +4948,17 @@ eval 判断: List! → 首元素 = Symbol("+")
 整个过程的"环境链"全貌:
 
   求值 (+ x n) 时:
-  ┌───────────────────────────────────────────────────────┐
-  │ CallFrame₂ (当前帧)                                    │
-  │   x → Number(10)      ← 调用 (add5 10) 时绑定的        │
-  │   outer ──┐                                           │
-  └───────────────────────────────────────────────────────┘
+
+![zh-box-31](svgs/zh-box-31.svg)
+
               ↓
-  ┌────────────────────────────────────────────────────────┐
-  │ CallFrame₁ (闭包捕获的环境)                              │
-  │   n → Number(5)        ← 调用 (make-adder 5) 时绑定的    │
-  │   outer ──┐                                            │
-  └────────────────────────────────────────────────────────┘
+
+![zh-box-32](svgs/zh-box-32.svg)
+
               ↓
-  ┌───────────────────────────────────────────────────────┐
-  │ 全局环境                                               │
-  │   + → Func(加法)     ← 最终在这里找到 +                 │
-  │   make-adder → Lambda₁                                │
-  │   add5 → Lambda₂                                      │
-  │   outer = None      ← 到头了                           │
-  └───────────────────────────────────────────────────────┘
+
+![zh-box-33](svgs/zh-box-33.svg)
+
 
 查找 "x": CallFrame₂ ✅ (1 跳)
 查找 "n": CallFrame₂ ❌ → CallFrame₁ ✅ (2 跳)
@@ -5327,7 +5220,11 @@ pub fn eval(exp: &LispExp, env: &mut LispEnv) -> Result<LispExp, LispErr> {
 - 所有原来用 `env` 的地方 → 改成 `current_env`
 - 递归调用 `eval(xxx, env)` → 改成 `eval(xxx, &mut current_env)`
 
+```
+
 ![tco trampoline](svgs/tco-trampoline.svg)
+
+```
 
 > 🔑 **图中的颜色含义**：🟢 绿色 = TCO 路径（`continue` 不增栈），🔵 蓝色 = 返回路径（出结果）。注意所有尾调用位置（`if` 分支、`lambda` 体调用）都走绿色路径。
 
@@ -5475,7 +5372,11 @@ pub fn intern(s: &str) -> u64 {
        比较: 1 == 1  (1 条 CPU 指令) vs "define" == "define" (6 次字符比较)
 ```
 
+```
+
 ![string interning](svgs/string-interning.svg)
+
+```
 
 > 🏗️ **双向映射**：`id_to_str` 用于 `lookup(id)` 输出调试信息，`str_to_id` 用于 `intern(str)` 快速去重。`OnceLock<RwLock<>>` 保证了全局唯一实例且线程安全。
 
@@ -5648,9 +5549,11 @@ test result: ok. 23 passed; 0 failed
 
 当前 `tokenize` 返回 `Vec<String>`——每个 token 都堆分配一个 String。改用 `Vec<&str>`——直接引用源码中的切片。
 
+```
+
 ![zero copy](svgs/zero-copy.svg)
 
-```rust
+
 // src/lexer.rs — tokenize 函数
 // 旧版:
 pub fn tokenize(input: &str) -> Vec<String> {
@@ -5890,7 +5793,11 @@ lisp-rs/
 
 **测试数**：所有测试通过（`cargo test` 验证）
 
+```
+
 ![module pipeline](svgs/module-pipeline.svg)
+
+```
 
 > 📦 **模块分层**：核心层（类型+环境+驻留）→ 解析层（词法+语法）→ 求值层。每层只依赖下面一层，不跨层依赖。
 
@@ -5932,7 +5839,11 @@ fn intern(&mut self, s: &str) -> u64 {
 
 > 🎯 **解决的问题**: begin/set!/let/cond/and/or/let*/letrec——补全 Lisp 的控制流和绑定能力。
 
+```
+
 ![special forms](svgs/special-forms.svg)
+
+```
 
 > 🗺️ **特殊形式全景图**：eval 遇到 List 时，先检查第一个元素是不是特殊形式关键字。🟢 绿色 = 尾调用优化的路径（`if`/`let`/`cond`/`and`/`or`/Lambda 调用都走 TCO），🔵 蓝色 = 直接返回（`quote`/`define`/`lambda`）。其余特殊形式（begin/set!/let/cond/and/or/let*/letrec）在步骤 44-51 逐一实现。
 
@@ -6497,13 +6408,9 @@ letrec 用了三个步骤来破解这个"鸡生蛋"问题：
   创建 shared_env = Rc<RefCell<LispEnv>>
   (Rc = 多人共享, RefCell = 允许修改)
 
-  ┌────────────────────────┐
-  │ shared_env (共享黑板)   │  ← Rc 引用计数 = 1
-  │                        │
-  │  even? → Nil (占位!)    │  ← 先占个位置, 值暂时为空
-  │  odd?  → Nil (占位!)    │  ← 同上
-  │  outer → 当前环境       │
-  └────────────────────────┘
+
+![zh-box-34](svgs/zh-box-34.svg)
+
 
   现在 even? 和 odd? 这两个名字已经"注册"了,
   虽然值还是空的——就像先写名字贴座位, 人还没到。
@@ -6513,54 +6420,28 @@ letrec 用了三个步骤来破解这个"鸡生蛋"问题：
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
   创建求值环境, outer 指向 shared_env:
-  ┌─────────────────────────┐
-  │ eval_env                │
-  │  data = {}              │
-  │  outer → shared_env ────┼→ shared_env { even?→Nil, odd?→Nil, ... }
-  └─────────────────────────┘
+
+![zh-box-35](svgs/zh-box-35.svg)
+
 
   在这个环境中求值 each lambda:
 
-  ┌─ 求值 (lambda (n) (if (= n 0) #t (odd? (- n 1)))) ────┐
-  │                                                     │
-  │  创建 Lambda_even:                                  │
-  │    params = [n]                                     │
-  │    body = (if (= n 0) #t (odd? (- n 1)))            │
-  │    env = eval_env  ← 📸 捕获当前环境!                │
-  │                                                     │
-  │  🔑 eval_env.outer = shared_env                     │
-  │     所以 Lambda_even 通过 outer 链能看到 shared_env   │
-  │     shared_env 里有 odd? (虽然是 Nil)                │
-  │     → 函数体里写 (odd? (- n 1)) 不会报错!             │
-  │                                                     │
-  │     因为 odd? 存在于 shared_env 中,                  │
-  │     只是值还是占位的 Nil                              │
-  │     等 step 3 会替换成真值!                           │
-  └─────────────────────────────────────────────────────┘
 
-  ┌────────────────────────────────────────────────────┐
-  │                                                    │
-  │  创建 Lambda_odd: 同理                              │
-  │    params = [n]                                    │
-  │    body = (if (= n 0) #f (even? (- n 1)))          │
-  │    env = eval_env  ← 同一个 eval_env!               │
-  │                                                    │
-  │  Lambda_even 和 Lambda_odd 共享同一个 eval_env      │
-  │  → 它们通过 outer 都能看到 shared_env                │
-  └────────────────────────────────────────────────────┘
+![zh-box-36](svgs/zh-box-36.svg)
+
+
+
+![zh-box-37](svgs/zh-box-37.svg)
+
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📦 步骤 3: 用真值替换占位符
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
   shared_env 更新:
-  ┌───────────────────────────────┐
-  │ shared_env (共享黑板)          │
-  │                               │
-  │ even? → Lambda_even  ← 替换!  │
-  │ odd?  → Lambda_odd   ← 替换!  │
-  │ outer → 当前环境               │
-  └───────────────────────────────┘
+
+![zh-box-38](svgs/zh-box-38.svg)
+
 
   现在 even? 和 odd? 互为引用, 通过 shared_env 连接!
 
@@ -7626,7 +7507,11 @@ fn test_newline_returns_nil() {
 
 ### 步骤 74: 公开模块 + 创建 main.rs
 
+```
+
 ![repl seq](svgs/repl-seq.svg)
+
+```
 
 > 🔄 **REPL 就是上面这个循环**——你输入一行代码，它经过词法分析 → 语法分析 → 求值，打印结果，然后等你输入下一行。直到你敲 `:q` 退出。
 
@@ -7797,7 +7682,11 @@ cargo run
 
 经过 74 步，这是我们构建的东西：
 
+```
+
 ![architecture overview](svgs/architecture-overview.svg)
+
+```
 
 **关键数据：**
 - **~3000 行 Rust 代码**（零外部依赖）

@@ -219,14 +219,11 @@ Layer 1: Start computing (factorial 5)
   1 Compute if's condition: (= 5 1)?
     These are three things: =, 5, 1. Let's see what each is:
 
-     ┌──────────────────────────────────────────────────┐
-     │ = is what? → the "equality check" feature        │
-     │ 5 is what? → just the number 5                   │
-     │ 1 is what? → just the number 1                   │
-     │                                                  │
-     │ Use "equality check" on (5, 1): Is 5 equal to 1? │
-     │ → Not equal! → result is #f (false)              │
-     └──────────────────────────────────────────────────┘
+```
+
+![en-box-01](svgs/en-box-01.svg)
+
+```
 
   2 if sees condition is #f → don't enter true branch, go to false branch:
     false branch: (* 5 (factorial (- 5 1)))
@@ -238,13 +235,11 @@ Layer 1: Start computing (factorial 5)
      Second number to multiply: (factorial (- 5 1))
      This is still nested! First compute the innermost (- 5 1):
 
-     ┌─ Compute (- 5 1) ───────────────────────┐
-     │ - is what? → the "subtraction" feature │
-     │ 5 is what? → just the number 5         │
-     │ 1 is what? → just the number 1         │
-     │                                        │
-     │ Use "subtraction" on (5, 1): 5 - 1 = 4 │
-     └────────────────────────────────────────┘
+```
+
+![en-box-02](svgs/en-box-02.svg)
+
+```
 
      So (factorial (- 5 1)) becomes (factorial 4)
      → But what is (factorial 4)? Need to call factorial again!
@@ -264,14 +259,11 @@ Layer 2: (factorial 4)
 
   1 Compute if's condition: (= 4 1)?
 
-     ┌──────────────────────────────────────────────────┐
-     │ = is what? → the "equality check" feature        │
-     │ 4 is what? → just the number 4                   │
-     │ 1 is what? → just the number 1                   │
-     │                                                  │
-     │ Use "equality check" on (4, 1): Is 4 equal to 1? │
-     │ → Not equal! → result is #f (false)              │
-     └──────────────────────────────────────────────────┘
+```
+
+![en-box-03](svgs/en-box-03.svg)
+
+```
 
   2 if sees condition is #f → go to false branch:
     false branch: (* 4 (factorial (- 4 1)))
@@ -283,13 +275,11 @@ Layer 2: (factorial 4)
      Second number to multiply: (factorial (- 4 1))
      First compute (- 4 1):
 
-     ┌─ Compute (- 4 1) ───────────────────────┐
-     │ - is what? → the "subtraction" feature │
-     │ 4 is what? → just the number 4         │
-     │ 1 is what? → just the number 1         │
-     │                                        │
-     │ Use "subtraction" on (4, 1): 4 - 1 = 3 │
-     └────────────────────────────────────────┘
+```
+
+![en-box-04](svgs/en-box-04.svg)
+
+```
 
      So (factorial (- 4 1)) becomes (factorial 3)
      → But what is (factorial 3)? Need to call factorial again!
@@ -309,14 +299,11 @@ Layer 3: (factorial 3)
 
   1 Compute if's condition: (= 3 1)?
 
-     ┌──────────────────────────────────────────────────┐
-     │ = is what? → the "equality check" feature        │
-     │ 3 is what? → just the number 3                   │
-     │ 1 is what? → just the number 1                   │
-     │                                                  │
-     │ Use "equality check" on (3, 1): Is 3 equal to 1? │
-     │ → Not equal! → result is #f (false)              │
-     └──────────────────────────────────────────────────┘
+```
+
+![en-box-05](svgs/en-box-05.svg)
+
+```
 
   2 if sees condition is #f → go to false branch:
     false branch: (* 3 (factorial (- 3 1)))
@@ -328,13 +315,11 @@ Layer 3: (factorial 3)
      Second number to multiply: (factorial (- 3 1))
      First compute (- 3 1):
 
-     ┌─ Compute (- 3 1) ───────────────────────┐
-     │ - is what? → the "subtraction" feature │
-     │ 3 is what? → just the number 3         │
-     │ 1 is what? → just the number 1         │
-     │                                        │
-     │ Use "subtraction" on (3, 1): 3 - 1 = 2 │
-     └────────────────────────────────────────┘
+```
+
+![en-box-06](svgs/en-box-06.svg)
+
+```
 
      So (factorial (- 3 1)) becomes (factorial 2)
      → Enter Layer 4 nesting doll!
@@ -353,14 +338,11 @@ Layer 4: (factorial 2)
 
   1 Compute if's condition: (= 2 1)?
 
-     ┌──────────────────────────────────────────────────┐
-     │ = is what? → the "equality check" feature        │
-     │ 2 is what? → just the number 2                   │
-     │ 1 is what? → just the number 1                   │
-     │                                                  │
-     │ Use "equality check" on (2, 1): Is 2 equal to 1? │
-     │ → Not equal! → result is #f (false)              │
-     └──────────────────────────────────────────────────┘
+```
+
+![en-box-07](svgs/en-box-07.svg)
+
+```
 
   2 if sees condition is #f → go to false branch:
     false branch: (* 2 (factorial (- 2 1)))
@@ -372,13 +354,11 @@ Layer 4: (factorial 2)
      Second number to multiply: (factorial (- 2 1))
      First compute (- 2 1):
 
-     ┌─ Compute (- 2 1) ───────────────────────┐
-     │ - is what? → the "subtraction" feature │
-     │ 2 is what? → just the number 2         │
-     │ 1 is what? → just the number 1         │
-     │                                        │
-     │ Use "subtraction" on (2, 1): 2 - 1 = 1 │
-     └────────────────────────────────────────┘
+```
+
+![en-box-08](svgs/en-box-08.svg)
+
+```
 
      So (factorial (- 2 1)) becomes (factorial 1)
      → Enter Layer 5 nesting doll!
@@ -397,14 +377,11 @@ Layer 5 (innermost, bottom-out!): (factorial 1)
 
   1 Compute if's condition: (= 1 1)?
 
-     ┌──────────────────────────────────────────────────┐
-     │ = is what? → the "equality check" feature        │
-     │ 1 is what? → just the number 1                   │
-     │ 1 is what? → just the number 1                   │
-     │                                                  │
-     │ Use "equality check" on (1, 1): Is 1 equal to 1? │
-     │ → Equal! → result is #t (true)!!!                │
-     └──────────────────────────────────────────────────┘
+```
+
+![en-box-09](svgs/en-box-09.svg)
+
+```
 
   2 if sees condition is #t → go to true branch: 1
     True branch is just a bare 1, no more computation needed!
@@ -602,14 +579,11 @@ First, unpack 1:
 
   Call make-counter, binding the actual value 0 to the parameter start:
 
-  ┌─────────────────────────────────────────────────┐
-  │ Create a temporary scratch pad for this call:   │
-  │                                                 │
-  │   backpack (temporary call space):              │
-  ┌─────────────────────────────────────────────────┐
-  │   │ start → 0     │  ← parameter bound          │
-  │   │ outer → Global│  ← can see globals          │
-  └─────────────────────────────────────────────────┘
+```
+
+![en-box-10](svgs/en-box-10.svg)
+
+```
   │                                                 │
   │ Inside this notepad, evaluate make-counter's body:│
   │   (lambda () (set! start (+ start 1)) start)    │
@@ -621,17 +595,11 @@ First, unpack 1:
   → body: two statements — (set! start (+ start 1)) then start
   → 📸 birth environment = {start: 0} ← THIS IS THE BACKPACK! 🎒
 
-  ┌────────────────────────────────────────────────────┐
-  │ Inner function (no name yet, call it "counter-fn"):│
-  │                                                    │
-  ┌────────────────────────────────────────────────────┐
-  │   │ counter-fn                  │                  │
-  │   │  params:  ()                │                  │
-  │   │  body: (set! start ...)     │                  │
-  │   │        start                │                  │
-  │   │  🎒 backpack: backpack ───→│ backpack          │
-  │   │       which has start → 0  │ start → 0         │
-  └────────────────────────────────────────────────────┘
+```
+
+![en-box-11](svgs/en-box-11.svg)
+
+```
   └─────────────────────────────────────────────────┘
 
   KEY INSIGHT: counter-fn was born with start=0, which went into its backpack,
@@ -670,10 +638,11 @@ Code: (counter)
 ② counter-function has no parameters, so we just create a notepad:
 
    current scope:
-   ┌─────────────────────────────┐
-   │ (no parameters of its own)  │
-   │ → open backpack: start → 0  │
-   └─────────────────────────────┘
+```
+
+![en-box-12](svgs/en-box-12.svg)
+
+```
 
 ③ Execute the body:
 
@@ -744,22 +713,18 @@ Prepared:
   3 Evaluate function body: (f (f x))
 
      First break down the inner (f x):
-     ┌────────────────────────────────────┐
-     │ f = square, x = 3                  │
-     │ → (square 3)                       │
-     │ → ((lambda (x) (* x x)) 3)         │
-     │ → (* 3 3)                          │
-     │ → 9                                │
-     └────────────────────────────────────┘
+```
+
+![en-box-13](svgs/en-box-13.svg)
+
+```
 
      Inner returns 9, now it becomes (f 9):
-     ┌────────────────────────────────────┐
-     │ f = square, argument = 9           │
-     │ → (square 9)                       │
-     │ → ((lambda (x) (* x x)) 9)         │
-     │ → (* 9 9)                          │
-     │ → 81                               │
-     └────────────────────────────────────┘
+```
+
+![en-box-14](svgs/en-box-14.svg)
+
+```
 
   Final: (apply-twice square 3) → 81 ✅
 
@@ -968,17 +933,10 @@ We'll use **RustRover** to write code—it gives you autocomplete, error checkin
 Open RustRover, click **"New Project"**, and you'll see the creation dialog. The dialog has three areas:
 
 ```
-┌────────────────────────────────────────────────────────────────────────────────┐
-│  [Left: Project Type List]  │  [Middle: Config Form]    │  [Right: Template]   │
-│                             │                           │                      │
-│  ● Rust                     │  Location(L): /.../x      │  ○ Binary            │
-│    Web                      │  Toolchain version: 1.86  │  ● Library           │
-│    React                    │  Standard Library: ...    │  ○ Procedural Macro  │
-│    ...                      │                           │  ○ WebAssembly       │
-│                             │                           │                      │
-│                             │                           │  [ Create ]          │
-└────────────────────────────────────────────────────────────────────────────────┘
 ```
+
+![en-box-15](svgs/en-box-15.svg)
+
 
 **1 Left: Click "Rust"** (at the top of the list). Make sure Rust is selected, not Web/React etc. RustRover will automatically detect your installed Rust toolchain — the "Toolchain version" field should fill in with something like `1.86`.
 
@@ -2561,7 +2519,11 @@ Layer 1: parse → "(" → read_seq starts reading
   └─ ")" → list ends! Return List([+,1,[*,2,3]])
 
 Result looks like a tree:
+```
+
 ![ast tree en](svgs/ast-tree-en.svg)
+
+```
 
 
 💡 In short — Recursion: a function that calls itself. Like Russian nesting dolls — open one, find another inside, repeat until the smallest one has nothing inside.
@@ -2587,7 +2549,11 @@ running 6 tests
 test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
+```
+
 ![parser seq en](svgs/parser-seq-en.svg)
+
+```
 
 > Recursive parsing call flow: `parse()` and `read_seq()` call each other—`parse` encountering `(` delegates to `read_seq`, `read_seq` encountering a child element calls `parse` again, forming recursive descent. Each time `)` is encountered, "pop one layer," ultimately building the complete nested AST tree.
 
@@ -2760,11 +2726,9 @@ use crate::{LispExp, LispErr};
 /// Environment — like an address book: name → value
 ///
 /// Structure diagram:
-┌────────────────────┐
-│ "x" → Number(10)   │  ← variable x has value 10
-│ "+" → Func(add)    │  ← variable + has the add function
-│ "y" → Number(20)   │
-└────────────────────┘
+
+![en-box-16](svgs/en-box-16.svg)
+
 #[derive(Clone, Debug, PartialEq, Default)]
 pub struct LispEnv {
     pub data: HashMap<String, LispExp>,
@@ -3428,7 +3392,11 @@ Types are now complete—`Number` can compute, `Bool` and `Nil` represent truth/
 
 > What we're solving: Implement the special forms if/define/lambda—they aren't ordinary functions, they have special evaluation rules. This is the foundation of Lisp's control flow.
 
+```
+
 ![class diagram en](svgs/class-diagram-en.svg)
+
+```
 
 > 🏋️ **Exercises**
 > 1. (⭐) Write a test to verify that `(> 5 3)` returns `#t` and `(> 3 5)` returns `#f`
@@ -4031,18 +3999,9 @@ Nesting doll structure (outside to inside):
 After executing `(define add (lambda (a b) (+ a b)))`, the global environment becomes:
 
 ```
-┌────────────────────────────────────┐
-│ Global Environment                 │
-│                                    │
-│  add → Lambda {                    │
-│           params = [a, b],         │
-│           body   = (+ a b),        │
-│           env    = global          │
-│         }                          │
-│  +   → Func(addition)              │
-│  -   → Func(subtraction)           │
-│  ... other built-in functions ...  │
-└────────────────────────────────────┘
+
+![en-box-17](svgs/en-box-17.svg)
+
 ```
 
 ---
@@ -4136,14 +4095,9 @@ Note: At this point, the new environment is created by cloning the call-time env
   let mut new_env = global.clone()
 
   new_env after clone:
-  ┌──────────────────────────────────────────┐
-  │ new_env (current)                        │
-  │  add → Lambda{...}                       │
-  │  +   → Func(addition)                    │
-  │  -   → Func(subtraction)                 │
-  │  ...                                     │
-  │ outer = None  (clone doesn't copy outer) │
-  └──────────────────────────────────────────┘
+
+![en-box-18](svgs/en-box-18.svg)
+
 
 2 Pair parameter names with argument values
   zip(["a", "b"], [Number(3), Number(4)]):
@@ -4151,22 +4105,16 @@ Note: At this point, the new environment is created by cloning the call-time env
     Pair 2: param="b", arg=Number(4) → new_env.set("b", 4)
 
   new_env is now:
-  ┌───────────────────────────────────┐
-  │ new_env (current)                 │
-  │  a → Number(3)    ← new binding!  │
-  │  b → Number(4)    ← new binding!  │
-  │  add → Lambda{...}                │
-  │  +   → Func(addition)             │
-  │  ...                              │
-  └───────────────────────────────────┘
+
+![en-box-19](svgs/en-box-19.svg)
+
 
 3 Evaluate function body in new environment
   eval((+ a b), new_env)
 
-  ┌─ Note ────────────────────────────────────┐
-  │ This triggers another new eval call —    │
-  │ the third layer of nesting dolls!        │
-  └──────────────────────────────────────────┘
+
+![en-box-20](svgs/en-box-20.svg)
+
 ```
 
 ---
@@ -4479,7 +4427,11 @@ lambda1.borrow_mut().push_str(", y=2");
 println!("{}", lambda2.borrow());  // "x=1, y=2"  ✅
 ```
 
+```
+
 ![rc sharing en](svgs/rc-sharing-en.svg)
+
+```
 
 > 💡 In short — `Rc<RefCell<T>>`: shared apartment + writable whiteboard. Multiple people share it (Rc), and anyone can write on the whiteboard (RefCell). When one person writes, everyone else immediately sees it. This is the closure's "backpack🎒"—multiple lambdas carry the same backpack; if one changes something inside, everyone else knows.
 
@@ -4527,7 +4479,11 @@ pub struct LispEnv {
 
 > 💡 **Why don't we need a garbage collector?** Most Lisp-in-X tutorials (Java, Python) have to deal with reference cycles and GC. Rust's ownership system handles this for us: `Rc` auto-frees memory when the last reference drops, and the `outer` chain is a one-way linked list — no cycles. Rust gives us GC-like safety without a runtime collector.
 
+```
+
 ![env chain en](svgs/env-chain-en.svg)
+
+```
 
 > Environment chain = singly linked list: each environment frame has an `outer` pointer to the outer environment. Variable lookup follows this chain from inside to outside—this is the runtime implementation of lexical scoping. `Rc<RefCell<>>` allows multiple places to share the same frame (e.g., two closures capturing the same outer environment).
 
@@ -4589,16 +4545,15 @@ Global environment (outer = None)
 
 
 ```
-┌──────────────────────┐
-│  +  → Func(add)      │
-│  x  → Number(10)     │
-└──────────────────────┘
+
+![en-box-21](svgs/en-box-21.svg)
+
           │ outer
           ▼
 Environment created when calling (lambda (y) (+ x y)) (outer = Global)
-┌─────────────────────┐
-│  y  → Number(5)     │  ← get("x") not found → go to outer → found Number(10)!
-└─────────────────────┘
+
+![en-box-22](svgs/en-box-22.svg)
+
 ```
 
 ```bash
@@ -4728,7 +4683,11 @@ test tests::test_closure ... ok
 test result: ok. 22 passed; 0 failed
 ```
 
+```
+
 ![closure en](svgs/closure-en.svg)
+
+```
 
 > Closure = function body + birth environment. Technically, "a function remembers the environment it was born in" means `Lambda.env` points to the definition-time `CallFrame`. When calling, the new frame uses this captured frame as its `outer`—so the inner function can "see" the outer function's variables.
 
@@ -4832,17 +4791,9 @@ Back to define's processing:
   → global.set("make-adder", Lambda₁)
 
 Global environment now:
-  ┌─────────────────────────────────────┐
-  │ Global environment                  │
-  │                                     │
-  │  make-adder → Lambda₁ {             │
-  │      params = ["n"],                │
-  │      body   = (lambda (x) (+ x n)), │
-  │      env    = Global  ← birth env   │
-  │  }                                  │
-  │  + → Func(add)                      │
-  │  ...                                │
-  └─────────────────────────────────────┘
+
+![en-box-23](svgs/en-box-23.svg)
+
 
 define returns: Nil ✅ (define always returns Nil)
 
@@ -4882,24 +4833,15 @@ eval determines: List! → first element = Symbol("make-adder")
 
   1 Evaluate function position:
 
-    ┌─────────────────────────────────────────────────┐
-    │ Sub-doll: eval(Symbol("make-adder"), Global)    │
-    │                                                 │
-    │   Symbol → look up "make-adder" in Global       │
-    │   → Found! Lambda₁ {                            │
-    │       params=["n"],                             │
-    │       body=(lambda (x) (+ x n)),                │
-    │       env=Global                                │
-    │     }                                           │
-    │   Return: Lambda₁                               │
-    └─────────────────────────────────────────────────┘
+
+![en-box-24](svgs/en-box-24.svg)
+
 
   2 Evaluate arguments:
 
-    ┌─────────────────────────────────────────────────┐
-    │ Sub-doll: eval(Number(5), Global)               │
-    │   Number → self-evaluating → Return Number(5)   │
-    └─────────────────────────────────────────────────┘
+
+![en-box-25](svgs/en-box-25.svg)
+
 
   Now: func = Lambda₁, args = [Number(5)]
 
@@ -4923,19 +4865,15 @@ Lambda₁ call — create new environment:
      zip(["n"], [Number(5)]) → CallFrame₁.set("n", Number(5))
 
      CallFrame₁ now:
-     ┌───────────────────────────────────┐
-     │ CallFrame₁                        │
-     │   n → Number(5)                   │
-     │   outer → Global (has make-adder) │
-     └───────────────────────────────────┘
+
+![en-box-26](svgs/en-box-26.svg)
+
 
   3 Evaluate Lambda₁'s function body in CallFrame₁:
      eval( (lambda (x) (+ x n)), CallFrame₁ )
-     ┌────────────────────────────────────────────────┐
-     │ Note! This eval runs in a "special" environment│
-     │ CallFrame₁.outer = Global                      │
-     │ CallFrame₁.data  = { n → 5 }                   │
-     └────────────────────────────────────────────────┘
+
+![en-box-27](svgs/en-box-27.svg)
+
 ```
 
 ---
@@ -4958,20 +4896,9 @@ eval determines: List! → first element = Symbol("lambda")
     body   = (+ x n),                  ← body has n! n is not a local parameter!
     env    = CallFrame₁  ← snapshot! Born in CallFrame₁ environment!
   }
-  ┌─────────────────────────────────────────────────────┐
-  │ This is the closure!                                │
-  │ Lambda₂.env = CallFrame₁                            │
-  │ And CallFrame₁ has n=5!                             │
-  │                                                     │
-  │ Compare with Line 1's Lambda₁:                      │
-  │   Lambda₁.env = Global (born in global)             │
-  │                                                     │
-  │ Line 2's Lambda₂:                                   │
-  │   Lambda₂.env = CallFrame₁ (born inside call frame!)│
-  │   And CallFrame₁.outer = Global                     │
-  │                                                     │
-  │ Lambda₂ "carries" CallFrame₁ with it!               │
-  └─────────────────────────────────────────────────────┘
+
+![en-box-28](svgs/en-box-28.svg)
+
 
   Return: Lambda₂
 ```
@@ -4985,14 +4912,9 @@ Back to Layer 1 (define processing):
   → global.set("add5", Lambda₂)
 
 Global environment now:
-  ┌───────────────────────────────────────────────────┐
-  │ Global environment                                │
-  │                                                   │
-  │  make-adder → Lambda₁ { env=Global }              │
-  │  add5       → Lambda₂ { env=CallFrame₁ }  ← new!  │
-  │  + → Func(add)                                    │
-  │  ...                                              │
-  └───────────────────────────────────────────────────┘
+
+![en-box-29](svgs/en-box-29.svg)
+
 
 define returns: Nil ✅
 
@@ -5013,21 +4935,15 @@ eval determines: List! → first element = Symbol("add5")
 
   1 Evaluate function position:
 
-    ┌──────────────────────────────────────────────────────┐
-    │ Sub-doll: eval(Symbol("add5"), Global)               │
-    │   Symbol → look up "add5" in Global                  │
-    │   → Lambda₂ { params=["x"],                          │
-    │               body=(+ x n),                          │
-    │               env=CallFrame₁ }  ← env is not Global! │
-    │   Return: Lambda₂                                    │
-    └──────────────────────────────────────────────────────┘
+
+![en-box-30](svgs/en-box-30.svg)
+
 
   2 Evaluate arguments:
 
-    ┌─────────────────────────────────────────────────┐
-    │ Sub-doll: eval(Number(10), Global)              │
-    │   Number → self-evaluating → Number(10)         │
-    └─────────────────────────────────────────────────┘
+
+![en-box-31](svgs/en-box-31.svg)
+
 
   Now: func = Lambda₂, args = [Number(10)]
 ```
@@ -5044,27 +4960,17 @@ Lambda₂ call — create new environment:
        data  = {},
        outer = Lambda₂.env = CallFrame₁  ← This is where the closure kicks in!
      }
-     ┌──────────────────────────────────────────────────┐
-     │ If using env.clone() (old approach):             │
-     │   CallFrame₂.outer = Global                      │
-     │   → Later looking for n: not in CallFrame₂,      │
-     │     not in Global either → undefined variable!   │
-     │                                                  │
-     │ Using with_outer(lambda.env) (new approach):     │
-     │   CallFrame₂.outer = CallFrame₁                  │
-     │   → Later looking for n: not in CallFrame₂,      │
-     │     go to CallFrame₁ → n=5 ✅ found!             │
-     └──────────────────────────────────────────────────┘
+
+![en-box-32](svgs/en-box-32.svg)
+
 
   2 Bind parameters:
      zip(["x"], [Number(10)]) → CallFrame₂.set("x", Number(10))
 
      CallFrame₂ now:
-     ┌───────────────────────────────────────┐
-     │ CallFrame₂                            │
-     │   x → Number(10)                      │
-     │   outer → CallFrame₁ { n→5, ... }     │
-     └───────────────────────────────────────┘
+
+![en-box-33](svgs/en-box-33.svg)
+
 
   3 Evaluate Lambda₂'s function body in CallFrame₂:
      eval( (+ x n), CallFrame₂ )
@@ -5084,51 +4990,21 @@ eval determines: List! → first element = Symbol("+")
 
   1 Evaluate function position "+":
 
-    ┌────────────────────────────────────────────────┐
-    │ Leaf doll: eval(Symbol("+"), CallFrame₂)       │
-    │                                                │
-    │   Check CallFrame₂: is there "+"?              │
-    │     data = { x→10 } → no "+"                   │
-    │                                                │
-    │   Follow outer up: outer = CallFrame₁          │
-    │   Check CallFrame₁: is there "+"?              │
-    │     data = { n→5 } → no "+"                    │
-    │                                                │
-    │   Continue following outer: outer = Global     │
-    │   Check Global: is there "+"?                  │
-    │     → ✅ Found! Func(add)                      │
-    │                                                │
-    │   Return: Func(add)                            │
-    └────────────────────────────────────────────────┘
+
+![en-box-34](svgs/en-box-34.svg)
+
 
   2 Evaluate first argument "x":
 
-    ┌────────────────────────────────────────────────┐
-    │ Leaf doll: eval(Symbol("x"), CallFrame₂)       │
-    │                                                │
-    │   Check CallFrame₂: is there "x"?              │
-    │     data = { x→10 } → ✅ Found! Number(10)     │
-    │                                                │
-    │   Return: Number(10)                           │
-    └────────────────────────────────────────────────┘
+
+![en-box-35](svgs/en-box-35.svg)
+
 
   3 Evaluate second argument "n": ← This is the key moment for closures!
 
-    ┌────────────────────────────────────────────────┐
-    │ Leaf doll: eval(Symbol("n"), CallFrame₂)       │
-    │                                                │
-    │   Check CallFrame₂: is there "n"?              │
-    │     data = { x→10 } → no "n" ❌                │
-    │                                                │
-    │   Follow outer up: outer = CallFrame₁  ← KEY   │
-    │   Check CallFrame₁: is there "n"?              │
-    │     data = { n→5 } → ✅ Found! Number(5)       │
-    ┌────────────────────────────────────────────────┐
-    │   │ Without closure (old env.clone()):   │     │
-    │   │ outer chain is: CallFrame₂ → Global │      │
-    │   │ CallFrame₁ is NOT on the outer chain!│     │
-    │   │ Check Global: no "n" → undefined!   │      │
-    └────────────────────────────────────────────────┘
+
+![en-box-36](svgs/en-box-36.svg)
+
     │                                               │
     │   Return: Number(5) ✅                        │
     └────────────────────────────────────────────────┘
@@ -5154,25 +5030,17 @@ eval determines: List! → first element = Symbol("+")
 Full "environment chain" of the whole process:
 
   Evaluating (+ x n):
-  ┌────────────────────────────────────────────────────────────┐
-  │ CallFrame₂ (current frame)                                 │
-  │   x → Number(10)      ← bound when calling (add5 10)       │
-  │   outer ──┐                                                │
-  └────────────────────────────────────────────────────────────┘
+
+![en-box-37](svgs/en-box-37.svg)
+
               ↓
-  ┌─────────────────────────────────────────────────────────────┐
-  │ CallFrame₁ (closure-captured environment)                   │
-  │   n → Number(5)        ← bound when calling (make-adder 5)  │
-  │   outer ──┐                                                 │
-  └─────────────────────────────────────────────────────────────┘
+
+![en-box-38](svgs/en-box-38.svg)
+
               ↓
-  ┌────────────────────────────────────────────────────────────┐
-  │ Global environment                                         │
-  │   + → Func(add)     ← finally found + here                 │
-  │   make-adder → Lambda₁                                     │
-  │   add5 → Lambda₂                                           │
-  │   outer = None      ← end of chain                         │
-  └────────────────────────────────────────────────────────────┘
+
+![en-box-39](svgs/en-box-39.svg)
+
 
 Lookup "x": CallFrame₂ ✅ (1 hop)
 Lookup "n": CallFrame₂ ❌ → CallFrame₁ ✅ (2 hops)
@@ -5393,7 +5261,11 @@ pub fn eval(exp: &LispExp, env: &mut LispEnv) -> Result<LispExp, LispErr> {
 - Every place that used `env` → change to `current_env`
 - Recursive call `eval(xxx, env)` → change to `eval(xxx, &mut current_env)`
 
+```
+
 ![tco trampoline en](svgs/tco-trampoline-en.svg)
+
+```
 
 > Color meanings: Green = TCO path (continue, no stack growth), Blue = return path (result produced). Note all tail call positions (if branches, lambda body calls) follow the green path.
 
@@ -5581,7 +5453,11 @@ String interning:
        Comparison: 1 == 1  (1 CPU instruction) vs "define" == "define" (6 character comparisons)
 ```
 
+```
+
 ![string interning en](svgs/string-interning-en.svg)
+
+```
 
 > Bidirectional mapping: `id_to_str` for `lookup(id)` to output debug info, `str_to_id` for `intern(str)` fast deduplication. `OnceLock<RwLock<>>` ensures a single global instance and thread safety.
 
@@ -5754,9 +5630,11 @@ test result: ok. 23 passed; 0 failed
 
 Currently `tokenize` returns `Vec<String>`—each token heap-allocates a String. Change to `Vec<&str>`—directly reference slices of the source.
 
+```
+
 ![zero copy en](svgs/zero-copy-en.svg)
 
-```rust
+
 // src/lexer.rs — tokenize function
 // Old:
 pub fn tokenize(input: &str) -> Vec<String> {
@@ -5996,7 +5874,11 @@ lisp-rs/
 
 **Test count**: All tests pass (verified with `cargo test`)
 
+```
+
 ![module pipeline en](svgs/module-pipeline-en.svg)
+
+```
 
 > Module layering: Core layer (types + environment + interner) → Parsing layer (lexer + parser) → Evaluation layer. Each layer only depends on layers below, no cross-layer dependencies.
 
@@ -6004,7 +5886,11 @@ lisp-rs/
 
 > What we're solving: begin/set!/let/cond/and/or/let*/letrec—completing Lisp's control flow and binding capabilities.
 
+```
+
 ![special forms en](svgs/special-forms-en.svg)
+
+```
 
 > 🏋️ **Exercises**
 > 1. (⭐) Run `cargo run --example bench --release` and record the TCO and factorial benchmark data on your machine
@@ -6597,13 +6483,9 @@ Step 1: Create "shared whiteboard" + write names (placeholders)
   Create shared_env = Rc<RefCell<LispEnv>>
   (Rc = shared by multiple, RefCell = allows mutation)
 
-  ┌──────────────────────────────┐
-  │ shared_env (shared)          │  ← Rc ref count = 1
-  │                              │
-  │  even? → Nil (placeholder!)  │  ← reserve a spot, value temporarily empty
-  │  odd?  → Nil (placeholder!)  │  ← same
-  │  outer → current env         │
-  └──────────────────────────────┘
+
+![en-box-40](svgs/en-box-40.svg)
+
 
   Now the names even? and odd? are "registered,"
   though their values are still empty—like putting name tags on seats before people arrive.
@@ -6613,54 +6495,28 @@ Step 2: Evaluate lambdas in an environment that "can see the whiteboard"
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
   Create evaluation env, outer points to shared_env:
-  ┌─────────────────────────┐
-  │ eval_env                │
-  │  data = {}              │
-  │  outer → shared_env ────┼→ shared_env { even?→Nil, odd?→Nil, ... }
-  └─────────────────────────┘
+
+![en-box-41](svgs/en-box-41.svg)
+
 
   Evaluate each lambda in this environment:
 
-  ┌─ Evaluate (lambda (n) (if (= n 0) #t (odd? (- n 1)))) ──────┐
-  │                                                            │
-  │  Create Lambda_even:                                       │
-  │    params = [n]                                            │
-  │    body = (if (= n 0) #t (odd? (- n 1)))                   │
-  │    env = eval_env  ← captures current environment!         │
-  │                                                            │
-  │  eval_env.outer = shared_env                               │
-  │     So Lambda_even can see shared_env through outer chain  │
-  │     shared_env has odd? (even if it's Nil)                 │
-  │     → Writing (odd? (- n 1)) in function body won't error! │
-  │                                                            │
-  │     Because odd? exists in shared_env,                     │
-  │     even if its value is still a placeholder Nil           │
-  │     Step 3 will replace it with the real value!            │
-  └────────────────────────────────────────────────────────────┘
 
-  ┌─ Evaluate (lambda (n) (if (= n 0) #f (even? (- n 1)))) ───┐
-  │                                                          │
-  │  Create Lambda_odd: same logic                           │
-  │    params = [n]                                          │
-  │    body = (if (= n 0) #f (even? (- n 1)))                │
-  │    env = eval_env  ← same eval_env!                      │
-  │                                                          │
-  │  Lambda_even and Lambda_odd share the same eval_env      │
-  │  → They can both see shared_env through outer            │
-  └──────────────────────────────────────────────────────────┘
+![en-box-42](svgs/en-box-42.svg)
+
+
+
+![en-box-43](svgs/en-box-43.svg)
+
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Step 3: Replace placeholders with real values
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
   shared_env updates:
-  ┌────────────────────────────────────┐
-  │ shared_env (shared whiteboard)     │
-  │                                    │
-  │  even? → Lambda_even  ← replaced!  │
-  │  odd?  → Lambda_odd   ← replaced!  │
-  │  outer → current environment       │
-  └────────────────────────────────────┘
+
+![en-box-44](svgs/en-box-44.svg)
+
 
   Now even? and odd? reference each other through shared_env!
 
@@ -7722,7 +7578,11 @@ fn test_newline_returns_nil() {
 
 ### Step 74: Make Modules Public + Create main.rs
 
+```
+
 ![repl seq en](svgs/repl-seq-en.svg)
+
+```
 
 > The REPL is the loop above—you type a line of code, it goes through lexical analysis → syntax analysis → evaluation, prints the result, then waits for your next line. Until you type `:q` to exit.
 
@@ -7888,7 +7748,11 @@ cargo run
 
 After 74 steps, here's what we built:
 
+```
+
 ![architecture overview en](svgs/architecture-overview-en.svg)
+
+```
 
 **Key numbers:**
 - **~3000 lines of Rust** (zero external dependencies)
