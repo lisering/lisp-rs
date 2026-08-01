@@ -222,12 +222,12 @@ if (x > 0) { return x + 1; }
      这是三个东西: =、5、1。分别看它们是什么:
 
      ┌───────────────────────────────────────┐
-     │ = 是什么? → 是"判断相等"这个功能      │
-     │ 5 是什么? → 就是数字 5                │
-     │ 1 是什么? → 就是数字 1                │
+     │ = 是什么? → 是"判断相等"这个功能         │
+     │ 5 是什么? → 就是数字 5                  │
+     │ 1 是什么? → 就是数字 1                  │
      │                                       │
-     │ 用"判断相等"比较 (5, 1): 5 等于 1 吗? │
-     │ → 不等! → 结果是 #f (假)              │
+     │ 用"判断相等"比较 (5, 1): 5 等于 1 吗?    │
+     │ → 不等! → 结果是 #f (假)                │
      └───────────────────────────────────────┘
 
   ② if 看到条件是 #f → 不走进真分支, 走假分支:
@@ -240,12 +240,12 @@ if (x > 0) { return x + 1; }
      要乘的第 2 个数: (factorial (- 5 1))
      这还是个嵌套! 先算最里面的 (- 5 1):
 
-     ┌─ 算 (- 5 1) ─────────────────┐
-     │ - 是什么? → "做减法"这个功能 │
-     │ 5 是什么? → 就是数字 5       │
-     │ 1 是什么? → 就是数字 1       │
+     ┌─ 算 (- 5 1) ──────────────────┐
+     │ - 是什么? → "做减法"这个功能    │
+     │ 5 是什么? → 就是数字 5         │
+     │ 1 是什么? → 就是数字 1         │
      │                              │
-     │ 用"减法"对 (5, 1): 5 - 1 = 4 │
+     │ 用"减法"对 (5, 1): 5 - 1 = 4  │
      └──────────────────────────────┘
 
      所以 (factorial (- 5 1)) 变成了 (factorial 4)
@@ -259,12 +259,12 @@ if (x > 0) { return x + 1; }
 
   这三层和第一层完全一样的模式，只是 n 不同。快速过一遍：
 
-  ┌─────────┬────────┬──────────┬─────────────┬────────────────────────────────┐
-  │ 层      │ 展开 n │ (= n 1)? │ (- n 1) = ? │ 暂停，等下一层                 │
-  ├─────────┼────────┼──────────┼─────────────┼────────────────────────────────┤
-  │ 第 2 层 │ n = 4  │ #f       │ 4-1 = 3     │ (fact 4)=(* 4 (fact 3 的结果)) │
-  │ 第 3 层 │ n = 3  │ #f       │ 3-1 = 2     │ (fact 3)=(* 3 (fact 2 的结果)) │
-  │ 第 4 层 │ n = 2  │ #f       │ 2-1 = 1     │ (fact 2)=(* 2 (fact 1 的结果)) │
+  ┌─ ┬ ──────────────────────────────────────────────────────────────────────┐
+  │ 层      │ 展开 n│ (= n 1)? │ (- n 1) = ? │ 暂停，等下一层                 │
+  ├────────────────────────────────────────────────────────────────────────┤
+  │ 第 2 层 │ n = 4 │ #f       │ 4-1 = 3     │ (fact 4)=(* 4 (fact 3 的结果))│
+  │ 第 3 层 │ n = 3 │ #f       │ 3-1 = 2     │ (fact 3)=(* 3 (fact 2 的结果))│
+  │ 第 4 层 │ n = 2 │ #f       │ 2-1 = 1     │ (fact 2)=(* 2 (fact 1 的结果))│
   └─────────┴────────┴──────────┴─────────────┴────────────────────────────────┘
 
   每一层都在"等下一层的结果回来再乘"——直到第 5 层触底。
@@ -280,12 +280,12 @@ if (x > 0) { return x + 1; }
   ① 算 if 的条件: (= 1 1)?
 
      ┌───────────────────────────────────────┐
-     │ = 是什么? → “判断相等”这个功能        │
-     │ 1 是什么? → 就是数字 1                │
-     │ 1 是什么? → 就是数字 1                │
+     │ = 是什么? → “判断相等”这个功能           │
+     │ 1 是什么? → 就是数字 1                  │
+     │ 1 是什么? → 就是数字 1                  │
      │                                       │
-     │ 用“判断相等”比较 (1, 1): 1 等于 1 吗? │
-     │ → 等于! → 结果是 #t (真)!!!           │
+     │ 用“判断相等”比较 (1, 1): 1 等于 1 吗?    │
+     │ → 等于! → 结果是 #t (真)!!!            │
      └───────────────────────────────────────┘
 
   ② if 看到条件是 #t → 走真分支: 1
@@ -506,8 +506,8 @@ make-counter 这个函数本身:
 
    当前环境:
    ┌────────────────────────────┐
-   │ (空的)                     │
-   │ → 打开背包: start → 0     │
+   │ (空的)                      │
+   │ → 打开背包: start → 0       │
    └────────────────────────────┘
 
 ③ 执行函数体:
@@ -589,7 +589,7 @@ Lisp 里函数跟数字、字符串一样，可以传来传去：
 
      内层返回 9, 现在变成 (f 9):
      ┌────────────────────────────────────┐
-     │ f = square, 参数 = 9               │
+     │ f = square, 参数 = 9                │
      │ → (square 9)                       │
      │ → ((lambda (x) (* x x)) 9)         │
      │ → (* 9 9)                          │
@@ -709,7 +709,7 @@ Lisp 里函数跟数字、字符串一样，可以传来传去：
 
 | 语言 | 求值策略 | 作用域 | TCO | 可变性 | 特点 |
 |------|---------|--------|-----|--------|------|
-| **我们的 Lisp** | 应用序 | 词法 (Rc<RefCell>) | ✅ 蹦床 | 有限 `set!` | 零依赖，~3K 行 |
+| **我们的 Lisp** | 应用序 | 词法 (Rc<RefCell>) | ✅ 蹦床 | 有限 `set!` | 零依赖，~2K 行（含测试） |
 | **Scheme (R7RS)** | 应用序 | 词法 | ✅ 必须 | 有限 `set!` | 卫生宏 |
 | **Common Lisp** | 应用序 | 词法+动态 | ✅ 可选 | 大量变值函数 | CLOS, 条件系统 |
 | **Clojure** | 应用序 | 词法 | ✅ JVM 级 | 持久化集合 | JVM 互操作, STM |
@@ -803,16 +803,16 @@ Rust 是我们要用的编程语言。先给电脑装上它。
 打开 RustRover，点 **"新建项目"**，你会看到创建对话框。对话框分三块区域：
 
 ```
-┌──────────────────────────────────────────────────────────┐
-│  [左侧: 项目类型列表]  │  [中间: 配置表单]  │  [右侧: 模板]  │
-│                        │                    │               │
-│  ● Rust                │  位置(L): /.../x   │  ○ 二进制文件  │
-│    Web                 │  工具链版本: 1.86  │  ● 库          │
-│    React               │  标准库: /.../src  │  ○ 过程宏      │
-│    ...                 │                    │  ○ WebAssembly │
-│                        │                    │               │
-│                        │                    │  [ Create ]   │
-└──────────────────────────────────────────────────────────┘
+┌───────────────────────────────────────────────────────────────┐
+│  [左侧: 项目类型列表]  │  [中间: 配置表单]  │  [右侧: 模板]        │
+│                        │                    │                 │
+│  ● Rust                │  位置(L): /.../x   │  ○ 二进制文件     │
+│    Web                 │  工具链版本: 1.86  │  ● 库            │
+│    React               │  标准库: /.../src  │  ○ 过程宏        │
+│    ...                 │                    │  ○ WebAssembly  │
+│                        │                    │                 │
+│                        │                    │  [ Create ]     │
+└───────────────────────────────────────────────────────────────┘
 ```
 
 **① 左侧：点 "Rust"**（在列表最上面）。确保选中的是 Rust，不是下面的 Web/React 等。RustRover 会自动检测已安装的 Rust 工具链——"工具链版本"字段会自动填入类似 `1.86` 的版本号。
@@ -1688,11 +1688,42 @@ pub fn eval(exp: &LispExp) -> Result<LispExp, LispErr> {
 }
 ```
 
-`cargo test` → ✅ 通过！
+`cargo test` → ✅ 测试通过，但有一条警告：
 
-🧠 **大白话 — `_`（通配符）**：`_` 匹配"剩下所有情况"。现在 `LispExp` 只有一个变体所以用不上，但等后面加了 `Symbol`、`List` 等类型后，`_` 就会发挥作用——任何还没处理的类型都会走这个兜底分支。
+```
+$ cargo test
+warning: unreachable pattern
+  --> src/lib.rs:17:9
+   |
+16 |         LispExp::Number(n) => Ok(LispExp::Number(*n)),
+   |         ------------------ matches all the relevant values
+17 |         _ => Err(LispErr::Reason("暂不支持此类型".to_string())),
+   |         ^ no value can reach this
+   |
+   = note: `#[warn(unreachable_patterns)]` (part of `#[warn(unused)]`) on by default
 
-这就像提前修好防洪堤：现在没洪水，但迟早会来。
+warning: `lisp-rs` (lib test) generated 1 warning
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.31s
+     Running unittests src/lib.rs (target/debug/deps/lisp_rs-5cd87530e74cecce)
+
+running 2 tests
+test tests::test_create_number ... ok
+test tests::test_eval_number ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+```
+
+🧠 **大白话 — 为什么会有 `unreachable pattern` 警告？**
+
+Rust 编译器很聪明——它看到 `LispExp` 目前**只有一个** `Number` 变体，而 `LispExp::Number(n)` 已经匹配了全部可能。所以 `_` 这行代码**永远不会执行到**——编译器提醒你："这段代码是死代码"。
+
+这个警告**完全无害**，测试照常通过（2 passed; 0 failed）。等后面步骤里给 `LispExp` 加了 `Symbol`、`List` 等更多变体后，`_` 就不再是死代码了——警告会自动消失。
+
+> 💡 **嫌警告碍眼？** 可以在 `eval` 函数上加 `#[allow(unreachable_patterns)]` 注解来暂时屏蔽。但建议留着——等后面加了更多变体，看到警告消失，反而是一种正反馈：说明你的枚举真的变丰富了。
+
+🧠 **大白话 — `_`（通配符）**：`_` 匹配"剩下所有情况"。现在 `LispExp` 只有一个变体所以用不上（编译器还会警告），但等后面加了 `Symbol`、`List` 等类型后，`_` 就会发挥作用——任何还没处理的类型都会走这个兜底分支，警告也会随之消失。
+
+这就像提前修好防洪堤：现在没洪水（编译器甚至觉得多余），但迟早会来。
 
 > **图解 — match 是怎么工作的**：
 
@@ -1759,13 +1790,43 @@ fn test_eval_str_number() {
 
 ```bash
 $ cargo test
+warning: unreachable pattern
+  --> src/lib.rs:17:9
+   |
+16 |         LispExp::Number(n) => Ok(LispExp::Number(*n)),
+   |         ------------------ matches all the relevant values
+17 |         _ => Err(LispErr::Reason("暂不支持此类型".to_string())),
+   |         ^ no value can reach this
+   |
+   = note: `#[warn(unreachable_patterns)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `eval_str` is never used
+  --> src/lib.rs:23:4
+   |
+23 | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
+   |    ^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `lisp-rs` (lib) generated 2 warnings
+warning: `lisp-rs` (lib test) generated 1 warning (1 duplicate)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.63s
+     Running unittests src/lib.rs (target/debug/deps/lisp_rs-5cd87530e74cecce)
+
 running 3 tests
 test tests::test_create_number ... ok
-test tests::test_eval_number ... ok
 test tests::test_eval_str_number ... ok
+test tests::test_eval_number ... ok
 
-test result: ok. 3 passed; 0 failed
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
+
+🧠 **大白话 — 为什么有两条警告？**
+
+1. **`unreachable pattern`**：上一步的“老朋友”。`LispExp` 仍只有 `Number` 一个变体，`_` 仍不可达。等后面加了 `Symbol` 等变体就会消失。
+2. **`function 'eval_str' is never used`（dead_code）**：`eval_str` 没有 `pub` 标记，在非测试代码中没有任何地方调用它——编译器觉得它是“死代码”。但它被 `#[cfg(test)]` 里的测试函数调用了，所以测试能通过。
+
+> 💡 **嫌 `dead_code` 警告碍眼？** 给 `eval_str` 加上 `pub` 就行：`pub fn eval_str(...)`。这样编译器知道它是公开 API，不警告。不过现在留着也无妨——这只是提醒，不是错误。
 
 🧠 **大白话 — `?` 操作符**：`source.trim().parse()...?;` 末尾的 `?`，意思是"如果这一步出错了，马上把这个错误返回给调用我的人"。省去了写一大堆 `if 出错 { return 错误 }` 的麻烦。
 
@@ -1881,8 +1942,8 @@ pub fn tokenize(input: &str) -> Vec<String> {
 
 ```
 Vec<String>：
-┌──────┬──────┬──────┐
-│ "("  │ "+"  │ "1"  │  ← 每个格子里是一个 String
+┌─ ┬ ───────────────┐
+│ "("  │ "+"│ "1"  │  ← 每个格子里是一个 String
 └──────┴──────┴──────┘
   0      1      2          ← 索引（从0开始）
 ```
@@ -1917,6 +1978,29 @@ mod tests {
 
 ```bash
 $ cargo test
+warning: unreachable pattern
+  --> src/lib.rs:17:9
+   |
+16 |         LispExp::Number(n) => Ok(LispExp::Number(*n)),
+   |         ------------------ matches all the relevant values
+17 |         _ => Err(LispErr::Reason("暂不支持此类型".to_string())),
+   |         ^ no value can reach this
+   |
+   = note: `#[warn(unreachable_patterns)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `eval_str` is never used
+  --> src/lib.rs:21:4
+   |
+21 | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
+   |    ^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `lisp-rs` (lib) generated 2 warnings
+warning: `lisp-rs` (lib test) generated 1 warning (1 duplicate)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.46s
+     Running unittests src/lib.rs (target/debug/deps/lisp_rs-5cd87530e74cecce)
+
 running 5 tests
 test lexer::tests::test_tokenize_simple ... ok
 test lexer::tests::test_tokenize_whitespace ... ok
@@ -1924,8 +2008,13 @@ test tests::test_create_number ... ok
 test tests::test_eval_number ... ok
 test tests::test_eval_str_number ... ok
 
-test result: ok. 5 passed; 0 failed
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
+
+> 🧠 **大白话 — 两条警告还在？**
+>
+> 1. **`unreachable pattern`**：`LispExp` 仍只有 `Number`，`_` 仍不可达。等步骤 12 加了 `Symbol` 后消失。
+> 2. **`function 'eval_str' is never used`**：`eval_str` 不是 `pub`，在非测试代码中没人调用它。这两条都是步骤 7-8 的“老朋友”，完全无害。
 
 ### 步骤 11: 处理括号
 
@@ -1943,6 +2032,29 @@ fn test_tokenize_parens() {
 `cargo test` → ❌ 测试失败：
 
 ```
+warning: unreachable pattern
+  --> src/lib.rs:17:9
+   |
+16 |         LispExp::Number(n) => Ok(LispExp::Number(*n)),
+   |         ------------------ matches all the relevant values
+17 |         _ => Err(LispErr::Reason("暂不支持此类型".to_string())),
+   |         ^ no value can reach this
+   |
+   = note: `#[warn(unreachable_patterns)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `eval_str` is never used
+  --> src/lib.rs:21:4
+   |
+21 | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
+   |    ^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `lisp-rs` (lib) generated 2 warnings
+warning: `lisp-rs` (lib test) generated 1 warning (1 duplicate)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.46s
+     Running unittests src/lib.rs (target/debug/deps/lisp_rs-5cd87530e74cecce)
+
 running 6 tests
 test lexer::tests::test_tokenize_simple ... ok
 test lexer::tests::test_tokenize_whitespace ... ok
@@ -1985,13 +2097,41 @@ pub fn tokenize(input: &str) -> Vec<String> {
 
 ```bash
 $ cargo test
+warning: unreachable pattern
+  --> src/lib.rs:17:9
+   |
+16 |         LispExp::Number(n) => Ok(LispExp::Number(*n)),
+   |         ------------------ matches all the relevant values
+17 |         _ => Err(LispErr::Reason("暂不支持此类型".to_string())),
+   |         ^ no value can reach this
+   |
+   = note: `#[warn(unreachable_patterns)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `eval_str` is never used
+  --> src/lib.rs:21:4
+   |
+21 | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
+   |    ^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `lisp-rs` (lib) generated 2 warnings
+warning: `lisp-rs` (lib test) generated 1 warning (1 duplicate)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.46s
+     Running unittests src/lib.rs (target/debug/deps/lisp_rs-5cd87530e74cecce)
+
 running 6 tests
 test lexer::tests::test_tokenize_simple ... ok
 test lexer::tests::test_tokenize_whitespace ... ok
 test lexer::tests::test_tokenize_parens ... ok
-...
-test result: ok. 6 passed; 0 failed
+test tests::test_create_number ... ok
+test tests::test_eval_number ... ok
+test tests::test_eval_str_number ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
+
+> 🧠 **大白话 — 两条老警告还在，但测试全通过了！** `unreachable pattern` 和 `dead_code` 警告在步骤 12 加入 `Symbol` 变体后会消失一个（`unreachable pattern`），另一个（`dead_code`）要等 `eval_str` 被 `pub` 标记或被非测试代码调用后才消失。
 
 ---
 
@@ -2153,14 +2293,30 @@ pub enum LispExp {
 
 ```bash
 $ cargo test
+warning: function `eval_str` is never used
+  --> src/lib.rs:25:4
+   |
+25 | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
+   |    ^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `lisp-rs` (lib) generated 1 warning
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.32s
+     Running unittests src/lib.rs (target/debug/deps/lisp_rs-5cd87530e74cecce)
+
 running 6 tests
-...
-test result: ok. 6 passed; 0 failed
+test lexer::tests::test_tokenize_simple ... ok
+test lexer::tests::test_tokenize_whitespace ... ok
+test lexer::tests::test_tokenize_parens ... ok
+test tests::test_create_number ... ok
+test tests::test_eval_number ... ok
+test tests::test_eval_str_number ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
----
-
-### 步骤 13: 更新 eval_str 走完整管线
+> 🧠 **大白话 — `unreachable pattern` 警告消失了！** 加了 `Symbol` 变体后，`_` 不再是死代码——它可以匹配 `Symbol`。只剩 `eval_str` 的 `dead_code` 警告还在。
 
 ```rust
 // lib.rs 顶部加
@@ -2182,9 +2338,21 @@ fn eval_str(source: &str) -> Result<LispExp, LispErr> {
 
 ```bash
 $ cargo test
+warning: function `eval_str` is never used
+  --> src/lib.rs:25:4
+   |
+25 | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
+   |    ^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `lisp-rs` (lib) generated 1 warning
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.32s
+     Running unittests src/lib.rs (target/debug/deps/lisp_rs-5cd87530e74cecce)
+
 running 6 tests
 ...
-test result: ok. 6 passed; 0 failed
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
 ---
@@ -2266,10 +2434,30 @@ fn read_seq(tokens: &[String]) -> Result<(LispExp, &[String]), LispErr> {
 
 ```bash
 $ cargo test
+warning: function `eval_str` is never used
+  --> src/lib.rs:25:4
+   |
+25 | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
+   |    ^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `lisp-rs` (lib) generated 1 warning
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.32s
+     Running unittests src/lib.rs (target/debug/deps/lisp_rs-5cd87530e74cecce)
+
 running 6 tests
-...
-test result: ok. 6 passed; 0 failed
+test lexer::tests::test_tokenize_simple ... ok
+test lexer::tests::test_tokenize_whitespace ... ok
+test lexer::tests::test_tokenize_parens ... ok
+test tests::test_create_number ... ok
+test tests::test_eval_number ... ok
+test tests::test_eval_str_number ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
+
+> 🧠 **大白话 — `unreachable pattern` 警告消失了！** 加了 `Symbol` 变体后，`_` 不再是死代码——它可以匹配 `Symbol`。只剩 `eval_str` 的 `dead_code` 警告还在。
 
 ![parser seq](svgs/parser-seq.svg)
 
@@ -2327,13 +2515,27 @@ mod tests {
 
 ```bash
 $ cargo test
+warning: function `eval_str` is never used
+  --> src/lib.rs:25:4
+   |
+25 | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
+   |    ^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `lisp-rs` (lib) generated 1 warning
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.32s
+     Running unittests src/lib.rs (target/debug/deps/lisp_rs-5cd87530e74cecce)
+
 running 9 tests
 test parser::tests::test_parse_symbol ... ok
 test parser::tests::test_unclosed_list_error ... ok
 test parser::tests::test_unexpected_close_error ... ok
 ...
-test result: ok. 9 passed; 0 failed
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
+
+> 🧠 **大白话 — `eval_str` 的 `dead_code` 警告还在。** 这条警告会一直跟着我们，直到步骤 74 创建 `main.rs` 并调用 `eval_str`（或者你提前给它加 `pub`）。
 
 ---
 
@@ -2433,11 +2635,11 @@ use crate::{LispExp, LispErr};
 /// 环境 — 就像一个通讯录: 名字 → 值
 ///
 /// 结构示意:
-/// ┌───────────────────┐
-/// │ "x" → Number(10)  │  ← 变量 x 的值是 10
-/// │ "+" → Func(加法)   │  ← 变量 + 的值是加法函数
-/// │ "y" → Number(20)  │
-/// └───────────────────┘
+┌────────────────────┐
+│ "x" → Number(10)   │  ← 变量 x 的值是 10
+│ "+" → Func(加法)    │  ← 变量 + 的值是加法函数
+│ "y" → Number(20)   │
+└────────────────────┘
 #[derive(Clone, Debug, PartialEq, Default)]
 pub struct LispEnv {
     pub data: HashMap<String, LispExp>,
@@ -3719,18 +3921,18 @@ test result: ok. 20 passed; 0 failed
 执行 `(define add (lambda (a b) (+ a b)))` 之后，全局环境变成：
 
 ```
-┌──────────────────────────────────┐
-│ 全局环境                          │
-│                                  │
-│  add → Lambda {                  │
-│           params = [a, b],       │
-│           body   = (+ a b),      │
-│           env    = 全局           │
-│         }                        │
-│  +   → Func(加法)                │
-│  -   → Func(减法)                │
-│  ... 其他内置函数 ...             │
-└──────────────────────────────────┘
+┌───────────────────────────────────┐
+│ 全局环境                           │
+│                                   │
+│  add → Lambda {                   │
+│           params = [a, b],        │
+│           body   = (+ a b),       │
+│           env    = 全局            │
+│         }                         │
+│  +   → Func(加法)                  │
+│  -   → Func(减法)                  │
+│  ... 其他内置函数 ...              │
+└───────────────────────────────────┘
 ```
 
 ---
@@ -3824,14 +4026,14 @@ eval 判断:                       eval 判断:
   let mut new_env = 全局.clone()
 
   clone 后的 new_env:
-  ┌──────────────────────────────────┐
-  │ new_env (当前)                    │
-  │  add → Lambda{...}               │
-  │  +   → Func(加法)                │
-  │  -   → Func(减法)                │
-  │  ...                             │
-  │ outer = None  (clone 不复制 outer) │
-  └──────────────────────────────────┘
+  ┌────────────────────────────────────┐
+  │ new_env (当前)                      │
+  │  add → Lambda{...}                 │
+  │  +   → Func(加法)                  │
+  │  -   → Func(减法)                  │
+  │  ...                               │
+  │ outer = None  (clone 不复制 outer)  │
+  └────────────────────────────────────┘
 
 ② 把参数名和实参值"配对绑定"
   zip(["a", "b"], [Number(3), Number(4)]):
@@ -3839,21 +4041,21 @@ eval 判断:                       eval 判断:
     第 2 对: param="b", arg=Number(4) → new_env.set("b", 4)
 
   new_env 现在是:
-  ┌──────────────────────────────────┐
+  ┌───────────────────────────────────┐
   │ new_env (当前)                    │
-  │  a → Number(3)    ← 新绑定!      │
-  │  b → Number(4)    ← 新绑定!      │
-  │  add → Lambda{...}               │
-  │  +   → Func(加法)                │
-  │  ...                             │
-  └──────────────────────────────────┘
+  │  a → Number(3)    ← 新绑定!        │
+  │  b → Number(4)    ← 新绑定!        │
+  │  add → Lambda{...}                │
+  │  +   → Func(加法)                  │
+  │  ...                              │
+  └───────────────────────────────────┘
 
 ③ 在新环境中求值函数体
   eval((+ a b), new_env)
 
-  ┌─ 注意 ──────────────────────────────────┐
-  │ 这又触发了一个新的 eval 调用 —— 第三层套娃! │
-  └──────────────────────────────────────────┘
+  ┌─ 注意 ────────────────────────────────────────┐
+  │ 这又触发了一个新的 eval 调用 —— 第三层套娃!     │
+  └─────────────────────────────────────────────┘
 ```
 
 ---
@@ -4282,10 +4484,10 @@ pub fn get(&self, key: &str) -> Result<LispExp, LispErr> {
 
 
 ```
-┌─────────────────────┐
-│  +  → Func(加法)     │
+┌──────────────────────┐
+│  +  → Func(加法)      │
 │  x  → Number(10)     │
-└─────────┬───────────┘
+└──────────────────────┘
           │ outer
           ▼
 调用 (lambda (y) (+ x y)) 时创建的环境 (outer = 全局)
@@ -4523,17 +4725,17 @@ first 是特殊形式 "lambda"! → 不执行函数体，只是"打包"成一个
   → 全局.set("make-adder", Lambda₁)
 
 全局环境现在变成:
-  ┌─────────────────────────────────────┐
-  │ 全局环境                             │
-  │                                     │
-  │  make-adder → Lambda₁ {             │
-  │      params = ["n"],                │
-  │      body   = (lambda (x) (+ x n)), │
-  │      env    = 全局  ← 诞生环境       │
-  │  }                                  │
-  │  + → Func(加法)                     │
-  │  ...                                │
-  └─────────────────────────────────────┘
+  ┌──────────────────────────────────────┐
+  │ 全局环境                              │
+  │                                      │
+  │  make-adder → Lambda₁ {              │
+  │      params = ["n"],                 │
+  │      body   = (lambda (x) (+ x n)),  │
+  │      env    = 全局  ← 诞生环境        │
+  │  }                                   │
+  │  + → Func(加法)                      │
+  │  ...                                 │
+  └──────────────────────────────────────┘
 
 define 返回: Nil ✅ (define 总是返回 Nil)
 
@@ -4573,24 +4775,24 @@ eval 判断: List! → 首元素 = Symbol("make-adder")
 
   ① 求值函数位置:
 
-    ┌────────────────────────────────────────────────┐
-    │ 🟢 子套娃: eval(Symbol("make-adder"), 全局)     │
-    │                                                │
-    │   Symbol → 在全局中查 "make-adder"              │
-    │   → 找到了! Lambda₁ {                          │
-    │       params=["n"],                            │
-    │       body=(lambda (x) (+ x n)),               │
+    ┌─────────────────────────────────────────────────┐
+    │ 🟢 子套娃: eval(Symbol("make-adder"), 全局)      │
+    │                                                 │
+    │   Symbol → 在全局中查 "make-adder"               │
+    │   → 找到了! Lambda₁ {                            │
+    │       params=["n"],                             │
+    │       body=(lambda (x) (+ x n)),                │
     │       env=全局                                  │
-    │     }                                          │
-    │   返回: Lambda₁                                │
-    └────────────────────────────────────────────────┘
+    │     }                                           │
+    │   返回: Lambda₁                                  │
+    └─────────────────────────────────────────────────┘
 
   ② 求值参数:
 
-    ┌────────────────────────────────────────────────┐
-    │ 🟢 子套娃: eval(Number(5), 全局)                │
-    │   Number → 自求值 → 返回 Number(5)              │
-    └────────────────────────────────────────────────┘
+    ┌─────────────────────────────────────────────────┐
+    │ 🟢 子套娃: eval(Number(5), 全局)                 │
+    │   Number → 自求值 → 返回 Number(5)               │
+    └─────────────────────────────────────────────────┘
 
   现在: func = Lambda₁, args = [Number(5)]
 
@@ -4614,19 +4816,19 @@ Lambda₁ 调用 — 创建新环境:
      zip(["n"], [Number(5)]) → CallFrame₁.set("n", Number(5))
 
      CallFrame₁ 现在:
-     ┌─────────────────────────────────┐
-     │ CallFrame₁                      │
-     │   n → Number(5)                 │
-     │   outer → 全局 (含 make-adder)   │
-     └─────────────────────────────────┘
+     ┌──────────────────────────────────┐
+     │ CallFrame₁                       │
+     │   n → Number(5)                  │
+     │   outer → 全局 (含 make-adder)    │
+     └──────────────────────────────────┘
 
   ③ 在 CallFrame₁ 中求值 Lambda₁ 的函数体:
      eval( (lambda (x) (+ x n)), CallFrame₁ )
-     ┌──────────────────────────────────────────────┐
-     │ 注意! 这个 eval 在一个"特殊"的环境中执行        │
-     │ CallFrame₁.outer = 全局                       │
-     │ CallFrame₁.data  = { n → 5 }                  │
-     └──────────────────────────────────────────────┘
+     ┌─────────────────────────────────────────────────┐
+     │ 注意! 这个 eval 在一个"特殊"的环境中执行            │
+     │ CallFrame₁.outer = 全局                          │
+     │ CallFrame₁.data  = { n → 5 }                    │
+     └─────────────────────────────────────────────────┘
 ```
 
 ---
@@ -4649,20 +4851,20 @@ eval 判断: List! → 首元素 = Symbol("lambda")
     body   = (+ x n),                  ← 函数体里有 n! n 不是局部参数!
     env    = CallFrame₁  ← 📸 咔嚓! 在 CallFrame₁ 环境中诞生!
   }
-  ┌────────────────────────────────────────────────────┐
-  │ 🔑 这就是闭包!                                     │
-  │ Lambda₂.env = CallFrame₁                           │
-  │ 而 CallFrame₁ 里有 n=5!                            │
-  │                                                   │
-  │ 对比第 1 行的 Lambda₁:                             │
-  │   Lambda₁.env = 全局 (诞生在全局)                   │
-  │                                                   │
-  │ 第 2 行的 Lambda₂:                                │
-  │   Lambda₂.env = CallFrame₁ (诞生在调用帧内!)        │
-  │   而 CallFrame₁.outer = 全局                       │
-  │                                                   │
-  │ Lambda₂ 带着 CallFrame₁ 一起"走"了!               │
-  └────────────────────────────────────────────────────┘
+  ┌─────────────────────────────────────────────────────┐
+  │ 🔑 这就是闭包!                                       │
+  │ Lambda₂.env = CallFrame₁                            │
+  │ 而 CallFrame₁ 里有 n=5!                              │
+  │                                                     │
+  │ 对比第 1 行的 Lambda₁:                               │
+  │   Lambda₁.env = 全局 (诞生在全局)                     │
+  │                                                     │
+  │ 第 2 行的 Lambda₂:                                   │
+  │   Lambda₂.env = CallFrame₁ (诞生在调用帧内!)          │
+  │   而 CallFrame₁.outer = 全局                         │
+  │                                                     │
+  │ Lambda₂ 带着 CallFrame₁ 一起"走"了!                  │
+  └─────────────────────────────────────────────────────┘
 
   返回: Lambda₂
 ```
@@ -4676,14 +4878,14 @@ eval 判断: List! → 首元素 = Symbol("lambda")
   → 全局.set("add5", Lambda₂)
 
 全局环境现在:
-  ┌──────────────────────────────────────────────────┐
-  │ 全局环境                                          │
-  │                                                  │
-  │  make-adder → Lambda₁ { env=全局 }                │
-  │  add5       → Lambda₂ { env=CallFrame₁ }  ← 新增!│
-  │  + → Func(加法)                                  │
-  │  ...                                             │
-  └──────────────────────────────────────────────────┘
+  ┌────────────────────────────────────────────────────┐
+  │ 全局环境                                            │
+  │                                                    │
+  │  make-adder → Lambda₁ { env=全局 }                  │
+  │  add5       → Lambda₂ { env=CallFrame₁ }  ← 新增!  │
+  │  + → Func(加法)                                    │
+  │  ...                                               │
+  └────────────────────────────────────────────────────┘
 
 define 返回: Nil ✅
 
@@ -4704,21 +4906,21 @@ eval 判断: List! → 首元素 = Symbol("add5")
 
   ① 求值函数位置:
 
-    ┌────────────────────────────────────────────────┐
-    │ 🟢 子套娃: eval(Symbol("add5"), 全局)           │
-    │   Symbol → 在全局中查 "add5"                    │
-    │   → Lambda₂ { params=["x"],                    │
-    │               body=(+ x n),                    │
-    │               env=CallFrame₁ }  ← 🔑 env 不是全局!│
-    │   返回: Lambda₂                                │
-    └────────────────────────────────────────────────┘
+    ┌────────────────────────────────────────────────────┐
+    │ 🟢 子套娃: eval(Symbol("add5"), 全局)               │
+    │   Symbol → 在全局中查 "add5"                        │
+    │   → Lambda₂ { params=["x"],                        │
+    │               body=(+ x n),                        │
+    │               env=CallFrame₁ }  ← 🔑 env 不是全局!  │
+    │   返回: Lambda₂                                    │
+    └────────────────────────────────────────────────────┘
 
   ② 求值参数:
 
-    ┌────────────────────────────────────────────────┐
-    │ 🟢 子套娃: eval(Number(10), 全局)               │
-    │   Number → 自求值 → Number(10)                  │
-    └────────────────────────────────────────────────┘
+    ┌─────────────────────────────────────────────────┐
+    │ 🟢 子套娃: eval(Number(10), 全局)                │
+    │   Number → 自求值 → Number(10)                   │
+    └─────────────────────────────────────────────────┘
 
   现在: func = Lambda₂, args = [Number(10)]
 ```
@@ -4735,17 +4937,17 @@ Lambda₂ 调用 — 创建新环境:
        data  = {},
        outer = Lambda₂.env = CallFrame₁  ← 🔑🔑 这就是闭包发挥作用的地方!
      }
-     ┌──────────────────────────────────────────────────┐
-     │ 如果用 env.clone() (旧版做法):                    │
-     │   CallFrame₂.outer = 全局                         │
-     │   → 后面找 n 时, 在 CallFrame₂ 找不到,            │
-     │     去全局也找不到 → 💥 未定义的变量!              │
-     │                                                  │
-     │ 用 with_outer(lambda.env) (新版做法):             │
-     │   CallFrame₂.outer = CallFrame₁                   │
-     │   → 后面找 n 时, 在 CallFrame₂ 找不到,            │
-     │     去 CallFrame₁ 找 → n=5 ✅ 找到了!             │
-     └──────────────────────────────────────────────────┘
+     ┌────────────────────────────────────────────────────┐
+     │ 如果用 env.clone() (旧版做法):                       │
+     │   CallFrame₂.outer = 全局                          │
+     │   → 后面找 n 时, 在 CallFrame₂ 找不到,               │
+     │     去全局也找不到 → 💥 未定义的变量!                 │
+     │                                                    │
+     │ 用 with_outer(lambda.env) (新版做法):               │
+     │   CallFrame₂.outer = CallFrame₁                    │
+     │   → 后面找 n 时, 在 CallFrame₂ 找不到,               │
+     │     去 CallFrame₁ 找 → n=5 ✅ 找到了!                │
+     └────────────────────────────────────────────────────┘
 
   ② 绑定参数:
      zip(["x"], [Number(10)]) → CallFrame₂.set("x", Number(10))
@@ -4775,54 +4977,54 @@ eval 判断: List! → 首元素 = Symbol("+")
 
   ① 求值函数位置 "+":
 
-    ┌────────────────────────────────────────────────┐
-    │ 🟢 叶子套娃: eval(Symbol("+"), CallFrame₂)      │
-    │                                              │
-    │   查 CallFrame₂: 有没有 "+"?                   │
-    │     data = { x→10 } → 没有 "+"                │
-    │                                              │
-    │   沿 outer 向上: outer = CallFrame₁            │
-    │   查 CallFrame₁: 有没有 "+"?                   │
-    │     data = { n→5 } → 没有 "+"                 │
-    │                                              │
-    │   继续沿 outer 向上: outer = 全局               │
-    │   查 全局: 有没有 "+"?                         │
-    │     → ✅ 找到了! Func(加法)                    │
-    │                                              │
-    │   返回: Func(加法)                             │
-    └────────────────────────────────────────────────┘
+    ┌─────────────────────────────────────────────────┐
+    │ 🟢 叶子套娃: eval(Symbol("+"), CallFrame₂)       │
+    │                                                 │
+    │   查 CallFrame₂: 有没有 "+"?                     │
+    │     data = { x→10 } → 没有 "+"                  │
+    │                                                 │
+    │   沿 outer 向上: outer = CallFrame₁              │
+    │   查 CallFrame₁: 有没有 "+"?                     │
+    │     data = { n→5 } → 没有 "+"                    │
+    │                                                 │
+    │   继续沿 outer 向上: outer = 全局                 │
+    │   查 全局: 有没有 "+"?                            │
+    │     → ✅ 找到了! Func(加法)                      │
+    │                                                 │
+    │   返回: Func(加法)                               │
+    └─────────────────────────────────────────────────┘
 
   ② 求值第一个参数 "x":
 
-    ┌────────────────────────────────────────────────┐
-    │ 🟢 叶子套娃: eval(Symbol("x"), CallFrame₂)      │
-    │                                              │
-    │   查 CallFrame₂: 有没有 "x"?                   │
-    │     data = { x→10 } → ✅ 找到了! Number(10)    │
-    │                                              │
-    │   返回: Number(10)                             │
-    └────────────────────────────────────────────────┘
+    ┌─────────────────────────────────────────────────┐
+    │ 🟢 叶子套娃: eval(Symbol("x"), CallFrame₂)       │
+    │                                                 │
+    │   查 CallFrame₂: 有没有 "x"?                     │
+    │     data = { x→10 } → ✅ 找到了! Number(10)      │
+    │                                                 │
+    │   返回: Number(10)                              │
+    └─────────────────────────────────────────────────┘
 
   ③ 求值第二个参数 "n": ← 🎯 这就是闭包的关键时刻!
 
-    ┌────────────────────────────────────────────────┐
-    │ 🟢 叶子套娃: eval(Symbol("n"), CallFrame₂)      │
-    │                                              │
-    │   查 CallFrame₂: 有没有 "n"?                   │
-    │     data = { x→10 } → 没有 "n" ❌              │
-    │                                              │
-    │   沿 outer 向上: outer = CallFrame₁  ← 🔑      │
-    │   查 CallFrame₁: 有没有 "n"?                   │
-    │     data = { n→5 } → ✅ 找到了! Number(5)      │
-    │   ┌──────────────────────────────────────┐    │
-    │   │ 如果没有闭包（旧版 env.clone() 做法） │    │
-    │   │ outer 链是: CallFrame₂ → 全局        │    │
-    │   │ CallFrame₁ 根本不在 outer 链上!      │    │
-    │   │ 查全局: 没有 "n" → 💥 未定义变量!     │    │
-    │   └──────────────────────────────────────┘    │
-    │                                              │
-    │   返回: Number(5) ✅                           │
-    └────────────────────────────────────────────────┘
+    ┌───────────────────────────────────────────────────┐
+    │ 🟢 叶子套娃: eval(Symbol("n"), CallFrame₂)         │
+    │                                                   │
+    │   查 CallFrame₂: 有没有 "n"?                       │
+    │     data = { x→10 } → 没有 "n" ❌                  │
+    │                                                   │
+    │   沿 outer 向上: outer = CallFrame₁  ← 🔑          │
+    │   查 CallFrame₁: 有没有 "n"?                       │
+    │     data = { n→5 } → ✅ 找到了! Number(5)          │
+    ┌───────────────────────────────────────────────────┐
+    │   │如果没有闭包（旧版 env.clone() 做法）│            │
+    │   │outer 链是: CallFrame₂ → 全局       │           │
+    │   │CallFrame₁ 根本不在 outer 链上!      │          │
+    │   │查全局: 没有 "n" → 💥 未定义变量!   │            │
+    └───────────────────────────────────────────────────┘
+    │                                                   │
+    │   返回: Number(5) ✅                              │
+    └───────────────────────────────────────────────────┘
 
   现在:
     func = Func(加法)
@@ -4846,23 +5048,23 @@ eval 判断: List! → 首元素 = Symbol("+")
 
   求值 (+ x n) 时:
   ┌───────────────────────────────────────────────────────┐
-  │ CallFrame₂ (当前帧)                                   │
-  │   x → Number(10)      ← 调用 (add5 10) 时绑定的       │
+  │ CallFrame₂ (当前帧)                                    │
+  │   x → Number(10)      ← 调用 (add5 10) 时绑定的        │
   │   outer ──┐                                           │
-  └────────────┼──────────────────────────────────────────┘
+  └───────────────────────────────────────────────────────┘
+              ↓
+  ┌────────────────────────────────────────────────────────┐
+  │ CallFrame₁ (闭包捕获的环境)                              │
+  │   n → Number(5)        ← 调用 (make-adder 5) 时绑定的    │
+  │   outer ──┐                                            │
+  └────────────────────────────────────────────────────────┘
               ↓
   ┌───────────────────────────────────────────────────────┐
-  │ CallFrame₁ (闭包捕获的环境)                           │
-  │   n → Number(5)        ← 调用 (make-adder 5) 时绑定的 │
-  │   outer ──┐                                           │
-  └────────────┼──────────────────────────────────────────┘
-              ↓
-  ┌───────────────────────────────────────────────────────┐
-  │ 全局环境                                              │
-  │   + → Func(加法)     ← 最终在这里找到 +               │
+  │ 全局环境                                               │
+  │   + → Func(加法)     ← 最终在这里找到 +                 │
   │   make-adder → Lambda₁                                │
   │   add5 → Lambda₂                                      │
-  │   outer = None      ← 到头了                          │
+  │   outer = None      ← 到头了                           │
   └───────────────────────────────────────────────────────┘
 
 查找 "x": CallFrame₂ ✅ (1 跳)
@@ -6295,13 +6497,13 @@ letrec 用了三个步骤来破解这个"鸡生蛋"问题：
   创建 shared_env = Rc<RefCell<LispEnv>>
   (Rc = 多人共享, RefCell = 允许修改)
 
-  ┌───────────────────────┐
-  │ shared_env (共享黑板)  │  ← Rc 引用计数 = 1
-  │                       │
-  │  even? → Nil (占位!)  │  ← 先占个位置, 值暂时为空
-  │  odd?  → Nil (占位!)  │  ← 同上
-  │  outer → 当前环境      │
-  └───────────────────────┘
+  ┌────────────────────────┐
+  │ shared_env (共享黑板)   │  ← Rc 引用计数 = 1
+  │                        │
+  │  even? → Nil (占位!)    │  ← 先占个位置, 值暂时为空
+  │  odd?  → Nil (占位!)    │  ← 同上
+  │  outer → 当前环境       │
+  └────────────────────────┘
 
   现在 even? 和 odd? 这两个名字已经"注册"了,
   虽然值还是空的——就像先写名字贴座位, 人还没到。
@@ -6319,32 +6521,32 @@ letrec 用了三个步骤来破解这个"鸡生蛋"问题：
 
   在这个环境中求值 each lambda:
 
-  ┌─ 求值 (lambda (n) (if (= n 0) #t (odd? (- n 1)))) ──┐
+  ┌─ 求值 (lambda (n) (if (= n 0) #t (odd? (- n 1)))) ────┐
   │                                                     │
   │  创建 Lambda_even:                                  │
   │    params = [n]                                     │
   │    body = (if (= n 0) #t (odd? (- n 1)))            │
-  │    env = eval_env  ← 📸 捕获当前环境!               │
+  │    env = eval_env  ← 📸 捕获当前环境!                │
   │                                                     │
   │  🔑 eval_env.outer = shared_env                     │
-  │     所以 Lambda_even 通过 outer 链能看到 shared_env │
-  │     shared_env 里有 odd? (虽然是 Nil)               │
-  │     → 函数体里写 (odd? (- n 1)) 不会报错!           │
+  │     所以 Lambda_even 通过 outer 链能看到 shared_env   │
+  │     shared_env 里有 odd? (虽然是 Nil)                │
+  │     → 函数体里写 (odd? (- n 1)) 不会报错!             │
   │                                                     │
-  │     因为 odd? 存在于 shared_env 中,                 │
-  │     只是值还是占位的 Nil                            │
-  │     等 step 3 会替换成真值!                         │
+  │     因为 odd? 存在于 shared_env 中,                  │
+  │     只是值还是占位的 Nil                              │
+  │     等 step 3 会替换成真值!                           │
   └─────────────────────────────────────────────────────┘
 
-  ┌─ 求值 (lambda (n) (if (= n 0) #f (even? (- n 1)))) ─┐
+  ┌────────────────────────────────────────────────────┐
   │                                                    │
-  │  创建 Lambda_odd: 同理                             │
+  │  创建 Lambda_odd: 同理                              │
   │    params = [n]                                    │
   │    body = (if (= n 0) #f (even? (- n 1)))          │
-  │    env = eval_env  ← 同一个 eval_env!              │
+  │    env = eval_env  ← 同一个 eval_env!               │
   │                                                    │
-  │  Lambda_even 和 Lambda_odd 共享同一个 eval_env     │
-  │  → 它们通过 outer 都能看到 shared_env              │
+  │  Lambda_even 和 Lambda_odd 共享同一个 eval_env      │
+  │  → 它们通过 outer 都能看到 shared_env                │
   └────────────────────────────────────────────────────┘
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -6352,13 +6554,13 @@ letrec 用了三个步骤来破解这个"鸡生蛋"问题：
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
   shared_env 更新:
-  ┌──────────────────────────────┐
-  │ shared_env (共享黑板)        │
-  │                              │
-  │ even? → Lambda_even  ← 替换! │
-  │ odd?  → Lambda_odd   ← 替换! │
-  │ outer → 当前环境             │
-  └──────────────────────────────┘
+  ┌───────────────────────────────┐
+  │ shared_env (共享黑板)          │
+  │                               │
+  │ even? → Lambda_even  ← 替换!  │
+  │ odd?  → Lambda_odd   ← 替换!  │
+  │ outer → 当前环境               │
+  └───────────────────────────────┘
 
   现在 even? 和 odd? 互为引用, 通过 shared_env 连接!
 

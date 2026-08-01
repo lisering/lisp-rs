@@ -238,7 +238,7 @@ Layer 1: Start computing (factorial 5)
      Second number to multiply: (factorial (- 5 1))
      This is still nested! First compute the innermost (- 5 1):
 
-     ┌─ Compute (- 5 1) ──────────────────────┐
+     ┌─ Compute (- 5 1) ───────────────────────┐
      │ - is what? → the "subtraction" feature │
      │ 5 is what? → just the number 5         │
      │ 1 is what? → just the number 1         │
@@ -283,7 +283,7 @@ Layer 2: (factorial 4)
      Second number to multiply: (factorial (- 4 1))
      First compute (- 4 1):
 
-     ┌─ Compute (- 4 1) ──────────────────────┐
+     ┌─ Compute (- 4 1) ───────────────────────┐
      │ - is what? → the "subtraction" feature │
      │ 4 is what? → just the number 4         │
      │ 1 is what? → just the number 1         │
@@ -328,7 +328,7 @@ Layer 3: (factorial 3)
      Second number to multiply: (factorial (- 3 1))
      First compute (- 3 1):
 
-     ┌─ Compute (- 3 1) ──────────────────────┐
+     ┌─ Compute (- 3 1) ───────────────────────┐
      │ - is what? → the "subtraction" feature │
      │ 3 is what? → just the number 3         │
      │ 1 is what? → just the number 1         │
@@ -372,7 +372,7 @@ Layer 4: (factorial 2)
      Second number to multiply: (factorial (- 2 1))
      First compute (- 2 1):
 
-     ┌─ Compute (- 2 1) ──────────────────────┐
+     ┌─ Compute (- 2 1) ───────────────────────┐
      │ - is what? → the "subtraction" feature │
      │ 2 is what? → just the number 2         │
      │ 1 is what? → just the number 1         │
@@ -605,11 +605,11 @@ First, unpack 1:
   ┌─────────────────────────────────────────────────┐
   │ Create a temporary scratch pad for this call:   │
   │                                                 │
-  │   backpack (temporary call space):             │
-  │   ┌──────────────────────┐                      │
-  │   │ start → 0            │  ← parameter bound   │
-  │   │ outer → Global       │  ← can see globals   │
-  │   └──────────────────────┘                      │
+  │   backpack (temporary call space):              │
+  ┌─────────────────────────────────────────────────┐
+  │   │ start → 0     │  ← parameter bound          │
+  │   │ outer → Global│  ← can see globals          │
+  └─────────────────────────────────────────────────┘
   │                                                 │
   │ Inside this notepad, evaluate make-counter's body:│
   │   (lambda () (set! start (+ start 1)) start)    │
@@ -621,17 +621,17 @@ First, unpack 1:
   → body: two statements — (set! start (+ start 1)) then start
   → 📸 birth environment = {start: 0} ← THIS IS THE BACKPACK! 🎒
 
-  ┌─────────────────────────────────────────────────┐
+  ┌────────────────────────────────────────────────────┐
   │ Inner function (no name yet, call it "counter-fn"):│
-  │                                                 │
-  │   ┌──────────────────────────────┐              │
-  │   │ counter-fn                   │              │
-  │   │  params:  ()                 │              │
-  │   │  body: (set! start ...)      │              │
-  │   │        start                 │              │
-  │   │  🎒 backpack: backpack ───→│ backpack    │
-  │   │       which has start → 0   │ start → 0    │
-  │   └──────────────────────────────┘              │
+  │                                                    │
+  ┌────────────────────────────────────────────────────┐
+  │   │ counter-fn                  │                  │
+  │   │  params:  ()                │                  │
+  │   │  body: (set! start ...)     │                  │
+  │   │        start                │                  │
+  │   │  🎒 backpack: backpack ───→│ backpack          │
+  │   │       which has start → 0  │ start → 0         │
+  └────────────────────────────────────────────────────┘
   └─────────────────────────────────────────────────┘
 
   KEY INSIGHT: counter-fn was born with start=0, which went into its backpack,
@@ -670,10 +670,10 @@ Code: (counter)
 ② counter-function has no parameters, so we just create a notepad:
 
    current scope:
-   ┌────────────────────────────┐
+   ┌─────────────────────────────┐
    │ (no parameters of its own)  │
-   │ → open backpack: start → 0 │
-   └────────────────────────────┘
+   │ → open backpack: start → 0  │
+   └─────────────────────────────┘
 
 ③ Execute the body:
 
@@ -745,20 +745,20 @@ Prepared:
 
      First break down the inner (f x):
      ┌────────────────────────────────────┐
-     │ f = square, x = 3                 │
-     │ → (square 3)                      │
-     │ → ((lambda (x) (* x x)) 3)        │
-     │ → (* 3 3)                         │
-     │ → 9                               │
+     │ f = square, x = 3                  │
+     │ → (square 3)                       │
+     │ → ((lambda (x) (* x x)) 3)         │
+     │ → (* 3 3)                          │
+     │ → 9                                │
      └────────────────────────────────────┘
 
      Inner returns 9, now it becomes (f 9):
      ┌────────────────────────────────────┐
      │ f = square, argument = 9           │
-     │ → (square 9)                      │
-     │ → ((lambda (x) (* x x)) 9)        │
-     │ → (* 9 9)                         │
-     │ → 81                              │
+     │ → (square 9)                       │
+     │ → ((lambda (x) (* x x)) 9)         │
+     │ → (* 9 9)                          │
+     │ → 81                               │
      └────────────────────────────────────┘
 
   Final: (apply-twice square 3) → 81 ✅
@@ -874,7 +874,7 @@ If you've heard of these, here's where this tutorial fits:
 
 | Language | Evaluation | Scope | TCO | Mutability | Notable |
 |----------|-----------|-------|-----|------------|---------|
-| **Our Lisp** | Applicative order | Lexical (Rc<RefCell>) | ✅ Trampoline | `set!` limited | Zero deps, ~3K LOC |
+| **Our Lisp** | Applicative order | Lexical (Rc<RefCell>) | ✅ Trampoline | `set!` limited | Zero deps, ~2K LOC (incl. tests) |
 | **Scheme (R7RS)** | Applicative order | Lexical | ✅ Required | `set!` limited | Hygienic macros |
 | **Common Lisp** | Applicative order | Lexical + Dynamic | ✅ Optional | Many mutators | CLOS, condition system |
 | **Clojure** | Applicative order | Lexical | ✅ JVM-level | Persistent collections | JVM interop, STM |
@@ -968,16 +968,16 @@ We'll use **RustRover** to write code—it gives you autocomplete, error checkin
 Open RustRover, click **"New Project"**, and you'll see the creation dialog. The dialog has three areas:
 
 ```
-┌──────────────────────────────────────────────────────────┐
-│  [Left: Project Type List]  │  [Middle: Config Form]  │  [Right: Template]  │
-│                            │                        │                   │
-│  ● Rust                   │  Location(L): /.../x   │  ○ Binary          │
-│    Web                    │  Toolchain version: 1.86│  ● Library         │
-│    React                  │  Standard Library: ...  │  ○ Procedural Macro│
-│    ...                    │                        │  ○ WebAssembly     │
-│                            │                        │                   │
-│                            │                        │  [ Create ]       │
-└──────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────┐
+│  [Left: Project Type List]  │  [Middle: Config Form]    │  [Right: Template]   │
+│                             │                           │                      │
+│  ● Rust                     │  Location(L): /.../x      │  ○ Binary            │
+│    Web                      │  Toolchain version: 1.86  │  ● Library           │
+│    React                    │  Standard Library: ...    │  ○ Procedural Macro  │
+│    ...                      │                           │  ○ WebAssembly       │
+│                             │                           │                      │
+│                             │                           │  [ Create ]          │
+└────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 **1 Left: Click "Rust"** (at the top of the list). Make sure Rust is selected, not Web/React etc. RustRover will automatically detect your installed Rust toolchain — the "Toolchain version" field should fill in with something like `1.86`.
@@ -1846,9 +1846,40 @@ pub fn eval(exp: &LispExp) -> Result<LispExp, LispErr> {
 }
 ```
 
-`cargo test` → ✅ Passed!
+`cargo test` → ✅ Tests pass, but with one warning:
 
-💡 In short — `_` (wildcard): matches everything else. `LispExp` only has one variant now, so `_` is future-proofing. When we add `Symbol`, `List`, and friends later, any unhandled type falls through to this catch-all.
+```
+$ cargo test
+warning: unreachable pattern
+  --> src/lib.rs:17:9
+   |
+16 |         LispExp::Number(n) => Ok(LispExp::Number(*n)),
+   |         ------------------ matches all the relevant values
+17 |         _ => Err(LispErr::Reason("This type is not supported yet".to_string())),
+   |         ^ no value can reach this
+   |
+   = note: `#[warn(unreachable_patterns)]` (part of `#[warn(unused)]`) on by default
+
+warning: `lisp-rs` (lib test) generated 1 warning
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.31s
+     Running unittests src/lib.rs (target/debug/deps/lisp_rs-5cd87530e74cecce)
+
+running 2 tests
+test tests::test_create_number ... ok
+test tests::test_eval_number ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+```
+
+💡 In short — Why the `unreachable pattern` warning?
+
+The Rust compiler is smart—it sees that `LispExp` currently has **only one** variant, `Number`, and `LispExp::Number(n)` already matches all possible values. So the `_` arm is **dead code**—it can never be reached. The compiler warns you: "this code is unreachable."
+
+This warning is **completely harmless**—tests still pass (2 passed; 0 failed). Once we add more variants like `Symbol`, `List`, etc. in later steps, `_` will no longer be dead code—the warning will disappear automatically.
+
+> 💡 **Annoyed by the warning?** You can add `#[allow(unreachable_patterns)]` above the `eval` function to suppress it temporarily. But we recommend leaving it—when you add more variants later and see the warning vanish, it's a nice confirmation that your enum has genuinely grown.
+
+💡 In short — `_` (wildcard): matches everything else. `LispExp` only has one variant now, so `_` is future-proofing (the compiler even warns it's unreachable). When we add `Symbol`, `List`, and friends later, any unhandled type falls through to this catch-all, and the warning disappears.
 
 Build the flood wall before the rain comes.
 
@@ -1915,13 +1946,43 @@ Data flow (assuming user typed " 42 ", with spaces):
 
 ```bash
 $ cargo test
+warning: unreachable pattern
+  --> src/lib.rs:17:9
+   |
+16 |         LispExp::Number(n) => Ok(LispExp::Number(*n)),
+   |         ------------------ matches all the relevant values
+17 |         _ => Err(LispErr::Reason("This type is not supported yet".to_string())),
+   |         ^ no value can reach this
+   |
+   = note: `#[warn(unreachable_patterns)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `eval_str` is never used
+  --> src/lib.rs:23:4
+   |
+23 | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
+   |    ^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `lisp-rs` (lib) generated 2 warnings
+warning: `lisp-rs` (lib test) generated 1 warning (1 duplicate)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.63s
+     Running unittests src/lib.rs (target/debug/deps/lisp_rs-5cd87530e74cecce)
+
 running 3 tests
 test tests::test_create_number ... ok
-test tests::test_eval_number ... ok
 test tests::test_eval_str_number ... ok
+test tests::test_eval_number ... ok
 
-test result: ok. 3 passed; 0 failed
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
+
+💡 In short — Why two warnings?
+
+1. **`unreachable pattern`**: The "old friend" from the previous step. `LispExp` still has only `Number`, so `_` is still unreachable. It will disappear once we add `Symbol` and other variants.
+2. **`function 'eval_str' is never used` (dead_code)**: `eval_str` isn't marked `pub`, and nothing in non-test code calls it—the compiler thinks it's "dead code." But it IS called by the test function under `#[cfg(test)]`, so tests pass fine.
+
+> 💡 **Annoyed by the `dead_code` warning?** Just add `pub` to `eval_str`: `pub fn eval_str(...)`. This tells the compiler it's a public API, and the warning goes away. But leaving it is fine too—it's just a reminder, not an error.
 
 💡 In short — The `?` operator: "if this fails, return the error now." Saves writing `if error { return error }` a hundred times.
 
@@ -2054,6 +2115,29 @@ mod tests {
 
 ```bash
 $ cargo test
+warning: unreachable pattern
+  --> src/lib.rs:17:9
+   |
+16 |         LispExp::Number(n) => Ok(LispExp::Number(*n)),
+   |         ------------------ matches all the relevant values
+17 |         _ => Err(LispErr::Reason("This type is not supported yet".to_string())),
+   |         ^ no value can reach this
+   |
+   = note: `#[warn(unreachable_patterns)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `eval_str` is never used
+  --> src/lib.rs:21:4
+   |
+21 | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
+   |    ^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `lisp-rs` (lib) generated 2 warnings
+warning: `lisp-rs` (lib test) generated 1 warning (1 duplicate)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.46s
+     Running unittests src/lib.rs (target/debug/deps/lisp_rs-5cd87530e74cecce)
+
 running 5 tests
 test lexer::tests::test_tokenize_simple ... ok
 test lexer::tests::test_tokenize_whitespace ... ok
@@ -2061,8 +2145,13 @@ test tests::test_create_number ... ok
 test tests::test_eval_number ... ok
 test tests::test_eval_str_number ... ok
 
-test result: ok. 5 passed; 0 failed
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
+
+> 💡 In short — Two warnings still here?
+>
+> 1. **`unreachable pattern`**: `LispExp` still only has `Number`, so `_` is still unreachable. It will disappear at Step 12 when `Symbol` is added.
+> 2. **`function 'eval_str' is never used`**: `eval_str` isn't `pub`, so nothing in non-test code calls it. Both are harmless carryovers from Steps 7-8.
 
 ### Step 11: Handle Parentheses
 
@@ -2080,6 +2169,29 @@ fn test_tokenize_parens() {
 `cargo test` → ❌ Test failure:
 
 ```
+warning: unreachable pattern
+  --> src/lib.rs:17:9
+   |
+16 |         LispExp::Number(n) => Ok(LispExp::Number(*n)),
+   |         ------------------ matches all the relevant values
+17 |         _ => Err(LispErr::Reason("This type is not supported yet".to_string())),
+   |         ^ no value can reach this
+   |
+   = note: `#[warn(unreachable_patterns)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `eval_str` is never used
+  --> src/lib.rs:21:4
+   |
+21 | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
+   |    ^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `lisp-rs` (lib) generated 2 warnings
+warning: `lisp-rs` (lib test) generated 1 warning (1 duplicate)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.46s
+     Running unittests src/lib.rs (target/debug/deps/lisp_rs-5cd87530e74cecce)
+
 running 6 tests
 test lexer::tests::test_tokenize_simple ... ok
 test lexer::tests::test_tokenize_whitespace ... ok
@@ -2122,13 +2234,41 @@ Input: "(+ 1 2)"
 
 ```bash
 $ cargo test
+warning: unreachable pattern
+  --> src/lib.rs:17:9
+   |
+16 |         LispExp::Number(n) => Ok(LispExp::Number(*n)),
+   |         ------------------ matches all the relevant values
+17 |         _ => Err(LispErr::Reason("This type is not supported yet".to_string())),
+   |         ^ no value can reach this
+   |
+   = note: `#[warn(unreachable_patterns)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `eval_str` is never used
+  --> src/lib.rs:21:4
+   |
+21 | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
+   |    ^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `lisp-rs` (lib) generated 2 warnings
+warning: `lisp-rs` (lib test) generated 1 warning (1 duplicate)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.46s
+     Running unittests src/lib.rs (target/debug/deps/lisp_rs-5cd87530e74cecce)
+
 running 6 tests
 test lexer::tests::test_tokenize_simple ... ok
 test lexer::tests::test_tokenize_whitespace ... ok
 test lexer::tests::test_tokenize_parens ... ok
-...
-test result: ok. 6 passed; 0 failed
+test tests::test_create_number ... ok
+test tests::test_eval_number ... ok
+test tests::test_eval_str_number ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
+
+> 💡 In short — Two old warnings still here, but all tests pass! The `unreachable pattern` will disappear at Step 12 when `Symbol` is added. The `dead_code` warning will persist until `eval_str` is made `pub` or called from non-test code.
 
 ---
 
@@ -2284,10 +2424,30 @@ pub enum LispExp {
 
 ```bash
 $ cargo test
+warning: function `eval_str` is never used
+  --> src/lib.rs:25:4
+   |
+25 | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
+   |    ^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `lisp-rs` (lib) generated 1 warning
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.32s
+     Running unittests src/lib.rs (target/debug/deps/lisp_rs-5cd87530e74cecce)
+
 running 6 tests
-...
-test result: ok. 6 passed; 0 failed
+test lexer::tests::test_tokenize_simple ... ok
+test lexer::tests::test_tokenize_whitespace ... ok
+test lexer::tests::test_tokenize_parens ... ok
+test tests::test_create_number ... ok
+test tests::test_eval_number ... ok
+test tests::test_eval_str_number ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
+
+> 💡 In short — The `unreachable pattern` warning is gone! Adding `Symbol` means `_` is no longer dead code—it can match `Symbol`. Only the `eval_str` `dead_code` warning remains.
 
 ---
 
@@ -2313,9 +2473,21 @@ Data pipeline:
 
 ```bash
 $ cargo test
+warning: function `eval_str` is never used
+  --> src/lib.rs:25:4
+   |
+25 | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
+   |    ^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `lisp-rs` (lib) generated 1 warning
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.32s
+     Running unittests src/lib.rs (target/debug/deps/lisp_rs-5cd87530e74cecce)
+
 running 6 tests
 ...
-test result: ok. 6 passed; 0 failed
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
 ---
@@ -2398,9 +2570,21 @@ In code, the "smallest doll" is the base case that stops the recursion.
 
 ```bash
 $ cargo test
+warning: function `eval_str` is never used
+  --> src/lib.rs:25:4
+   |
+25 | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
+   |    ^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `lisp-rs` (lib) generated 1 warning
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.32s
+     Running unittests src/lib.rs (target/debug/deps/lisp_rs-5cd87530e74cecce)
+
 running 6 tests
 ...
-test result: ok. 6 passed; 0 failed
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
 ![parser seq en](svgs/parser-seq-en.svg)
@@ -2459,13 +2643,27 @@ mod tests {
 
 ```bash
 $ cargo test
+warning: function `eval_str` is never used
+  --> src/lib.rs:25:4
+   |
+25 | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
+   |    ^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `lisp-rs` (lib) generated 1 warning
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.32s
+     Running unittests src/lib.rs (target/debug/deps/lisp_rs-5cd87530e74cecce)
+
 running 9 tests
 test parser::tests::test_parse_symbol ... ok
 test parser::tests::test_unclosed_list_error ... ok
 test parser::tests::test_unexpected_close_error ... ok
 ...
-test result: ok. 9 passed; 0 failed
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
+
+> 💡 In short — The `eval_str` `dead_code` warning is still here. It will follow us until Step 74 when `main.rs` is created and calls `eval_str` (or you add `pub` to it earlier).
 
 ---
 
@@ -2562,11 +2760,11 @@ use crate::{LispExp, LispErr};
 /// Environment — like an address book: name → value
 ///
 /// Structure diagram:
-/// ┌───────────────────┐
-/// │ "x" → Number(10)  │  ← variable x has value 10
-/// │ "+" → Func(add)    │  ← variable + has the add function
-/// │ "y" → Number(20)  │
-/// └───────────────────┘
+┌────────────────────┐
+│ "x" → Number(10)   │  ← variable x has value 10
+│ "+" → Func(add)    │  ← variable + has the add function
+│ "y" → Number(20)   │
+└────────────────────┘
 #[derive(Clone, Debug, PartialEq, Default)]
 pub struct LispEnv {
     pub data: HashMap<String, LispExp>,
@@ -3833,18 +4031,18 @@ Nesting doll structure (outside to inside):
 After executing `(define add (lambda (a b) (+ a b)))`, the global environment becomes:
 
 ```
-┌──────────────────────────────────┐
-│ Global Environment                │
-│                                   │
-│  add → Lambda {                   │
-│           params = [a, b],        │
-│           body   = (+ a b),       │
+┌────────────────────────────────────┐
+│ Global Environment                 │
+│                                    │
+│  add → Lambda {                    │
+│           params = [a, b],         │
+│           body   = (+ a b),        │
 │           env    = global          │
-│         }                         │
-│  +   → Func(addition)             │
-│  -   → Func(subtraction)          │
-│  ... other built-in functions ... │
-└──────────────────────────────────┘
+│         }                          │
+│  +   → Func(addition)              │
+│  -   → Func(subtraction)           │
+│  ... other built-in functions ...  │
+└────────────────────────────────────┘
 ```
 
 ---
@@ -3938,14 +4136,14 @@ Note: At this point, the new environment is created by cloning the call-time env
   let mut new_env = global.clone()
 
   new_env after clone:
-  ┌──────────────────────────────────┐
-  │ new_env (current)                 │
-  │  add → Lambda{...}                │
-  │  +   → Func(addition)             │
-  │  -   → Func(subtraction)          │
-  │  ...                             │
+  ┌──────────────────────────────────────────┐
+  │ new_env (current)                        │
+  │  add → Lambda{...}                       │
+  │  +   → Func(addition)                    │
+  │  -   → Func(subtraction)                 │
+  │  ...                                     │
   │ outer = None  (clone doesn't copy outer) │
-  └──────────────────────────────────┘
+  └──────────────────────────────────────────┘
 
 2 Pair parameter names with argument values
   zip(["a", "b"], [Number(3), Number(4)]):
@@ -3953,19 +4151,19 @@ Note: At this point, the new environment is created by cloning the call-time env
     Pair 2: param="b", arg=Number(4) → new_env.set("b", 4)
 
   new_env is now:
-  ┌──────────────────────────────────┐
+  ┌───────────────────────────────────┐
   │ new_env (current)                 │
   │  a → Number(3)    ← new binding!  │
   │  b → Number(4)    ← new binding!  │
   │  add → Lambda{...}                │
   │  +   → Func(addition)             │
-  │  ...                             │
-  └──────────────────────────────────┘
+  │  ...                              │
+  └───────────────────────────────────┘
 
 3 Evaluate function body in new environment
   eval((+ a b), new_env)
 
-  ┌─ Note ──────────────────────────────────┐
+  ┌─ Note ────────────────────────────────────┐
   │ This triggers another new eval call —    │
   │ the third layer of nesting dolls!        │
   └──────────────────────────────────────────┘
@@ -4391,10 +4589,10 @@ Global environment (outer = None)
 
 
 ```
-┌─────────────────────┐
-│  +  → Func(add)     │
+┌──────────────────────┐
+│  +  → Func(add)      │
 │  x  → Number(10)     │
-└─────────┬───────────┘
+└──────────────────────┘
           │ outer
           ▼
 Environment created when calling (lambda (y) (+ x y)) (outer = Global)
@@ -4642,7 +4840,7 @@ Global environment now:
   │      body   = (lambda (x) (+ x n)), │
   │      env    = Global  ← birth env   │
   │  }                                  │
-  │  + → Func(add)                     │
+  │  + → Func(add)                      │
   │  ...                                │
   └─────────────────────────────────────┘
 
@@ -4684,24 +4882,24 @@ eval determines: List! → first element = Symbol("make-adder")
 
   1 Evaluate function position:
 
-    ┌────────────────────────────────────────────────┐
-    │ Sub-doll: eval(Symbol("make-adder"), Global)   │
-    │                                                │
+    ┌─────────────────────────────────────────────────┐
+    │ Sub-doll: eval(Symbol("make-adder"), Global)    │
+    │                                                 │
     │   Symbol → look up "make-adder" in Global       │
-    │   → Found! Lambda₁ {                           │
+    │   → Found! Lambda₁ {                            │
     │       params=["n"],                             │
     │       body=(lambda (x) (+ x n)),                │
     │       env=Global                                │
-    │     }                                          │
-    │   Return: Lambda₁                              │
-    └────────────────────────────────────────────────┘
+    │     }                                           │
+    │   Return: Lambda₁                               │
+    └─────────────────────────────────────────────────┘
 
   2 Evaluate arguments:
 
-    ┌────────────────────────────────────────────────┐
+    ┌─────────────────────────────────────────────────┐
     │ Sub-doll: eval(Number(5), Global)               │
     │   Number → self-evaluating → Return Number(5)   │
-    └────────────────────────────────────────────────┘
+    └─────────────────────────────────────────────────┘
 
   Now: func = Lambda₁, args = [Number(5)]
 
@@ -4725,19 +4923,19 @@ Lambda₁ call — create new environment:
      zip(["n"], [Number(5)]) → CallFrame₁.set("n", Number(5))
 
      CallFrame₁ now:
-     ┌─────────────────────────────────┐
-     │ CallFrame₁                      │
-     │   n → Number(5)                 │
-     │   outer → Global (has make-adder)│
-     └─────────────────────────────────┘
+     ┌───────────────────────────────────┐
+     │ CallFrame₁                        │
+     │   n → Number(5)                   │
+     │   outer → Global (has make-adder) │
+     └───────────────────────────────────┘
 
   3 Evaluate Lambda₁'s function body in CallFrame₁:
      eval( (lambda (x) (+ x n)), CallFrame₁ )
-     ┌──────────────────────────────────────────────┐
+     ┌────────────────────────────────────────────────┐
      │ Note! This eval runs in a "special" environment│
-     │ CallFrame₁.outer = Global                     │
-     │ CallFrame₁.data  = { n → 5 }                  │
-     └──────────────────────────────────────────────┘
+     │ CallFrame₁.outer = Global                      │
+     │ CallFrame₁.data  = { n → 5 }                   │
+     └────────────────────────────────────────────────┘
 ```
 
 ---
@@ -4760,20 +4958,20 @@ eval determines: List! → first element = Symbol("lambda")
     body   = (+ x n),                  ← body has n! n is not a local parameter!
     env    = CallFrame₁  ← snapshot! Born in CallFrame₁ environment!
   }
-  ┌────────────────────────────────────────────────────┐
-  │ This is the closure!                               │
-  │ Lambda₂.env = CallFrame₁                           │
-  │ And CallFrame₁ has n=5!                            │
-  │                                                   │
-  │ Compare with Line 1's Lambda₁:                     │
+  ┌─────────────────────────────────────────────────────┐
+  │ This is the closure!                                │
+  │ Lambda₂.env = CallFrame₁                            │
+  │ And CallFrame₁ has n=5!                             │
+  │                                                     │
+  │ Compare with Line 1's Lambda₁:                      │
   │   Lambda₁.env = Global (born in global)             │
-  │                                                   │
-  │ Line 2's Lambda₂:                                 │
+  │                                                     │
+  │ Line 2's Lambda₂:                                   │
   │   Lambda₂.env = CallFrame₁ (born inside call frame!)│
-  │   And CallFrame₁.outer = Global                    │
-  │                                                   │
-  │ Lambda₂ "carries" CallFrame₁ with it!             │
-  └────────────────────────────────────────────────────┘
+  │   And CallFrame₁.outer = Global                     │
+  │                                                     │
+  │ Lambda₂ "carries" CallFrame₁ with it!               │
+  └─────────────────────────────────────────────────────┘
 
   Return: Lambda₂
 ```
@@ -4787,14 +4985,14 @@ Back to Layer 1 (define processing):
   → global.set("add5", Lambda₂)
 
 Global environment now:
-  ┌──────────────────────────────────────────────────┐
+  ┌───────────────────────────────────────────────────┐
   │ Global environment                                │
-  │                                                  │
+  │                                                   │
   │  make-adder → Lambda₁ { env=Global }              │
   │  add5       → Lambda₂ { env=CallFrame₁ }  ← new!  │
-  │  + → Func(add)                                   │
-  │  ...                                             │
-  └──────────────────────────────────────────────────┘
+  │  + → Func(add)                                    │
+  │  ...                                              │
+  └───────────────────────────────────────────────────┘
 
 define returns: Nil ✅
 
@@ -4815,21 +5013,21 @@ eval determines: List! → first element = Symbol("add5")
 
   1 Evaluate function position:
 
-    ┌────────────────────────────────────────────────┐
-    │ Sub-doll: eval(Symbol("add5"), Global)          │
-    │   Symbol → look up "add5" in Global             │
-    │   → Lambda₂ { params=["x"],                    │
-    │               body=(+ x n),                     │
-    │               env=CallFrame₁ }  ← env is not Global!│
-    │   Return: Lambda₂                              │
-    └────────────────────────────────────────────────┘
+    ┌──────────────────────────────────────────────────────┐
+    │ Sub-doll: eval(Symbol("add5"), Global)               │
+    │   Symbol → look up "add5" in Global                  │
+    │   → Lambda₂ { params=["x"],                          │
+    │               body=(+ x n),                          │
+    │               env=CallFrame₁ }  ← env is not Global! │
+    │   Return: Lambda₂                                    │
+    └──────────────────────────────────────────────────────┘
 
   2 Evaluate arguments:
 
-    ┌────────────────────────────────────────────────┐
+    ┌─────────────────────────────────────────────────┐
     │ Sub-doll: eval(Number(10), Global)              │
     │   Number → self-evaluating → Number(10)         │
-    └────────────────────────────────────────────────┘
+    └─────────────────────────────────────────────────┘
 
   Now: func = Lambda₂, args = [Number(10)]
 ```
@@ -4888,49 +5086,49 @@ eval determines: List! → first element = Symbol("+")
 
     ┌────────────────────────────────────────────────┐
     │ Leaf doll: eval(Symbol("+"), CallFrame₂)       │
-    │                                               │
+    │                                                │
     │   Check CallFrame₂: is there "+"?              │
     │     data = { x→10 } → no "+"                   │
-    │                                               │
+    │                                                │
     │   Follow outer up: outer = CallFrame₁          │
     │   Check CallFrame₁: is there "+"?              │
-    │     data = { n→5 } → no "+"                   │
-    │                                               │
+    │     data = { n→5 } → no "+"                    │
+    │                                                │
     │   Continue following outer: outer = Global     │
     │   Check Global: is there "+"?                  │
-    │     → ✅ Found! Func(add)                     │
-    │                                               │
-    │   Return: Func(add)                           │
+    │     → ✅ Found! Func(add)                      │
+    │                                                │
+    │   Return: Func(add)                            │
     └────────────────────────────────────────────────┘
 
   2 Evaluate first argument "x":
 
     ┌────────────────────────────────────────────────┐
     │ Leaf doll: eval(Symbol("x"), CallFrame₂)       │
-    │                                               │
+    │                                                │
     │   Check CallFrame₂: is there "x"?              │
-    │     data = { x→10 } → ✅ Found! Number(10)    │
-    │                                               │
-    │   Return: Number(10)                          │
+    │     data = { x→10 } → ✅ Found! Number(10)     │
+    │                                                │
+    │   Return: Number(10)                           │
     └────────────────────────────────────────────────┘
 
   3 Evaluate second argument "n": ← This is the key moment for closures!
 
     ┌────────────────────────────────────────────────┐
     │ Leaf doll: eval(Symbol("n"), CallFrame₂)       │
-    │                                               │
+    │                                                │
     │   Check CallFrame₂: is there "n"?              │
-    │     data = { x→10 } → no "n" ❌               │
-    │                                               │
-    │   Follow outer up: outer = CallFrame₁  ← KEY  │
+    │     data = { x→10 } → no "n" ❌                │
+    │                                                │
+    │   Follow outer up: outer = CallFrame₁  ← KEY   │
     │   Check CallFrame₁: is there "n"?              │
-    │     data = { n→5 } → ✅ Found! Number(5)     │
-    │   ┌──────────────────────────────────────┐    │
-    │   │ Without closure (old env.clone()):   │    │
-    │   │ outer chain is: CallFrame₂ → Global  │    │
-    │   │ CallFrame₁ is NOT on the outer chain!│    │
-    │   │ Check Global: no "n" → undefined!   │    │
-    │   └──────────────────────────────────────┘    │
+    │     data = { n→5 } → ✅ Found! Number(5)       │
+    ┌────────────────────────────────────────────────┐
+    │   │ Without closure (old env.clone()):   │     │
+    │   │ outer chain is: CallFrame₂ → Global │      │
+    │   │ CallFrame₁ is NOT on the outer chain!│     │
+    │   │ Check Global: no "n" → undefined!   │      │
+    └────────────────────────────────────────────────┘
     │                                               │
     │   Return: Number(5) ✅                        │
     └────────────────────────────────────────────────┘
@@ -4960,13 +5158,13 @@ Full "environment chain" of the whole process:
   │ CallFrame₂ (current frame)                                 │
   │   x → Number(10)      ← bound when calling (add5 10)       │
   │   outer ──┐                                                │
-  └────────────┼───────────────────────────────────────────────┘
+  └────────────────────────────────────────────────────────────┘
               ↓
-  ┌────────────────────────────────────────────────────────────┐
-  │ CallFrame₁ (closure-captured environment)                  │
-  │   n → Number(5)        ← bound when calling (make-adder 5) │
-  │   outer ──┐                                                │
-  └────────────┼───────────────────────────────────────────────┘
+  ┌─────────────────────────────────────────────────────────────┐
+  │ CallFrame₁ (closure-captured environment)                   │
+  │   n → Number(5)        ← bound when calling (make-adder 5)  │
+  │   outer ──┐                                                 │
+  └─────────────────────────────────────────────────────────────┘
               ↓
   ┌────────────────────────────────────────────────────────────┐
   │ Global environment                                         │
@@ -6399,13 +6597,13 @@ Step 1: Create "shared whiteboard" + write names (placeholders)
   Create shared_env = Rc<RefCell<LispEnv>>
   (Rc = shared by multiple, RefCell = allows mutation)
 
-  ┌───────────────────────┐
-  │ shared_env (shared)   │  ← Rc ref count = 1
-  │                       │
+  ┌──────────────────────────────┐
+  │ shared_env (shared)          │  ← Rc ref count = 1
+  │                              │
   │  even? → Nil (placeholder!)  │  ← reserve a spot, value temporarily empty
   │  odd?  → Nil (placeholder!)  │  ← same
   │  outer → current env         │
-  └───────────────────────┘
+  └──────────────────────────────┘
 
   Now the names even? and odd? are "registered,"
   though their values are still empty—like putting name tags on seats before people arrive.
@@ -6423,7 +6621,7 @@ Step 2: Evaluate lambdas in an environment that "can see the whiteboard"
 
   Evaluate each lambda in this environment:
 
-  ┌─ Evaluate (lambda (n) (if (= n 0) #t (odd? (- n 1)))) ─────┐
+  ┌─ Evaluate (lambda (n) (if (= n 0) #t (odd? (- n 1)))) ──────┐
   │                                                            │
   │  Create Lambda_even:                                       │
   │    params = [n]                                            │
@@ -6440,7 +6638,7 @@ Step 2: Evaluate lambdas in an environment that "can see the whiteboard"
   │     Step 3 will replace it with the real value!            │
   └────────────────────────────────────────────────────────────┘
 
-  ┌─ Evaluate (lambda (n) (if (= n 0) #f (even? (- n 1)))) ─┐
+  ┌─ Evaluate (lambda (n) (if (= n 0) #f (even? (- n 1)))) ───┐
   │                                                          │
   │  Create Lambda_odd: same logic                           │
   │    params = [n]                                          │
@@ -6459,8 +6657,8 @@ Step 3: Replace placeholders with real values
   ┌────────────────────────────────────┐
   │ shared_env (shared whiteboard)     │
   │                                    │
-  │  even? → Lambda_even  ← replaced! │
-  │  odd?  → Lambda_odd   ← replaced! │
+  │  even? → Lambda_even  ← replaced!  │
+  │  odd?  → Lambda_odd   ← replaced!  │
   │  outer → current environment       │
   └────────────────────────────────────┘
 
