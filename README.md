@@ -1947,6 +1947,8 @@ Like a line cook: "Can't make this dish? Tell the waiter immediately, don't try 
 
 **✅ Milestone: Minimal usable interpreter! Input "42" outputs Number(42.0).**
 
+But `eval_str("(+ 1 2)")` would fail — `"(+ 1 2)"` is not a valid number. To handle multi-element expressions, we need to first **split the string into words** (lexing), then **understand the structure** (parsing). That's what the next two chapters do.
+
 ---
 
 > 🏋️ **Exercises**
@@ -2057,16 +2059,19 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_tokenize_simple() {
-        assert_eq!(tokenize("42"), ["42"]);
+    fn test_tokenize_multi() {
+        assert_eq!(tokenize("+ 1 2"), ["+", "1", "2"]);
     }
 
     #[test]
     fn test_tokenize_whitespace() {
-        assert_eq!(tokenize("  42  "), ["42"]);
+        assert_eq!(tokenize("  +   1   2  "), ["+", "1", "2"]);
     }
-}
 ```
+
+`"+ 1 2"` — one string became `["+", "1", "2"]` — three tokens! tokenize is **splitting**! This is the first step toward solving the `eval_str("(+ 1 2)")` failure from Step 8: the string must be split into words before we can understand it.
+
+But try with parentheses: `tokenize("(+ 1 2)")` → `["(+", "1", "2)"]` — the parens are stuck to `+` and `2`! Because `split_whitespace` only cuts on whitespace, and parens aren't whitespace. Next step fixes this.
 
 ```bash
 $ cargo test
@@ -2094,7 +2099,7 @@ warning: `lisp-rs` (lib test) generated 1 warning (1 duplicate)
      Running unittests src/lib.rs (target/debug/deps/lisp_rs-5cd87530e74cecce)
 
 running 5 tests
-test lexer::tests::test_tokenize_simple ... ok
+test lexer::tests::test_tokenize_multi ... ok
 test lexer::tests::test_tokenize_whitespace ... ok
 test tests::test_create_number ... ok
 test tests::test_eval_number ... ok
@@ -2148,7 +2153,7 @@ warning: `lisp-rs` (lib test) generated 1 warning (1 duplicate)
      Running unittests src/lib.rs (target/debug/deps/lisp_rs-5cd87530e74cecce)
 
 running 6 tests
-test lexer::tests::test_tokenize_simple ... ok
+test lexer::tests::test_tokenize_multi ... ok
 test lexer::tests::test_tokenize_whitespace ... ok
 test lexer::tests::test_tokenize_parens ... FAILED
 
@@ -2213,7 +2218,7 @@ warning: `lisp-rs` (lib test) generated 1 warning (1 duplicate)
      Running unittests src/lib.rs (target/debug/deps/lisp_rs-5cd87530e74cecce)
 
 running 6 tests
-test lexer::tests::test_tokenize_simple ... ok
+test lexer::tests::test_tokenize_multi ... ok
 test lexer::tests::test_tokenize_whitespace ... ok
 test lexer::tests::test_tokenize_parens ... ok
 test tests::test_create_number ... ok
@@ -2418,6 +2423,25 @@ pub enum LispExp {
 }
 ```
 
+**Test the parser** — verify parse can distinguish numbers from symbols:
+
+```rust
+// src/parser.rs — add test module at end of file
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_parse_symbol() {
+        let tokens = vec!["+".to_string()];
+        let (exp, _) = parse(&tokens).unwrap();
+        assert_eq!(exp, LispExp::Symbol("+".into()));
+    }
+}
+```
+
+`"+"` is not a number, so `parse::<f64>()` fails, and it becomes `Symbol("+")`. In Lisp, `+` is just the name of the addition function — like `hello` or `x`, it's a symbol. The parser's value is here: **type distinction** — numbers become `Number`, non-numbers become `Symbol`.
+
 ```bash
 $ cargo test
 warning: function `eval_str` is never used
@@ -2432,15 +2456,16 @@ warning: `lisp-rs` (lib) generated 1 warning
     Finished `test` profile [unoptimized + debuginfo] target(s) in 0.32s
      Running unittests src/lib.rs (target/debug/deps/lisp_rs-5cd87530e74cecce)
 
-running 6 tests
-test lexer::tests::test_tokenize_simple ... ok
+running 7 tests
+test lexer::tests::test_tokenize_multi ... ok
 test lexer::tests::test_tokenize_whitespace ... ok
 test lexer::tests::test_tokenize_parens ... ok
+test parser::tests::test_parse_symbol ... ok
 test tests::test_create_number ... ok
 test tests::test_eval_number ... ok
 test tests::test_eval_str_number ... ok
 
-test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
 > 💡 In short — The `unreachable pattern` warning is gone! Adding `Symbol` means `_` is no longer dead code—it can match `Symbol`. Only the `eval_str` `dead_code` warning remains.
@@ -2464,7 +2489,11 @@ fn eval_str(source: &str) -> Result<LispExp, LispErr> {
 
 ```text
 Data pipeline:
-"42" → tokenize → ["42"] → parse → Number(42.0) → eval → Number(42.0)
+"(+ 1 2)" → tokenize → ["(", "+", "1", "2", ")"] → parse → List([Symbol("+"), Number(1.0), Number(2.0)]) → eval → Number(3.0)
+
+Note: parse can currently only handle single atoms (e.g. "+" → Symbol("+")),
+list parsing is completed in Step 14, list evaluation in Step 22.
+But the pipeline is connected — three modules, each with its own job.
 ```
 
 ```bash
@@ -2481,9 +2510,9 @@ warning: `lisp-rs` (lib) generated 1 warning
     Finished `test` profile [unoptimized + debuginfo] target(s) in 0.32s
      Running unittests src/lib.rs (target/debug/deps/lisp_rs-5cd87530e74cecce)
 
-running 6 tests
+running 7 tests
 ...
-test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
 ---
@@ -2582,9 +2611,9 @@ warning: `lisp-rs` (lib) generated 1 warning
     Finished `test` profile [unoptimized + debuginfo] target(s) in 0.32s
      Running unittests src/lib.rs (target/debug/deps/lisp_rs-5cd87530e74cecce)
 
-running 6 tests
+running 7 tests
 ...
-test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
 
@@ -2616,30 +2645,20 @@ test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 > parse("(+ 1 (* 2 3))") → List(Symbol(+), Number(1), List(Symbol(*), Number(2), Number(3)))
 > ```
 
-### Step 15: Parse Symbols + Parenthesis Error Tests
+### Step 15: Parenthesis Error Tests
+
+`test_parse_symbol` was already added in Step 12. This step only adds error handling tests — add to parser.rs's tests module:
 
 ```rust
-// parser.rs end — test module
-#[cfg(test)]
-mod tests {
-    use super::*;
+// parser.rs — add to tests module
+#[test]
+fn test_unclosed_list_error() {
+    assert!(parse(&["(".to_string(), "+".into(), "1".into()]).is_err());
+}
 
-    #[test]
-    fn test_parse_symbol() {
-        let tokens = vec!["x".to_string()];
-        let (exp, _) = parse(&tokens).unwrap();
-        assert_eq!(exp, LispExp::Symbol("x".into()));
-    }
-
-    #[test]
-    fn test_unclosed_list_error() {
-        assert!(parse(&["(".to_string(), "+".into(), "1".into()]).is_err());
-    }
-
-    #[test]
-    fn test_unexpected_close_error() {
-        assert!(parse(&[")".to_string()]).is_err());
-    }
+#[test]
+fn test_unexpected_close_error() {
+    assert!(parse(&[")".to_string()]).is_err());
 }
 ```
 
@@ -2894,24 +2913,7 @@ fn eval_str(source: &str, env: &LispEnv) -> Result<LispExp, LispErr> {
 }
 ```
 
-**Old tests also need updating**—`test_eval_number` and `test_eval_str_number` need to create env and pass it in:
-
-```rust
-// src/lib.rs
-#[test]
-fn test_eval_number() {
-    let env = LispEnv::new();  // ← add this line
-    let exp = LispExp::Number(42.0);
-    let result = eval(&exp, &env).unwrap();  // ← add &env
-    assert_eq!(result, LispExp::Number(42.0));
-}
-
-#[test]
-fn test_eval_str_number() {
-    let env = LispEnv::new();  // ← add this line
-    assert_eq!(eval_str("42", &env).unwrap(), LispExp::Number(42.0));
-}
-```
+**Old tests also need updating**—`test_eval_number` and `test_eval_str_number` need signature updates: `eval(&exp)` → `eval(&exp, &mut env)`, `eval_str("42")` → `eval_str("42", &mut env)`, `let env = LispEnv::new()` → `let mut env = LispEnv::new()`, `&env` → `&mut env`. The compiler will report each error — follow the hints to fix.
 
 **New test**—symbol evaluation:
 
@@ -2950,7 +2952,7 @@ $ cargo test
 running 12 tests
 test env::tests::test_env_set_get ... ok
 test env::tests::test_env_undefined ... ok
-test lexer::tests::test_tokenize_simple ... ok
+test lexer::tests::test_tokenize_multi ... ok
 test lexer::tests::test_tokenize_whitespace ... ok
 test lexer::tests::test_tokenize_parens ... ok
 test parser::tests::test_parse_symbol ... ok
@@ -3754,7 +3756,7 @@ $ cargo test
 running 16 tests
 test env::tests::test_env_set_get ... ok
 test env::tests::test_env_undefined ... ok
-test lexer::tests::test_tokenize_simple ... ok
+test lexer::tests::test_tokenize_multi ... ok
 test lexer::tests::test_tokenize_whitespace ... ok
 test lexer::tests::test_tokenize_parens ... ok
 test parser::tests::test_parse_symbol ... ok
@@ -5732,7 +5734,7 @@ fn test_tokenize_empty() {
 
 #[test]
 fn test_tokenize_comment() {
-    assert_eq!(tokenize("42 ; this is a comment"), vec!["42"]);
+    assert_eq!(tokenize("(+ 1 2) ; this is a comment"), vec!["(", "+", "1", "2", ")"]);
 }
 
 #[test]
@@ -5791,7 +5793,7 @@ if token == "(" {     // token is already &str, no need for .as_str()
 ```bash
 $ cargo test
 running 26 tests
-test lexer::tests::test_tokenize_simple ... ok
+test lexer::tests::test_tokenize_multi ... ok
 test lexer::tests::test_tokenize_whitespace ... ok
 test lexer::tests::test_tokenize_parens ... ok
 test lexer::tests::test_tokenize_empty ... ok

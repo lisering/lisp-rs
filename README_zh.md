@@ -1811,6 +1811,8 @@ test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 
 **✅ 里程碑：最小可用解释器！输入 "42" 输出 Number(42.0)。**
 
+但 `eval_str("(+ 1 2)")` 会直接报错——`"(+ 1 2)"` 不是一个合法的数字。要处理多元素表达式，需要先把字符串**拆成单词**（词法分析），再**理解结构**（语法分析）。这就是接下来两章要做的事。
+
 ---
 
 > 🏋️ **练习**
@@ -1916,13 +1918,14 @@ pub fn tokenize(input: &str) -> Vec<String> {
 🧠 **大白话 — `Vec<String>`**："一堆 String 排好队"。`Vec`（读作"vec"，是 vector 的缩写）是 Rust 里最基本的数据结构——一个能自动扩容的列表。
 
 ```
-Vec<String>：
+Vec<String>：  ["+", "1", "2"]
 ```
 
 ![zh-box-09](svgs/zh-box-09.svg)
 
 ```
   0      1      2          ← 索引（从0开始）
+  "+"    "1"    "2"
 ```
 
 就像一个购物清单——可以往里加东西，删东西，按编号找东西。
@@ -1942,16 +1945,20 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_tokenize_simple() {
-        assert_eq!(tokenize("42"), ["42"]);
+    fn test_tokenize_multi() {
+        assert_eq!(tokenize("+ 1 2"), ["+", "1", "2"]);
     }
 
     #[test]
     fn test_tokenize_whitespace() {
-        assert_eq!(tokenize("  42  "), ["42"]);
+        assert_eq!(tokenize("  +   1   2  "), ["+", "1", "2"]);
     }
 }
 ```
+
+`"+ 1 2"` 一个字符串变成了 `["+", "1", "2"]` 三个 token——tokenize 在**拆分**！这正是步骤 8 中 `eval_str("(+ 1 2)")` 失败的原因的第一步解决方案：字符串得先拆成单词，才能进一步理解。
+
+但试试带括号的：`tokenize("(+ 1 2)")` → `["(+", "1", "2)"]`——括号粘在 `+` 和 `2` 上了！因为 `split_whitespace` 只按空白切，括号不是空白，自然跟旁边的字符粘在一起。下一步解决这个问题。
 
 ```bash
 $ cargo test
@@ -1979,7 +1986,7 @@ warning: `lisp-rs` (lib test) generated 1 warning (1 duplicate)
      Running unittests src/lib.rs (target/debug/deps/lisp_rs-5cd87530e74cecce)
 
 running 5 tests
-test lexer::tests::test_tokenize_simple ... ok
+test lexer::tests::test_tokenize_multi ... ok
 test lexer::tests::test_tokenize_whitespace ... ok
 test tests::test_create_number ... ok
 test tests::test_eval_number ... ok
@@ -2033,7 +2040,7 @@ warning: `lisp-rs` (lib test) generated 1 warning (1 duplicate)
      Running unittests src/lib.rs (target/debug/deps/lisp_rs-5cd87530e74cecce)
 
 running 6 tests
-test lexer::tests::test_tokenize_simple ... ok
+test lexer::tests::test_tokenize_multi ... ok
 test lexer::tests::test_tokenize_whitespace ... ok
 test lexer::tests::test_tokenize_parens ... FAILED
 
@@ -2098,7 +2105,7 @@ warning: `lisp-rs` (lib test) generated 1 warning (1 duplicate)
      Running unittests src/lib.rs (target/debug/deps/lisp_rs-5cd87530e74cecce)
 
 running 6 tests
-test lexer::tests::test_tokenize_simple ... ok
+test lexer::tests::test_tokenize_multi ... ok
 test lexer::tests::test_tokenize_whitespace ... ok
 test lexer::tests::test_tokenize_parens ... ok
 test tests::test_create_number ... ok
@@ -2309,6 +2316,25 @@ pub enum LispExp {
 }
 ```
 
+**测试 parser**——验证 parse 能区分数字和符号：
+
+```rust
+// src/parser.rs — 文件末尾加测试模块
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_parse_symbol() {
+        let tokens = vec!["+".to_string()];
+        let (exp, _) = parse(&tokens).unwrap();
+        assert_eq!(exp, LispExp::Symbol("+".into()));
+    }
+}
+```
+
+`"+"` 不是数字，`parse::<f64>()` 失败，于是被当作 `Symbol("+")`——在 Lisp 里，`+` 就是加法函数的名字，它和 `hello`、`x` 一样，都是一个符号。parse 的价值就在这里：**区分类型**，数字变 `Number`，非数字变 `Symbol`。
+
 ```bash
 $ cargo test
 warning: function `eval_str` is never used
@@ -2323,15 +2349,16 @@ warning: `lisp-rs` (lib) generated 1 warning
     Finished `test` profile [unoptimized + debuginfo] target(s) in 0.32s
      Running unittests src/lib.rs (target/debug/deps/lisp_rs-5cd87530e74cecce)
 
-running 6 tests
-test lexer::tests::test_tokenize_simple ... ok
+running 7 tests
+test lexer::tests::test_tokenize_multi ... ok
 test lexer::tests::test_tokenize_whitespace ... ok
 test lexer::tests::test_tokenize_parens ... ok
+test parser::tests::test_parse_symbol ... ok
 test tests::test_create_number ... ok
 test tests::test_eval_number ... ok
 test tests::test_eval_str_number ... ok
 
-test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
 > 🧠 **大白话 — `unreachable pattern` 警告消失了！** 加了 `Symbol` 变体后，`_` 不再是死代码——它可以匹配 `Symbol`。只剩 `eval_str` 的 `dead_code` 警告还在。
@@ -2351,7 +2378,11 @@ fn eval_str(source: &str) -> Result<LispExp, LispErr> {
 
 ```text
 数据管线:
-"42" → tokenize → ["42"] → parse → Number(42.0) → eval → Number(42.0)
+"(+ 1 2)" → tokenize → ["(", "+", "1", "2", ")"] → parse → List([Symbol("+"), Number(1.0), Number(2.0)]) → eval → Number(3.0)
+
+注意: 当前 parse 只能处理单个原子（如 "+" → Symbol("+")），
+列表解析在步骤 14 完成，列表求值在步骤 22 完成。
+但管线已经全线贯通——三个模块各司其职。
 ```
 
 ```bash
@@ -2368,9 +2399,9 @@ warning: `lisp-rs` (lib) generated 1 warning
     Finished `test` profile [unoptimized + debuginfo] target(s) in 0.32s
      Running unittests src/lib.rs (target/debug/deps/lisp_rs-5cd87530e74cecce)
 
-running 6 tests
+running 7 tests
 ...
-test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
 ---
@@ -2448,8 +2479,6 @@ fn read_seq(tokens: &[String]) -> Result<(LispExp, &[String]), LispErr> {
 
 ![ast tree](svgs/ast-tree.svg)
 
-```
-
 🧠 **大白话 — 递归**：函数调用自己。就像"镜子里的镜子里的镜子"——无限嵌套下去，直到遇到停止条件（`)`）。
 
 生活中也有递归：你要打开一个箱子，发现里面还有个箱子——于是重复"打开箱子"这个动作，直到最里面的箱子没有套娃为止。
@@ -2468,15 +2497,16 @@ warning: `lisp-rs` (lib) generated 1 warning
     Finished `test` profile [unoptimized + debuginfo] target(s) in 0.32s
      Running unittests src/lib.rs (target/debug/deps/lisp_rs-5cd87530e74cecce)
 
-running 6 tests
-test lexer::tests::test_tokenize_simple ... ok
+running 7 tests
+test lexer::tests::test_tokenize_multi ... ok
 test lexer::tests::test_tokenize_whitespace ... ok
 test lexer::tests::test_tokenize_parens ... ok
+test parser::tests::test_parse_symbol ... ok
 test tests::test_create_number ... ok
 test tests::test_eval_number ... ok
 test tests::test_eval_str_number ... ok
 
-test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
 > 🧠 **大白话 — `unreachable pattern` 警告消失了！** 加了 `Symbol` 变体后，`_` 不再是死代码——它可以匹配 `Symbol`。只剩 `eval_str` 的 `dead_code` 警告还在。
@@ -2510,30 +2540,20 @@ test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 > parse("(+ 1 (* 2 3))") → List(Symbol(+), Number(1), List(Symbol(*), Number(2), Number(3)))
 > ```
 
-### 步骤 15: 解析符号 + 括号错误测试
+### 步骤 15: 括号错误测试
+
+`test_parse_symbol` 已在步骤 12 添加。本步骤只加错误处理测试——在 parser.rs 的 tests 模块中新增：
 
 ```rust
-// parser.rs 末尾 — 测试模块
-#[cfg(test)]
-mod tests {
-    use super::*;
+// parser.rs — tests 模块中新增
+#[test]
+fn test_unclosed_list_error() {
+    assert!(parse(&["(".to_string(), "+".into(), "1".into()]).is_err());
+}
 
-    #[test]
-    fn test_parse_symbol() {
-        let tokens = vec!["x".to_string()];
-        let (exp, _) = parse(&tokens).unwrap();
-        assert_eq!(exp, LispExp::Symbol("x".into()));
-    }
-
-    #[test]
-    fn test_unclosed_list_error() {
-        assert!(parse(&["(".to_string(), "+".into(), "1".into()]).is_err());
-    }
-
-    #[test]
-    fn test_unexpected_close_error() {
-        assert!(parse(&[")".to_string()]).is_err());
-    }
+#[test]
+fn test_unexpected_close_error() {
+    assert!(parse(&[")".to_string()]).is_err());
 }
 ```
 
@@ -2556,6 +2576,7 @@ test parser::tests::test_parse_symbol ... ok
 test parser::tests::test_unclosed_list_error ... ok
 test parser::tests::test_unexpected_close_error ... ok
 ...
+
 test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
@@ -2657,16 +2678,15 @@ use std::collections::HashMap;  // 引入哈希表
 use crate::{LispExp, LispErr};
 
 /// 环境 — 就像一个通讯录: 名字 → 值
-///
-/// 结构示意:
-
-![zh-box-10](svgs/zh-box-10.svg)
-
 #[derive(Clone, Debug, PartialEq, Default)]
 pub struct LispEnv {
     pub data: HashMap<String, LispExp>,
 }
 ```
+
+结构示意:
+
+![zh-box-10](svgs/zh-box-10.svg)
 
 🧠 **大白话 — HashMap**：就像电话本。你给一个"名字"（key），就能查到对应的"内容"（value）。查起来非常快——不像翻书一页页找，而是像查字典（按拼音直接定位）。
 
@@ -2798,24 +2818,7 @@ fn eval_str(source: &str, env: &LispEnv) -> Result<LispExp, LispErr> {
 }
 ```
 
-**旧的测试也要更新**——`test_eval_number` 和 `test_eval_str_number` 需要创建 env 并传入：
-
-```rust
-// src/lib.rs
-#[test]
-fn test_eval_number() {
-    let env = LispEnv::new();  // ← 加这行
-    let exp = LispExp::Number(42.0);
-    let result = eval(&exp, &env).unwrap();  // ← 加 &env
-    assert_eq!(result, LispExp::Number(42.0));
-}
-
-#[test]
-fn test_eval_str_number() {
-    let env = LispEnv::new();  // ← 加这行
-    assert_eq!(eval_str("42", &env).unwrap(), LispExp::Number(42.0));
-}
-```
+**旧测试需要更新签名**——`test_eval_number` 和 `test_eval_str_number` 中的 `eval(&exp)` → `eval(&exp, &env)`、`eval_str("42")` → `eval_str("42", &env)`，同时 `let env = LispEnv::new()` → `let mut env = LispEnv::new()`、`&env` → `&mut env`。编译器会逐处报错，按提示修复即可。
 
 **新测试**——符号求值：
 
@@ -2854,7 +2857,7 @@ $ cargo test
 running 12 tests
 test env::tests::test_env_set_get ... ok
 test env::tests::test_env_undefined ... ok
-test lexer::tests::test_tokenize_simple ... ok
+test lexer::tests::test_tokenize_multi ... ok
 test lexer::tests::test_tokenize_whitespace ... ok
 test lexer::tests::test_tokenize_parens ... ok
 test parser::tests::test_parse_symbol ... ok
@@ -3670,7 +3673,7 @@ $ cargo test
 running 16 tests
 test env::tests::test_env_set_get ... ok
 test env::tests::test_env_undefined ... ok
-test lexer::tests::test_tokenize_simple ... ok
+test lexer::tests::test_tokenize_multi ... ok
 test lexer::tests::test_tokenize_whitespace ... ok
 test lexer::tests::test_tokenize_parens ... ok
 test parser::tests::test_parse_symbol ... ok
@@ -4040,7 +4043,9 @@ eval 判断:                       eval 判断:
 
   clone 后的 new_env:
 
+```
 ![zh-box-12](svgs/zh-box-12.svg)
+```
 
 
 ② 把参数名和实参值"配对绑定"
@@ -4050,14 +4055,18 @@ eval 判断:                       eval 判断:
 
   new_env 现在是:
 
+```
 ![zh-box-13](svgs/zh-box-13.svg)
+```
 
 
 ③ 在新环境中求值函数体
   eval((+ a b), new_env)
 
 
+```
 ![zh-box-14](svgs/zh-box-14.svg)
+```
 
 ```
 
@@ -4492,13 +4501,17 @@ pub fn get(&self, key: &str) -> Result<LispExp, LispErr> {
 
 ```
 
+```
 ![zh-box-15](svgs/zh-box-15.svg)
+```
 
           │ outer
           ▼
 调用 (lambda (y) (+ x y)) 时创建的环境 (outer = 全局)
 
+```
 ![zh-box-16](svgs/zh-box-16.svg)
+```
 
 ```
 
@@ -4734,7 +4747,9 @@ first 是特殊形式 "lambda"! → 不执行函数体，只是"打包"成一个
 
 全局环境现在变成:
 
+```
 ![zh-box-17](svgs/zh-box-17.svg)
+```
 
 
 define 返回: Nil ✅ (define 总是返回 Nil)
@@ -4776,13 +4791,17 @@ eval 判断: List! → 首元素 = Symbol("make-adder")
   ① 求值函数位置:
 
 
+```
 ![zh-box-18](svgs/zh-box-18.svg)
+```
 
 
   ② 求值参数:
 
 
+```
 ![zh-box-19](svgs/zh-box-19.svg)
+```
 
 
   现在: func = Lambda₁, args = [Number(5)]
@@ -4808,13 +4827,17 @@ Lambda₁ 调用 — 创建新环境:
 
      CallFrame₁ 现在:
 
+```
 ![zh-box-20](svgs/zh-box-20.svg)
+```
 
 
   ③ 在 CallFrame₁ 中求值 Lambda₁ 的函数体:
      eval( (lambda (x) (+ x n)), CallFrame₁ )
 
+```
 ![zh-box-21](svgs/zh-box-21.svg)
+```
 
 ```
 
@@ -4839,7 +4862,9 @@ eval 判断: List! → 首元素 = Symbol("lambda")
     env    = CallFrame₁  ← 📸 咔嚓! 在 CallFrame₁ 环境中诞生!
   }
 
+```
 ![zh-box-22](svgs/zh-box-22.svg)
+```
 
 
   返回: Lambda₂
@@ -4855,7 +4880,9 @@ eval 判断: List! → 首元素 = Symbol("lambda")
 
 全局环境现在:
 
+```
 ![zh-box-23](svgs/zh-box-23.svg)
+```
 
 
 define 返回: Nil ✅
@@ -4878,13 +4905,17 @@ eval 判断: List! → 首元素 = Symbol("add5")
   ① 求值函数位置:
 
 
+```
 ![zh-box-24](svgs/zh-box-24.svg)
+```
 
 
   ② 求值参数:
 
 
+```
 ![zh-box-25](svgs/zh-box-25.svg)
+```
 
 
   现在: func = Lambda₂, args = [Number(10)]
@@ -4903,7 +4934,9 @@ Lambda₂ 调用 — 创建新环境:
        outer = Lambda₂.env = CallFrame₁  ← 🔑🔑 这就是闭包发挥作用的地方!
      }
 
+```
 ![zh-box-26](svgs/zh-box-26.svg)
+```
 
 
   ② 绑定参数:
@@ -4911,7 +4944,9 @@ Lambda₂ 调用 — 创建新环境:
 
      CallFrame₂ 现在:
 
+```
 ![zh-box-27](svgs/zh-box-27.svg)
+```
 
 
   ③ 在 CallFrame₂ 中求值 Lambda₂ 的函数体:
@@ -4933,19 +4968,25 @@ eval 判断: List! → 首元素 = Symbol("+")
   ① 求值函数位置 "+":
 
 
+```
 ![zh-box-28](svgs/zh-box-28.svg)
+```
 
 
   ② 求值第一个参数 "x":
 
 
+```
 ![zh-box-29](svgs/zh-box-29.svg)
+```
 
 
   ③ 求值第二个参数 "n": ← 🎯 这就是闭包的关键时刻!
 
 
+```
 ![zh-box-30](svgs/zh-box-30.svg)
+```
 
     │                                                   │
     │   返回: Number(5) ✅                              │
@@ -4973,15 +5014,21 @@ eval 判断: List! → 首元素 = Symbol("+")
 
   求值 (+ x n) 时:
 
+```
 ![zh-box-31](svgs/zh-box-31.svg)
+```
 
               ↓
 
+```
 ![zh-box-32](svgs/zh-box-32.svg)
+```
 
               ↓
 
+```
 ![zh-box-33](svgs/zh-box-33.svg)
+```
 
 
 查找 "x": CallFrame₂ ✅ (1 跳)
@@ -5569,11 +5616,9 @@ test result: ok. 23 passed; 0 failed
 
 当前 `tokenize` 返回 `Vec<String>`——每个 token 都堆分配一个 String。改用 `Vec<&str>`——直接引用源码中的切片。
 
-```
-
 ![zero copy](svgs/zero-copy.svg)
 
-
+```rust
 // src/lexer.rs — tokenize 函数
 // 旧版:
 pub fn tokenize(input: &str) -> Vec<String> {
@@ -5649,7 +5694,7 @@ fn test_tokenize_empty() {
 
 #[test]
 fn test_tokenize_comment() {
-    assert_eq!(tokenize("42 ; this is a comment"), vec!["42"]);
+    assert_eq!(tokenize("(+ 1 2) ; this is a comment"), vec!["(", "+", "1", "2", ")"]);
 }
 
 #[test]
@@ -5708,7 +5753,7 @@ if token == "(" {     // token 已经是 &str，不需要 .as_str()
 ```bash
 $ cargo test
 running 26 tests
-test lexer::tests::test_tokenize_simple ... ok
+test lexer::tests::test_tokenize_multi ... ok
 test lexer::tests::test_tokenize_whitespace ... ok
 test lexer::tests::test_tokenize_parens ... ok
 test lexer::tests::test_tokenize_empty ... ok
@@ -6425,7 +6470,9 @@ letrec 用了三个步骤来破解这个"鸡生蛋"问题：
   (Rc = 多人共享, RefCell = 允许修改)
 
 
+```
 ![zh-box-34](svgs/zh-box-34.svg)
+```
 
 
   现在 even? 和 odd? 这两个名字已经"注册"了,
@@ -6437,17 +6484,23 @@ letrec 用了三个步骤来破解这个"鸡生蛋"问题：
 
   创建求值环境, outer 指向 shared_env:
 
+```
 ![zh-box-35](svgs/zh-box-35.svg)
+```
 
 
   在这个环境中求值 each lambda:
 
 
+```
 ![zh-box-36](svgs/zh-box-36.svg)
+```
 
 
 
+```
 ![zh-box-37](svgs/zh-box-37.svg)
+```
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -6456,7 +6509,9 @@ letrec 用了三个步骤来破解这个"鸡生蛋"问题：
 
   shared_env 更新:
 
+```
 ![zh-box-38](svgs/zh-box-38.svg)
+```
 
 
   现在 even? 和 odd? 互为引用, 通过 shared_env 连接!
