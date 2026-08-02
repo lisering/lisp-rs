@@ -1650,7 +1650,7 @@ LispExp::Number(42.0)    ← 新的,有所有权的 LispExp
 **延伸**：`f64` 是 `Copy` 类型——解引用时自动复制一份，原值不受影响。
 就像你借了朋友的笔记，`*` 就是复印一份——原件还是朋友的，你拿着复印件走。
 
-现在 `LispExp` 只有 `Number` 一种情况，这个 `match` 能通过编译。但后面我们会在 `LispExp` 里加更多类型（Symbol、List 等）——到时候编译器就会要求补全所有分支。不如现在就把兜底分支写好：
+现在 `LispExp` 只有 `Number` 一种情况，这个 `match` 能通过编译。但后面我们会在 `LispExp` 里加更多类型（Symbol、List 等）——有了这个兜底分支，新类型会自动走到这里返回错误，不用每次加类型都来改 `eval`。等所有类型都有显式处理后（步骤 28），我们会删掉这个兜底分支，改让编译器帮我们检查穷尽性。
 
 ```rust
 // src/lib.rs
@@ -3270,12 +3270,16 @@ pub fn eval(exp: &LispExp, env: &LispEnv) -> Result<LispExp, LispErr> {
         LispExp::Bool(_) | LispExp::Nil | LispExp::Func(_) => Ok(exp.clone()),
         LispExp::Symbol(s) => env.get(s),
         LispExp::List(elements) => { /* ... 列表求值 ... */ }
-        _ => Err(LispErr::Reason("暂不支持此类型".to_string())),
+        // 不需要 _ 兜底——所有变体都已显式处理
     }
 }
 ```
 
 > ⚠️ **注意**: `Bool(_) | Nil | Func(_)` 用 `|` 合并——它们都是"求值为自身"，用同一个处理逻辑。
+>
+> 🧠 **大白话 — 为什么删掉了 `_` 兜底分支？**
+>
+> 到这一步，`LispExp` 的 6 个变体（`Number`、`Symbol`、`List`、`Func`、`Bool`、`Nil`）全部有显式处理——`_` 已经不可达了。删掉它的好处是：**以后新增变体时（如步骤 29-31 的 `String`、步骤 34 的 `Lambda`），如果忘了在 `eval` 里处理，编译器会立即报错**（`non-exhaustive patterns`），而不是等到运行时才发现。Rust 的穷尽性检查是最好的安全网——但前提是你不写 `_`。
 
 在 parser 的 `parse_atom` 中：
 
@@ -3322,6 +3326,18 @@ env.set("<=".into(), LispExp::Func(|args| { /* ... a <= b ... */ }));
 // src/lib.rs — LispExp 枚举
 String(String),  // ← 新增
 ```
+
+同时更新 `eval` 的自求值分支，把 `String` 加进去：
+
+```rust
+// src/lib.rs — eval 函数，自求值分支
+// 旧版:
+LispExp::Bool(_) | LispExp::Nil | LispExp::Func(_) => Ok(exp.clone()),
+// 新版:
+LispExp::Bool(_) | LispExp::Nil | LispExp::Func(_) | LispExp::String(_) => Ok(exp.clone()),
+```
+
+> 💡 如果你忘了加 `String`，编译器会报错：`non-exhaustive patterns: \`String(_)\` not covered`——这正是步骤 28 删掉 `_` 兜底的好处！编译器替你盯着，不放过任何一个漏处理的变体。
 
 ```bash
 $ cargo test
@@ -3448,9 +3464,6 @@ pub fn eval(exp: &LispExp, env: &LispEnv) -> Result<LispExp, LispErr> {
                 _ => Err(LispErr::Reason("不是函数".to_string())),
             }
         }
-
-        // === 兜底 ===
-        _ => Err(LispErr::Reason("暂不支持此类型".to_string())),
     }
 }
 ```

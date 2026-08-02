@@ -1788,7 +1788,7 @@ LispExp::Number(42.0)  ← fresh, owned LispExp
 
 `f64` is a `Copy` type, so dereferencing auto-copies — like photocopying a friend's notebook. The original stays with them, you take the copy.
 
-Right now `LispExp` only has `Number`, so this `match` compiles. But later we'll add more types to `LispExp` (Symbol, List, etc.)—then the compiler will require all branches to be covered. Let's write the catch-all branch now:
+Right now `LispExp` only has `Number`, so this `match` compiles. But later we'll add more types to `LispExp` (Symbol, List, etc.)—with this catch-all branch, new types will automatically fall through to here and return an error, so you won't need to update `eval` every time. Once all types have explicit handling (step 28), we'll remove this catch-all and let the compiler check exhaustiveness for us.
 
 ```rust
 // src/lib.rs
@@ -3364,12 +3364,16 @@ pub fn eval(exp: &LispExp, env: &LispEnv) -> Result<LispExp, LispErr> {
         LispExp::Bool(_) | LispExp::Nil | LispExp::Func(_) => Ok(exp.clone()),
         LispExp::Symbol(s) => env.get(s),
         LispExp::List(elements) => { /* ... list evaluation ... */ }
-        _ => Err(LispErr::Reason("This type is not supported yet".to_string())),
+        // No _ catch-all needed—all variants are explicitly handled
     }
 }
 ```
 
 > Note: `Bool(_) | Nil | Func(_)` uses `|` to combine them—they all "evaluate to themselves," using the same handling logic.
+>
+> **Why did we remove the `_` catch-all?**
+>
+> At this point, all 6 variants of `LispExp` (`Number`, `Symbol`, `List`, `Func`, `Bool`, `Nil`) have explicit handling—the `_` was unreachable. Removing it means: **when you add new variants later (like `String` in steps 29-31, `Lambda` in step 34), if you forget to handle them in `eval`, the compiler will immediately error** (`non-exhaustive patterns`) instead of silently failing at runtime. Rust's exhaustiveness check is your best safety net—but only if you don't write `_`.
 
 In `parse_atom` in parser:
 
@@ -3416,6 +3420,18 @@ Then add the `String` variant to `LispExp` (type declaration area):
 // src/lib.rs — LispExp enum
 String(String),  // ← new
 ```
+
+Also update `eval`'s self-evaluating branch to include `String`:
+
+```rust
+// src/lib.rs — eval function, self-evaluating branch
+// Old:
+LispExp::Bool(_) | LispExp::Nil | LispExp::Func(_) => Ok(exp.clone()),
+// New:
+LispExp::Bool(_) | LispExp::Nil | LispExp::Func(_) | LispExp::String(_) => Ok(exp.clone()),
+```
+
+> If you forgot to add `String`, the compiler will error: `non-exhaustive patterns: \`String(_)\` not covered`—this is exactly the benefit of removing the `_` catch-all in step 28! The compiler watches for you, catching any unhandled variant.
 
 ```bash
 $ cargo test
@@ -3539,9 +3555,6 @@ pub fn eval(exp: &LispExp, env: &LispEnv) -> Result<LispExp, LispErr> {
                 _ => Err(LispErr::Reason("Not a function".to_string())),
             }
         }
-
-        // === Catch-all ===
-        _ => Err(LispErr::Reason("This type is not supported yet".to_string())),
     }
 }
 ```
