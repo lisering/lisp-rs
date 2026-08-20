@@ -12,7 +12,7 @@
 
 # Building a Lisp Interpreter from Scratch — Rust Hands-On Tutorial
 
-> **Zero knowledge required. Zero dependencies.** 74 steps. 173 tests. One working Lisp interpreter at the end. Each step first explains **what problem to solve**, then writes the code.
+> **Zero knowledge required. Zero dependencies.** 74 steps. 42 tests. One working Lisp interpreter at the end. Each step first explains **what problem to solve**, then writes the code.
 
 ### TCO in action — 1,000,000 iterations vs. stack overflow
 
@@ -193,7 +193,7 @@ Calculate factorial (5! = 5×4×3×2×1 = 120):
 (factorial 5)   ; → 120
 ```
 
-Notice something? Lisp has **no for loops, no while loops**. To repeat things, you need "a function calling itself" (recursion). That's because Lisp was invented more than a decade before for-loops existed—the concept hadn't been dreamed up yet.
+Notice something? Lisp has **no for loops, no while loops**. To repeat things, you need "a function calling itself" (recursion). That's because Lisp's designers started from mathematical theory (λ-calculus), choosing recursion as the sole repetition mechanism — mathematics has no concept of "loops," only recursive function definitions. Later Lisp dialects (such as Common Lisp) did add looping constructs, but recursion has always remained the core style of Lisp.
 
 Below is the **Russian-doll-style breakdown** of `(factorial 5)`, showing how it computes 120 layer by layer.
 
@@ -980,7 +980,7 @@ Left file list:
       └── lib.rs           ← our code goes here
 ```
 
-Double-click `src/lib.rs`, and the default example code will appear in the editing area. **Delete all of it** (we'll write from scratch).
+Double-click `src/lib.rs`, and the default example code will appear in the editing area (an `add` function and a test). **Leave it as-is for now** — we'll use it to verify the toolchain works in the next step. We'll replace it with our own code starting at [Step 5](#step-5-define-the-number-type-number).
 
 ---
 
@@ -1063,7 +1063,7 @@ name = "my-lisp"  # change this
 ---
 ### Step 5: Define the Number Type `Number`
 
-The first thing our Lisp interpreter needs to handle is **numbers**. In Rust, we use `enum` to list "what exists in the world." Clear `src/lib.rs` and write:
+The first thing our Lisp interpreter needs to handle is **numbers**. In Rust, we use `enum` to list "what exists in the world." Now **delete all the default example code** in `src/lib.rs` (the one we kept from Step 3) and replace it with:
 
 ```rust
 // src/lib.rs
@@ -1741,9 +1741,9 @@ Run `cargo test` → ❌ Compiler error:
 
 ```
 error[E0425]: cannot find function `eval` in this scope
-  --> src/lib.rs:27:22
+  --> src/lib.rs:NN:22
    |
-27 |         let result = eval(&exp).unwrap();
+NN |         let result = eval(&exp).unwrap();
    |                      ^^^^ not found in this scope
 ```
 
@@ -1788,34 +1788,21 @@ LispExp::Number(42.0)  ← fresh, owned LispExp
 
 `f64` is a `Copy` type, so dereferencing auto-copies — like photocopying a friend's notebook. The original stays with them, you take the copy.
 
-Right now `LispExp` only has `Number`, so this `match` compiles. But later we'll add more types to `LispExp` (Symbol, List, etc.)—with this catch-all branch, new types will automatically fall through to here and return an error, so you won't need to update `eval` every time. Once all types have explicit handling (step 28), we'll remove this catch-all and let the compiler check exhaustiveness for us.
+Right now `LispExp` only has `Number`, so this `match` compiles. Later we'll add more types to `LispExp` (Symbol, List, etc.)—at that point, `match` will need to handle all variants, or the compiler will throw a `non-exhaustive patterns` error. We'll first encounter this in [Step 12](#step-12-create-parserrs) when we add `Symbol`, and add a catch-all branch then.
 
 ```rust
 // src/lib.rs
 pub fn eval(exp: &LispExp) -> Result<LispExp, LispErr> {
     match exp {
         LispExp::Number(n) => Ok(LispExp::Number(*n)),
-        _ => Err(LispErr::Reason("This type is not supported yet".to_string())),
-        // ↑ _ = "all other cases" (catch-all)
     }
 }
 ```
 
-`cargo test` → ✅ Tests pass, but with one warning:
+`cargo test` → ✅ Tests pass, no warnings:
 
 ```
 $ cargo test
-warning: unreachable pattern
-  --> src/lib.rs:17:9
-   |
-16 |         LispExp::Number(n) => Ok(LispExp::Number(*n)),
-   |         ------------------ matches all the relevant values
-17 |         _ => Err(LispErr::Reason("This type is not supported yet".to_string())),
-   |         ^ no value can reach this
-   |
-   = note: `#[warn(unreachable_patterns)]` (part of `#[warn(unused)]`) on by default
-
-warning: `lisp-rs` (lib test) generated 1 warning
     Finished `test` profile [unoptimized + debuginfo] target(s) in 0.31s
      Running unittests src/lib.rs (target/debug/deps/lisp_rs-5cd87530e74cecce)
 
@@ -1825,18 +1812,6 @@ test tests::test_eval_number ... ok
 
 test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
-
-💡 In short — Why the `unreachable pattern` warning?
-
-The Rust compiler is smart—it sees that `LispExp` currently has **only one** variant, `Number`, and `LispExp::Number(n)` already matches all possible values. So the `_` arm is **dead code**—it can never be reached. The compiler warns you: "this code is unreachable."
-
-This warning is **completely harmless**—tests still pass (2 passed; 0 failed). Once we add more variants like `Symbol`, `List`, etc. in later steps, `_` will no longer be dead code—the warning will disappear automatically.
-
-> 💡 **Annoyed by the warning?** You can add `#[allow(unreachable_patterns)]` above the `eval` function to suppress it temporarily. But we recommend leaving it—when you add more variants later and see the warning vanish, it's a nice confirmation that your enum has genuinely grown.
-
-💡 In short — `_` (wildcard): matches everything else. `LispExp` only has one variant now, so `_` is future-proofing (the compiler even warns it's unreachable). When we add `Symbol`, `List`, and friends later, any unhandled type falls through to this catch-all, and the warning disappears.
-
-Build the flood wall before the rain comes.
 
 > **Diagram — how match works**:
 
@@ -1901,26 +1876,15 @@ Data flow (assuming user typed " 42 ", with spaces):
 
 ```bash
 $ cargo test
-warning: unreachable pattern
-  --> src/lib.rs:17:9
-   |
-16 |         LispExp::Number(n) => Ok(LispExp::Number(*n)),
-   |         ------------------ matches all the relevant values
-17 |         _ => Err(LispErr::Reason("This type is not supported yet".to_string())),
-   |         ^ no value can reach this
-   |
-   = note: `#[warn(unreachable_patterns)]` (part of `#[warn(unused)]`) on by default
-
 warning: function `eval_str` is never used
-  --> src/lib.rs:23:4
+  --> src/lib.rs:NN:4
    |
-23 | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
+NN | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
    |    ^^^^^^^^
    |
    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
 
-warning: `lisp-rs` (lib) generated 2 warnings
-warning: `lisp-rs` (lib test) generated 1 warning (1 duplicate)
+warning: `lisp-rs` (lib) generated 1 warning
     Finished `test` profile [unoptimized + debuginfo] target(s) in 0.63s
      Running unittests src/lib.rs (target/debug/deps/lisp_rs-5cd87530e74cecce)
 
@@ -1932,10 +1896,9 @@ test tests::test_eval_number ... ok
 test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
-💡 In short — Why two warnings?
+💡 In short — Why this warning?
 
-1. **`unreachable pattern`**: The "old friend" from the previous step. `LispExp` still has only `Number`, so `_` is still unreachable. It will disappear once we add `Symbol` and other variants.
-2. **`function 'eval_str' is never used` (dead_code)**: `eval_str` isn't marked `pub`, and nothing in non-test code calls it—the compiler thinks it's "dead code." But it IS called by the test function under `#[cfg(test)]`, so tests pass fine.
+**`function 'eval_str' is never used` (dead_code)**: `eval_str` isn't marked `pub`, and nothing in non-test code calls it—the compiler thinks it's "dead code." But it IS called by the test function under `#[cfg(test)]`, so tests pass fine.
 
 > 💡 **Annoyed by the `dead_code` warning?** Just add `pub` to `eval_str`: `pub fn eval_str(...)`. This tells the compiler it's a public API, and the warning goes away. But leaving it is fine too—it's just a reminder, not an error.
 
@@ -1953,7 +1916,7 @@ But `eval_str("(+ 1 2)")` would fail — `"(+ 1 2)"` is not a valid number. To h
 
 > 🏋️ **Exercises**
 > 1. (⭐) Modify `eval_str` to also handle `"true"` and `"false"` string inputs (don't use Bool type yet, just return strings)
-> 2. (⭐⭐) `eval` only has two branches right now (Number and `_`). What happens when you input a negative number like `-42`? How would you fix it?
+> 2. (⭐⭐) `eval` only has one branch right now (Number). What happens when you input a negative number like `-42`? How would you fix it?
 
 
 <details>
@@ -2075,26 +2038,15 @@ But try with parentheses: `tokenize("(+ 1 2)")` → `["(+", "1", "2)"]` — the 
 
 ```bash
 $ cargo test
-warning: unreachable pattern
-  --> src/lib.rs:17:9
-   |
-16 |         LispExp::Number(n) => Ok(LispExp::Number(*n)),
-   |         ------------------ matches all the relevant values
-17 |         _ => Err(LispErr::Reason("This type is not supported yet".to_string())),
-   |         ^ no value can reach this
-   |
-   = note: `#[warn(unreachable_patterns)]` (part of `#[warn(unused)]`) on by default
-
 warning: function `eval_str` is never used
-  --> src/lib.rs:21:4
+  --> src/lib.rs:NN:4
    |
-21 | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
+NN | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
    |    ^^^^^^^^
    |
    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
 
-warning: `lisp-rs` (lib) generated 2 warnings
-warning: `lisp-rs` (lib test) generated 1 warning (1 duplicate)
+warning: `lisp-rs` (lib) generated 1 warning
     Finished `test` profile [unoptimized + debuginfo] target(s) in 0.46s
      Running unittests src/lib.rs (target/debug/deps/lisp_rs-5cd87530e74cecce)
 
@@ -2108,10 +2060,9 @@ test tests::test_eval_str_number ... ok
 test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
-> 💡 In short — Two warnings still here?
+> 💡 In short — `dead_code` warning still here?
 >
-> 1. **`unreachable pattern`**: `LispExp` still only has `Number`, so `_` is still unreachable. It will disappear at Step 12 when `Symbol` is added.
-> 2. **`function 'eval_str' is never used`**: `eval_str` isn't `pub`, so nothing in non-test code calls it. Both are harmless carryovers from Steps 7-8.
+> **`function 'eval_str' is never used`**: `eval_str` isn't `pub`, so nothing in non-test code calls it. Harmless carryover from Step 8.
 
 ### Step 11: Handle Parentheses
 
@@ -2129,26 +2080,15 @@ fn test_tokenize_parens() {
 `cargo test` → ❌ Test failure:
 
 ```
-warning: unreachable pattern
-  --> src/lib.rs:17:9
-   |
-16 |         LispExp::Number(n) => Ok(LispExp::Number(*n)),
-   |         ------------------ matches all the relevant values
-17 |         _ => Err(LispErr::Reason("This type is not supported yet".to_string())),
-   |         ^ no value can reach this
-   |
-   = note: `#[warn(unreachable_patterns)]` (part of `#[warn(unused)]`) on by default
-
 warning: function `eval_str` is never used
-  --> src/lib.rs:21:4
+  --> src/lib.rs:NN:4
    |
-21 | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
+NN | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
    |    ^^^^^^^^
    |
    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
 
-warning: `lisp-rs` (lib) generated 2 warnings
-warning: `lisp-rs` (lib test) generated 1 warning (1 duplicate)
+warning: `lisp-rs` (lib) generated 1 warning
     Finished `test` profile [unoptimized + debuginfo] target(s) in 0.46s
      Running unittests src/lib.rs (target/debug/deps/lisp_rs-5cd87530e74cecce)
 
@@ -2194,26 +2134,15 @@ Input: "(+ 1 2)"
 
 ```bash
 $ cargo test
-warning: unreachable pattern
-  --> src/lib.rs:17:9
-   |
-16 |         LispExp::Number(n) => Ok(LispExp::Number(*n)),
-   |         ------------------ matches all the relevant values
-17 |         _ => Err(LispErr::Reason("This type is not supported yet".to_string())),
-   |         ^ no value can reach this
-   |
-   = note: `#[warn(unreachable_patterns)]` (part of `#[warn(unused)]`) on by default
-
 warning: function `eval_str` is never used
-  --> src/lib.rs:21:4
+  --> src/lib.rs:NN:4
    |
-21 | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
+NN | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
    |    ^^^^^^^^
    |
    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
 
-warning: `lisp-rs` (lib) generated 2 warnings
-warning: `lisp-rs` (lib test) generated 1 warning (1 duplicate)
+warning: `lisp-rs` (lib) generated 1 warning
     Finished `test` profile [unoptimized + debuginfo] target(s) in 0.46s
      Running unittests src/lib.rs (target/debug/deps/lisp_rs-5cd87530e74cecce)
 
@@ -2228,7 +2157,7 @@ test tests::test_eval_str_number ... ok
 test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
-> 💡 In short — Two old warnings still here, but all tests pass! The `unreachable pattern` will disappear at Step 12 when `Symbol` is added. The `dead_code` warning will persist until `eval_str` is made `pub` or called from non-test code.
+> 💡 In short — `dead_code` warning still here, but all tests pass! This warning will persist until `eval_str` is made `pub` or called from non-test code.
 
 ---
 
@@ -2320,7 +2249,7 @@ fn test_comment_ignored() {
 > Why this matters: The parser transforms a flat token list into a tree structure (AST). This tree represents the program's grammatical structure - without it, the evaluator would have no meaningful input. Recursive descent parsing is the most intuitive parsing technique and works for most real-world languages.
 
 ## Understanding the Meaning of Words
-> ⏩ **Skip signal:** Know recursive descent parsing? Jump to [Step 16](#step-16-create-environment-variable-name--value-address-book). The mermaid sequence diagram in Step 14 is worth a look, though.
+> ⏩ **Skip signal:** Know recursive descent parsing? Jump to [Step 16](#step-16-create-environment-variable-name--value-address-book). The recursive parsing diagram in Step 14 is worth a look, though.
 
 ---
 
@@ -2423,6 +2352,29 @@ pub enum LispExp {
 }
 ```
 
+You also need to update the `eval` function — `LispExp` now has two variants, but `eval` only handles `Number`. Rust's `match` requires all variants to be covered, otherwise it won't compile. We don't know how to evaluate `Symbol` yet (that comes in [Step 18](#step-18-add-env-parameter-to-eval-signature), when we can look up environment variables), so let's add a catch-all branch:
+
+```rust
+// src/lib.rs — update eval function
+pub fn eval(exp: &LispExp) -> Result<LispExp, LispErr> {
+    match exp {
+        LispExp::Number(n) => Ok(LispExp::Number(*n)),
+        _ => Err(LispErr::Reason("This type is not supported yet".to_string())),
+        // ↑ _ = "all other cases" (catch-all)
+    }
+}
+```
+
+💡 In short — Why add `_` now?
+
+In Step 7, `LispExp` only had `Number`, so matching just `Number` was enough — the compiler was happy. Now that we've added `Symbol`, if `match` doesn't handle it, the compiler will error:
+
+```text
+error[E0004]: non-exhaustive patterns: `Symbol(_)` not covered
+```
+
+`_` is a wildcard that matches "everything else." Right now it catches `Symbol`; later when we add more variants (`List`, `Bool`, etc.), `_` will catch those too — no need to update `eval` every time. Once all types have explicit handling ([Step 28](#step-28-bool-and-nil)), we'll remove this catch-all and let the compiler check exhaustiveness for us.
+
 **Test the parser** — verify parse can distinguish numbers from symbols:
 
 ```rust
@@ -2445,9 +2397,9 @@ mod tests {
 ```bash
 $ cargo test
 warning: function `eval_str` is never used
-  --> src/lib.rs:25:4
+  --> src/lib.rs:NN:4
    |
-25 | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
+NN | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
    |    ^^^^^^^^
    |
    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
@@ -2468,7 +2420,7 @@ test tests::test_eval_str_number ... ok
 test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
-> 💡 In short — The `unreachable pattern` warning is gone! Adding `Symbol` means `_` is no longer dead code—it can match `Symbol`. Only the `eval_str` `dead_code` warning remains.
+> 💡 In short — `dead_code` warning still here! We added the `Symbol` variant and `_` catch-all, compilation went smoothly. The `eval_str` `dead_code` warning persists — it'll disappear once `eval_str` is made `pub` or called from non-test code.
 
 ---
 
@@ -2488,20 +2440,23 @@ fn eval_str(source: &str) -> Result<LispExp, LispErr> {
 ```
 
 ```text
-Data pipeline:
-"(+ 1 2)" → tokenize → ["(", "+", "1", "2", ")"] → parse → List([Symbol("+"), Number(1.0), Number(2.0)]) → eval → Number(3.0)
+Data pipeline (using the single atom "+" as an example):
+"+" → tokenize → ["+"] → parse → Symbol("+") → eval → Err("This type is not supported yet")
 
 Note: parse can currently only handle single atoms (e.g. "+" → Symbol("+")),
 list parsing is completed in Step 14, list evaluation in Step 22.
 But the pipeline is connected — three modules, each with its own job.
+
+Preview: once Step 14 completes list parsing, the full pipeline will be:
+"(+ 1 2)" → tokenize → ["(", "+", "1", "2", ")"] → parse → List([Symbol("+"), Number(1.0), Number(2.0)]) → eval → Number(3.0)
 ```
 
 ```bash
 $ cargo test
 warning: function `eval_str` is never used
-  --> src/lib.rs:25:4
+  --> src/lib.rs:NN:4
    |
-25 | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
+NN | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
    |    ^^^^^^^^
    |
    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
@@ -2600,9 +2555,9 @@ In code, the "smallest doll" is the base case that stops the recursion.
 ```bash
 $ cargo test
 warning: function `eval_str` is never used
-  --> src/lib.rs:25:4
+  --> src/lib.rs:NN:4
    |
-25 | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
+NN | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
    |    ^^^^^^^^
    |
    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
@@ -2665,9 +2620,9 @@ fn test_unexpected_close_error() {
 ```bash
 $ cargo test
 warning: function `eval_str` is never used
-  --> src/lib.rs:25:4
+  --> src/lib.rs:NN:4
    |
-25 | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
+NN | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
    |    ^^^^^^^^
    |
    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
@@ -2932,15 +2887,15 @@ fn test_eval_symbol() {
 > ```text
 > $ cargo test
 > error[E0061]: this function takes 2 arguments but 1 was supplied
->    --> src/lib.rs:55:16
+>    --> src/lib.rs:NN:16
 >     |
->  55 |     let result = eval(&exp).unwrap();
+>  NN |     let result = eval(&exp).unwrap();
 >     |                  ^^^^------ help: add missing argument: `, env`
 >     |
 > note: function defined here
->    --> src/lib.rs:30:1
+>    --> src/lib.rs:NN:1
 >     |
->  30 | pub fn eval(exp: &LispExp, env: &LispEnv) -> Result<LispExp, LispErr> {
+>  NN | pub fn eval(exp: &LispExp, env: &LispEnv) -> Result<LispExp, LispErr> {
 >     | ^^^^^^^^^^^ ---------------------------
 > error: aborting due to 3 previous errors
 > ```
@@ -7877,10 +7832,11 @@ Each test is an **executable documentation** artifact — it documents what a fe
 should do, and `cargo test` verifies it actually works. When adding a feature,
 the standard workflow is: **test first → implement → verify → document**.
 
-Our 173 tests cover:
-- **Lexer** (20 tests) — every token type, edge cases (empty input, comments)
-- **Parser** (25 tests) — nested lists, atom types, error handling
-- **Eval** (128 tests) — all special forms, built-in functions, closures, TCO
+Our 42 tests cover:
+- **Lexer** (7 tests) — every token type, edge cases (empty input, comments)
+- **Parser** (3 tests) — nested lists, atom types, error handling
+- **Environment** (3 tests) — variable access, undefined lookup
+- **Eval** (29 tests) — all special forms, built-in functions, closures, TCO
 
 The high test count is not accidental — it's because each line of the tutorial
 is backed by a concrete, runnable example.
@@ -8022,7 +7978,7 @@ Steps 52-74: Built-in Functions + REPL
 
 > **Feynman test**: Explain these 74 steps to a friend who knows nothing about programming. If each step makes them nod and say "oh, I see," you've succeeded.
 
-> **Verification**: `cargo test` (173 tests), `cargo run` (interactive REPL)
+> **Verification**: `cargo test` (42 tests), `cargo run` (interactive REPL)
 
 ---
 

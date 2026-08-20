@@ -12,7 +12,7 @@
 
 # 从零构建 Lisp 解释器 — Rust 实战教程
 
-> **零基础、零依赖。** 74 步，173 个测试，最终得到一个完整的 Lisp 解释器。每一步先说清楚**要解决什么问题**，再写代码。
+> **零基础、零依赖。** 74 步，42 个测试，最终得到一个完整的 Lisp 解释器。每一步先说清楚**要解决什么问题**，再写代码。
 
 ### TCO 效果演示 — 100 万次递归 vs 栈溢出
 
@@ -193,7 +193,7 @@ if (x > 0) { return x + 1; }
 (factorial 5)   ; → 120
 ```
 
-注意到什么没有？Lisp **没有 for 循环、没有 while 循环**。重复做事只能靠"函数调用自己"（递归）。这是因为 Lisp 比 for 循环还早发明了十几年——那时候还没有循环这个概念。
+注意到什么没有？Lisp **没有 for 循环、没有 while 循环**。重复做事只能靠"函数调用自己"（递归）。这是因为 Lisp 的设计者从数学理论（λ演算）出发，选择了递归作为唯一的重复机制——数学里没有"循环"的概念，只有函数的递归定义。后来的 Lisp 方言（如 Common Lisp）也加入了循环结构，但递归始终是 Lisp 的核心风格。
 
 下面是 `(factorial 5)` 的**套娃式拆解**，看它是怎么一层层算出 120 的。
 
@@ -351,14 +351,14 @@ expression  = atom | list ;
 atom        = number | symbol | string | boolean | nil ;
 list        = "(" , expression* , ")" ;
 number      = integer | float ;
-symbol      = letter , { letter | digit | special } ;
+symbol      = ( letter | special ) , { letter | digit | special } ;
 string      = '"' , { any_character - '"' } , '"' ;
 boolean     = "#t" | "#f" ;
 nil         = "nil" | "()" ;
 
 letter      = "a"..."z" | "A"..."Z" ;
 digit       = "0"..."9" ;
-special     = "+" | "-" | "*" | "/" | "=" | "<" | ">" | "!" | "?" | "_" ;
+special     = "+" | "-" | "*" | "/" | "=" | "<" | ">" | "!" | "?" | "_" | "." | "'" ;
 ```
 
 这个文法仅描述语法层。运行时 `(f a b)` 可以是函数调用、特殊形式或宏——
@@ -663,7 +663,7 @@ Lisp 里函数跟数字、字符串一样，可以传来传去：
 | 步骤 28-31 | 布尔判断、字符串、数字比较 | `(> 5 3)` → `#t` |
 | 步骤 32-35 | 条件分支、定义变量、创建和调用函数 | `(define sq (lambda (x) (* x x)))` |
 | 步骤 36-39 | **闭包**（函数记住诞生环境）+ **一万层递归不崩溃** | `(loop 10000)` |
-| 步骤 40-43 | 解释器快 5 倍（驻留/零拷贝/FX 哈希） | 性能基准 |
+| 步骤 40-43 | 三项优化：字符串驻留、零拷贝词法分析、FX 哈希 | `cargo test` 全通过 |
 | 步骤 44-51 | 8 种特殊形式（begin/set!/let/cond...） | `(let ((x 1)) (+ x 2))` |
 | 步骤 52-74 | **完整的交互式 REPL** | `cargo run` → 输入 Lisp 代码 |
 
@@ -835,7 +835,7 @@ cd lisp-rs
       └── lib.rs           ← 我们的代码写在这里
 ```
 
-双击 `src/lib.rs`，中间编辑区会出现默认的示例代码。**把它全部删掉**（后面我们会从头写）。
+双击 `src/lib.rs`，中间编辑区会出现默认的示例代码（一个 `add` 函数和一个测试）。**先别动它**——我们下一 步要用它来验证工具链能正常工作，等到[步骤 5](#步骤-5-定义数字类型-number) 再从头写自己的代码。
 
 ---
 
@@ -920,7 +920,7 @@ name = "my-lisp"  # 改这里
 ---
 ### 步骤 5: 定义数字类型 `Number`
 
-我们的 Lisp 解释器要处理的第一样东西就是**数字**。在 Rust 里，我们用 `enum` 列出"世界上有什么"。把 `src/lib.rs` 清空，写入：
+我们的 Lisp 解释器要处理的第一样东西就是**数字**。在 Rust 里，我们用 `enum` 列出"世界上有什么"。现在把 `src/lib.rs` 里的默认示例代码**全部删掉**（步骤 3 保留的那个），替换成以下内容：
 
 ```rust
 // src/lib.rs
@@ -1533,11 +1533,11 @@ pub enum LispExp {
 
 **2. Rust enum vs C enum**
 C 的 `enum` 只是整数别名（`enum Color { RED=0, GREEN=1 }`）。Rust 的 enum 变体可携带数据：`Number(f64)` 带一个 f64，`List(Vec<LispExp>)` 带一个向量。这让 enum 能替代"tagged union"，比 C 更安全、更强大。
+</details>
 
 > 3. (⭐⭐⭐) **先思考后验证**：如果调用 `eval_str("\"hello\" + 42")`，你觉得在运行之前
 >    会发生什么？Rust 的类型系统会在编译时捕获它，还是会在运行时出错？为什么？
 >    实际运行看看你的预测是否准确。
-      </details>
 
 
 
@@ -1578,7 +1578,7 @@ C 的 `enum` 只是整数别名（`enum Color { RED=0, GREEN=1 }`）。Rust 的 
 ---
 ### 步骤 7: 求值函数 `eval`
 
-> ⚠️ **临时安排**：目前项目只有 `lib.rs` 一个文件，`eval` 暂时放在这里。等项目文件多起来后（步骤 40 左右），`eval` 会搬到新文件 `src/interpreter.rs` 里——它属于「求值器」模块，跟类型定义分开存放更清晰。
+> ⚠️ **临时安排**：目前项目只有 `lib.rs` 一个文件，`eval` 暂时放在这里。等步骤 43 结束时，`eval` 会搬到新文件 `src/interpreter.rs` 里——它属于「求值器」模块，跟类型定义分开存放更清晰。
 
 **需求**: 输入 `Number(42.0)`，输出 `Number(42.0)`。数字不需要"计算"——它本身就是答案。
 
@@ -1598,9 +1598,9 @@ fn test_eval_number() {
 
 ```
 error[E0425]: cannot find function `eval` in this scope
-  --> src/lib.rs:27:22
+  --> src/lib.rs:NN:22
    |
-27 |         let result = eval(&exp).unwrap();
+NN |         let result = eval(&exp).unwrap();
    |                      ^^^^ not found in this scope
 ```
 
@@ -1650,34 +1650,21 @@ LispExp::Number(42.0)    ← 新的,有所有权的 LispExp
 **延伸**：`f64` 是 `Copy` 类型——解引用时自动复制一份，原值不受影响。
 就像你借了朋友的笔记，`*` 就是复印一份——原件还是朋友的，你拿着复印件走。
 
-现在 `LispExp` 只有 `Number` 一种情况，这个 `match` 能通过编译。但后面我们会在 `LispExp` 里加更多类型（Symbol、List 等）——有了这个兜底分支，新类型会自动走到这里返回错误，不用每次加类型都来改 `eval`。等所有类型都有显式处理后（步骤 28），我们会删掉这个兜底分支，改让编译器帮我们检查穷尽性。
+现在 `LispExp` 只有 `Number` 一种情况，这个 `match` 能通过编译。后面我们会在 `LispExp` 里加更多类型（Symbol、List 等）——到那时，`match` 就需要处理所有变体，否则编译器会报 `non-exhaustive patterns` 错误。我们会在[步骤 13](#步骤-13-添加-symbol-类型-打通管线)添加 `Symbol` 时首次遇到这个问题，届时再加上兜底分支。
 
 ```rust
 // src/lib.rs
 pub fn eval(exp: &LispExp) -> Result<LispExp, LispErr> {
     match exp {
         LispExp::Number(n) => Ok(LispExp::Number(*n)),
-        _ => Err(LispErr::Reason("暂不支持此类型".to_string())),
-        // ↑ _ = "其他所有情况"（兜底）
     }
 }
 ```
 
-`cargo test` → ✅ 测试通过，但有一条警告：
+`cargo test` → ✅ 测试通过，无警告：
 
 ```
 $ cargo test
-warning: unreachable pattern
-  --> src/lib.rs:17:9
-   |
-16 |         LispExp::Number(n) => Ok(LispExp::Number(*n)),
-   |         ------------------ matches all the relevant values
-17 |         _ => Err(LispErr::Reason("暂不支持此类型".to_string())),
-   |         ^ no value can reach this
-   |
-   = note: `#[warn(unreachable_patterns)]` (part of `#[warn(unused)]`) on by default
-
-warning: `lisp-rs` (lib test) generated 1 warning
     Finished `test` profile [unoptimized + debuginfo] target(s) in 0.31s
      Running unittests src/lib.rs (target/debug/deps/lisp_rs-5cd87530e74cecce)
 
@@ -1687,18 +1674,6 @@ test tests::test_eval_number ... ok
 
 test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
-
-🧠 **大白话 — 为什么会有 `unreachable pattern` 警告？**
-
-Rust 编译器很聪明——它看到 `LispExp` 目前**只有一个** `Number` 变体，而 `LispExp::Number(n)` 已经匹配了全部可能。所以 `_` 这行代码**永远不会执行到**——编译器提醒你："这段代码是死代码"。
-
-这个警告**完全无害**，测试照常通过（2 passed; 0 failed）。等后面步骤里给 `LispExp` 加了 `Symbol`、`List` 等更多变体后，`_` 就不再是死代码了——警告会自动消失。
-
-> 💡 **嫌警告碍眼？** 可以在 `eval` 函数上加 `#[allow(unreachable_patterns)]` 注解来暂时屏蔽。但建议留着——等后面加了更多变体，看到警告消失，反而是一种正反馈：说明你的枚举真的变丰富了。
-
-🧠 **大白话 — `_`（通配符）**：`_` 匹配"剩下所有情况"。现在 `LispExp` 只有一个变体所以用不上（编译器还会警告），但等后面加了 `Symbol`、`List` 等类型后，`_` 就会发挥作用——任何还没处理的类型都会走这个兜底分支，警告也会随之消失。
-
-这就像提前修好防洪堤：现在没洪水（编译器甚至觉得多余），但迟早会来。
 
 > **图解 — match 是怎么工作的**：
 
@@ -1765,26 +1740,15 @@ fn test_eval_str_number() {
 
 ```bash
 $ cargo test
-warning: unreachable pattern
-  --> src/lib.rs:17:9
-   |
-16 |         LispExp::Number(n) => Ok(LispExp::Number(*n)),
-   |         ------------------ matches all the relevant values
-17 |         _ => Err(LispErr::Reason("暂不支持此类型".to_string())),
-   |         ^ no value can reach this
-   |
-   = note: `#[warn(unreachable_patterns)]` (part of `#[warn(unused)]`) on by default
-
 warning: function `eval_str` is never used
-  --> src/lib.rs:23:4
+  --> src/lib.rs:NN:4
    |
-23 | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
+NN | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
    |    ^^^^^^^^
    |
    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
 
-warning: `lisp-rs` (lib) generated 2 warnings
-warning: `lisp-rs` (lib test) generated 1 warning (1 duplicate)
+warning: `lisp-rs` (lib) generated 1 warning
     Finished `test` profile [unoptimized + debuginfo] target(s) in 0.63s
      Running unittests src/lib.rs (target/debug/deps/lisp_rs-5cd87530e74cecce)
 
@@ -1796,10 +1760,9 @@ test tests::test_eval_number ... ok
 test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
-🧠 **大白话 — 为什么有两条警告？**
+🧠 **大白话 — 为什么有这条警告？**
 
-1. **`unreachable pattern`**：上一步的“老朋友”。`LispExp` 仍只有 `Number` 一个变体，`_` 仍不可达。等后面加了 `Symbol` 等变体就会消失。
-2. **`function 'eval_str' is never used`（dead_code）**：`eval_str` 没有 `pub` 标记，在非测试代码中没有任何地方调用它——编译器觉得它是“死代码”。但它被 `#[cfg(test)]` 里的测试函数调用了，所以测试能通过。
+**`function 'eval_str' is never used`（dead_code）**：`eval_str` 没有 `pub` 标记，在非测试代码中没有任何地方调用它——编译器觉得它是“死代码”。但它被 `#[cfg(test)]` 里的测试函数调用了，所以测试能通过。
 
 > 💡 **嫌 `dead_code` 警告碍眼？** 给 `eval_str` 加上 `pub` 就行：`pub fn eval_str(...)`。这样编译器知道它是公开 API，不警告。不过现在留着也无妨——这只是提醒，不是错误。
 
@@ -1817,7 +1780,7 @@ test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 
 > 🏋️ **练习**
 > 1. (⭐) 修改 `eval_str`，让它也支持 `"true"` 和 `"false"` 字符串输入（先不用 Bool 类型，返回字符串即可）
-> 2. (⭐⭐) `eval` 函数现在只有两个分支（Number 和 `_`）。如果用户输入一个负数 `-42`，会发生什么？怎么修复？
+> 2. (⭐⭐) `eval` 函数现在只有一个分支（Number）。如果用户输入一个负数 `-42`，会发生什么？怎么修复？
 
 
 <details>
@@ -1836,16 +1799,9 @@ fn eval_str(source: &str) -> Result<LispExp, LispErr> {
 ```
 
 **2. -42 的处理**
-词法分析器把 `-42` 拆成 `["-", "42"]`——负号被当成减号运算符。解析器得到 `List([Symbol("-"), Number(42)])` 而不是 `Number(-42)`。修复：在 `parse_atom` 中检测以 `-` 开头且后接数字的 token，直接 `parse::<f64>()` ：
-```rust
-fn parse_atom(token: &str) -> LispExp {
-    if let Ok(num) = token.parse::<f64>() {
-        return LispExp::Number(num);
-    }
-    LispExp::Symbol(token.to_string())
-}
-```
-因为 Rust 的 `"-42".parse::<f64>()` 返回 `Ok(-42.0)`，所以其实已经是正确的！
+在当前 `eval_str` 中，`"-42".trim().parse::<f64>()` 直接返回 `Ok(-42.0)`——Rust 的 `parse::<f64>()` 本身就能处理负数字符串。所以 `-42` 已经被正确解析为 `Number(-42.0)`，无需修复。
+
+> 💡 **后续变化**：等到步骤 9-11 实现词法分析器后，`tokenize("-42")` 会把 `-42` 作为一个整体 token 返回（因为 `-` 和 `42` 之间没有空格）。步骤 12 的 `parse_atom` 中 `"-42".parse::<f64>()` 同样返回 `Ok(-42.0)`，仍然正确。但如果写成 `(- 42)`（带空格），则 `-` 被当作减号运算符，`42` 是数字——这是另一种语义（减法调用），不是负数字面量。
 </details>
 
 
@@ -1962,26 +1918,15 @@ mod tests {
 
 ```bash
 $ cargo test
-warning: unreachable pattern
-  --> src/lib.rs:17:9
-   |
-16 |         LispExp::Number(n) => Ok(LispExp::Number(*n)),
-   |         ------------------ matches all the relevant values
-17 |         _ => Err(LispErr::Reason("暂不支持此类型".to_string())),
-   |         ^ no value can reach this
-   |
-   = note: `#[warn(unreachable_patterns)]` (part of `#[warn(unused)]`) on by default
-
 warning: function `eval_str` is never used
-  --> src/lib.rs:21:4
+  --> src/lib.rs:NN:4
    |
-21 | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
+NN | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
    |    ^^^^^^^^
    |
    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
 
-warning: `lisp-rs` (lib) generated 2 warnings
-warning: `lisp-rs` (lib test) generated 1 warning (1 duplicate)
+warning: `lisp-rs` (lib) generated 1 warning
     Finished `test` profile [unoptimized + debuginfo] target(s) in 0.46s
      Running unittests src/lib.rs (target/debug/deps/lisp_rs-5cd87530e74cecce)
 
@@ -1995,10 +1940,9 @@ test tests::test_eval_str_number ... ok
 test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
-> 🧠 **大白话 — 两条警告还在？**
+> 🧠 **大白话 — `dead_code` 警告还在？**
 >
-> 1. **`unreachable pattern`**：`LispExp` 仍只有 `Number`，`_` 仍不可达。等步骤 12 加了 `Symbol` 后消失。
-> 2. **`function 'eval_str' is never used`**：`eval_str` 不是 `pub`，在非测试代码中没人调用它。这两条都是步骤 7-8 的“老朋友”，完全无害。
+> **`function 'eval_str' is never used`**：`eval_str` 不是 `pub`，在非测试代码中没人调用它。这是步骤 8 的“老朋友”，完全无害。
 
 ### 步骤 11: 处理括号
 
@@ -2016,26 +1960,15 @@ fn test_tokenize_parens() {
 `cargo test` → ❌ 测试失败：
 
 ```
-warning: unreachable pattern
-  --> src/lib.rs:17:9
-   |
-16 |         LispExp::Number(n) => Ok(LispExp::Number(*n)),
-   |         ------------------ matches all the relevant values
-17 |         _ => Err(LispErr::Reason("暂不支持此类型".to_string())),
-   |         ^ no value can reach this
-   |
-   = note: `#[warn(unreachable_patterns)]` (part of `#[warn(unused)]`) on by default
-
 warning: function `eval_str` is never used
-  --> src/lib.rs:21:4
+  --> src/lib.rs:NN:4
    |
-21 | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
+NN | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
    |    ^^^^^^^^
    |
    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
 
-warning: `lisp-rs` (lib) generated 2 warnings
-warning: `lisp-rs` (lib test) generated 1 warning (1 duplicate)
+warning: `lisp-rs` (lib) generated 1 warning
     Finished `test` profile [unoptimized + debuginfo] target(s) in 0.46s
      Running unittests src/lib.rs (target/debug/deps/lisp_rs-5cd87530e74cecce)
 
@@ -2081,26 +2014,15 @@ pub fn tokenize(input: &str) -> Vec<String> {
 
 ```bash
 $ cargo test
-warning: unreachable pattern
-  --> src/lib.rs:17:9
-   |
-16 |         LispExp::Number(n) => Ok(LispExp::Number(*n)),
-   |         ------------------ matches all the relevant values
-17 |         _ => Err(LispErr::Reason("暂不支持此类型".to_string())),
-   |         ^ no value can reach this
-   |
-   = note: `#[warn(unreachable_patterns)]` (part of `#[warn(unused)]`) on by default
-
 warning: function `eval_str` is never used
-  --> src/lib.rs:21:4
+  --> src/lib.rs:NN:4
    |
-21 | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
+NN | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
    |    ^^^^^^^^
    |
    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
 
-warning: `lisp-rs` (lib) generated 2 warnings
-warning: `lisp-rs` (lib test) generated 1 warning (1 duplicate)
+warning: `lisp-rs` (lib) generated 1 warning
     Finished `test` profile [unoptimized + debuginfo] target(s) in 0.46s
      Running unittests src/lib.rs (target/debug/deps/lisp_rs-5cd87530e74cecce)
 
@@ -2115,7 +2037,7 @@ test tests::test_eval_str_number ... ok
 test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
-> 🧠 **大白话 — 两条老警告还在，但测试全通过了！** `unreachable pattern` 和 `dead_code` 警告在步骤 12 加入 `Symbol` 变体后会消失一个（`unreachable pattern`），另一个（`dead_code`）要等 `eval_str` 被 `pub` 标记或被非测试代码调用后才消失。
+> 🧠 **大白话 — `dead_code` 警告还在，但测试全通过了！** 这个警告要等 `eval_str` 被 `pub` 标记或被非测试代码调用后才消失。
 
 ---
 
@@ -2211,7 +2133,7 @@ fn test_comment_ignored() {
 > 为什么要学：语法分析器把扁平的 token 列表转换成树状结构 (AST)。这棵树代表程序的语法结构 - 没有它，求值器就没有有意义的输入。递归下降解析是最直观的解析技术，适用于大多数真实语言。
 
 ## 理解单词的意思
-> ⏩ **跳过信号：** 了解递归下降解析？跳到[步骤 16](#步骤-16-创建环境变量名-值的通讯录)。不过步骤 14 的 mermaid 时序图值得看一眼。
+> ⏩ **跳过信号：** 了解递归下降解析？跳到[步骤 16](#步骤-16-创建环境变量名-值的通讯录)。不过步骤 14 的递归解析图值得看一眼。
 
 
 ---
@@ -2240,7 +2162,7 @@ fn test_comment_ignored() {
 
 右键 `src` 文件夹 → **New** → **File**，输入 `parser.rs`。
 
-`lib.rs` 加：`mod parser;`
+`lib.rs` 加：`pub mod parser;`
 
 ```rust
 // src/parser.rs
@@ -2306,7 +2228,13 @@ if let Ok(num) = token.parse::<f64>() {
 >
 > `if let` 就是"我只关心这一种情况的 match"。
 
-但编译需要 `LispExp` 有 `Symbol`！在 `lib.rs` 中加上：
+但编译需要 `LispExp` 有 `Symbol`！这一步我们要完成两件事：给 `LispExp` 加 `Symbol` 变体，然后打通词法分析→语法分析→求值器的完整管线。
+
+---
+
+### 步骤 13: 添加 Symbol 类型, 打通管线
+
+在 `lib.rs` 中加上 `Symbol` 变体：
 
 ```rust
 // src/lib.rs
@@ -2315,6 +2243,29 @@ pub enum LispExp {
     Symbol(String),  // ← 加这个
 }
 ```
+
+同时，`eval` 函数也要更新——`LispExp` 现在有两个变体，但 `eval` 只处理了 `Number`。Rust 的 `match` 要求穷尽所有变体，否则编译报错。我们暂时还不知道怎么求值 `Symbol`（要到[步骤 18](#步骤-18-eval-签名加-env-参数)才能查环境变量），所以先加一个兜底分支：
+
+```rust
+// src/lib.rs — 更新 eval 函数
+pub fn eval(exp: &LispExp) -> Result<LispExp, LispErr> {
+    match exp {
+        LispExp::Number(n) => Ok(LispExp::Number(*n)),
+        _ => Err(LispErr::Reason("暂不支持此类型".to_string())),
+        // ↑ _ = "其他所有情况"（兜底）
+    }
+}
+```
+
+🧠 **大白话 — 为什么现在要加 `_`？**
+
+步骤 7 时 `LispExp` 只有 `Number` 一个变体，`match` 只写 `Number` 就够了，编译器不会报错。现在加了 `Symbol`，如果 `match` 里不处理它，编译器会报：
+
+```text
+error[E0004]: non-exhaustive patterns: `Symbol(_)` not covered
+```
+
+`_` 是通配符，匹配"剩下所有情况"。现在它会匹配 `Symbol`；后面加更多变体（`List`、`Bool` 等）时，`_` 也会自动兜住——不用每次加类型都来改 `eval`。等所有类型都有显式处理后（[步骤 28](#步骤-28-bool-和-nil)），我们会删掉这个兜底分支，改让编译器帮我们检查穷尽性。
 
 **测试 parser**——验证 parse 能区分数字和符号：
 
@@ -2338,9 +2289,9 @@ mod tests {
 ```bash
 $ cargo test
 warning: function `eval_str` is never used
-  --> src/lib.rs:25:4
+  --> src/lib.rs:NN:4
    |
-25 | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
+NN | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
    |    ^^^^^^^^
    |
    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
@@ -2361,7 +2312,7 @@ test tests::test_eval_str_number ... ok
 test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
-> 🧠 **大白话 — `unreachable pattern` 警告消失了！** 加了 `Symbol` 变体后，`_` 不再是死代码——它可以匹配 `Symbol`。只剩 `eval_str` 的 `dead_code` 警告还在。
+> 🧠 **大白话 — `dead_code` 警告还在！** 这一步加了 `Symbol` 变体和 `_` 兜底分支，编译顺利通过。`eval_str` 的 `dead_code` 警告仍在，等它被 `pub` 标记或被非测试代码调用后消失。
 
 ```rust
 // lib.rs 顶部加
@@ -2377,20 +2328,23 @@ fn eval_str(source: &str) -> Result<LispExp, LispErr> {
 ```
 
 ```text
-数据管线:
-"(+ 1 2)" → tokenize → ["(", "+", "1", "2", ")"] → parse → List([Symbol("+"), Number(1.0), Number(2.0)]) → eval → Number(3.0)
+数据管线（以单个原子 "+" 为例）:
+"+" → tokenize → ["+"] → parse → Symbol("+") → eval → Err("暂不支持此类型")
 
 注意: 当前 parse 只能处理单个原子（如 "+" → Symbol("+")），
 列表解析在步骤 14 完成，列表求值在步骤 22 完成。
 但管线已经全线贯通——三个模块各司其职。
+
+预览: 等步骤 14 完成列表解析后，完整管线将是:
+"(+ 1 2)" → tokenize → ["(", "+", "1", "2", ")"] → parse → List([Symbol("+"), Number(1.0), Number(2.0)]) → eval → Number(3.0)
 ```
 
 ```bash
 $ cargo test
 warning: function `eval_str` is never used
-  --> src/lib.rs:25:4
+  --> src/lib.rs:NN:4
    |
-25 | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
+NN | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
    |    ^^^^^^^^
    |
    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
@@ -2486,9 +2440,9 @@ fn read_seq(tokens: &[String]) -> Result<(LispExp, &[String]), LispErr> {
 ```bash
 $ cargo test
 warning: function `eval_str` is never used
-  --> src/lib.rs:25:4
+  --> src/lib.rs:NN:4
    |
-25 | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
+NN | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
    |    ^^^^^^^^
    |
    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
@@ -2509,7 +2463,7 @@ test tests::test_eval_str_number ... ok
 test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
-> 🧠 **大白话 — `unreachable pattern` 警告消失了！** 加了 `Symbol` 变体后，`_` 不再是死代码——它可以匹配 `Symbol`。只剩 `eval_str` 的 `dead_code` 警告还在。
+> 🧠 **大白话 — `dead_code` 警告还在！** 步骤 13 加的 `Symbol` 变体和 `_` 兜底分支让编译通过，`eval_str` 的 `dead_code` 警告仍在——等它被 `pub` 标记或被非测试代码调用后消失。
 
 
 ![parser seq](svgs/parser-seq.svg)
@@ -2560,9 +2514,9 @@ fn test_unexpected_close_error() {
 ```bash
 $ cargo test
 warning: function `eval_str` is never used
-  --> src/lib.rs:25:4
+  --> src/lib.rs:NN:4
    |
-25 | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
+NN | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
    |    ^^^^^^^^
    |
    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
@@ -2837,15 +2791,15 @@ fn test_eval_symbol() {
 > ```text
 > $ cargo test
 > error[E0061]: this function takes 2 arguments but 1 was supplied
->    --> src/lib.rs:55:16
+>    --> src/lib.rs:NN:16
 >     |
->  55 |     let result = eval(&exp).unwrap();
+>  NN |     let result = eval(&exp).unwrap();
 >     |                  ^^^^------ help: add missing argument: `, env`
 >     |
 > note: function defined here
->    --> src/lib.rs:30:1
+>    --> src/lib.rs:NN:1
 >     |
->  30 | pub fn eval(exp: &LispExp, env: &LispEnv) -> Result<LispExp, LispErr> {
+>  NN | pub fn eval(exp: &LispExp, env: &LispEnv) -> Result<LispExp, LispErr> {
 >     | ^^^^^^^^^^^ ---------------------------
 > error: aborting due to 3 previous errors
 > ```
@@ -2914,6 +2868,7 @@ env.set("x".into(), LispExp::Number(1.0));
 env.set("x".into(), LispExp::Number(2.0));
 assert_eq!(env.get("x").unwrap(), LispExp::Number(2.0)); // 2, 不是 1
 ```
+</details>
 
 > 🧠 **停下来思考**
 >
@@ -2926,7 +2881,6 @@ assert_eq!(env.get("x").unwrap(), LispExp::Number(2.0)); // 2, 不是 1
 >
 > 在运行代码之前，先想清楚：`y` 的值是什么？为什么？这和 Rust 的 `let y = x` 行为一致吗？
 > 提示：在我们的实现中，`define` 和 `set!` 是怎么存储值的？
-</details>
 
 
 
@@ -3187,10 +3141,10 @@ if args.len() == 1 {
 
 **3. (+ 1 2 3 4 5)**
 能正确计算为 15。`+` 函数遍历所有参数求和（`filter_map` + `sum`），天然支持任意数量参数。
+</details>
 
 > 4. (⭐⭐⭐) **先预测再验证**：在我们的 Lisp 中调用 `(+ 1 "hello")` 会发生什么？
 >    写下你预测的结果。提示：看看我们的算术函数是怎么处理类型检查的。有类型检查吗？
-      </details>
 
 
 
@@ -5124,6 +5078,7 @@ eval → lambda调用 → eval → lambda调用 → eval → ... → 💥 栈溢
 
 **3. 没有 TCO 时**
 每次递归调用会在 Rust 调用栈上分配新帧。`(loop 1000)` 可能还撑得住（取决于栈大小），`(loop 10000)` 必定 crash。TCO 蹦床循环通过 `current_exp = new_exp; continue` 复用同一帧，不增长栈。
+</details>
 
 > 4. (⭐⭐⭐) **先思考再运行**：
 >    ```lisp
@@ -5134,7 +5089,6 @@ eval → lambda调用 → eval → lambda调用 → eval → ... → 💥 栈溢
 >    ```
 >    `(f)` 返回什么？先写下你的推理，再实际测试。你答对了吗？现在把 `a` 的定义从 `define`
 >    改成 `let`，结果会变吗？为什么？
-      </details>
 
 
 
@@ -5880,7 +5834,7 @@ lisp-rs/
 ---
 
 > 🏋️ **练习**
-> 1. (⭐) 运行 `cargo run --example bench --release`，记录你的电脑上的 TCO 和阶乘基准数据
+> 1. (⭐) 运行 `cargo run --release` 启动 REPL，然后输入 `(define loop (lambda (n) (if (= n 0) "done" (loop (- n 1)))))` 和 `(loop 1000000)`，观察 TCO 效果
 > 2. (⭐⭐) 在 `interner.rs` 的 `intern()` 函数里加一个计数器，统计总共驻留了多少个不同的符号
 
 
@@ -7861,10 +7815,11 @@ fn test_closure() {
 而 `cargo test` 验证它确实做到了。添加功能时的标准流程是：
 **测试先行 → 实现 → 验证 → 文档化**。
 
-我们的 173 个测试覆盖：
-- **词法分析器**（20 个）——所有 token 类型、边界情况（空输入、注释）
-- **语法分析器**（25 个）——嵌套列表、原子类型、错误处理
-- **求值器**（128 个）——所有特殊形式、内置函数、闭包、TCO
+我们的 42 个测试覆盖：
+- **词法分析器**（7 个）——所有 token 类型、边界情况（空输入、注释）
+- **语法分析器**（3 个）——嵌套列表、原子类型、错误处理
+- **环境**（3 个）——变量存取、未定义查找
+- **求值器**（29 个）——所有特殊形式、内置函数、闭包、TCO
 
 测试数量不是偶然的——因为教程的每一行都有具体、可运行的例子支撑。
 
@@ -8004,7 +7959,7 @@ fn test_closure() {
 
 > **费曼检验**：把这 74 步讲给你完全不懂编程的朋友听。如果每一步他都能点头说"哦，原来是这样"——你就成功了。
 
-> **运行验证**: `cargo test` (173 个测试), `cargo run` (交互 REPL)
+> **运行验证**: `cargo test` (42 个测试), `cargo run` (交互 REPL)
 
 ---
 
