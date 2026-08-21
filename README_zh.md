@@ -1991,6 +1991,10 @@ assertion `left == right` failed
 ```rust
 // src/lexer.rs
 pub fn tokenize(input: &str) -> Vec<String> {
+    // 注意：replace 返回的是新的 String（不是 &str），
+    // split_whitespace 的 &str 引用的是这个临时 String。
+    // 因此必须用 .map(|s| s.to_string()) 将每个 &str 转换为拥有所有权的 String，
+    // 否则引用会在语句结束时悬垂。步骤 42 的零拷贝版本会消除这个分配。
     input
         .replace("(", " ( ")   // 每个 "(" → " ( "
         .replace(")", " ) ")   // 每个 ")" → " ) "
@@ -3453,6 +3457,7 @@ LispExp::List(elements) => {
     // 用 && 合并条件，避免嵌套 if（Clippy 会警告 collapsible_if）
     if let LispExp::Symbol(s) = &elements[0]
         && s == "if"
+        && elements.len() == 4
     {
         // (if 条件 真分支 假分支)
         let cond = eval(&elements[1], env)?;
@@ -3547,8 +3552,8 @@ if s == "if" {
 }
 
 // ========== 新增：define 特殊形式 ==========
-if s == "define" {
-    // (define 变量名 值)
+if s == "define" && elements.len() == 3 {
+    // (define 变量名 值) — 共 3 个元素
     if let LispExp::Symbol(name) = &elements[1] {
         let value = eval(&elements[2], env)?;   // 求值
         env.set(name.clone(), value);           // &mut env → 可以写入！
@@ -3769,8 +3774,8 @@ if s == "define" {
 }
 
 // ========== 新增：lambda 特殊形式 ==========
-if s == "lambda" {
-    // (lambda (参数列表) 函数体)
+if s == "lambda" && elements.len() >= 3 {
+    // (lambda (参数列表) 函数体) — 至少 3 个元素
     let params: Vec<String> = match &elements[1] {
         LispExp::List(param_list) => param_list
             .iter()
@@ -5164,7 +5169,7 @@ pub fn eval(exp: &LispExp, env: &mut LispEnv) -> Result<LispExp, LispErr> {
                     }
 
                     // ---- define（支持递归定义）----
-                    if sym == "define" {
+                    if sym == "define" && elements.len() == 3 {
                         if let LispExp::Symbol(name) = &elements[1] {
                             // ★ 用 Rc 共享环境：让闭包能"看到"自己
                             let shared_env = Rc::new(RefCell::new(
@@ -5192,7 +5197,7 @@ pub fn eval(exp: &LispExp, env: &mut LispEnv) -> Result<LispExp, LispErr> {
                     }
 
                     // ---- lambda ----
-                    if sym == "lambda" {
+                    if sym == "lambda" && elements.len() >= 3 {
                         // 解析参数（同旧版逻辑）
                         let params: Vec<String> = match &elements[1] {
                             LispExp::List(pl) => pl.iter().map(|p| {
@@ -5250,6 +5255,8 @@ pub fn eval(exp: &LispExp, env: &mut LispEnv) -> Result<LispExp, LispErr> {
 ```
 
 🧠 **大白话 — `mem::take`**：把 `env` 的值"偷走"，原地留下一个空壳。整个循环期间我们用 `current_env` 操作，最后通过 `*env = current_env` 把环境还回去。就像借书——拿了走，看完还。
+
+> 💡 **嵌套 `eval` 调用的安全性**：TCO 循环内部会调用 `eval(&elements[0], &mut current_env)` 等嵌套求值。每次嵌套 `eval` 也会 `std::mem::take(&mut current_env)` 偷走环境，但在返回时通过 `*env = current_env` 恢复。即使嵌套 `eval` 通过 `?` 提前返回错误，错误会向上传播，外层不再使用 `current_env`，因此状态不会被破坏。这是 `mem::take` + 恢复机制的核心安全保障。
 
 **TCO 核心规律（记住这两条就够了）**：
 
@@ -5632,7 +5639,8 @@ pub fn tokenize(input: &str) -> Vec<&str> {
                 // 普通 token（数字或符号名）
                 let start = i;
                 while let Some((_, c)) = chars.peek() {
-                    if c.is_whitespace() || *c == '(' || *c == ')' { break; }
+                    if c.is_whitespace() || *c == '(' || *c == ')'
+                        || *c == '\'' || *c == '"' { break; }
                     chars.next();
                 }
                 // ✅ 修复：用 input.len() 而非 input.len()-1（空字符串时下溢 panic）
@@ -5942,6 +5950,8 @@ fn intern(&mut self, s: &str) -> u64 {
 
 > 📁 **从现在起，所有修改 `eval` 的代码都写在 `src/interpreter.rs` 里**（上一步刚创建的）。类型定义仍在 `lib.rs`，内置函数注册仍在 `default_env()`（也在 `interpreter.rs` 里）。
 
+> 📌 **`PredefinedSyms` 结构体**：从本步骤起，特殊形式的关键字（`if`、`define`、`lambda`、`begin` 等）通过 `predefined()` 函数获取预驻留的 `u64` ID，避免每次比较都调用 `interner::intern()`。`PredefinedSyms` 结构体和 `predefined()` 函数定义在 `src/interner.rs` 中（步骤 40 创建的文件），包含所有特殊形式符号的预驻留 ID。使用方式：`predefined().begin`、`predefined().let_sym` 等。
+
 **目标**: `(begin (define x 10) (+ x 5))` → `15`。
 
 **测试**（加到测试模块）:
@@ -6053,6 +6063,8 @@ test result: ok. 28 passed; 0 failed
 ---
 
 ### 步骤 46: let — 局部绑定
+
+> 📌 **前置依赖**：`let` 的多表达式 body 会被脱糖为 `begin`（步骤 44）。请确保 `begin` 已实现。
 
 **目标**: `(let ((x 1) (y 2)) (+ x y))` → `3`。
 
@@ -7326,7 +7338,10 @@ fn qq_expand(exp: &LispExp, p: &PredefinedSyms) -> LispExp {
                         }
                         if *s == p.unquote_splicing {
                             // ,@x 不能出现在列表头部（它只能在列表元素位置拼接）
-                            // 处理方式见下方的列表构建逻辑
+                            // 此处不做特殊处理，继续走普通列表构建逻辑。
+                            // 注意：标准 Lisp 中 ,@ 在头部是未定义行为，
+                            // 本实现会将其作为普通元素处理，可能产生意外结果。
+                            // 建议避免在列表头部使用 ,@。
                         }
                     }
                 }

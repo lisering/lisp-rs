@@ -2111,6 +2111,11 @@ Parentheses are stuck to the words next to them! `(+` became one token, and `2)`
 ```rust
 // src/lexer.rs
 pub fn tokenize(input: &str) -> Vec<String> {
+    // Note: replace returns a new String (not &str).
+    // split_whitespace returns &str slices referencing that temporary String.
+    // Therefore we must use .map(|s| s.to_string()) to convert each &str
+    // into an owned String, otherwise the references would dangle.
+    // Step 42's zero-copy version eliminates this allocation.
     input
         .replace("(", " ( ")   // each "(" → " ( "
         .replace(")", " ) ")   // each ")" → " ) "
@@ -3543,7 +3548,7 @@ LispExp::List(elements) => {
     // ========== New: Special form check ==========
     // First check if the first element is a symbol, if so check if it's a special form
     if let LispExp::Symbol(s) = &elements[0] {
-        if s == "if" {
+        if s == "if" && elements.len() == 4 {
             // (if condition true-branch false-branch)
             let cond = eval(&elements[1], env)?;
             // Only #f and nil are "false", everything else is "true"
@@ -3631,8 +3636,8 @@ if s == "if" {
 }
 
 // ========== New: define special form ==========
-if s == "define" {
-    // (define variable-name value)
+if s == "define" && elements.len() == 3 {
+    // (define variable-name value) — 3 elements total
     if let LispExp::Symbol(name) = &elements[1] {
         let value = eval(&elements[2], env)?;   // evaluate
         env.set(name.clone(), value);           // &mut env → can write!
@@ -3855,8 +3860,8 @@ if s == "define" {
 }
 
 // ========== New: lambda special form ==========
-if s == "lambda" {
-    // (lambda (parameter-list) function-body)
+if s == "lambda" && elements.len() >= 3 {
+    // (lambda (parameter-list) function-body) — at least 3 elements
     let params: Vec<String> = match &elements[1] {
         LispExp::List(param_list) => param_list
             .iter()
@@ -5163,7 +5168,7 @@ pub fn eval(exp: &LispExp, env: &mut LispEnv) -> Result<LispExp, LispErr> {
                     }
 
                     // ---- define (supports recursive definition) ----
-                    if sym == "define" {
+                    if sym == "define" && elements.len() == 3 {
                         if let LispExp::Symbol(name) = &elements[1] {
                             // Use Rc to share environment: let closures "see" themselves
                             let shared_env = Rc::new(RefCell::new(
@@ -5191,7 +5196,7 @@ pub fn eval(exp: &LispExp, env: &mut LispEnv) -> Result<LispExp, LispErr> {
                     }
 
                     // ---- lambda ----
-                    if sym == "lambda" {
+                    if sym == "lambda" && elements.len() >= 3 {
                         // Parse parameters (same as old logic)
                         let params: Vec<String> = match &elements[1] {
                             LispExp::List(pl) => pl.iter().map(|p| {
@@ -5249,6 +5254,8 @@ pub fn eval(exp: &LispExp, env: &mut LispEnv) -> Result<LispExp, LispErr> {
 ```
 
 💡 In short — `mem::take` swaps the value out, leaving an empty default behind. We work with `current_env` during the loop, then put the real env back with `*env = current_env`. Borrow a book, read it, return it.
+
+> 💡 **Safety of nested `eval` calls**: The TCO loop internally calls `eval(&elements[0], &mut current_env)` for nested evaluation. Each nested `eval` also does `std::mem::take(&mut current_env)` to take the environment, but restores it via `*env = current_env` on return. Even if a nested `eval` returns early via `?` (error), the error propagates upward and the outer code no longer uses `current_env`, so state is not corrupted. This is the core safety guarantee of the `mem::take` + restore mechanism.
 
 **TCO core rules (just remember these two)**:
 
@@ -5673,7 +5680,8 @@ pub fn tokenize(input: &str) -> Vec<&str> {
                 // Regular token (number or symbol name)
                 let start = i;
                 while let Some((_, c)) = chars.peek() {
-                    if c.is_whitespace() || *c == '(' || *c == ')' { break; }
+                    if c.is_whitespace() || *c == '(' || *c == ')'
+                        || *c == '\'' || *c == '"' { break; }
                     chars.next();
                 }
                 // ✅ Fix: use input.len() instead of input.len()-1 (underflow panic on empty string)
@@ -5979,6 +5987,8 @@ fn intern(&mut self, s: &str) -> u64 {
 
 > **From now on, all code modifying `eval` goes in `src/interpreter.rs`** (created in the previous step). Type definitions remain in `lib.rs`, built-in function registration remains in `default_env()` (also in `interpreter.rs`).
 
+> 📌 **`PredefinedSyms` struct**: From this step onward, special form keywords (`if`, `define`, `lambda`, `begin`, etc.) are accessed via the `predefined()` function which returns pre-interned `u64` IDs, avoiding repeated `interner::intern()` calls. The `PredefinedSyms` struct and `predefined()` function are defined in `src/interner.rs` (created in Step 40), containing pre-interned IDs for all special form symbols. Usage: `predefined().begin`, `predefined().let_sym`, etc.
+
 **Goal**: `(begin (define x 10) (+ x 5))` → `15`.
 
 **Test** (add to test module):
@@ -6090,6 +6100,8 @@ test result: ok. 28 passed; 0 failed
 ---
 
 ### Step 46: let — Local Bindings
+
+> 📌 **Prerequisite**: `let`'s multi-expression body is desugared to `begin` (Step 44). Make sure `begin` is implemented first.
 
 **Goal**: `(let ((x 1) (y 2)) (+ x y))` → `3`.
 
@@ -7346,8 +7358,11 @@ fn qq_expand(exp: &LispExp, p: &PredefinedSyms) -> LispExp {
                             return inner[1].clone();
                         }
                         if *s == p.unquote_splicing {
-                            // ,@x can't appear at list head (it can only splice in element position)
-                            // Handled in the list-building logic below
+                            // ,@x cannot appear at list head (it can only splice in element position)
+                            // No special handling here, falls through to normal list-building logic.
+                            // Note: ,@ at list head is undefined behavior in standard Lisp.
+                            // This implementation treats it as a regular element, which may
+                            // produce unexpected results. Avoid using ,@ at list head.
                         }
                     }
                 }
