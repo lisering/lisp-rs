@@ -26,11 +26,11 @@ You don't have to read everything. Pick the lane that fits you:
 
 | If you... | Start at | Time to first code |
 |-----------|----------|-------------------|
-| Have **never programmed before** | [What We're Building](#what-were-building) | ~15 minutes |
-| Know **Python/JS/Java but not Rust** | [Step 5: Define the Number type](#step-5-define-the-number-type-number) | ~5 minutes |
+| Have **never programmed before** | [What We're Building](#what-were-building) | approx. 15 minutes |
+| Know **Python/JS/Java but not Rust** | [Step 5: Define the Number type](#step-5-define-the-number-type-number) | approx. 5 minutes |
 | Know **Rust basics** (enum, match, HashMap) | [Step 9: Create lexer.rs](#step-9-create-a-new-file) | Right away |
-| Have **written an interpreter before** | Skim to [Step 37: Closures](#step-37-lambda-captures-environment-implementing-true-closures) and [Step 39: TCO](#step-39-tco-trampoline-loop-implementation) | ~30 minutes |
-| Just want to see **how closures are implemented** | Jump to [Step 37: Closures](#step-37-lambda-captures-environment-implementing-true-closures) | ~10 minutes |
+| Have **written an interpreter before** | Skim to [Step 37: Closures](#step-37-lambda-captures-environment-implementing-true-closures) and [Step 39: TCO](#step-39-tco-trampoline-loop-implementation) | approx. 30 minutes |
+| Just want to see **how closures are implemented** | Jump to [Step 37: Closures](#step-37-lambda-captures-environment-implementing-true-closures) | approx. 10 minutes |
 
 **Already built something like this?** You might still find something new here: the backpack-closure trace (Step 37), the trampoline-loop TCO walkthrough (Step 39), and the three teaching-focused optimization passes (Steps 40–43). Everything else you can skim.
 
@@ -839,7 +839,7 @@ If you've heard of these, here's where this tutorial fits:
 
 | Language | Evaluation | Scope | TCO | Mutability | Notable |
 |----------|-----------|-------|-----|------------|---------|
-| **Our Lisp** | Applicative order | Lexical (Rc<RefCell>) | ✅ Trampoline | `set!` limited | Zero deps, ~2K LOC (incl. tests) |
+| **Our Lisp** | Applicative order | Lexical (Rc<RefCell>) | ✅ Trampoline | `set!` limited | Zero deps, approx. 2K LOC (incl. tests) |
 | **Scheme (R7RS)** | Applicative order | Lexical | ✅ Required | `set!` limited | Hygienic macros |
 | **Common Lisp** | Applicative order | Lexical + Dynamic | ✅ Optional | Many mutators | CLOS, condition system |
 | **Clojure** | Applicative order | Lexical | ✅ JVM-level | Persistent collections | JVM interop, STM |
@@ -1125,14 +1125,14 @@ Rust's integer types are very rich—more than most languages:
 
 | Type | Meaning | Range | Use Case |
 |------|--------|-------|---------|
-| `u8` | unsigned 8-bit | 0 ~ 255 (2⁸−1) | Color values (RGB 0-255 each), small numbers |
-| `u16` | unsigned 16-bit | 0 ~ 65,535 (2¹⁶−1) | Unicode characters |
-| `u32` | unsigned 32-bit | 0 ~ 4,294,967,295 (~4.3 billion, 2³²−1) | File sizes |
-| `u64` | unsigned 64-bit | 0 ~ 18,446,744,073,709,551,615 (~1.84×10¹⁹) | Large numbers, timestamps |
+| `u8` | unsigned 8-bit | 0–255 (2⁸−1) | Color values (RGB 0-255 each), small numbers |
+| `u16` | unsigned 16-bit | 0–65,535 (2¹⁶−1) | Unicode characters |
+| `u32` | unsigned 32-bit | 0–4,294,967,295 (approx. 4.3 billion, 2³²−1) | File sizes |
+| `u64` | unsigned 64-bit | 0–18,446,744,073,709,551,615 (approx. 1.84×10¹⁹) | Large numbers, timestamps |
 | `usize` | pointer-sized (32/64-bit) | Depends on architecture (32-bit = u32, 64-bit = u64) | **Array/vector lengths, indices** |
-| `i8` | **signed** 8-bit | −128 ~ 127 (−2⁷ ~ 2⁷−1) | Small range, can be negative |
-| `i32` | **signed** 32-bit | −2,147,483,648 ~ 2,147,483,647 (~±2.1 billion) | **Default integer type** |
-| `i64` | **signed** 64-bit | −9,223,372,036,854,775,808 ~ 9,223,372,036,854,775,807 (~±9.2×10¹⁸) | When large integers are needed |
+| `i8` | **signed** 8-bit | −128 – 127 (−2⁷ – 2⁷−1) | Small range, can be negative |
+| `i32` | **signed** 32-bit | −2,147,483,648 – 2,147,483,647 (approx. ±2.1 billion) | **Default integer type** |
+| `i64` | **signed** 64-bit | −9,223,372,036,854,775,808 – 9,223,372,036,854,775,807 (approx. ±9.2×10¹⁸) | When large integers are needed |
 | `isize` | pointer-sized signed | Depends on architecture (32-bit = i32, 64-bit = i64) | Memory difference calculations |
 
 **Naming convention**: `u` = unsigned (only positive), `i` = signed (can be positive or negative), the number = **bits** of storage.
@@ -1159,8 +1159,8 @@ Compare to Python: Python integers can be arbitrarily large (auto-expand), but e
 
 | Type | Bits | Precision | Use Case |
 |------|------|----------|---------|
-| `f32` | 32-bit | ~7 decimal digits | Graphics, AI models |
-| `f64` | 64-bit | ~15 decimal digits | **General computation (default)** |
+| `f32` | 32-bit | approx. 7 decimal digits | Graphics, AI models |
+| `f64` | 64-bit | approx. 15 decimal digits | **General computation (default)** |
 
 `f` = float, the number = bits. `f64` is Rust's **default float type**—when you write `let x = 3.14`, Rust automatically infers it as `f64`.
 
@@ -1346,8 +1346,8 @@ Rust has two float types:
 
 | Type | Bits | Precision | Use Case |
 |------|------|----------|---------|
-| `f32` | 32-bit | ~7 decimal places | Graphics, memory saving |
-| `f64` | 64-bit | ~15 decimal places | **General computation (default)** |
+| `f32` | 32-bit | approx. 7 decimal places | Graphics, memory saving |
+| `f64` | 64-bit | approx. 15 decimal places | **General computation (default)** |
 
 Why choose `f64`? Because modern CPUs process `f64` and `f32` at almost the same speed, but `f64` has twice the precision. Lisp's numeric calculations need precision, so we use `f64`.
 
@@ -4197,10 +4197,10 @@ Step 35 end-of-step project status:
 ```
 lisp-rs/
 ├── src/
-│   ├── lib.rs      (~220 lines) — LispExp, LispErr, eval, default_env, tests
-│   ├── lexer.rs    (~20 lines)  — tokenize()
-│   ├── parser.rs   (~60 lines)  — parse() + read_seq()
-│   └── env.rs      (~40 lines)  — LispEnv { data, outer }
+│   ├── lib.rs      (approx. 220 lines) — LispExp, LispErr, eval, default_env, tests
+│   ├── lexer.rs    (approx. 20 lines)  — tokenize()
+│   ├── parser.rs   (approx. 60 lines)  — parse() + read_seq()
+│   └── env.rs      (approx. 40 lines)  — LispEnv { data, outer }
 ```
 
 **Supported special forms**: ✅ `if` ✅ `define` ✅ `lambda` (create + call)
@@ -5858,12 +5858,12 @@ Step 43 end-of-step project status:
 ```
 lisp-rs/
 ├── src/
-│   ├── lib.rs         (~200 lines) — core types + module declarations
-│   ├── lexer.rs       (~60 lines)  — tokenize() zero-copy
-│   ├── parser.rs      (~60 lines)  — parse() + read_seq()
-│   ├── env.rs         (~55 lines)  — LispEnv + FxHasher
-│   ├── interner.rs    (~30 lines)  — string interner
-│   └── interpreter.rs (~200 lines) — eval + default_env  ← new!
+│   ├── lib.rs         (approx. 200 lines) — core types + module declarations
+│   ├── lexer.rs       (approx. 60 lines)  — tokenize() zero-copy
+│   ├── parser.rs      (approx. 60 lines)  — parse() + read_seq()
+│   ├── env.rs         (approx. 55 lines)  — LispEnv + FxHasher
+│   ├── interner.rs    (approx. 30 lines)  — string interner
+│   └── interpreter.rs (approx. 200 lines) — eval + default_env  ← new!
 ```
 
 **Completed optimizations**:
@@ -8058,7 +8058,7 @@ Steps 52-74: Built-in Functions + REPL
 
 ## Appendix D: Complete Program Example — Symbolic Differentiator
 
-After 74 steps you've built an interpreter — what can you do with it? Here's a ~30-line Lisp program that differentiates mathematical expressions:
+After 74 steps you've built an interpreter — what can you do with it? Here's an approx. 30-line Lisp program that differentiates mathematical expressions:
 
 ```lisp
 ; Symbolic differentiator — run it on your own interpreter!
@@ -8084,8 +8084,9 @@ After 74 steps you've built an interpreter — what can you do with it? Here's a
 (deriv expr 'x)
 ; → (+ (* 2 (expt x 1) 1) (+ (* 0 x) (* 2 1)) 0)
 ; simplified: (+ (* 2 x) 2)
+```
 
-🎯 **This shows the power of Lisp**: With your own interpreter, your own language, ~30 lines of code — you can do symbolic computation. And you wrote every line of it yourself.
+🎯 **This shows the power of Lisp**: With your own interpreter, your own language, approx. 30 lines of code — you can do symbolic computation. And you wrote every line of it yourself.
 
 💡 **Prerequisite functions**: This program uses `cadr` (second element) and `caddr` (third element) — defined in Step 58b. If you haven't implemented them yet, add them first.
 
