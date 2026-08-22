@@ -12,7 +12,7 @@
 
 # Building a Lisp Interpreter from Scratch — Rust Hands-On Tutorial
 
-> **Zero knowledge required. Zero dependencies.** 74 steps. 42 tests. One working Lisp interpreter at the end. Each step first explains **what problem to solve**, then writes the code.
+**Zero knowledge required. Zero dependencies.** 74 steps. 42 tests. One working Lisp interpreter at the end. Each step first explains **what problem to solve**, then writes the code.
 
 ### TCO in action — 1,000,000 iterations vs. stack overflow
 
@@ -32,7 +32,7 @@ You don't have to read everything. Pick the lane that fits you:
 | Have **written an interpreter before** | Skim to [Step 37: Closures](#step-37-lambda-captures-environment-implementing-true-closures) and [Step 39: TCO](#step-39-tco-trampoline-loop-implementation) | ~30 minutes |
 | Just want to see **how closures are implemented** | Jump to [Step 37: Closures](#step-37-lambda-captures-environment-implementing-true-closures) | ~10 minutes |
 
-> **Already built something like this?** You might still find something new here: the backpack-closure trace (Step 37), the trampoline-loop TCO walkthrough (Step 39), and the three teaching-focused optimization passes (Steps 40–43). Everything else you can skim.
+**Already built something like this?** You might still find something new here: the backpack-closure trace (Step 37), the trampoline-loop TCO walkthrough (Step 39), and the three teaching-focused optimization passes (Steps 40–43). Everything else you can skim.
 
 ---
 
@@ -65,7 +65,7 @@ Programming is **telling a computer what to do**. But you can't just speak to it
 
 The catch is, the computer's native language is **0 and 1** (machine code), which no normal person can read. So someone invented a middleman: you write code in a **human-readable language**, and an **interpreter** (that's what we're about to build) translates it into something the computer can execute.
 
-> 💡 In short: You write the recipe for spaghetti bolognese. The interpreter is the chef who reads it and actually cooks the dish.
+💡 In short: You write the recipe for spaghetti bolognese. The interpreter is the chef who reads it and actually cooks the dish.
 
 ---
 
@@ -87,7 +87,7 @@ This isn't just being different for the sake of it. Lisp's core idea is: **code 
 
 Look at `(+ x 1)` above—it's both a piece of "code" (telling the computer to add 1 to x) and a "list" (three things: `+`, `x`, `1` arranged together). Later you'll see this gives it a flexibility that other languages can't match.
 
-> 💡 In short: Other languages give you a fixed recipe book. Lisp gives you a kitchen — you can rewrite the recipe as you go. That's why they call it "the programmable programming language."
+💡 In short: Other languages give you a fixed recipe book. Lisp gives you a kitchen — you can rewrite the recipe as you go. That's why they call it "the programmable programming language."
 
 ---
 
@@ -110,7 +110,7 @@ The inner list is computed first, then the result is used by the outer one—lik
 
 That's it. You read that right—the entire syntax of the Lisp language, fully explained right here.
 
-> 💡 Why "Lisp"? The name mashes **Lis**t + **P**rocessing together — a syllabic abbreviation, not a letter-by-letter acronym like "HTTP". Early papers wrote LISP in all caps; modern style uses **Lisp**. The name says what it does: a language designed for processing lists.
+💡 Why "Lisp"? The name mashes **Lis**t + **P**rocessing together — a syllabic abbreviation, not a letter-by-letter acronym like "HTTP". Early papers wrote LISP in all caps; modern style uses **Lisp**. The name says what it does: a language designed for processing lists.
 
 
 
@@ -179,7 +179,7 @@ Call Process:
   2 Compute (* 12 12) → 144
 ```
 
-> 💡 In short: `lambda` is designing a machine on paper — you haven't built it yet. `(square 5)` means "build the machine from that blueprint, feed it 5, and return the output." Unlike a recipe (just instructions), a `lambda` is a **value** — you can store it in a variable, pass it to another function, or return it. Lambda produces a thing, not just directions.
+💡 In short: `lambda` is designing a machine on paper — you haven't built it yet. `(square 5)` means "build the machine from that blueprint, feed it 5, and return the output." Unlike a recipe (just instructions), a `lambda` is a **value** — you can store it in a variable, pass it to another function, or return it. Lambda produces a thing, not just directions.
 
 **2 Recursion (Lisp has no loops, only functions calling themselves)**
 
@@ -424,7 +424,7 @@ Algebraic expansion perspective (same process, expressed as formulas):
   = 120                                    ← compute backwards: 5×24=120
 ```
 
-> 💡 In short: Recursion breaks a big problem into smaller copies of itself. Can't compute 5! directly? Compute 4! and multiply by 5. Can't compute 4!? Ask further down... until you hit 1! = 1 (the base case), then climb back up.
+💡 In short: Recursion breaks a big problem into smaller copies of itself. Can't compute 5! directly? Compute 4! and multiply by 5. Can't compute 4!? Ask further down... until you hit 1! = 1 (the base case), then climb back up.
 
 **3 Closures (functions "remember" the environment they were born in)**
 
@@ -442,9 +442,9 @@ Algebraic expansion perspective (same process, expressed as formulas):
 
 `make-counter` returns a function that "remembers" the initial value of `start`. Each time you call it, `start` goes up by 1. This ability for "a function to package up external variables" is called a **closure**—one of the concepts Lisp first introduced.
 
-> `counter` is just the name we gave to the function returned by `(make-counter 0)` — it carries a backpack 🎒 containing `start=0`. Every `(counter)` call opens that same backpack.
+`counter` is just the name we gave to the function returned by `(make-counter 0)` — it carries a backpack 🎒 containing `start=0`. Every `(counter)` call opens that same backpack.
 
-> ⚡ **What's `set!`? And why didn't factorial need it?** — Pronounced "set-bang." `set!` modifies an existing variable; `define` creates a new one (think: labeling a new locker vs. swapping what's inside an existing one). Factorial creates fresh parameters with each recursive call, so it never needs to mutate. Counter's inner lambda has no parameters — the only way to change `start` is `set!`, reaching directly into the backpack. Using `define` would just create a local shadow, leaving the backpack untouched.
+⚡ **What's `set!`? And why didn't factorial need it?** — Pronounced "set-bang." `set!` modifies an existing variable; `define` creates a new one (think: labeling a new locker vs. swapping what's inside an existing one). Factorial creates fresh parameters with each recursive call, so it never needs to mutate. Counter's inner lambda has no parameters — the only way to change `start` is `set!`, reaching directly into the backpack. Using `define` would just create a local shadow, leaving the backpack untouched.
 
 Let's **break it down like nesting dolls**, step by step, to see what actually happens.
 
@@ -492,7 +492,7 @@ make-counter itself:
 
 ![make counter en](svgs/make-counter-en.svg)
 
-> ⚠️ **Heads-up**: make-counter's body is itself a lambda! Calling make-counter returns that inner lambda, not a number.
+⚠️ **Heads-up**: make-counter's body is itself a lambda! Calling make-counter returns that inner lambda, not a number.
 
 ---
 
@@ -674,9 +674,9 @@ Each call:
                                └── start updated by set!: 0→1→2→3
 ```
 
-> 💡 **In plain English**: A closure captures its birth environment like a **shared whiteboard** — every closure created in the same scope sees the same board. `set!` writes on that whiteboard, and all closures that share it see the change instantly. It's not a snapshot (frozen in time) — it's a live link. That's why we call it the backpack 🎒: each backpack contains live references, not photocopies.
+💡 **In plain English**: A closure captures its birth environment like a **shared whiteboard** — every closure created in the same scope sees the same board. `set!` writes on that whiteboard, and all closures that share it see the change instantly. It's not a snapshot (frozen in time) — it's a live link. That's why we call it the backpack 🎒: each backpack contains live references, not photocopies.
 
-> 📝 **Terminology note**: What we've been calling the "backpack" 🎒 and "notepad" is called a **CallFrame** (or stack frame) in CS. The rest of the tutorial uses CallFrame — just remember the backpack idea.
+📝 **Terminology note**: What we've been calling the "backpack" 🎒 and "notepad" is called a **CallFrame** (or stack frame) in CS. The rest of the tutorial uses CallFrame — just remember the backpack idea.
 
 **4 Functions are values too (higher-order functions)**
 
@@ -813,7 +813,7 @@ Can evaluate numbers
 | Steps 52-74 | **A fully interactive REPL** | `cargo run` → type Lisp code |
 
 
-> **The diagram above is the skeleton of the entire project** — source code enters from the left, passes through four stages, and comes out the right as the computed result. The 74 steps ahead flesh out these four stages in detail.
+**The diagram above is the skeleton of the entire project** — source code enters from the left, passes through four stages, and comes out the right as the computed result. The 74 steps ahead flesh out these four stages in detail.
 
 ![pipeline en](svgs/pipeline-en.svg)
 
@@ -830,7 +830,7 @@ If you've heard of these, here's where this tutorial fits:
 | [*mal - Make a Lisp*](https://github.com/kanaka/mal) (Kanaka) | 80+ languages | Intermediate programmers | mal gives you test cases with zero explanation. This tutorial gives you the *why* behind every step — not just what to write, but why it works |
 | [*Write Yourself a Scheme*](https://en.wikibooks.org/wiki/Write_Yourself_a_Scheme_in_48_Hours) | Haskell | Haskell programmers | 48 hours is a sprint. This tutorial is 74 paced steps — you can stop at any point, run `cargo test`, and everything works |
 
-> **Bottom line:** If *Crafting Interpreters* is the graduate-level course, this tutorial is the undergraduate intro — same subject (building an interpreter), same method (TDD, testable milestones, diagrams), but starting from "what's a terminal?"
+**Bottom line:** If *Crafting Interpreters* is the graduate-level course, this tutorial is the undergraduate intro — same subject (building an interpreter), same method (TDD, testable milestones, diagrams), but starting from "what's a terminal?"
 
 ---
 
@@ -860,10 +860,10 @@ A production Lisp implementation. It's a teaching interpreter — tree-walking `
 
 
 ## Preparation
-> ⏩ **Skip signal:** Already have Rust and an IDE installed? Jump to [Step 5](#step-5-define-the-number-type-number).
+⏩ **Skip signal:** Already have Rust and an IDE installed? Jump to [Step 5](#step-5-define-the-number-type-number).
 
 
-> Why this matters: Before you can build an interpreter, you need a working Rust environment. This setup is the same foundation professional Rust developers use every day - get it right once, and everything else follows smoothly.
+Why this matters: Before you can build an interpreter, you need a working Rust environment. This setup is the same foundation professional Rust developers use every day - get it right once, and everything else follows smoothly.
 
 ---
 
@@ -944,7 +944,7 @@ Open RustRover, click **"New Project"**, and you'll see the creation dialog. The
   ✅ .../rust-learning/lisp-rs
 ```
 
-> Leave "Toolchain version" (auto-detected) and "Standard Library" path as-is.
+Leave "Toolchain version" (auto-detected) and "Standard Library" path as-is.
 
 **3 Right: Select template.** On the right is the **"Project Template"** radio group:
 
@@ -953,7 +953,7 @@ Open RustRover, click **"New Project"**, and you'll see the creation dialog. The
 - `Procedural Macro` — Rust compiler plugin, not needed now
 - `WebAssembly Lib` — runs in the browser, also not needed
 
-> We're building a **Library**, not an Application. Choosing "Library" means the code only runs when other code references it—this is perfect for our interpreter.
+We're building a **Library**, not an Application. Choosing "Library" means the code only runs when other code references it—this is perfect for our interpreter.
 
 **4 Bottom-right: Click the "Create" button.**
 
@@ -966,7 +966,7 @@ cargo new lisp-rs --lib
 cd lisp-rs
 ```
 
-> Both methods produce the exact same result. After Method 2, just use RustRover's **Open** to open the `lisp-rs` folder.
+Both methods produce the exact same result. After Method 2, just use RustRover's **Open** to open the `lisp-rs` folder.
 
 Wait for the progress bar in the bottom-right to finish.
 
@@ -1004,9 +1004,9 @@ test result: ok. 1 passed; 0 failed
 
 **Tip**: All `cargo test` commands in this tutorial should be typed in the **Terminal** at the bottom of RustRover. You can also click the green **Run** arrow (▶) in the gutter next to individual test functions, or open the **Run** panel (⌃R / Ctrl+R) to see a graphical test tree—same result, pick whichever you prefer.
 
-> 🏋️ **Exercises**
-> 1. (⭐) Change the project name from `lisp-rs` to whatever you like, then run `cargo test`
-> 2. (⭐) Try `cargo build` in the terminal and see how it differs from `cargo test`
+🏋️ **Exercises**
+1. (⭐) Change the project name from `lisp-rs` to whatever you like, then run `cargo test`
+2. (⭐) Try `cargo build` in the terminal and see how it differs from `cargo test`
 
 
 <details>
@@ -1026,21 +1026,21 @@ name = "my-lisp"  # change this
 
 ---
 
-> 📖 **Next: [Understanding Values](#understanding-values)**
+📖 **Next: [Understanding Values](#understanding-values)**
 
 
-> ✅ **Summary**: Toolchain ready. `cargo test` passes. You can edit, build, and run Rust code.
+✅ **Summary**: Toolchain ready. `cargo test` passes. You can edit, build, and run Rust code.
 
 
 ## Understanding Values
-> ⏩ **Skip signal:** Know Rust enums, `#[derive]`, and `match`? Jump to [Step 7](#step-7-the-eval-function).
+⏩ **Skip signal:** Know Rust enums, `#[derive]`, and `match`? Jump to [Step 7](#step-7-the-eval-function).
 
-> ⚠️ **Slow zone** — This chapter has high Rust concept density (enum / derive / f64 / pub / #[cfg(test)] / assert_eq!).
-> If you're struggling, that's normal—most learners spend extra time here.
-> Tip: type every code block into RustRover, get `cargo test` to pass before moving on.
+⚠️ **Slow zone** — This chapter has high Rust concept density (enum / derive / f64 / pub / #[cfg(test)] / assert_eq!).
+If you're struggling, that's normal—most learners spend extra time here.
+Tip: type every code block into RustRover, get `cargo test` to pass before moving on.
 
 
-> The interpreter first needs to be able to "understand" numbers—input `42`, output `42.0`. This is the foundation of everything that follows.
+The interpreter first needs to be able to "understand" numbers—input `42`, output `42.0`. This is the foundation of everything that follows.
 
 ---
 
@@ -1114,7 +1114,7 @@ enum Message {
 
 To understand `ChangeColor(u8, u8, u8)` above, we first need to know what **basic data types** exist in Rust—these are the building blocks for all Rust programs.
 
-> 🔧 **Rust Curve: Enums vs Inheritance** — In Java, Python, or C++, you would represent "something that could be a number or a symbol" using class inheritance with a base `Expression` class and subclasses. Rust uses `enum` instead — it is faster (no virtual dispatch, no heap allocation per variant) and safer (match exhaustiveness means you cannot forget a case). This is a concrete instance of the **expression problem** (famously discussed in SICP): a closed set of variants (enums) makes adding new operations easy (just add a `match` arm) but adding new variants requires editing all matches; inheritance is the opposite — new subclasses are easy but new operations require touching all classes. Rust chooses enum because an interpreter's data types are relatively stable, while its operations grow with every new feature.
+🔧 **Rust Curve: Enums vs Inheritance** — In Java, Python, or C++, you would represent "something that could be a number or a symbol" using class inheritance with a base `Expression` class and subclasses. Rust uses `enum` instead — it is faster (no virtual dispatch, no heap allocation per variant) and safer (match exhaustiveness means you cannot forget a case). This is a concrete instance of the **expression problem** (famously discussed in SICP): a closed set of variants (enums) makes adding new operations easy (just add a `match` arm) but adding new variants requires editing all matches; inheritance is the opposite — new subclasses are easy but new operations require touching all classes. Rust chooses enum because an interpreter's data types are relatively stable, while its operations grow with every new feature.
 
 ---
 ##### Prerequisite Knowledge: Rust's Basic Type System
@@ -1137,7 +1137,7 @@ Rust's integer types are very rich—more than most languages:
 
 **Naming convention**: `u` = unsigned (only positive), `i` = signed (can be positive or negative), the number = **bits** of storage.
 
-> 💡 In short: `u8` is 8 switches, each 0 or 1, giving 256 possible values (0-255). `u16` is 16 switches, giving 65,536 values. Same pattern for the rest.
+💡 In short: `u8` is 8 switches, each 0 or 1, giving 256 possible values (0-255). `u16` is 16 switches, giving 65,536 values. Same pattern for the rest.
 
 ```rust
 let a: u8 = 255;           // u8 max is 255
@@ -1151,7 +1151,7 @@ let d: u64 = 1000000000;   // u64 can be very large
 - `u64` takes 8 bytes, more precision but takes more space
 - If your data won't exceed 255, using `u8` saves 7/8 of the memory compared to `u64`
 
-> Compare to Python: Python integers can be arbitrarily large (auto-expand), but every operation needs type checking and may trigger memory allocation—slow. Rust integers are fixed size, directly mapping to CPU registers, **zero overhead**. This is one reason Rust can be dozens of times faster than Python.
+Compare to Python: Python integers can be arbitrarily large (auto-expand), but every operation needs type checking and may trigger memory allocation—slow. Rust integers are fixed size, directly mapping to CPU registers, **zero overhead**. This is one reason Rust can be dozens of times faster than Python.
 
 ---
 
@@ -1223,7 +1223,7 @@ if let Message::ChangeColor(r, g, b) = msg {
 }
 ```
 
-> 💡 In a nutshell: A tuple packs multiple values together in parentheses. `(255, 0, 0)` holds three color values. Items can have different types — `(42, "hello", 3.14)` is `(i32, &str, f64)`.
+💡 In a nutshell: A tuple packs multiple values together in parentheses. `(255, 0, 0)` holds three color values. Items can have different types — `(42, "hello", 3.14)` is `(i32, &str, f64)`.
 
 ---
 
@@ -1291,7 +1291,7 @@ for x in &v {
 | Performance | Faster | Slightly slower (may trigger reallocation) |
 | Use case | Small fixed-size data | Variable-length data |
 
-> 💡 In short: An array is a fixed row of cups — you can't add or remove them. A `Vec` is an expandable cup holder — pour more in and it grows. Downside: occasional "rearranging" (reallocation).
+💡 In short: An array is a fixed row of cups — you can't add or remove them. A `Vec` is an expandable cup holder — pour more in and it grows. Downside: occasional "rearranging" (reallocation).
 
 Our project uses `Vec` extensively—for example, Lisp's list `List(Vec<LispExp>)` uses a `Vec` to hold any number of elements.
 
@@ -1328,7 +1328,7 @@ Rust:              let x: Option<i32> = getSomething();
 
 **`LispExp` is a "pocket inventory" of what can be carried**. Right now there's only `Number(f64)`, later we'll add `Symbol`, `List`, `Bool` and other variants.
 
-> Compare to other languages: In Python you can do `x = 42; x = "hello"`—variables can change type freely. Rust doesn't allow this; you must use `enum` to explicitly declare "this variable could be a number or a string." This sounds like extra work, but it lets the compiler catch type-mismatch bugs early.
+Compare to other languages: In Python you can do `x = 42; x = "hello"`—variables can change type freely. Rust doesn't allow this; you must use `enum` to explicitly declare "this variable could be a number or a string." This sounds like extra work, but it lets the compiler catch type-mismatch bugs early.
 
 ---
 
@@ -1351,7 +1351,7 @@ Rust has two float types:
 
 Why choose `f64`? Because modern CPUs process `f64` and `f32` at almost the same speed, but `f64` has twice the precision. Lisp's numeric calculations need precision, so we use `f64`.
 
-> 💡 In short: `f64` is a decimal number, precise to about 15 digits. Plenty for everyday use.
+💡 In short: `f64` is a decimal number, precise to about 15 digits. Plenty for everyday use.
 
 ---
 
@@ -1405,9 +1405,9 @@ impl PartialEq for LispExp {
 
 **`derive` is a "laziness tool"**—telling the compiler "my type needs these capabilities, generate the code for me using the standard approach." Almost all basic types should have these three derives.
 
-> 💡 In short: `#[derive(Clone, Debug, PartialEq)]` is like telling your assistant "handle copying, printing, and comparing for this type." Doing those three by hand takes 30+ lines of boilerplate; the derive macro finishes in a blink. It's a secretary you dictate intent to, not a form you fill out.
+💡 In short: `#[derive(Clone, Debug, PartialEq)]` is like telling your assistant "handle copying, printing, and comparing for this type." Doing those three by hand takes 30+ lines of boilerplate; the derive macro finishes in a blink. It's a secretary you dictate intent to, not a form you fill out.
 
-> Rust's design philosophy: Rust's trait system requires you to "explicitly declare each capability you want." Unlike Python where all objects can be printed and compared—Rust requires you to explicitly say "this type supports printing." This sounds tedious, but it means you'll never accidentally compare two things that shouldn't be compared.
+Rust's design philosophy: Rust's trait system requires you to "explicitly declare each capability you want." Unlike Python where all objects can be printed and compared—Rust requires you to explicitly say "this type supports printing." This sounds tedious, but it means you'll never accidentally compare two things that shouldn't be compared.
 
 ---
 
@@ -1429,7 +1429,7 @@ enum SecretType { ... }   // only usable within this .rs file
 pub enum LispExp { ... }  // other files reference via use crate::LispExp
 ```
 
-> Rust's design philosophy: Rust defaults **everything to private**, and you actively choose what to make public. This is the opposite of Java (default public). Rust's philosophy is "principle of least privilege"—only expose what must be exposed, reducing misuse.
+Rust's design philosophy: Rust defaults **everything to private**, and you actively choose what to make public. This is the opposite of Java (default public). Rust's philosophy is "principle of least privilege"—only expose what must be exposed, reducing misuse.
 
 ---
 
@@ -1478,7 +1478,7 @@ mod tests {
 - Conditional compilation completely excludes test code from release builds
 - `cargo build --release` produces a program without any test code—smaller, faster
 
-> 💡 In short: `#[cfg(test)]` means "only compile this during testing." Like work clothes — on during the job, off for the release.
+💡 In short: `#[cfg(test)]` means "only compile this during testing." Like work clothes — on during the job, off for the release.
 
 **`mod tests` — Test Module**
 
@@ -1492,7 +1492,7 @@ Compare to other languages:
 - Java puts them in a separate `src/test/` directory
 - Rust: **tests and code are together**—this is the Rust community convention
 
-> 💡 In short: In Rust, tests and code live in the same file — like a quality-inspection report stapled to the product. Every crate ships with its own test suite built in. You never have to hunt through a separate `tests/` directory to find the tests for a module.
+💡 In short: In Rust, tests and code live in the same file — like a quality-inspection report stapled to the product. Every crate ships with its own test suite built in. You never have to hunt through a separate `tests/` directory to find the tests for a module.
 
 **`use super::*;` — Referencing parent module content**
 
@@ -1525,7 +1525,7 @@ let mut y = 42;  // `mut` makes it mutable — y = 43 now compiles
 y = 43;          // ✅ OK
 ```
 
-> Rust design philosophy: Immutability by default is one of Rust's core designs. In most languages, variables are mutable by default (can change), and you add `const` or `final` to make them immutable. Rust does the opposite—**immutable by default, explicitly say `mut` if you want changes**. This reduces a huge number of bugs caused by accidental modifications.
+Rust design philosophy: Immutability by default is one of Rust's core designs. In most languages, variables are mutable by default (can change), and you add `const` or `final` to make them immutable. Rust does the opposite—**immutable by default, explicitly say `mut` if you want changes**. This reduces a huge number of bugs caused by accidental modifications.
 
 **`LispExp::Number(42.0)` — Creating an enum value**
 
@@ -1568,7 +1568,7 @@ test result: ok. 1 passed; 0 failed
 2. `test_create_number` function is marked with `#[test]`
 3. `assert_eq!` doesn't "yell"—both sides are equal
 
-> 💡 In short: `cargo test` checks your work. `ok` means you're good. Tests not only verify correctness — they also prove the code compiles and runs.
+💡 In short: `cargo test` checks your work. `ok` means you're good. Tests not only verify correctness — they also prove the code compiles and runs.
 
 ---
 
@@ -1621,7 +1621,7 @@ pub enum LispErr {
 
 💡 In short — `String`: a piece of text, any text. `"Hello"`, `"error: x not found"`, you name it.
 
-> 🔧 **Rust Curve: `String` vs `&str`** — Rust has two string types: `String` (owned, heap-allocated, growable) and `&str` (a borrowed view of a string, like a reference). `Reason(String)` uses the owned version because errors need to live independently of their source. You will see `&str` later when we talk about zero-copy tokens in Steps 40-43.
+🔧 **Rust Curve: `String` vs `&str`** — Rust has two string types: `String` (owned, heap-allocated, growable) and `&str` (a borrowed view of a string, like a reference). `Reason(String)` uses the owned version because errors need to live independently of their source. You will see `&str` later when we talk about zero-copy tokens in Steps 40-43.
 
 **Current complete `lib.rs`**:
 
@@ -1659,9 +1659,9 @@ test tests::test_create_number ... ok
 test result: ok. 1 passed; 0 failed
 ```
 
-> 🏋️ **Exercises**
-> 1. (⭐) Add a `Character(char)` variant to `LispExp` to represent a single character
-> 2. (⭐⭐) Think about why Rust's `enum` is more powerful than C's `enum`. (Hint: C's enum variants can't carry data)
+🏋️ **Exercises**
+1. (⭐) Add a `Character(char)` variant to `LispExp` to represent a single character
+2. (⭐⭐) Think about why Rust's `enum` is more powerful than C's `enum`. (Hint: C's enum variants can't carry data)
 
 
 <details>
@@ -1678,26 +1678,26 @@ pub enum LispExp {
 **2. Rust enum vs C enum**
 C enums are just integer aliases (`enum Color { RED=0, GREEN=1 }`). Rust enum variants can carry data: `Number(f64)` holds an f64, `List(Vec<LispExp>)` holds a vector. This makes Rust enums a safe alternative to tagged unions.
 
-> 3. (⭐⭐⭐) **Think first**: If you wrote `eval_str("\"hello\" + 42")`, what do you think would happen
->    *before* you run it? Would Rust's type system catch it at compile time, or would it fail at runtime?
->    Why? Run it and see if your prediction was right.
+3. (⭐⭐⭐) **Think first**: If you wrote `eval_str("\"hello\" + 42")`, what do you think would happen
+   *before* you run it? Would Rust's type system catch it at compile time, or would it fail at runtime?
+   Why? Run it and see if your prediction was right.
 </details>
 
 ---
 
-> 📖 **Next: [Let the Program Compute](#making-programs-compute)**
+📖 **Next: [Let the Program Compute](#making-programs-compute)**
 
-> 🧠 **Mental Model Checkpoint**: After this chapter, you should think of the interpreter as a value factory - source code goes in, `LispExp` values come out. `LispExp` is your universal data type, the currency of the entire interpreter.
+🧠 **Mental Model Checkpoint**: After this chapter, you should think of the interpreter as a value factory - source code goes in, `LispExp` values come out. `LispExp` is your universal data type, the currency of the entire interpreter.
 
 
 
-> ✅ **Summary**: Core types define what values exist in our language; `Result<LispExp, LispErr>` is the universal return type.
+✅ **Summary**: Core types define what values exist in our language; `Result<LispExp, LispErr>` is the universal return type.
 
 
 ## Making Programs Compute
-> ⏩ **Skip signal:** Familiar with Rust function signatures and `Result`? Skim this — the key takeaway is the `eval` pipeline.
+⏩ **Skip signal:** Familiar with Rust function signatures and `Result`? Skim this — the key takeaway is the `eval` pipeline.
 
-> Now that we have the number type, we also need to "evaluate"—compute results from numeric expressions, opening up the entire source-to-value pipeline.
+Now that we have the number type, we also need to "evaluate"—compute results from numeric expressions, opening up the entire source-to-value pipeline.
 
 ---
 
@@ -1721,7 +1721,7 @@ C enums are just integer aliases (`enum Color { RED=0, GREEN=1 }`). Rust enum va
 ---
 ### Step 7: The `eval` Function
 
-> **Temporary arrangement**: Currently the project only has `lib.rs` as a single file, so `eval` is placed here temporarily. Once the project has more files (around step 40), `eval` will be moved to a new file `src/interpreter.rs`—it belongs to the "evaluator" module, separate from type definitions for better organization.
+**Temporary arrangement**: Currently the project only has `lib.rs` as a single file, so `eval` is placed here temporarily. Once the project has more files (around step 40), `eval` will be moved to a new file `src/interpreter.rs`—it belongs to the "evaluator" module, separate from type definitions for better organization.
 
 **Requirement**: Input `Number(42.0)`, output `Number(42.0)`. Numbers don't need "computation"—they are the answer themselves.
 
@@ -1813,7 +1813,7 @@ test tests::test_eval_number ... ok
 test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
-> **Diagram — how match works**:
+**Diagram — how match works**:
 
 ![enum pocket en](svgs/enum-pocket-en.svg)
 
@@ -1900,7 +1900,7 @@ test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 
 **`function 'eval_str' is never used` (dead_code)**: `eval_str` isn't marked `pub`, and nothing in non-test code calls it—the compiler thinks it's "dead code." But it IS called by the test function under `#[cfg(test)]`, so tests pass fine.
 
-> 💡 **Annoyed by the `dead_code` warning?** Just add `pub` to `eval_str`: `pub fn eval_str(...)`. This tells the compiler it's a public API, and the warning goes away. But leaving it is fine too—it's just a reminder, not an error.
+💡 **Annoyed by the `dead_code` warning?** Just add `pub` to `eval_str`: `pub fn eval_str(...)`. This tells the compiler it's a public API, and the warning goes away. But leaving it is fine too—it's just a reminder, not an error.
 
 💡 In short — The `?` operator: "if this fails, return the error now." Saves writing `if error { return error }` a hundred times.
 
@@ -1914,9 +1914,9 @@ But `eval_str("(+ 1 2)")` would fail — `"(+ 1 2)"` is not a valid number. To h
 
 ---
 
-> 🏋️ **Exercises**
-> 1. (⭐) Modify `eval_str` to also handle `"true"` and `"false"` string inputs (don't use Bool type yet, just return strings)
-> 2. (⭐⭐) `eval` only has one branch right now (Number). What happens when you input a negative number like `-42`? How would you fix it?
+🏋️ **Exercises**
+1. (⭐) Modify `eval_str` to also handle `"true"` and `"false"` string inputs (don't use Bool type yet, just return strings)
+2. (⭐⭐) `eval` only has one branch right now (Number). What happens when you input a negative number like `-42`? How would you fix it?
 
 
 <details>
@@ -1938,16 +1938,16 @@ fn eval_str(source: &str) -> Result<LispExp, LispErr> {
 The lexer splits `-42` into `["-", "42"]` — minus is treated as subtraction. The fix: `parse_atom` already calls `token.parse::<f64>()`, and `"-42".parse::<f64>()` returns `Ok(-42.0)` — so it actually works correctly already!
 </details>
 
-> What we're solving: Break the source string into a list of Tokens. Like reading a sentence, you split it into words first—once you have the words, you can figure out what the sentence means. — Lexer
+What we're solving: Break the source string into a list of Tokens. Like reading a sentence, you split it into words first—once you have the words, you can figure out what the sentence means. — Lexer
 
 
-> ✅ **Summary**: `eval` takes an expression, returns a value or error. The interpreter pipeline is connected end-to-end.
+✅ **Summary**: `eval` takes an expression, returns a value or error. The interpreter pipeline is connected end-to-end.
 
 
-> Why this matters: The lexer is the interpreter's eyes - it reads raw text and identifies the meaningful units (tokens). Every compiler and interpreter starts with a lexer, making this a transferable skill you'll use in any language implementation.
+Why this matters: The lexer is the interpreter's eyes - it reads raw text and identifies the meaningful units (tokens). Every compiler and interpreter starts with a lexer, making this a transferable skill you'll use in any language implementation.
 
 ## Splitting Sentences into Words
-> ⏩ **Skip signal:** Know lexing/tokenizing? Jump to [Step 12](#step-12-create-parserrs).
+⏩ **Skip signal:** Know lexing/tokenizing? Jump to [Step 12](#step-12-create-parserrs).
 
 ---
 
@@ -2060,9 +2060,9 @@ test tests::test_eval_str_number ... ok
 test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
-> 💡 In short — `dead_code` warning still here?
->
-> **`function 'eval_str' is never used`**: `eval_str` isn't `pub`, so nothing in non-test code calls it. Harmless carryover from Step 8.
+💡 In short — `dead_code` warning still here?
+
+**`function 'eval_str' is never used`**: `eval_str` isn't `pub`, so nothing in non-test code calls it. Harmless carryover from Step 8.
 
 ### Step 11: Handle Parentheses
 
@@ -2162,13 +2162,13 @@ test tests::test_eval_str_number ... ok
 test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
-> 💡 In short — `dead_code` warning still here, but all tests pass! This warning will persist until `eval_str` is made `pub` or called from non-test code.
+💡 In short — `dead_code` warning still here, but all tests pass! This warning will persist until `eval_str` is made `pub` or called from non-test code.
 
 ---
 
-> 🏋️ **Exercises**
-> 1. (⭐) Add comment support to `tokenize`: everything from `;` to end of line should be ignored. Hint: strip comments before `replace` — use `lines()` to iterate over each line and `find(';')` to keep only the part before `;`
-> 2. (⭐⭐) Write a test that inputs `"(+ 1 2) ; This is a comment"` and expects `["(", "+", "1", "2", ")"]`
+🏋️ **Exercises**
+1. (⭐) Add comment support to `tokenize`: everything from `;` to end of line should be ignored. Hint: strip comments before `replace` — use `lines()` to iterate over each line and `find(';')` to keep only the part before `;`
+2. (⭐⭐) Write a test that inputs `"(+ 1 2) ; This is a comment"` and expects `["(", "+", "1", "2", ")"]`
 
 
 <details>
@@ -2206,7 +2206,7 @@ pub fn tokenize(input: &str) -> Vec<String> {
 }
 ```
 
-> 💡 **Why not a character-level loop?** The current `tokenize` uses a "replace + split" style. Introducing `pos`/`len`/`chars` character loop variables would clash with the existing code style. Using `lines()` + `find(';')` to strip comments first, then running the original logic, keeps the change minimal and easy to follow. Step 42's zero-copy lexer naturally introduces `char_indices().peekable()` for character-level processing.
+💡 **Why not a character-level loop?** The current `tokenize` uses a "replace + split" style. Introducing `pos`/`len`/`chars` character loop variables would clash with the existing code style. Using `lines()` + `find(';')` to strip comments first, then running the original logic, keeps the change minimal and easy to follow. Step 42's zero-copy lexer naturally introduces `char_indices().peekable()` for character-level processing.
 
 **2. Test**
 ```rust
@@ -2220,41 +2220,41 @@ fn test_comment_ignored() {
 ```
 </details>
 
-> What we're solving: Transform a flat list of Tokens into a nested AST tree. This is the most important data structure transformation in the whole interpreter.
+What we're solving: Transform a flat list of Tokens into a nested AST tree. This is the most important data structure transformation in the whole interpreter.
 
 ---
 
-> 🎯 **Milestone: Lexer complete** — Now our interpreter can turn source code into tokens.
->
-> 📝 **Design Note: Why strings for tokens?**
->
-> Right now tokens are `Vec<String>` — every token allocates a new String on the heap. For `(+ 1 2)`,
-> that means 5 heap allocations for a 7-character expression.
->
-> **Is this wasteful?** Yes, but deliberately so. At this stage, clarity beats performance:
-> - `String` is familiar to Rust beginners
-> - String comparison (`token == "("`) is straightforward
-> - The `to_string()` calls make data flow visible
->
-> **What about alternatives?**
-> - `&str` (slices into the source) — faster but requires lifetime management. We'll switch to this in Step 42!
-> - `enum Token { LParen, RParen, Number(f64), Symbol(String), ... }` — more type-safe but introduces a new type just for tokens
-> - `u64` interned IDs — fastest but adds an indirection layer
->
-> **Mitigation**: In production Lisp implementations, the lexer is usually the cheapest part of the pipeline.
-> The real bottleneck is eval. So String-based tokens are fine for learning — we optimize only when it matters.
+🎯 **Milestone: Lexer complete** — Now our interpreter can turn source code into tokens.
 
-> 🧠 **Mental Model Checkpoint**: After this chapter, you should see source code not as text, but as a sequence of tokens. `(+ 1 2)` is not a string - it is `["(", "+", "1", "2", ")"]`. This shift from text to tokens is the first step in understanding how computers process code.
+📝 **Design Note: Why strings for tokens?**
 
+Right now tokens are `Vec<String>` — every token allocates a new String on the heap. For `(+ 1 2)`,
+that means 5 heap allocations for a 7-character expression.
 
+**Is this wasteful?** Yes, but deliberately so. At this stage, clarity beats performance:
+- `String` is familiar to Rust beginners
+- String comparison (`token == "("`) is straightforward
+- The `to_string()` calls make data flow visible
 
-> ✅ **Summary**: `tokenize()` handles all token types. The lexer is in its own module with its own tests.
+**What about alternatives?**
+- `&str` (slices into the source) — faster but requires lifetime management. We'll switch to this in Step 42!
+- `enum Token { LParen, RParen, Number(f64), Symbol(String), ... }` — more type-safe but introduces a new type just for tokens
+- `u64` interned IDs — fastest but adds an indirection layer
+
+**Mitigation**: In production Lisp implementations, the lexer is usually the cheapest part of the pipeline.
+The real bottleneck is eval. So String-based tokens are fine for learning — we optimize only when it matters.
+
+🧠 **Mental Model Checkpoint**: After this chapter, you should see source code not as text, but as a sequence of tokens. `(+ 1 2)` is not a string - it is `["(", "+", "1", "2", ")"]`. This shift from text to tokens is the first step in understanding how computers process code.
 
 
-> Why this matters: The parser transforms a flat token list into a tree structure (AST). This tree represents the program's grammatical structure - without it, the evaluator would have no meaningful input. Recursive descent parsing is the most intuitive parsing technique and works for most real-world languages.
+
+✅ **Summary**: `tokenize()` handles all token types. The lexer is in its own module with its own tests.
+
+
+Why this matters: The parser transforms a flat token list into a tree structure (AST). This tree represents the program's grammatical structure - without it, the evaluator would have no meaningful input. Recursive descent parsing is the most intuitive parsing technique and works for most real-world languages.
 
 ## Understanding the Meaning of Words
-> ⏩ **Skip signal:** Know recursive descent parsing? Jump to [Step 16](#step-16-create-environment-variable-name--value-address-book). The recursive parsing diagram in Step 14 is worth a look, though.
+⏩ **Skip signal:** Know recursive descent parsing? Jump to [Step 16](#step-16-create-environment-variable-name--value-address-book). The recursive parsing diagram in Step 14 is worth a look, though.
 
 ---
 
@@ -2278,7 +2278,7 @@ fn test_comment_ignored() {
 ---
 ### Step 12: Create parser.rs
 
-> **Temporary approach**: `Symbol` currently uses `String` to store the name (simple and intuitive). The final form of the project uses `Symbol(u64)`—an integer ID, mapping names to numbers via a "string interner," making comparison and hashing O(1). We'll make this optimization in steps 40-41, replacing all `String` with `u64`. For now, use `String` to get the logic working.
+**Temporary approach**: `Symbol` currently uses `String` to store the name (simple and intuitive). The final form of the project uses `Symbol(u64)`—an integer ID, mapping names to numbers via a "string interner," making comparison and hashing O(1). We'll make this optimization in steps 40-41, replacing all `String` with `u64`. For now, use `String` to get the logic working.
 
 Right-click `src` folder → **New** → **File**, enter `parser.rs`.
 
@@ -2425,7 +2425,7 @@ test tests::test_eval_str_number ... ok
 test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
-> 💡 In short — `dead_code` warning still here! We added the `Symbol` variant and `_` catch-all, compilation went smoothly. The `eval_str` `dead_code` warning persists — it'll disappear once `eval_str` is made `pub` or called from non-test code.
+💡 In short — `dead_code` warning still here! We added the `Symbol` variant and `_` catch-all, compilation went smoothly. The `eval_str` `dead_code` warning persists — it'll disappear once `eval_str` is made `pub` or called from non-test code.
 
 ---
 
@@ -2580,30 +2580,30 @@ test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 ![parser seq en](svgs/parser-seq-en.svg)
 
 
-> Recursive parsing call flow: `parse()` and `read_seq()` call each other—`parse` encountering `(` delegates to `read_seq`, `read_seq` encountering a child element calls `parse` again, forming recursive descent. Each time `)` is encountered, "pop one layer," ultimately building the complete nested AST tree.
+Recursive parsing call flow: `parse()` and `read_seq()` call each other—`parse` encountering `(` delegates to `read_seq`, `read_seq` encountering a child element calls `parse` again, forming recursive descent. Each time `)` is encountered, "pop one layer," ultimately building the complete nested AST tree.
 
-> 📐 **Formal Definition**: Recursive Descent Parser
->
-> The parser is defined by two mutually recursive functions:
->
-> ```
-> parse(tokens):
->   if tokens[0] is atom → parse_atom(tokens)
->   if tokens[0] is "("  → read_seq(tokens[1:])
->
-> read_seq(tokens):
->   if tokens[0] is ")"  → (Nil, tokens[1:])        // base case: empty list
->   else:
->     (expr, rest) = parse(tokens)                    // parse one expression
->     (list,  rem)  = read_seq(rest)                  // recursively parse the rest
->     (cons(expr, list), rem)                         // combine into a list
-> ```
->
-> This is a **mutual recursion**: `parse` calls `read_seq`, which calls `parse`.
-> The base case `read_seq` finds `)` — this is what stops infinite recursion.
-> ```
-> parse("(+ 1 (* 2 3))") → List(Symbol(+), Number(1), List(Symbol(*), Number(2), Number(3)))
-> ```
+📐 **Formal Definition**: Recursive Descent Parser
+
+The parser is defined by two mutually recursive functions:
+
+```
+parse(tokens):
+  if tokens[0] is atom → parse_atom(tokens)
+  if tokens[0] is "("  → read_seq(tokens[1:])
+
+read_seq(tokens):
+  if tokens[0] is ")"  → (Nil, tokens[1:])        // base case: empty list
+  else:
+    (expr, rest) = parse(tokens)                    // parse one expression
+    (list,  rem)  = read_seq(rest)                  // recursively parse the rest
+    (cons(expr, list), rem)                         // combine into a list
+```
+
+This is a **mutual recursion**: `parse` calls `read_seq`, which calls `parse`.
+The base case `read_seq` finds `)` — this is what stops infinite recursion.
+```
+parse("(+ 1 (* 2 3))") → List(Symbol(+), Number(1), List(Symbol(*), Number(2), Number(3)))
+```
 
 ### Step 15: Parenthesis Error Tests
 
@@ -2644,14 +2644,14 @@ test parser::tests::test_unexpected_close_error ... ok
 test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
-> 💡 In short — The `eval_str` `dead_code` warning is still here. It will follow us until Step 74 when `main.rs` is created and calls `eval_str` (or you add `pub` to it earlier).
+💡 In short — The `eval_str` `dead_code` warning is still here. It will follow us until Step 74 when `main.rs` is created and calls `eval_str` (or you add `pub` to it earlier).
 
 ---
 
-> 🏋️ **Exercises**
-> 1. (⭐) Modify `parse_atom` to recognize `#t` and `#f` keywords, returning custom Symbols
-> 2. (⭐⭐) What error does the parser return for input `"(+ 1 2"` (missing right paren)? Write a test to verify
-> 3. (⭐⭐⭐) Think: can `(1 + 2)` be parsed? Why does Lisp require the first element to be the operator?
+🏋️ **Exercises**
+1. (⭐) Modify `parse_atom` to recognize `#t` and `#f` keywords, returning custom Symbols
+2. (⭐⭐) What error does the parser return for input `"(+ 1 2"` (missing right paren)? Write a test to verify
+3. (⭐⭐⭐) Think: can `(1 + 2)` be parsed? Why does Lisp require the first element to be the operator?
 
 
 <details>
@@ -2675,34 +2675,34 @@ Returns `LispErr::Reason("unclosed list: missing ')'")`.
 **3. (1 + 2) parsing**
 Parses fine as `List([Number(1), Symbol("+"), Number(2)])`. But eval fails — `1` (a Number) isn't callable. Lisp requires the first element in a list to be an operator.
 
-> 4. (⭐⭐⭐) **Predict the error**: What exactly would happen if you called `parse("(+ 1 2")`
->    (missing closing paren)? Write down your predicted error message *before* actually
->    trying it. Then run `cargo test` and compare. Was your prediction close?
+4. (⭐⭐⭐) **Predict the error**: What exactly would happen if you called `parse("(+ 1 2")`
+   (missing closing paren)? Write down your predicted error message *before* actually
+   trying it. Then run `cargo test` and compare. Was your prediction close?
 </details>
 
-> What we're solving: variable name→value mapping (the environment). With environments, `(define x 10)` and `(+ x 1)` actually mean something.
+What we're solving: variable name→value mapping (the environment). With environments, `(define x 10)` and `(+ x 1)` actually mean something.
 
-> 🧠 **Mental Model Checkpoint**: After this chapter, you should visualize programs as trees, not text. `(+ 1 (* 2 3))` becomes a tree with `+` at the root, `1` and the `(* 2 3)` subtree as branches. The parser is a tree-builder.
-
-
-
-> ✅ **Summary**: `parse()` + `read_seq()` mutual recursion builds a tree. Nested `(+ 1 (* 2 3))` parses correctly.
+🧠 **Mental Model Checkpoint**: After this chapter, you should visualize programs as trees, not text. `(+ 1 (* 2 3))` becomes a tree with `+` at the root, `1` and the `(* 2 3)` subtree as branches. The parser is a tree-builder.
 
 
 
-> **💡 Parser Error Recovery Strategy**
->
-> The current parser immediately returns `LispErr` on syntax errors. A friendlier
-> approach is **Panic Mode recovery**: when the parser encounters an unexpected token,
-> skip the current expression and continue parsing the rest. Crafting Interpreters
-> shows this lets users see all errors at once instead of fix-one-discover-next.
-> Implementation: add a sync point in `read_seq` that resumes parsing at `)` or EOF.
+✅ **Summary**: `parse()` + `read_seq()` mutual recursion builds a tree. Nested `(+ 1 (* 2 3))` parses correctly.
 
 
-> Why this matters: Variables turn a calculator into a programming language. Environments give us named storage with lexical scoping - the same mechanism used by Scheme, JavaScript, Python, and Rust itself. Understanding environment chains is key to understanding how modern languages manage scope.
+
+**💡 Parser Error Recovery Strategy**
+
+The current parser immediately returns `LispErr` on syntax errors. A friendlier
+approach is **Panic Mode recovery**: when the parser encounters an unexpected token,
+skip the current expression and continue parsing the rest. Crafting Interpreters
+shows this lets users see all errors at once instead of fix-one-discover-next.
+Implementation: add a sync point in `read_seq` that resumes parsing at `)` or EOF.
+
+
+Why this matters: Variables turn a calculator into a programming language. Environments give us named storage with lexical scoping - the same mechanism used by Scheme, JavaScript, Python, and Rust itself. Understanding environment chains is key to understanding how modern languages manage scope.
 
 ## Giving Things Names
-> ⏩ **Skip signal:** Familiar with hash maps and scope chains? Skim this chapter — the key concept is `outer` (the environment chain).
+⏩ **Skip signal:** Familiar with hash maps and scope chains? Skim this chapter — the key concept is `outer` (the environment chain).
 
 
 ---
@@ -2856,7 +2856,7 @@ pub fn eval(exp: &LispExp, env: &LispEnv) -> Result<LispExp, LispErr> {
 }
 ```
 
-> **Warning: signature changed, all callers of eval must be updated!**
+**Warning: signature changed, all callers of eval must be updated!**
 
 ---
 
@@ -2887,25 +2887,25 @@ fn test_eval_symbol() {
 }
 ```
 
-> **Change checklist**: changed 1 function signature → updated 3 call sites. If you miss one, `cargo test` will give precise errors:
->
-> ```text
-> $ cargo test
-> error[E0061]: this function takes 2 arguments but 1 was supplied
->    --> src/lib.rs:NN:16
->     |
->  NN |     let result = eval(&exp).unwrap();
->     |                  ^^^^------ help: add missing argument: `, env`
->     |
-> note: function defined here
->    --> src/lib.rs:NN:1
->     |
->  NN | pub fn eval(exp: &LispExp, env: &LispEnv) -> Result<LispExp, LispErr> {
->     | ^^^^^^^^^^^ ---------------------------
-> error: aborting due to 3 previous errors
-> ```
->
-> Each error points to a location needing the `env` parameter. After fixing all 3 places as shown above:
+**Change checklist**: changed 1 function signature → updated 3 call sites. If you miss one, `cargo test` will give precise errors:
+
+```text
+$ cargo test
+error[E0061]: this function takes 2 arguments but 1 was supplied
+   --> src/lib.rs:NN:16
+    |
+ NN |     let result = eval(&exp).unwrap();
+    |                  ^^^^------ help: add missing argument: `, env`
+    |
+note: function defined here
+   --> src/lib.rs:NN:1
+    |
+ NN | pub fn eval(exp: &LispExp, env: &LispEnv) -> Result<LispExp, LispErr> {
+    | ^^^^^^^^^^^ ---------------------------
+error: aborting due to 3 previous errors
+```
+
+Each error points to a location needing the `env` parameter. After fixing all 3 places as shown above:
 
 ```bash
 $ cargo test
@@ -2944,9 +2944,9 @@ test result: ok. 12 passed; 0 failed
 
 ---
 
-> 🏋️ **Exercises**
-> 1. (⭐) Write a test that stores `"pi"` → `Number(3.14159)` in the environment, then retrieves it with `get`
-> 2. (⭐⭐) If you `set` the same key twice, does the second call overwrite the first? Write a test to verify
+🏋️ **Exercises**
+1. (⭐) Write a test that stores `"pi"` → `Number(3.14159)` in the environment, then retrieves it with `get`
+2. (⭐⭐) If you `set` the same key twice, does the second call overwrite the first? Write a test to verify
 
 
 <details>
@@ -2970,32 +2970,32 @@ env.set("x".into(), LispExp::Number(2.0));
 assert_eq!(env.get("x").unwrap(), LispExp::Number(2.0)); // 2, not 1
 ```
 
-> 🧠 **Pause and Think**
->
-> ```lisp
-> (define x 10)
-> (define y x)    ; y = 10
-> (set! x 20)     ;
-> y               ; → 10 or 20?
-> ```
->
-> Before running the code, work it out: what is `y`? Why? Is this the same behavior as Rust's `let y = x`?
-> Hint: how do `define` and `set!` store values in our implementation?
+🧠 **Pause and Think**
+
+```lisp
+(define x 10)
+(define y x)    ; y = 10
+(set! x 20)     ;
+y               ; → 10 or 20?
+```
+
+Before running the code, work it out: what is `y`? Why? Is this the same behavior as Rust's `let y = x`?
+Hint: how do `define` and `set!` store values in our implementation?
 </details>
 
-> What we're solving: List evaluation = function call. This is the heart of Lisp—`+` in `(+ 1 2)` gets looked up in the environment to find the function, then `1` and `2` are passed as arguments.
+What we're solving: List evaluation = function call. This is the heart of Lisp—`+` in `(+ 1 2)` gets looked up in the environment to find the function, then `1` and `2` are passed as arguments.
 
-> 📖 **Next: [Doing Real Computation](#doing-real-computation)**
+📖 **Next: [Doing Real Computation](#doing-real-computation)**
 
-> 🧠 **Mental Model Checkpoint**: After this chapter, you should see `eval` as a dispatch table: check the expression type, handle it accordingly. `Number` -> return as-is. `Symbol` -> look up in environment. `List` -> evaluate the operator, evaluate the operands, apply.
+🧠 **Mental Model Checkpoint**: After this chapter, you should see `eval` as a dispatch table: check the expression type, handle it accordingly. `Number` -> return as-is. `Symbol` -> look up in environment. `List` -> evaluate the operator, evaluate the operands, apply.
 
 
 
-> ✅ **Summary**: Variables bind names to values. `env.get()` follows the outer chain for lexical scoping.
+✅ **Summary**: Variables bind names to values. `env.get()` follows the outer chain for lexical scoping.
 
 
 ## Doing Real Computation
-> 🚫 **Core chapter.** Even if you know function calls, the `List` evaluation logic and `Func` type are central to the interpreter. Don't skip.
+🚫 **Core chapter.** Even if you know function calls, the `List` evaluation logic and `Func` type are central to the interpreter. Don't skip.
 
 
 ---
@@ -3028,11 +3028,11 @@ Func(fn(&[LispExp]) -> Result<LispExp, LispErr>),
 
 💡 In short — A function pointer is like a remote control button: press it, the corresponding function runs.
 
-> 🔧 **Rust Curve: `fn` Pointers vs Closures** — Our `Func` type uses bare function pointers (`fn(&[LispExp]) -> Result<...>`), the simplest kind of callable in Rust. Rust also has closures (`|| ...`) which can capture variables from their environment. Closures come in three flavors: `Fn` (can be called multiple times, immutable capture), `FnMut` (mutable capture), and `FnOnce` (consumes captures, can be called once). We use bare `fn` pointers because our built-ins have no captured state — they are pure functions.
+🔧 **Rust Curve: `fn` Pointers vs Closures** — Our `Func` type uses bare function pointers (`fn(&[LispExp]) -> Result<...>`), the simplest kind of callable in Rust. Rust also has closures (`|| ...`) which can capture variables from their environment. Closures come in three flavors: `Fn` (can be called multiple times, immutable capture), `FnMut` (mutable capture), and `FnOnce` (consumes captures, can be called once). We use bare `fn` pointers because our built-ins have no captured state — they are pure functions.
 
-> ⚠️ **Compiler Warning Note**: After adding `Func(fn(...))`, `cargo test` may show a warning: `warning: function pointer comparisons do not produce meaningful results`. This is because Rust 1.97+ warns when deriving `PartialEq` on a type containing function pointers — their addresses may differ between codegen units, making comparisons meaningless. **This warning is completely harmless** — our code never compares two functions for equality (only compares `args[0] == args[1]` for numbers/symbols/lists). To silence it, add `#[allow(unpredictable_function_pointer_comparisons)]` to `LispExp`.
+⚠️ **Compiler Warning Note**: After adding `Func(fn(...))`, `cargo test` may show a warning: `warning: function pointer comparisons do not produce meaningful results`. This is because Rust 1.97+ warns when deriving `PartialEq` on a type containing function pointers — their addresses may differ between codegen units, making comparisons meaningless. **This warning is completely harmless** — our code never compares two functions for equality (only compares `args[0] == args[1]` for numbers/symbols/lists). To silence it, add `#[allow(unpredictable_function_pointer_comparisons)]` to `LispExp`.
 
-> 🦀 **Rust Deep Dive: Why can't we compare function pointers?** If you look at the actual source code, you'll see `#[allow(unpredictable_function_pointer_comparisons)]` above the enum. Rust deliberately makes `fn` pointers incomparable with `==` in stable code. The reason: the compiler may merge identical functions or generate multiple copies of the same generic function at different addresses. Comparing two `fn` pointers for equality is unreliable — the same logical function could sit at different addresses. For our interpreter, this means `(eq? + +)` might return `#f`, which is technically correct (two copies of the same built-in are different pointers). We accept this limitation rather than building a function registry.
+🦀 **Rust Deep Dive: Why can't we compare function pointers?** If you look at the actual source code, you'll see `#[allow(unpredictable_function_pointer_comparisons)]` above the enum. Rust deliberately makes `fn` pointers incomparable with `==` in stable code. The reason: the compiler may merge identical functions or generate multiple copies of the same generic function at different addresses. Comparing two `fn` pointers for equality is unreliable — the same logical function could sit at different addresses. For our interpreter, this means `(eq? + +)` might return `#f`, which is technically correct (two copies of the same built-in are different pointers). We accept this limitation rather than building a function registry.
 
 **eval also needs updating**: Func is a "self-evaluating" type (the function itself is the value, no computation needed):
 
@@ -3154,7 +3154,7 @@ test result: ok. 13 passed; 0 failed
 2. `.filter_map(|a| ...)` — keep only the numbers, skip everything else
 3. `.sum()` — add 'em all up
 
-> 🎉 **Milestone: Can compute (+ 1 2) = 3!**
+🎉 **Milestone: Can compute (+ 1 2) = 3!**
 
 ### Steps 24-27: Subtraction, Multiplication, Division
 
@@ -3210,10 +3210,10 @@ But—numbers can be computed, but **boolean values and "empty" still don't work
 
 ---
 
-> 🏋️ **Exercises**
-> 1. (⭐) Register a new function `square` that takes one argument and returns its square
-> 2. (⭐⭐) Implement a single-argument version of `-`: `(- x)` should return `-x` (negation). Hint: check the number of arguments
-> 3. (⭐⭐⭐) Think: can `(+ 1 2 3 4 5)` compute correctly with the current implementation? Why?
+🏋️ **Exercises**
+1. (⭐) Register a new function `square` that takes one argument and returns its square
+2. (⭐⭐) Implement a single-argument version of `-`: `(- x)` should return `-x` (negation). Hint: check the number of arguments
+3. (⭐⭐⭐) Think: can `(+ 1 2 3 4 5)` compute correctly with the current implementation? Why?
 
 
 <details>
@@ -3242,44 +3242,44 @@ if args.len() == 1 {
 **3. (+ 1 2 3 4 5)**
 Correctly returns 15. The `+` function iterates all arguments with `filter_map` + `sum`, supporting any count.
 
-> 4. (⭐⭐⭐) **Predict then verify**: What happens when you call `(+ 1 "hello")` in our Lisp?
->    Write down your predicted outcome. Hint: Look at how our arithmetic functions handle
->    type checking. Is there any type checking at all?
+4. (⭐⭐⭐) **Predict then verify**: What happens when you call `(+ 1 "hello")` in our Lisp?
+   Write down your predicted outcome. Hint: Look at how our arithmetic functions handle
+   type checking. Is there any type checking at all?
 </details>
 
-> What we're solving: Add Bool/Nil/String types. Booleans let us make decisions (if), nil lets us represent "empty."
+What we're solving: Add Bool/Nil/String types. Booleans let us make decisions (if), nil lets us represent "empty."
 
-> 📖 **Next: [More Data Types](#more-data-types)**
+📖 **Next: [More Data Types](#more-data-types)**
 
 ---
 
-> 📝 **Design Note: Why AST tree-walking interpreter?**
->
-> We chose a **tree-walking interpreter**: parse source → AST → walk the tree and evaluate.
-> This is the simplest correct implementation you can build. It's not the fastest, but it's the most transparent.
->
-> **What are the alternatives?**
->
-> | Approach | What it does | Pros | Cons |
-> |----------|-------------|------|------|
-> | **Tree-walking** (us) | Parse → walk AST | Simple, transparent, easy to debug | Slow for production |
-> | **Bytecode VM** | Parse → compile to bytecode → VM executes | 10-100x faster | Much more code, harder to debug |
-> | **JIT compilation** | Parse → compile to machine code at runtime | Fastest | Extremely complex |
->
-> **Why this is the right choice for learning**: The AST is a *picture of your code*. When you call
-> `eval(List[Symbol(+), Number(1), Number(2)])`, you can *see* what's happening. A bytecode VM would
-> hide this behind instruction dispatch.
->
-> **Bottom line**: Every production interpreter starts as a tree-walker. Python, Ruby, and JavaScript all
-> began this way. By understanding tree-walking first, you'll understand why bytecode VMs exist
-> (performance) and what they sacrifice (simplicity).
+📝 **Design Note: Why AST tree-walking interpreter?**
+
+We chose a **tree-walking interpreter**: parse source → AST → walk the tree and evaluate.
+This is the simplest correct implementation you can build. It's not the fastest, but it's the most transparent.
+
+**What are the alternatives?**
+
+| Approach | What it does | Pros | Cons |
+|----------|-------------|------|------|
+| **Tree-walking** (us) | Parse → walk AST | Simple, transparent, easy to debug | Slow for production |
+| **Bytecode VM** | Parse → compile to bytecode → VM executes | 10-100x faster | Much more code, harder to debug |
+| **JIT compilation** | Parse → compile to machine code at runtime | Fastest | Extremely complex |
+
+**Why this is the right choice for learning**: The AST is a *picture of your code*. When you call
+`eval(List[Symbol(+), Number(1), Number(2)])`, you can *see* what's happening. A bytecode VM would
+hide this behind instruction dispatch.
+
+**Bottom line**: Every production interpreter starts as a tree-walker. Python, Ruby, and JavaScript all
+began this way. By understanding tree-walking first, you'll understand why bytecode VMs exist
+(performance) and what they sacrifice (simplicity).
 
 
-> ✅ **Summary**: `eval` can call built-in functions. Arithmetic works with variable-length arguments.
+✅ **Summary**: `eval` can call built-in functions. Arithmetic works with variable-length arguments.
 
 
 ## More Data Types
-> ⏩ **Skip signal:** Know Bool/Nil/String types? Skim the code, focus on the Lisp truthiness rules (`#f` and `nil` are false, everything else is true).
+⏩ **Skip signal:** Know Bool/Nil/String types? Skim the code, focus on the Lisp truthiness rules (`#f` and `nil` are false, everything else is true).
 
 
 ---
@@ -3329,11 +3329,11 @@ pub fn eval(exp: &LispExp, env: &LispEnv) -> Result<LispExp, LispErr> {
 }
 ```
 
-> Note: `Bool(_) | Nil | Func(_)` uses `|` to combine them—they all "evaluate to themselves," using the same handling logic.
->
-> **Why did we remove the `_` catch-all?**
->
-> At this point, all 6 variants of `LispExp` (`Number`, `Symbol`, `List`, `Func`, `Bool`, `Nil`) have explicit handling—the `_` was unreachable. Removing it means: **when you add new variants later (like `String` in steps 29-31, `Lambda` in step 34), if you forget to handle them in `eval`, the compiler will immediately error** (`non-exhaustive patterns`) instead of silently failing at runtime. Rust's exhaustiveness check is your best safety net—but only if you don't write `_`.
+Note: `Bool(_) | Nil | Func(_)` uses `|` to combine them—they all "evaluate to themselves," using the same handling logic.
+
+**Why did we remove the `_` catch-all?**
+
+At this point, all 6 variants of `LispExp` (`Number`, `Symbol`, `List`, `Func`, `Bool`, `Nil`) have explicit handling—the `_` was unreachable. Removing it means: **when you add new variants later (like `String` in steps 29-31, `Lambda` in step 34), if you forget to handle them in `eval`, the compiler will immediately error** (`non-exhaustive patterns`) instead of silently failing at runtime. Rust's exhaustiveness check is your best safety net—but only if you don't write `_`.
 
 In `parse_atom` in parser:
 
@@ -3391,7 +3391,7 @@ LispExp::Bool(_) | LispExp::Nil | LispExp::Func(_) => Ok(exp.clone()),
 LispExp::Bool(_) | LispExp::Nil | LispExp::Func(_) | LispExp::String(_) => Ok(exp.clone()),
 ```
 
-> If you forgot to add `String`, the compiler will error: `non-exhaustive patterns: \`String(_)\` not covered`—this is exactly the benefit of removing the `_` catch-all in step 28! The compiler watches for you, catching any unhandled variant.
+If you forgot to add `String`, the compiler will error: `non-exhaustive patterns: \`String(_)\` not covered`—this is exactly the benefit of removing the `_` catch-all in step 28! The compiler watches for you, catching any unhandled variant.
 
 ```bash
 $ cargo test
@@ -3404,15 +3404,15 @@ Types are now complete—`Number` can compute, `Bool` and `Nil` represent truth/
 
 ---
 
-> What we're solving: Implement the special forms if/define/lambda—they aren't ordinary functions, they have special evaluation rules. This is the foundation of Lisp's control flow.
+What we're solving: Implement the special forms if/define/lambda—they aren't ordinary functions, they have special evaluation rules. This is the foundation of Lisp's control flow.
 
 
 ![class diagram en](svgs/class-diagram-en.svg)
 
 
-> 🏋️ **Exercises**
-> 1. (⭐) Write a test to verify that `(> 5 3)` returns `#t` and `(> 3 5)` returns `#f`
-> 2. (⭐⭐) Add a `string-length` function that returns the length of a string. Hint: the `String` variant stores a Rust `String`, which has a `.len()` method
+🏋️ **Exercises**
+1. (⭐) Write a test to verify that `(> 5 3)` returns `#t` and `(> 3 5)` returns `#f`
+2. (⭐⭐) Add a `string-length` function that returns the length of a string. Hint: the `String` variant stores a Rust `String`, which has a `.len()` method
 
 
 <details>
@@ -3440,20 +3440,20 @@ env.set("string-length".into(), LispExp::Func(|args| {
 ```
 </details>
 
-> Type panorama: `LispExp`'s 8 variants—self-evaluating types (Number/Bool/String/Nil) + symbols (Symbol) + lists (List) + callable types (Func/Lambda). `Lambda`'s internal `env` field makes it a closure.
+Type panorama: `LispExp`'s 8 variants—self-evaluating types (Number/Bool/String/Nil) + symbols (Symbol) + lists (List) + callable types (Func/Lambda). `Lambda`'s internal `env` field makes it a closure.
 
-> 📖 **Next: [Let the Program Make Choices](#making-programs-choose)**
+📖 **Next: [Let the Program Make Choices](#making-programs-choose)**
 
 
-> ✅ **Summary**: Full type system with Boolean logic and numeric comparison. All 6 comparison operators work.
+✅ **Summary**: Full type system with Boolean logic and numeric comparison. All 6 comparison operators work.
 
 
 ## Making Programs Choose
-> ⏩ **Skip signal:** Know `if`/`define`/`lambda` semantics? Skim the implementation — note `lambda` as a special form (Step 34).
+⏩ **Skip signal:** Know `if`/`define`/`lambda` semantics? Skim the implementation — note `lambda` as a special form (Step 34).
 
-> ⚠️ **Slow zone** — Step 33 changes `eval`'s signature from `&LispEnv` to `&mut LispEnv`,
-> triggering about 6 compile errors. This is normal—the compiler is helping you find all call sites that need updating.
-> Don't panic, fix them one by one.
+⚠️ **Slow zone** — Step 33 changes `eval`'s signature from `&LispEnv` to `&mut LispEnv`,
+triggering about 6 compile errors. This is normal—the compiler is helping you find all call sites that need updating.
+Don't panic, fix them one by one.
 
 ---
 
@@ -3519,9 +3519,9 @@ pub fn eval(exp: &LispExp, env: &LispEnv) -> Result<LispExp, LispErr> {
 }
 ```
 
-> **Understanding this structure is important**: all subsequent modifications build upon this function. The `List` branch currently **unconditionally** treats the first element as the function and the rest as arguments—this is ordinary function call logic.
->
-> But `if`, `define`, `lambda` **are not ordinary functions**—they have special evaluation rules. We need to check for these "special forms" in the `List` branch, **before** the ordinary function call.
+**Understanding this structure is important**: all subsequent modifications build upon this function. The `List` branch currently **unconditionally** treats the first element as the function and the rest as arguments—this is ordinary function call logic.
+
+But `if`, `define`, `lambda` **are not ordinary functions**—they have special evaluation rules. We need to check for these "special forms" in the `List` branch, **before** the ordinary function call.
 
 ---
 
@@ -3529,7 +3529,7 @@ pub fn eval(exp: &LispExp, env: &LispEnv) -> Result<LispExp, LispErr> {
 
 **File: `src/lib.rs`**, modify the `LispExp::List(elements)` branch of `eval`.
 
-> ⚠️ **Rust Version Requirement**: This step uses `if let ... &&` syntax (let-chains), which requires **Rust 1.88+** and `edition = "2024"` (set in `Cargo.toml`). If you're using an older Rust version, rewrite as nested `if let` + `if` instead.
+⚠️ **Rust Version Requirement**: This step uses `if let ... &&` syntax (let-chains), which requires **Rust 1.88+** and `edition = "2024"` (set in `Cargo.toml`). If you're using an older Rust version, rewrite as nested `if let` + `if` instead.
 
 **Problem**: `(if (= x 0) 1 2)` — if `(= x 0)` is true, return `1`, otherwise return `2`.
 Why can't `if` be an ordinary function? Because ordinary functions **evaluate all their arguments first** before running. But `if` should only evaluate the condition, and then only **one** of the two branches.
@@ -3655,22 +3655,22 @@ if s == "define" && elements.len() == 3 {
 
 **Third step: Verify—run `cargo test` to see errors**
 
-> 💡 **Why does changing `&` to `&mut` cause 6 errors?**
->
-> Imagine you run a bubble tea shop with a "read-only menu."
-> All branches (places that call `eval`) are designed for "read-only menu"—
-> customers read the menu and leave, they don't modify it.
->
-> Now you want customers to **write on the menu** (`define` needs to modify the environment),
-> so you change the menu to "writable menu" (`&mut LispEnv`).
->
-> But the branches still follow the old rules—they have "read-only menu" workflows,
-> and suddenly the menu changed, things don't fit!
->
-> So you need to update each branch (every function that calls `eval`)
-> to "writable menu" mode (`&mut env`).
->
-> The compiler is helping you—it found 6 branches that haven't been updated yet. Fix them one by one.
+💡 **Why does changing `&` to `&mut` cause 6 errors?**
+
+Imagine you run a bubble tea shop with a "read-only menu."
+All branches (places that call `eval`) are designed for "read-only menu"—
+customers read the menu and leave, they don't modify it.
+
+Now you want customers to **write on the menu** (`define` needs to modify the environment),
+so you change the menu to "writable menu" (`&mut LispEnv`).
+
+But the branches still follow the old rules—they have "read-only menu" workflows,
+and suddenly the menu changed, things don't fit!
+
+So you need to update each branch (every function that calls `eval`)
+to "writable menu" mode (`&mut env`).
+
+The compiler is helping you—it found 6 branches that haven't been updated yet. Fix them one by one.
 
 The signature changed but call sites haven't been updated, the compiler will show two types of errors:
 
@@ -3720,7 +3720,7 @@ let mut env = LispEnv::new();    // ← add mut here
 let result = eval(&exp, &mut env).unwrap();  // ← & → &mut here
 ```
 
-> Make the same change to all other test functions. Fix each one the compiler reports.
+Make the same change to all other test functions. Fix each one the compiler reports.
 
 **After fixing, run again:**
 
@@ -3807,7 +3807,7 @@ LispExp can contain LispLambda
 
 The compiler asks: "How big is LispExp?" There's no answer — it could be infinitely nested. `Box` fixes this: "store the inner value on the heap, keep just a pointer (8 bytes) here." Problem solved.
 
-> 🦀 **Rust Deep Dive: Stack vs. Heap.** Rust puts values on the **stack** by default — fast allocation, automatic cleanup when the function returns. `Box` moves data to the **heap** — slightly slower to allocate, but the data lives as long as the pointer exists. Why does this matter for our interpreter? A typical `LispExp` without Box would be huge (the compiler needs to reserve space for the *largest possible* variant). With `Box<LispLambda>`, the enum only stores an 8-byte pointer, and the lambda's actual data lives on the heap. This keeps `LispExp` small and cache-friendly — most Lisp values (numbers, bools, nils) fit in a few bytes and never touch the heap.
+🦀 **Rust Deep Dive: Stack vs. Heap.** Rust puts values on the **stack** by default — fast allocation, automatic cleanup when the function returns. `Box` moves data to the **heap** — slightly slower to allocate, but the data lives as long as the pointer exists. Why does this matter for our interpreter? A typical `LispExp` without Box would be huge (the compiler needs to reserve space for the *largest possible* variant). With `Box<LispLambda>`, the enum only stores an 8-byte pointer, and the lambda's actual data lives on the heap. This keeps `LispExp` small and cache-friendly — most Lisp values (numbers, bools, nils) fit in a few bytes and never touch the heap.
 
 ```
 Without Box:              With Box:
@@ -4181,14 +4181,14 @@ Layer 0 → eval(List((add 3 4)))     ← identified as function call
 
 **You might be wondering now**: here we used `new_env = global.clone()`, so what's different about closures with `with_outer`?—Great question, that's what we'll cover next.
 
-> 🎉 **Milestone: We can now define variables, write conditionals, and create our own functions!**
->
-> ```lisp
-> (define square (lambda (x) (* x x)))
-> (define abs (lambda (n) (if (< n 0) (- 0 n) n)))
-> (square 5)   ; → 25
-> (abs -10)    ; → 10
-> ```
+🎉 **Milestone: We can now define variables, write conditionals, and create our own functions!**
+
+```lisp
+(define square (lambda (x) (* x x)))
+(define abs (lambda (n) (if (< n 0) (- 0 n) n)))
+(square 5)   ; → 25
+(abs -10)    ; → 10
+```
 
 ---
 
@@ -4218,10 +4218,10 @@ test result: ok. 20 passed; 0 failed
 
 ---
 
-> 🏋️ **Exercises**
-> 1. (⭐) Using `define` and `lambda`, write an `(abs x)` function that returns the absolute value of x
-> 2. (⭐⭐) Define a recursive function `(sum-to n)` that returns 1+2+...+n. Hint: reference the factorial implementation
-> 3. (⭐⭐⭐) Write a `compose` function using lambda: `(compose f g)` returns a new function h such that `(h x)` = `(f (g x))`
+🏋️ **Exercises**
+1. (⭐) Using `define` and `lambda`, write an `(abs x)` function that returns the absolute value of x
+2. (⭐⭐) Define a recursive function `(sum-to n)` that returns 1+2+...+n. Hint: reference the factorial implementation
+3. (⭐⭐⭐) Write a `compose` function using lambda: `(compose f g)` returns a new function h such that `(h x)` = `(f (g x))`
 
 
 <details>
@@ -4245,18 +4245,18 @@ test result: ok. 20 passed; 0 failed
 ```
 </details>
 
-> 🧠 **Pause and Think**
->
-> ```lisp
-> ((lambda (x) x) (lambda (x) x))
-> ```
->
-> What does this expression return? Will it crash? Work through each step: what is the outer lambda's parameter `x` bound to? What does the inner lambda evaluate to? If the answer is "a function" — can you print it in Rust? How did we implement `Display`?
+🧠 **Pause and Think**
 
-> What we're solving: Closures (functions remembering their birth environment) + TCO (tail recursion without stack overflow). Without closures you don't get real higher-order functions; without TCO you can't write infinite recursion.
+```lisp
+((lambda (x) x) (lambda (x) x))
+```
+
+What does this expression return? Will it crash? Work through each step: what is the outer lambda's parameter `x` bound to? What does the inner lambda evaluate to? If the answer is "a function" — can you print it in Rust? How did we implement `Display`?
+
+What we're solving: Closures (functions remembering their birth environment) + TCO (tail recursion without stack overflow). Without closures you don't get real higher-order functions; without TCO you can't write infinite recursion.
 
 
-> ✅ **Summary**: `if` controls evaluation flow, `define` creates top-level bindings, `lambda` creates callable functions.
+✅ **Summary**: `if` controls evaluation flow, `define` creates top-level bindings, `lambda` creates callable functions.
 
 
 
@@ -4281,20 +4281,20 @@ The parser uses it (`parse` calls `read_seq` before `read_seq` exists),
 the evaluator uses it (`eval` calls `lookup_builtin` before builtins exist),
 and you used it while following this tutorial (writing tests before implementing code).
 
-> When you write `(lambda (x) (* x 2))` before implementing `lambda`,
-> you are practicing the same mental discipline that makes Scheme great for prototyping.
+When you write `(lambda (x) (* x 2))` before implementing `lambda`,
+you are practicing the same mental discipline that makes Scheme great for prototyping.
 
 
 ## Remembering the Past
-> Why this matters: Closures are Lisp's gift to programming. A closure is a function that remembers the variables that were in scope when it was created - enabling callbacks, event handlers, and functional abstractions. Our implementation uses `Rc<RefCell<>>` for shared ownership, which mirrors how many Rust programs manage complex data.
+Why this matters: Closures are Lisp's gift to programming. A closure is a function that remembers the variables that were in scope when it was created - enabling callbacks, event handlers, and functional abstractions. Our implementation uses `Rc<RefCell<>>` for shared ownership, which mirrors how many Rust programs manage complex data.
 
-> 🚫 **Core chapter — worth reading in full.** Closures (Step 37) and TCO (Step 39) are the deepest sections here. Read every line.
+🚫 **Core chapter — worth reading in full.** Closures (Step 37) and TCO (Step 39) are the deepest sections here. Read every line.
 
-> ⚠️ **Slow zone — the hardest 4 steps in the entire tutorial.**
-> Step 36 introduces `Rc<RefCell<LispEnv>>` (three layers of nested smart pointers), Step 37 implements closure capture,
-> Step 39 implements TCO with a trampoline loop. If you're struggling, that's normal—most learners spend 2-3x more time here.
-> Tip: understand the "backpack🎒" metaphor first (Step 37 opening), then read the code. If stuck, skip to Step 40 (performance),
-> come back to closures later—it doesn't block subsequent features.
+⚠️ **Slow zone — the hardest 4 steps in the entire tutorial.**
+Step 36 introduces `Rc<RefCell<LispEnv>>` (three layers of nested smart pointers), Step 37 implements closure capture,
+Step 39 implements TCO with a trampoline loop. If you're struggling, that's normal—most learners spend 2-3x more time here.
+Tip: understand the "backpack🎒" metaphor first (Step 37 opening), then read the code. If stuck, skip to Step 40 (performance),
+come back to closures later—it doesn't block subsequent features.
 
 
 ---
@@ -4357,16 +4357,16 @@ LispExp::List(elements) => {
 }
 ```
 
-> **Two problems with the current approach**:
->
-> 1. **Closures**: lambda call uses `env.clone()` to create a new environment—but it clones the **call-time** environment, not the **definition-time** environment. So `(lambda (x) (+ x n))`'s `n` won't be found.
-> 2. **Stack overflow**: each call to `eval` is recursive—`(loop 10000)` will blow the Rust call stack.
+**Two problems with the current approach**:
+
+1. **Closures**: lambda call uses `env.clone()` to create a new environment—but it clones the **call-time** environment, not the **definition-time** environment. So `(lambda (x) (+ x n))`'s `n` won't be found.
+2. **Stack overflow**: each call to `eval` is recursive—`(loop 10000)` will blow the Rust call stack.
 
 ---
 
 ### Step 35.5: Understanding Rc and RefCell — Letting Functions Travel with a Backpack
 
-> 💡 **Why learn this first?** The next step (Step 36) will add an `outer` field to the environment, enabling closures. This requires two new Rust concepts: `Rc` and `RefCell`. Understanding them separately first means you won't be hit with three things at once.
+💡 **Why learn this first?** The next step (Step 36) will add an `outer` field to the environment, enabling closures. This requires two new Rust concepts: `Rc` and `RefCell`. Understanding them separately first means you won't be hit with three things at once.
 
 #### ① Rc — Sharing One Book Among Many Readers
 
@@ -4394,7 +4394,7 @@ println!("{}", reader2);  // "The Rust Programming Language"
 // Book is only freed when the last reader leaves
 ```
 
-> 💡 In short — `Rc`: like a shared apartment—multiple tenants share one unit. `Rc::clone()` doesn't copy the apartment, just adds a tenant name. The lease ends when the last person moves out.
+💡 In short — `Rc`: like a shared apartment—multiple tenants share one unit. `Rc::clone()` doesn't copy the apartment, just adds a tenant name. The lease ends when the last person moves out.
 
 #### ② RefCell — A Shared Book You Can Write In
 
@@ -4411,7 +4411,7 @@ notebook.borrow_mut().push_str("step one");
 println!("{}", notebook.borrow());  // "notes: step one"
 ```
 
-> 💡 In short — `RefCell`: a shared book that also allows writing. `borrow_mut()` = grab the pen and write, `borrow()` = just read, don't touch the pen.
+💡 In short — `RefCell`: a shared book that also allows writing. `borrow_mut()` = grab the pen and write, `borrow()` = just read, don't touch the pen.
 
 #### ③ Combo: Rc<RefCell<T>> — Shared + Mutable
 
@@ -4438,11 +4438,11 @@ println!("{}", lambda2.borrow());  // "x=1, y=2"  ✅
 ![rc sharing en](svgs/rc-sharing-en.svg)
 
 
-> 💡 In short — `Rc<RefCell<T>>`: shared apartment + writable whiteboard. Multiple people share it (Rc), and anyone can write on the whiteboard (RefCell). When one person writes, everyone else immediately sees it. This is the closure's "backpack🎒"—multiple lambdas carry the same backpack; if one changes something inside, everyone else knows.
+💡 In short — `Rc<RefCell<T>>`: shared apartment + writable whiteboard. Multiple people share it (Rc), and anyone can write on the whiteboard (RefCell). When one person writes, everyone else immediately sees it. This is the closure's "backpack🎒"—multiple lambdas carry the same backpack; if one changes something inside, everyone else knows.
 
-> ⚠️ **Note**: `RefCell` checks at runtime (not compile time). If you call `borrow_mut()` twice simultaneously, the program will panic. But our interpreter is single-threaded, so this won't happen.
+⚠️ **Note**: `RefCell` checks at runtime (not compile time). If you call `borrow_mut()` twice simultaneously, the program will panic. But our interpreter is single-threaded, so this won't happen.
 
-> 📝 **Next step preview**: Step 36 will add `outer: Option<Rc<RefCell<LispEnv>>>` to `LispEnv`. Now that you understand `Rc` and `RefCell`, the three-layer nesting won't be scary.
+📝 **Next step preview**: Step 36 will add `outer: Option<Rc<RefCell<LispEnv>>>` to `LispEnv`. Now that you understand `Rc` and `RefCell`, the three-layer nesting won't be scary.
 
 ---
 
@@ -4480,15 +4480,15 @@ pub struct LispEnv {
 - **`RefCell`** (interior mutability): lets you modify the environment even when it's shared. Anyone can write in that notebook.
 - Together: multiple readers, one writer, all sharing the same environment frame.
 
-> 🦀 **Rust Deep Dive: The "shared XOR mutable" rule.** Rust's most fundamental rule is: you can either have *one* mutable reference OR *many* shared references — never both at once. This prevents data races at compile time. But closures break this — multiple closures all need mutable access to the same captured environment (think `set!` modifying a shared variable). `Rc` gives us shared *ownership*, and `RefCell` moves Rust's borrow-checking from compile time to *runtime*. The trade-off: if you accidentally borrow the same `RefCell` mutably twice, your program panics instead of compiling. For a single-threaded interpreter, this is a safe and pragmatic choice.
+🦀 **Rust Deep Dive: The "shared XOR mutable" rule.** Rust's most fundamental rule is: you can either have *one* mutable reference OR *many* shared references — never both at once. This prevents data races at compile time. But closures break this — multiple closures all need mutable access to the same captured environment (think `set!` modifying a shared variable). `Rc` gives us shared *ownership*, and `RefCell` moves Rust's borrow-checking from compile time to *runtime*. The trade-off: if you accidentally borrow the same `RefCell` mutably twice, your program panics instead of compiling. For a single-threaded interpreter, this is a safe and pragmatic choice.
 
-> 💡 **Why don't we need a garbage collector?** Most Lisp-in-X tutorials (Java, Python) have to deal with reference cycles and GC. Rust's ownership system handles this for us: `Rc` auto-frees memory when the last reference drops, and the `outer` chain is a one-way linked list — no cycles. Rust gives us GC-like safety without a runtime collector.
+💡 **Why don't we need a garbage collector?** Most Lisp-in-X tutorials (Java, Python) have to deal with reference cycles and GC. Rust's ownership system handles this for us: `Rc` auto-frees memory when the last reference drops, and the `outer` chain is a one-way linked list — no cycles. Rust gives us GC-like safety without a runtime collector.
 
 
 ![env chain en](svgs/env-chain-en.svg)
 
 
-> Environment chain = singly linked list: each environment frame has an `outer` pointer to the outer environment. Variable lookup follows this chain from inside to outside—this is the runtime implementation of lexical scoping. `Rc<RefCell<>>` allows multiple places to share the same frame (e.g., two closures capturing the same outer environment).
+Environment chain = singly linked list: each environment frame has an `outer` pointer to the outer environment. Variable lookup follows this chain from inside to outside—this is the runtime implementation of lexical scoping. `Rc<RefCell<>>` allows multiple places to share the same frame (e.g., two closures capturing the same outer environment).
 
 **Second step: Update `new()` method**—add `outer: None`:
 
@@ -4572,7 +4572,7 @@ test result: ok. 21 passed; 0 failed
 
 ### Step 37: Lambda Captures Environment, Implementing True Closures
 
-> **Already know what closures are?** Here's the whole idea in one sentence: when a `lambda` is evaluated, we create a `LispLambda` that stores a reference to the current `LispEnv`. Variable lookup chains through `env → env.outer → ...` until found. That's lexical scoping. The rest of this step is a detailed walkthrough for readers who are new to the concept.
+**Already know what closures are?** Here's the whole idea in one sentence: when a `lambda` is evaluated, we create a `LispLambda` that stores a reference to the current `LispEnv`. Variable lookup chains through `env → env.outer → ...` until found. That's lexical scoping. The rest of this step is a detailed walkthrough for readers who are new to the concept.
 
 **File: `src/lib.rs`**
 
@@ -4584,7 +4584,7 @@ test result: ok. 21 passed; 0 failed
 (add5 10)  ; should be 15, but n is no longer findable when add5 is called!
 ```
 
-> 🔧 **Rust Curve: `Rc<RefCell<T>>`** — This is Rust's pattern for shared mutable state. `Rc` (Reference Counted) lets multiple parts of the program share ownership of the same data — like a book with multiple readers. `RefCell` adds runtime borrow checking — it enforces the same rules as Rust's borrow checker (one writer XOR multiple readers), but at runtime instead of compile time. We accept this runtime cost because it dramatically simplifies the environment code. Most production Rust code avoids `RefCell` when possible, but for interpreters and graph-like data structures it is the pragmatic choice.
+🔧 **Rust Curve: `Rc<RefCell<T>>`** — This is Rust's pattern for shared mutable state. `Rc` (Reference Counted) lets multiple parts of the program share ownership of the same data — like a book with multiple readers. `RefCell` adds runtime borrow checking — it enforces the same rules as Rust's borrow checker (one writer XOR multiple readers), but at runtime instead of compile time. We accept this runtime cost because it dramatically simplifies the environment code. Most production Rust code avoids `RefCell` when possible, but for interpreters and graph-like data structures it is the pragmatic choice.
 
 **First step: Update `LispLambda` struct**—add `env` field:
 
@@ -4690,31 +4690,31 @@ test result: ok. 22 passed; 0 failed
 ![closure en](svgs/closure-en.svg)
 
 
-> Closure = function body + birth environment. Technically, "a function remembers the environment it was born in" means `Lambda.env` points to the definition-time `CallFrame`. When calling, the new frame uses this captured frame as its `outer`—so the inner function can "see" the outer function's variables.
+Closure = function body + birth environment. Technically, "a function remembers the environment it was born in" means `Lambda.env` points to the definition-time `CallFrame`. When calling, the new frame uses this captured frame as its `outer`—so the inner function can "see" the outer function's variables.
 
-> 📐 **Formal Definition**: Closure Semantics
->
-> ```
-> eval(Lambda(params, body), env) = ⟦λ(params) body | env⟧
->     // "Closure" = package of (params, body, captured environment)
->
-> eval(List[closure, actuals...], env_call) =
->     let ⟦λ(params) body | env_capture⟧ = eval(closure, env_call)
->     let env_new = extend(env_capture, params → map(eval(_, env_call), actuals))
->     eval(body, env_new)
-> ```
->
-> The key insight: when calling a closure, we extend the **captured environment** (env_capture),
-> not the **calling environment** (env_call). This is what makes it **lexical scoping**.
-> Without this (if we used env_call), we'd have **dynamic scoping** — a different language semantics.
->
-> ```lisp
-> (define x 1)
-> (define f (lambda () x))
-> (define x 2)
-> (f)  ; Lexical → 1  (uses x from where f was defined)
->      ; Dynamic → 2  (uses x from where f was called)
-> ```
+📐 **Formal Definition**: Closure Semantics
+
+```
+eval(Lambda(params, body), env) = ⟦λ(params) body | env⟧
+    // "Closure" = package of (params, body, captured environment)
+
+eval(List[closure, actuals...], env_call) =
+    let ⟦λ(params) body | env_capture⟧ = eval(closure, env_call)
+    let env_new = extend(env_capture, params → map(eval(_, env_call), actuals))
+    eval(body, env_new)
+```
+
+The key insight: when calling a closure, we extend the **captured environment** (env_capture),
+not the **calling environment** (env_call). This is what makes it **lexical scoping**.
+Without this (if we used env_call), we'd have **dynamic scoping** — a different language semantics.
+
+```lisp
+(define x 1)
+(define f (lambda () x))
+(define x 2)
+(f)  ; Lexical → 1  (uses x from where f was defined)
+     ; Dynamic → 2  (uses x from where f was called)
+```
 
 ---
 
@@ -5048,7 +5048,7 @@ Lookup "n": CallFrame₂ ❌ → CallFrame₁ ✅ (2 hops)
 Lookup "+": CallFrame₂ ❌ → CallFrame₁ ❌ → Global ✅ (3 hops)
 ```
 
-> **One-sentence summary**: `Lambda.env` remembers its birth call frame. When calling this lambda, `with_outer(lambda.env)` "hangs" the new frame under the birth frame. Variable lookup climbs up the outer chain—so it can "see" variables from the birth frame. This is the **closure**.
+**One-sentence summary**: `Lambda.env` remembers its birth call frame. When calling this lambda, `with_outer(lambda.env)` "hangs" the new frame under the birth frame. Variable lookup climbs up the outer chain—so it can "see" variables from the birth frame. This is the **closure**.
 
 ---
 
@@ -5070,29 +5070,29 @@ eval → lambdaCall → eval → lambdaCall → eval → ... → stack overflow!
 
 **Tail call**: If the last step of a function is calling another function (or itself recursively), you can "reuse" the current stack frame instead of creating a new one. This is called **Tail Call Optimization (TCO)**.
 
-> 📐 **Formal Definition**: Tail Call vs. Non-Tail Call
->
-> A function call is in **tail position** if it's the *last thing* evaluated before the enclosing
-> function returns. Formally:
->
-> ```
-> eval(Begin(exprs...)) =
->     eval(exprs[0..n-1])          // Non-tail: evaluate for side effects
->     eval(exprs[n])               // Tail: this result becomes the result of Begin
->
-> eval(If(cond, then, else)) =
->     if eval(cond) == true → eval(then)    // Tail: then is in tail position
->     else                  → eval(else)    // Tail: else is in tail position
->
-> eval(Apply(func, args)) =
->     eval(func)                   // Not tail: must evaluate to get the function
->     eval(args[0..n-1])           // Not tail: must evaluate all arguments first
->     apply(eval(func), evaled_args)  // Tail: this is the last step
-> ```
->
-> **Trampoline rule**: If `current_exp` is in tail position, update `current_exp = new_exp`
-> and `continue` the loop instead of recursively calling `eval`. This flattens the recursion
-> into iteration, using O(1) stack space instead of O(n).
+📐 **Formal Definition**: Tail Call vs. Non-Tail Call
+
+A function call is in **tail position** if it's the *last thing* evaluated before the enclosing
+function returns. Formally:
+
+```
+eval(Begin(exprs...)) =
+    eval(exprs[0..n-1])          // Non-tail: evaluate for side effects
+    eval(exprs[n])               // Tail: this result becomes the result of Begin
+
+eval(If(cond, then, else)) =
+    if eval(cond) == true → eval(then)    // Tail: then is in tail position
+    else                  → eval(else)    // Tail: else is in tail position
+
+eval(Apply(func, args)) =
+    eval(func)                   // Not tail: must evaluate to get the function
+    eval(args[0..n-1])           // Not tail: must evaluate all arguments first
+    apply(eval(func), evaled_args)  // Tail: this is the last step
+```
+
+**Trampoline rule**: If `current_exp` is in tail position, update `current_exp = new_exp`
+and `continue` the loop instead of recursively calling `eval`. This flattens the recursion
+into iteration, using O(1) stack space instead of O(n).
 
 ---
 
@@ -5125,7 +5125,7 @@ pub fn eval(exp: &LispExp, env: &mut LispEnv) -> Result<LispExp, LispErr> {
     // If not yet added, add Default to the derive line in env.rs
 ```
 
-> ⚠️ `std::mem::take` requires the type to implement `Default`. If you haven't added `#[derive(Default)]` to `LispEnv` yet, do it now: add `, Default` after the existing derives in `src/env.rs`.
+⚠️ `std::mem::take` requires the type to implement `Default`. If you haven't added `#[derive(Default)]` to `LispEnv` yet, do it now: add `, Default` after the existing derives in `src/env.rs`.
 
 ```rust
     // 2 Trampoline loop: each loop processes one expression
@@ -5255,7 +5255,7 @@ pub fn eval(exp: &LispExp, env: &mut LispEnv) -> Result<LispExp, LispErr> {
 
 💡 In short — `mem::take` swaps the value out, leaving an empty default behind. We work with `current_env` during the loop, then put the real env back with `*env = current_env`. Borrow a book, read it, return it.
 
-> 💡 **Safety of nested `eval` calls**: The TCO loop internally calls `eval(&elements[0], &mut current_env)` for nested evaluation. Each nested `eval` also does `std::mem::take(&mut current_env)` to take the environment, but restores it via `*env = current_env` on return. Even if a nested `eval` returns early via `?` (error), the error propagates upward and the outer code no longer uses `current_env`, so state is not corrupted. This is the core safety guarantee of the `mem::take` + restore mechanism.
+💡 **Safety of nested `eval` calls**: The TCO loop internally calls `eval(&elements[0], &mut current_env)` for nested evaluation. Each nested `eval` also does `std::mem::take(&mut current_env)` to take the environment, but restores it via `*env = current_env` on return. Even if a nested `eval` returns early via `?` (error), the error propagates upward and the outer code no longer uses `current_env`, so state is not corrupted. This is the core safety guarantee of the `mem::take` + restore mechanism.
 
 **TCO core rules (just remember these two)**:
 
@@ -5268,7 +5268,7 @@ pub fn eval(exp: &LispExp, env: &mut LispEnv) -> Result<LispExp, LispErr> {
 ![tco trampoline en](svgs/tco-trampoline-en.svg)
 
 
-> Color meanings: Green = TCO path (continue, no stack growth), Blue = return path (result produced). Note all tail call positions (if branches, lambda body calls) follow the green path.
+Color meanings: Green = TCO path (continue, no stack growth), Blue = return path (result produced). Note all tail call positions (if branches, lambda body calls) follow the green path.
 
 **Tests**:
 
@@ -5295,18 +5295,18 @@ test tests::test_tail_call_optimization ... ok
 test result: ok. 23 passed; 0 failed
 ```
 
-> 🎉 **Milestone: Closures + infinite recursion supported! The core capabilities of the interpreter are all in place.**
->
-> ```lisp
-> (define fact (lambda (n) (if (= n 0) 1 (* n (fact (- n 1))))))
-> (fact 5)   ; → 120
-> (fact 100) ; evaluates correctly, but fact is NOT tail-recursive — only use TCO-friendly recursion!
-> ```
+🎉 **Milestone: Closures + infinite recursion supported! The core capabilities of the interpreter are all in place.**
 
-> 🏋️ **Exercises**
-> 1. (⭐) Using closures, write a `(make-adder n)` function that returns `(lambda (x) (+ x n))`. Test: `(define add5 (make-adder 5))` → `(add5 10)` = 15
-> 2. (⭐⭐) Write a `(make-stack)` function: return a closure that tracks the stack size on each call (use set! to accumulate)
-> 3. (⭐⭐⭐) Explain: why would `(loop 10000)` crash without TCO? Try running `(loop 1000)` on a version without TCO
+```lisp
+(define fact (lambda (n) (if (= n 0) 1 (* n (fact (- n 1))))))
+(fact 5)   ; → 120
+(fact 100) ; evaluates correctly, but fact is NOT tail-recursive — only use TCO-friendly recursion!
+```
+
+🏋️ **Exercises**
+1. (⭐) Using closures, write a `(make-adder n)` function that returns `(lambda (x) (+ x n))`. Test: `(define add5 (make-adder 5))` → `(add5 10)` = 15
+2. (⭐⭐) Write a `(make-stack)` function: return a closure that tracks the stack size on each call (use set! to accumulate)
+3. (⭐⭐⭐) Explain: why would `(loop 10000)` crash without TCO? Try running `(loop 1000)` on a version without TCO
 
 
 <details>
@@ -5332,63 +5332,63 @@ test result: ok. 23 passed; 0 failed
 **3. Without TCO**
 Each recursive call allocates a new Rust stack frame. A few thousand calls exhaust the stack. TCO uses `current_exp = new_exp; continue` to reuse the same frame.
 
-> 4. (⭐⭐⭐) **Think before you run**:
->    ```lisp
->    (define a 1)
->    (define f (lambda () a))
->    (define a 2)
->    (f)
->    ```
->    What does `(f)` return? Write down your answer with reasoning *before* actually testing it.
->    Now run it. Were you right? Now change the code to define `a` with `let` instead of `define`.
->    Does the result change? Why?
+4. (⭐⭐⭐) **Think before you run**:
+   ```lisp
+   (define a 1)
+   (define f (lambda () a))
+   (define a 2)
+   (f)
+   ```
+   What does `(f)` return? Write down your answer with reasoning *before* actually testing it.
+   Now run it. Were you right? Now change the code to define `a` with `let` instead of `define`.
+   Does the result change? Why?
 </details>
 
-> What we're solving: Performance optimization—string interning (each name allocated only once), zero-copy lexing (no token copying), FX hasher (5x faster than SipHash). Making the interpreter fast.
+What we're solving: Performance optimization—string interning (each name allocated only once), zero-copy lexing (no token copying), FX hasher (5x faster than SipHash). Making the interpreter fast.
 
-> 📖 **Next: [Making It Faster](#making-programs-run-faster)**
+📖 **Next: [Making It Faster](#making-programs-run-faster)**
 
 ---
 
-> 📝 **Design Note: Why `Rc<RefCell<>>` and not a garbage collector?**
->
-> Our closures capture their environment via `Rc<RefCell<LispEnv>>` — a reference-counted,
-> runtime-mutable smart pointer. This works, but real Lisp implementations (Chez Scheme, Racket,
-> SBCL) use tracing garbage collectors.
->
-> **Why `Rc<RefCell<>>` for us?**
->
-> | Concern | `Rc<RefCell<>>` | Tracing GC |
-> |---------|-----------------|-----------|
-> | Memory model | Deterministic (drop when refcount hits 0) | Non-deterministic (collection cycles) |
-> | Cycle handling | Can't handle cycles (memory leak) | Handles cycles automatically |
-> | Complexity | Zero — built into Rust's standard library | Requires a separate runtime |
-> | Performance | Predictable overhead | Pauses during collection |
->
-> **Our choice is correct for a learning project.** We avoid adding a GC runtime (which would be
-> a second interpreter in itself). However, our `letrec` implementation shows the cycle problem:
-> two lambdas referencing each other in their environments creates a reference cycle. We solved
-> this with a workaround (letrec's "chalkboard" trick), but a real GC would handle it transparently.
->
-> **📌 TCO Design Decision: Trampoline over CPS**
->
-> We implemented TCO via a **trampoline loop** (`loop { match ...; continue }`). The alternative
-> is **CPS (Continuation-Passing Style) transform**: rewrite every function to take a continuation
-> parameter instead of returning. CPS is more powerful (supports call/cc) but:
-> - Requires transforming ALL functions — a massive refactor
-> - Harder to understand (every function becomes "call me with what to do next")
->
-> The trampoline is the pragmatic choice: it handles tail calls without changing our function signatures,
-> and it's trivially correct (just `continue` instead of recursive `eval`).
+📝 **Design Note: Why `Rc<RefCell<>>` and not a garbage collector?**
 
-> 🧠 **Mental Model Checkpoint**: After this chapter, you should distinguish between recursive calls that grow the stack and tail calls that don't. A tail call returns the result of one function directly - the evaluator can `continue` the loop instead of pushing a new stack frame.
+Our closures capture their environment via `Rc<RefCell<LispEnv>>` — a reference-counted,
+runtime-mutable smart pointer. This works, but real Lisp implementations (Chez Scheme, Racket,
+SBCL) use tracing garbage collectors.
 
+**Why `Rc<RefCell<>>` for us?**
 
+| Concern | `Rc<RefCell<>>` | Tracing GC |
+|---------|-----------------|-----------|
+| Memory model | Deterministic (drop when refcount hits 0) | Non-deterministic (collection cycles) |
+| Cycle handling | Can't handle cycles (memory leak) | Handles cycles automatically |
+| Complexity | Zero — built into Rust's standard library | Requires a separate runtime |
+| Performance | Predictable overhead | Pauses during collection |
 
-> 🧠 **Mental Model Checkpoint**: After this chapter, you should understand that a function is not just code - it is code plus an environment. When you call a closure, it can access variables that no longer exist on the call stack, because the environment was captured at definition time.
+**Our choice is correct for a learning project.** We avoid adding a GC runtime (which would be
+a second interpreter in itself). However, our `letrec` implementation shows the cycle problem:
+two lambdas referencing each other in their environments creates a reference cycle. We solved
+this with a workaround (letrec's "chalkboard" trick), but a real GC would handle it transparently.
+
+**📌 TCO Design Decision: Trampoline over CPS**
+
+We implemented TCO via a **trampoline loop** (`loop { match ...; continue }`). The alternative
+is **CPS (Continuation-Passing Style) transform**: rewrite every function to take a continuation
+parameter instead of returning. CPS is more powerful (supports call/cc) but:
+- Requires transforming ALL functions — a massive refactor
+- Harder to understand (every function becomes "call me with what to do next")
+
+The trampoline is the pragmatic choice: it handles tail calls without changing our function signatures,
+and it's trivially correct (just `continue` instead of recursive `eval`).
+
+🧠 **Mental Model Checkpoint**: After this chapter, you should distinguish between recursive calls that grow the stack and tail calls that don't. A tail call returns the result of one function directly - the evaluator can `continue` the loop instead of pushing a new stack frame.
 
 
-> ✅ **Summary**: Closures capture their birth environment. TCO lets `(loop 10000)` run without stack overflow.
+
+🧠 **Mental Model Checkpoint**: After this chapter, you should understand that a function is not just code - it is code plus an environment. When you call a closure, it can access variables that no longer exist on the call stack, because the environment was captured at definition time.
+
+
+✅ **Summary**: Closures capture their birth environment. TCO lets `(loop 10000)` run without stack overflow.
 
 
 ## Making Programs Run Faster
@@ -5458,7 +5458,7 @@ String interning:
 ![string interning en](svgs/string-interning-en.svg)
 
 
-> Bidirectional mapping: `id_to_str` for `lookup(id)` to output debug info, `str_to_id` for `intern(str)` fast deduplication. `OnceLock<RwLock<>>` ensures a single global instance and thread safety.
+Bidirectional mapping: `id_to_str` for `lookup(id)` to output debug info, `str_to_id` for `intern(str)` fast deduplication. `OnceLock<RwLock<>>` ensures a single global instance and thread safety.
 
 💡 In short — `static`: one global instance for the entire program. Like the lobby clock — everyone sees the same one.
 
@@ -5494,7 +5494,7 @@ LispExp::Symbol(token.to_string())
 LispExp::Symbol(interner::intern(token))  // intern string as u64 ID
 ```
 
-> ⚠️ Don't forget to add `use crate::interner;` at the top of `src/parser.rs`!
+⚠️ Don't forget to add `use crate::interner;` at the top of `src/parser.rs`!
 
 **Third step: Change `LispEnv`'s key type**:
 
@@ -5542,7 +5542,7 @@ NN |     env.get("x")
 error: aborting due to 12 previous errors
 ```
 
-> Many errors, but only **3 patterns**. Fix by category:
+Many errors, but only **3 patterns**. Fix by category:
 
 **Fifth step: Fix by category**
 
@@ -5556,7 +5556,7 @@ if s == "define" {   →  if *s == interner::intern("define") {
 if s == "lambda" {   →  if *s == interner::intern("lambda") {
 ```
 
-> `s` is now `&u64`, so dereference with `*s`. `intern("if")` returns u64.
+`s` is now `&u64`, so dereference with `*s`. `intern("if")` returns u64.
 
 **Pattern B: `env.set(key, value)`—key from String to u64**
 
@@ -5581,7 +5581,7 @@ env.get(name)             →  env.get(*name)  // if name is &u64
 if let LispExp::Symbol(name) = &elements[1] {  ← No change needed! Matching Symbol stays the same
 ```
 
-> Pattern D needs no change—the match syntax for `Symbol(whatever)` remains the same, only the inner data type changes.
+Pattern D needs no change—the match syntax for `Symbol(whatever)` remains the same, only the inner data type changes.
 
 **Pattern E: `LispLambda.params`—from `Vec<String>` to `Vec<u64>`**
 
@@ -5609,7 +5609,7 @@ Also, the code that collects parameter names in the `lambda` special form must c
 name.clone()                →  interner::intern(name)
 ```
 
-> 💡 **Tip**: If you miss updating `params`, the compiler will report a type mismatch at the `lambda.params.iter().zip(...)` line—`zip` requires both iterators to have matching element types.
+💡 **Tip**: If you miss updating `params`, the compiler will report a type mismatch at the `lambda.params.iter().zip(...)` line—`zip` requires both iterators to have matching element types.
 
 **After fixing:**
 
@@ -5698,7 +5698,7 @@ pub fn tokenize(input: &str) -> Vec<&str> {
 
 💡 In short — Zero-copy: instead of photocopying every token into a new String (heap allocation), we just point to the right spot in the source (a Post-it note). Eliminates 100% of token allocations.
 
-> ⚠️ **Boundary tests (important!)**: On empty string input, the old `input.len()-1` would cause a usize underflow panic. The fix above uses `input.len()` to avoid this. Make sure to add these tests:
+⚠️ **Boundary tests (important!)**: On empty string input, the old `input.len()-1` would cause a usize underflow panic. The fix above uses `input.len()` to avoid this. Make sure to add these tests:
 
 ```rust
 // src/lexer.rs — add to tests module
@@ -5763,8 +5763,8 @@ if token.as_str() == "(" {
 if token == "(" {     // token is already &str, no need for .as_str()
 ```
 
-> Old version `token: &String`, needed `.as_str()` to convert to `&str` to compare with `"("`.
-> New version `token: &str`, `== "("` works directly.
+Old version `token: &String`, needed `.as_str()` to convert to `&str` to compare with `"("`.
+New version `token: &str`, `== "("` works directly.
 
 ```bash
 $ cargo test
@@ -5846,14 +5846,14 @@ pub data: HashMap<u64, LispExp, BuildFxHasher>,  // use custom fast hasher
 
 Step 43 end-of-step project status:
 
-> **Important: Project restructuring** — The project has grown quite large. Now migrate the `eval` function and `default_env` from `lib.rs` to a new file `src/interpreter.rs`:
-> 1. Right-click `src` → **New** → **File** → `interpreter.rs`
-> 2. **Cut** the `eval` function and `default_env` function from `lib.rs` to `interpreter.rs`
-> 3. Add `use crate::{LispExp, LispErr, LispLambda};` and `use crate::env::LispEnv;` and other necessary imports at the top of `interpreter.rs`
-> 4. Add `pub mod interpreter;` in `lib.rs`
-> 5. `cargo test` to confirm everything passes
->
-> **From now on, all modifications to `eval` and `default_env` go in `src/interpreter.rs`.**
+**Important: Project restructuring** — The project has grown quite large. Now migrate the `eval` function and `default_env` from `lib.rs` to a new file `src/interpreter.rs`:
+1. Right-click `src` → **New** → **File** → `interpreter.rs`
+2. **Cut** the `eval` function and `default_env` function from `lib.rs` to `interpreter.rs`
+3. Add `use crate::{LispExp, LispErr, LispLambda};` and `use crate::env::LispEnv;` and other necessary imports at the top of `interpreter.rs`
+4. Add `pub mod interpreter;` in `lib.rs`
+5. `cargo test` to confirm everything passes
+
+**From now on, all modifications to `eval` and `default_env` go in `src/interpreter.rs`.**
 
 ```
 lisp-rs/
@@ -5878,19 +5878,19 @@ lisp-rs/
 ![module pipeline en](svgs/module-pipeline-en.svg)
 
 
-> Module layering: Core layer (types + environment + interner) → Parsing layer (lexer + parser) → Evaluation layer. Each layer only depends on layers below, no cross-layer dependencies.
+Module layering: Core layer (types + environment + interner) → Parsing layer (lexer + parser) → Evaluation layer. Each layer only depends on layers below, no cross-layer dependencies.
 
 ---
 
-> What we're solving: begin/set!/let/cond/and/or/let*/letrec—completing Lisp's control flow and binding capabilities.
+What we're solving: begin/set!/let/cond/and/or/let*/letrec—completing Lisp's control flow and binding capabilities.
 
 
 ![special forms en](svgs/special-forms-en.svg)
 
 
-> 🏋️ **Exercises**
-> 1. (⭐) Run `cargo run --example bench --release` and record the TCO and factorial benchmark data on your machine
-> 2. (⭐⭐) Add a counter in `interner.rs`'s `intern()` function to track how many distinct symbols have been interned
+🏋️ **Exercises**
+1. (⭐) Run `cargo run --example bench --release` and record the TCO and factorial benchmark data on your machine
+2. (⭐⭐) Add a counter in `interner.rs`'s `intern()` function to track how many distinct symbols have been interned
 
 
 <details>
@@ -5920,48 +5920,48 @@ fn intern(&mut self, s: &str) -> u64 {
 ```
 </details>
 
-> Special form panorama: When eval encounters a List, it first checks if the first element is a special form keyword. Green = tail-call optimized paths (if/let/cond/and/or/Lambda calls all use TCO), Blue = direct return (quote/define/lambda). The remaining special forms (begin/set!/let/cond/and/or/let*/letrec) are implemented one by one in steps 44-51.
+Special form panorama: When eval encounters a List, it first checks if the first element is a special form keyword. Green = tail-call optimized paths (if/let/cond/and/or/Lambda calls all use TCO), Blue = direct return (quote/define/lambda). The remaining special forms (begin/set!/let/cond/and/or/let*/letrec) are implemented one by one in steps 44-51.
 
 ---
 
-> 📝 **Design Note: Optimization order — why we waited until Step 40**
->
-> The three optimizations (interning, zero-copy lexing, FX hasher) are deliberately postponed until
-> after closures and TCO work. This is not an accident — it's a pedagogical principle:
->
-> **"Make it work, make it right, make it fast"** — in that order.
->
-> If we'd introduced interning in Step 5, the reader would have to juggle:
-> - A global static `OnceLock<RwLock<>>` (unfamiliar pattern)
-> - Symbol IDs vs. string names (dual representation)
-> - HashMap lifetime management
->
-> ...all before understanding *why* symbols need to be compared at all.
->
-> **When should you optimize?** The answer from this tutorial's structure:
-> | Stage | Concern | Optimization priority |
-> |-------|---------|---------------------|
-> | Steps 1-27 | Correctness | None — use the simplest code |
-> | Steps 28-39 | Feature completeness | None — add features first |
-> | Steps 40-43 | Performance | Now — the feature set is stable |
-> | Steps 44-74 | Polish | Only if benchmarks show a problem |
->
-> This mirrors how real projects evolve. You can't optimize what you haven't built, and you
-> shouldn't optimize what you haven't measured.
+📝 **Design Note: Optimization order — why we waited until Step 40**
+
+The three optimizations (interning, zero-copy lexing, FX hasher) are deliberately postponed until
+after closures and TCO work. This is not an accident — it's a pedagogical principle:
+
+**"Make it work, make it right, make it fast"** — in that order.
+
+If we'd introduced interning in Step 5, the reader would have to juggle:
+- A global static `OnceLock<RwLock<>>` (unfamiliar pattern)
+- Symbol IDs vs. string names (dual representation)
+- HashMap lifetime management
+
+...all before understanding *why* symbols need to be compared at all.
+
+**When should you optimize?** The answer from this tutorial's structure:
+| Stage | Concern | Optimization priority |
+|-------|---------|---------------------|
+| Steps 1-27 | Correctness | None — use the simplest code |
+| Steps 28-39 | Feature completeness | None — add features first |
+| Steps 40-43 | Performance | Now — the feature set is stable |
+| Steps 44-74 | Polish | Only if benchmarks show a problem |
+
+This mirrors how real projects evolve. You can't optimize what you haven't built, and you
+shouldn't optimize what you haven't measured.
 
 
-> ✅ **Summary**: Symbol comparison is O(1). Lexer allocates zero heap. Hashing uses ~3 CPU instructions per key.
+✅ **Summary**: Symbol comparison is O(1). Lexer allocates zero heap. Hashing uses ~3 CPU instructions per key.
 
 
 
-> **📊 Benchmark results** (measured with `cargo bench` on a 2019 MBP running `(loop 100000)`):
-> - Naïve (string comparison + recursive eval): **~2,300 μs**
-> - Interning (u64 symbols + FX hashing): **~410 μs** (5.6× speedup)
-> - Full optimization (including zero-copy lexer): **~280 μs** (8.2× speedup)
+**📊 Benchmark results** (measured with `cargo bench` on a 2019 MBP running `(loop 100000)`):
+- Naïve (string comparison + recursive eval): **~2,300 μs**
+- Interning (u64 symbols + FX hashing): **~410 μs** (5.6× speedup)
+- Full optimization (including zero-copy lexer): **~280 μs** (8.2× speedup)
 
 
 ## More Magic Commands
-> ⏩ **Skip signal:** Only need the core language? Jump to [Step 52](#step-52-less-than). These special forms follow the same pattern — check the first element, branch accordingly.
+⏩ **Skip signal:** Only need the core language? Jump to [Step 52](#step-52-less-than). These special forms follow the same pattern — check the first element, branch accordingly.
 
 
 ---
@@ -5985,9 +5985,9 @@ fn intern(&mut self, s: &str) -> u64 {
 ---
 ### Step 44: begin — Sequential Evaluation
 
-> **From now on, all code modifying `eval` goes in `src/interpreter.rs`** (created in the previous step). Type definitions remain in `lib.rs`, built-in function registration remains in `default_env()` (also in `interpreter.rs`).
+**From now on, all code modifying `eval` goes in `src/interpreter.rs`** (created in the previous step). Type definitions remain in `lib.rs`, built-in function registration remains in `default_env()` (also in `interpreter.rs`).
 
-> 📌 **`PredefinedSyms` struct**: From this step onward, special form keywords (`if`, `define`, `lambda`, `begin`, etc.) are accessed via the `predefined()` function which returns pre-interned `u64` IDs, avoiding repeated `interner::intern()` calls. The `PredefinedSyms` struct and `predefined()` function are defined in `src/interner.rs` (created in Step 40), containing pre-interned IDs for all special form symbols. Usage: `predefined().begin`, `predefined().let_sym`, etc.
+📌 **`PredefinedSyms` struct**: From this step onward, special form keywords (`if`, `define`, `lambda`, `begin`, etc.) are accessed via the `predefined()` function which returns pre-interned `u64` IDs, avoiding repeated `interner::intern()` calls. The `PredefinedSyms` struct and `predefined()` function are defined in `src/interner.rs` (created in Step 40), containing pre-interned IDs for all special form symbols. Usage: `predefined().begin`, `predefined().let_sym`, etc.
 
 **Goal**: `(begin (define x 10) (+ x 5))` → `15`.
 
@@ -6101,7 +6101,7 @@ test result: ok. 28 passed; 0 failed
 
 ### Step 46: let — Local Bindings
 
-> 📌 **Prerequisite**: `let`'s multi-expression body is desugared to `begin` (Step 44). Make sure `begin` is implemented first.
+📌 **Prerequisite**: `let`'s multi-expression body is desugared to `begin` (Step 44). Make sure `begin` is implemented first.
 
 **Goal**: `(let ((x 1) (y 2)) (+ x y))` → `3`.
 
@@ -6383,7 +6383,7 @@ test result: ok. 31 passed; 0 failed
 
 **Implementation**—Rc shared environment pattern ("placeholder then replace"):
 
-> ⚠️ **Critical fix**: `shared_env` must clone the current environment (not create an empty env + outer pointer), otherwise lambdas inside `letrec` won't find built-in functions like `+`, `=`.
+⚠️ **Critical fix**: `shared_env` must clone the current environment (not create an empty env + outer pointer), otherwise lambdas inside `letrec` won't find built-in functions like `+`, `=`.
 
 ```rust
 // src/interpreter.rs
@@ -6552,10 +6552,10 @@ KEY SUMMARY: letrec's "placeholder then replace" strategy:
 
 ---
 
-> 🏋️ **Exercises**
-> 1. (⭐) Rewrite the factorial function using `let` with local variables to store intermediate results
-> 2. (⭐⭐) Use `letrec` to implement mutually recursive `even?` and `odd?` functions
-> 3. (⭐⭐⭐) Use `cond` to implement a `(grade score)` function: >=90→A, >=80→B, >=70→C, >=60→D, else→F
+🏋️ **Exercises**
+1. (⭐) Rewrite the factorial function using `let` with local variables to store intermediate results
+2. (⭐⭐) Use `letrec` to implement mutually recursive `even?` and `odd?` functions
+3. (⭐⭐⭐) Use `cond` to implement a `(grade score)` function: >=90→A, >=80→B, >=70→C, >=60→D, else→F
 
 
 <details>
@@ -6585,63 +6585,63 @@ KEY SUMMARY: letrec's "placeholder then replace" strategy:
           (else 'F))))
 ```
 
-> 4. (⭐⭐⭐) **Design thinking**: `let` is defined as syntactic sugar — it desugars into
->    a lambda call. Could `if` also be desugared into a function call? Why or why not?
->    What about `and`? What about `define`? For each, say "yes (it can be a function)"
->    or "no (must be a special form)" and give your reasoning.
+4. (⭐⭐⭐) **Design thinking**: `let` is defined as syntactic sugar — it desugars into
+   a lambda call. Could `if` also be desugared into a function call? Why or why not?
+   What about `and`? What about `define`? For each, say "yes (it can be a function)"
+   or "no (must be a special form)" and give your reasoning.
 </details>
 
-> What we're solving: Complete all built-in functions (arithmetic, list operations, predicates, higher-order), variadic lambda, quote abbreviation, Display trait, REPL entry point. From here the interpreter becomes truly usable.
+What we're solving: Complete all built-in functions (arithmetic, list operations, predicates, higher-order), variadic lambda, quote abbreviation, Display trait, REPL entry point. From here the interpreter becomes truly usable.
 
 ---
 
-> 📝 **Design Note: Special forms — why they're special**
->
-> A *special form* is a language construct that doesn't follow normal evaluation rules.
-> In our Lisp, `if`, `define`, `lambda`, `begin`, `set!`, `let`, `cond`, `and`, `or`, `let*`,
-> and `letrec` are all special forms.
->
-> **What makes them "special"?**
->
-> ```lisp
-> (if (= x 0) "zero" (loop x))    ; only evaluates one branch
-> (define x 42)                     ; doesn't evaluate "x" — it defines it
-> (lambda (x) (+ x 1))             ; doesn't evaluate body — captures it
-> ```
->
-> If these were ordinary functions, all arguments would be evaluated before the call —
-> and `define` would crash trying to evaluate an undefined symbol `x`.
->
-> **What belongs in special forms vs. built-in functions?**
->
-> | Criteria | Goes in special form | Goes in built-in function |
-> |----------|---------------------|--------------------------|
-> | Control flow | `if`, `cond`, `and`, `or` | (none) |
-> | Variable binding | `define`, `set!`, `let`, `letrec` | (none) |
-> | Function creation | `lambda` | (none) |
-> | Sequencing | `begin` | (none) |
-> | Arithmetic | (none) | `+`, `-`, `*`, `/` |
-> | Comparison | (none) | `=`, `>`, `<`, `>=`, `<=` |
-> | List operations | (none) | `list`, `cons`, `car`, `cdr` |
-> | Type predicates | (none) | `null?`, `number?`, `symbol?` |
->
-> **Rule of thumb**: If a construct needs to *delay evaluation* of some arguments
-> (e.g., `if` only evaluates one branch, `lambda` captures its body without evaluation),
-> it must be a special form. Everything else can be a function.
->
-> In the next section we'll add ~30 built-in functions — and every single one follows the
-> exact same pattern. No more special forms needed.
+📝 **Design Note: Special forms — why they're special**
 
-> 📖 **Next: [Completing Built-in Functions](#built-in-functions)**
+A *special form* is a language construct that doesn't follow normal evaluation rules.
+In our Lisp, `if`, `define`, `lambda`, `begin`, `set!`, `let`, `cond`, `and`, `or`, `let*`,
+and `letrec` are all special forms.
+
+**What makes them "special"?**
+
+```lisp
+(if (= x 0) "zero" (loop x))    ; only evaluates one branch
+(define x 42)                     ; doesn't evaluate "x" — it defines it
+(lambda (x) (+ x 1))             ; doesn't evaluate body — captures it
+```
+
+If these were ordinary functions, all arguments would be evaluated before the call —
+and `define` would crash trying to evaluate an undefined symbol `x`.
+
+**What belongs in special forms vs. built-in functions?**
+
+| Criteria | Goes in special form | Goes in built-in function |
+|----------|---------------------|--------------------------|
+| Control flow | `if`, `cond`, `and`, `or` | (none) |
+| Variable binding | `define`, `set!`, `let`, `letrec` | (none) |
+| Function creation | `lambda` | (none) |
+| Sequencing | `begin` | (none) |
+| Arithmetic | (none) | `+`, `-`, `*`, `/` |
+| Comparison | (none) | `=`, `>`, `<`, `>=`, `<=` |
+| List operations | (none) | `list`, `cons`, `car`, `cdr` |
+| Type predicates | (none) | `null?`, `number?`, `symbol?` |
+
+**Rule of thumb**: If a construct needs to *delay evaluation* of some arguments
+(e.g., `if` only evaluates one branch, `lambda` captures its body without evaluation),
+it must be a special form. Everything else can be a function.
+
+In the next section we'll add ~30 built-in functions — and every single one follows the
+exact same pattern. No more special forms needed.
+
+📖 **Next: [Completing Built-in Functions](#built-in-functions)**
 
 
-> ✅ **Summary**: Full special form set. `letrec` solves the chicken-and-egg problem of mutual recursion.
+✅ **Summary**: Full special form set. `letrec` solves the chicken-and-egg problem of mutual recursion.
 
 
 ## Built-in Functions Completion
-> ⏩ **Skip signal:** Each function follows the same pattern: write test → register in `default_env()` → `cargo test`. Skim and focus on `map`/`apply`/`filter` (Steps 67-69) and variadic lambda (Step 70).
+⏩ **Skip signal:** Each function follows the same pattern: write test → register in `default_env()` → `cargo test`. Skim and focus on `map`/`apply`/`filter` (Steps 67-69) and variadic lambda (Step 70).
 
-> From this step forward, each function follows the same pattern: **write test first → register in `default_env()` → verify with `cargo test`**.
+From this step forward, each function follows the same pattern: **write test first → register in `default_env()` → verify with `cargo test`**.
 
 ---
 
@@ -6814,7 +6814,7 @@ env.set(intern("caddr"), LispExp::Func(|args| {
 (caddr (list 1 2 3))  ; → 3
 ```
 
-> 💡 **Why add them now?** The symbolic differentiator in Appendix D uses `cadr` and `caddr` to access expression operands. These functions are extremely common in real Scheme programs.
+💡 **Why add them now?** The symbolic differentiator in Appendix D uses `cadr` and `caddr` to access expression operands. These functions are extremely common in real Scheme programs.
 
 ---
 
@@ -6856,7 +6856,7 @@ env.set(intern("length"), LispExp::Func(|args| {
 
 **Why `as f64`?** Rust's `Vec::len()` returns `usize`, but our Lisp only has `f64` numbers — we must cast explicitly.
 
-> 💡 In short: `length` counts items. Empty list `nil` counts as 0.
+💡 In short: `length` counts items. Empty list `nil` counts as 0.
 
 **Tests**:
 
@@ -6889,7 +6889,7 @@ env.set(intern("reverse"), LispExp::Func(|args| {
 
 **Note the `.clone()`**: `els` is borrowed from `&args[0]` — we can't modify it while borrowed. So we clone first, then reverse the clone. This is a standard Rust ownership pattern: **clone before mutate**.
 
-> 💡 In short: `reverse` flips the list like a pancake. `[1, 2, 3]` becomes `[3, 2, 1]`.
+💡 In short: `reverse` flips the list like a pancake. `[1, 2, 3]` becomes `[3, 2, 1]`.
 
 **Tests**:
 
@@ -6927,7 +6927,7 @@ env.set(intern("member"), LispExp::Func(|args| {
 
 **Why return a sublist instead of `#t`?** Because a non-empty list is truthy in `if` — you get both "does it exist?" and "what's after it?" in one call.
 
-> 💡 In short: `member` is like searching through a deck of cards — find the hearts, and from that card onward, you get them all. Not found? You get `#f`.
+💡 In short: `member` is like searching through a deck of cards — find the hearts, and from that card onward, you get them all. Not found? You get `#f`.
 
 **Tests**:
 
@@ -6975,7 +6975,7 @@ match args[0] { LispExp::Number(_) => true, _ => false }
 ```
 But in one line — cleaner.
 
-> 🧠 **In plain terms**: Type predicates are like the security checkpoint asking "are you a passenger or staff?" — different types go through different channels. `null?` asks "is it empty?", `number?` asks "is it a number?".
+🧠 **In plain terms**: Type predicates are like the security checkpoint asking "are you a passenger or staff?" — different types go through different channels. `null?` asks "is it empty?", `number?` asks "is it a number?".
 
 **Tests**:
 
@@ -7413,7 +7413,7 @@ fn qq_expand(exp: &LispExp, p: &PredefinedSyms) -> LispExp {
 }
 ```
 
-> 💡 **Reading guide**: The core of this code is building the `cons` chain **right-to-left**. Imagine stacking blocks — start from `'()` on the far right, and each step leftward, use `cons` to attach the current element (after expansion). When you hit `,@`, use `append` to splice instead.
+💡 **Reading guide**: The core of this code is building the `cons` chain **right-to-left**. Imagine stacking blocks — start from `'()` on the far right, and each step leftward, use `cons` to attach the current element (after expansion). When you hit `,@`, use `append` to splice instead.
 
 **Step 5: Add `quasiquote` special form to `eval`**. Expand the template, then evaluate the result with TCO.
 
@@ -7511,7 +7511,7 @@ env.set(intern("display"), LispExp::Func(|args| {
 }));
 ```
 
-> 💡 In short: `display` prints a value to the screen. Unlike `println!`, it doesn't add a newline — so you can `display` multiple values in a row, then use `newline` to break the line.
+💡 In short: `display` prints a value to the screen. Unlike `println!`, it doesn't add a newline — so you can `display` multiple values in a row, then use `newline` to break the line.
 
 #### `newline` — Print a Line Break
 
@@ -7539,7 +7539,7 @@ env.set(intern("read"), LispExp::Func(|_args| {
 }));
 ```
 
-> 💡 In short: `read` waits for the user to type a line and press Enter, then returns that line as a string. Like Python's `input()`. If the user presses Ctrl+D (EOF), it returns `nil`.
+💡 In short: `read` waits for the user to type a line and press Enter, then returns that line as a string. Like Python's `input()`. If the user presses Ctrl+D (EOF), it returns `nil`.
 
 **Tests**:
 
@@ -7585,7 +7585,7 @@ fn test_newline_returns_nil() {
 ![repl seq en](svgs/repl-seq-en.svg)
 
 
-> The REPL is the loop above—you type a line of code, it goes through lexical analysis → syntax analysis → evaluation, prints the result, then waits for your next line. Until you type `:q` to exit.
+The REPL is the loop above—you type a line of code, it goes through lexical analysis → syntax analysis → evaluation, prints the result, then waits for your next line. Until you type `:q` to exit.
 
 In `lib.rs`, change `mod parser;` to `pub mod parser;` (so main.rs can use the parser module).
 
@@ -7701,12 +7701,12 @@ cargo run
 # Goodbye!
 ```
 
-> 🎉 **Final milestone: Complete interactive Lisp interpreter!**
+🎉 **Final milestone: Complete interactive Lisp interpreter!**
 
-> 🏋️ **Exercises**
-> 1. (⭐) Add an `:info` command to the REPL that prints the interpreter's version number and the count of registered built-in functions
-> 2. (⭐⭐) Use `map` and `lambda` to square every element of the list `(1 2 3 4 5)` in one line
-> 3. (⭐⭐⭐) Use `defmacro` to write a `(debug expr)` macro: print expr before evaluating it, then print the result after evaluation. Hint: reference `(list 'begin (list 'display ...) expr)`
+🏋️ **Exercises**
+1. (⭐) Add an `:info` command to the REPL that prints the interpreter's version number and the count of registered built-in functions
+2. (⭐⭐) Use `map` and `lambda` to square every element of the list `(1 2 3 4 5)` in one line
+3. (⭐⭐⭐) Use `defmacro` to write a `(debug expr)` macro: print expr before evaluating it, then print the result after evaluation. Hint: reference `(list 'begin (list 'display ...) expr)`
 
 <details>
 <summary>Click for answer</summary>
@@ -7742,7 +7742,7 @@ cargo run
 </details>
 
 ---
-> ✅ **Summary**: A complete, interactive Lisp interpreter in ~2000 lines of Rust — zero external dependencies.
+✅ **Summary**: A complete, interactive Lisp interpreter in ~2000 lines of Rust — zero external dependencies.
 
 
 ## 🏗️ Architecture Retrospective
@@ -7895,8 +7895,8 @@ is backed by a concrete, runnable example.
 | **WebAssembly backend** | Compile Lisp to WASM instead of interpreting it |
 | **Concurrent Lisp** | Add `future` / `promise` primitives (Rust's async makes this natural) |
 
-> **Final note**: This interpreter is a *foundation*, not a finished product. The best code is
-> the code you write yourself. Fork this project, break it, fix it, extend it. That's how you learn.
+**Final note**: This interpreter is a *foundation*, not a finished product. The best code is
+the code you write yourself. Fork this project, break it, fix it, extend it. That's how you learn.
 
 ---
 
@@ -7926,7 +7926,7 @@ and returns its derivative — written entirely in your Lisp:
 This is **30 lines** of pure Lisp, running on the interpreter *you* just built from scratch.
 You can copy it into your REPL right now.
 
-> **Inspired by SICP §2.3.2** — the same exercise used at MIT to teach symbolic computing.
+**Inspired by SICP §2.3.2** — the same exercise used at MIT to teach symbolic computing.
 
 
 
@@ -7991,9 +7991,9 @@ Steps 52-74: Built-in Functions + REPL
 
 ---
 
-> **Feynman test**: Explain these 74 steps to a friend who knows nothing about programming. If each step makes them nod and say "oh, I see," you've succeeded.
+**Feynman test**: Explain these 74 steps to a friend who knows nothing about programming. If each step makes them nod and say "oh, I see," you've succeeded.
 
-> **Verification**: `cargo test` (42 tests), `cargo run` (interactive REPL)
+**Verification**: `cargo test` (42 tests), `cargo run` (interactive REPL)
 
 ---
 
@@ -8085,9 +8085,9 @@ After 74 steps you've built an interpreter — what can you do with it? Here's a
 ; → (+ (* 2 (expt x 1) 1) (+ (* 0 x) (* 2 1)) 0)
 ; simplified: (+ (* 2 x) 2)
 
-> 🎯 **This shows the power of Lisp**: With your own interpreter, your own language, ~30 lines of code — you can do symbolic computation. And you wrote every line of it yourself.
+🎯 **This shows the power of Lisp**: With your own interpreter, your own language, ~30 lines of code — you can do symbolic computation. And you wrote every line of it yourself.
 
-> 💡 **Prerequisite functions**: This program uses `cadr` (second element) and `caddr` (third element) — defined in Step 58b. If you haven't implemented them yet, add them first.
+💡 **Prerequisite functions**: This program uses `cadr` (second element) and `caddr` (third element) — defined in Step 58b. If you haven't implemented them yet, add them first.
 
 ---
 
