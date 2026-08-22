@@ -27,8 +27,8 @@
 | 如果你是... | 从这里开始 | 大约 |
 |-----------|----------|------|
 | **完全没接触过编程** | [我们要做什么](#我们要做什么) | 15 分钟到写代码 |
-| 会 **Python/JS/Java，但不会 Rust** | [步骤 5：定义数字类型](#步骤-5-定义数字类型-number) | 5 分钟到写代码 |
-| 已懂 **Rust 基础**（enum、match、HashMap） | [步骤 9：词法分析](#步骤-9-创建新文件) | 直接开始 |
+| 会 **Python/JS/Java，但不会 Rust** | [步骤 5：定义核心类型](#步骤-5-定义核心类型--lispexp-与-lisperr) | 5 分钟到写代码 |
+| 已懂 **Rust 基础**（enum、match、HashMap） | [步骤 9：词法分析](#步骤-9-创建词法分析器) | 直接开始 |
 | **写过解释器** | 快速跳到[步骤 37：闭包](#步骤-37-lambda-捕获环境-实现真正的闭包)和[步骤 39：TCO](#步骤-39-tco-蹦床循环实现) | 约 30 分钟 |
 | 只想看 **闭包是怎么实现的** | 直接跳到[步骤 37：闭包](#步骤-37-lambda-捕获环境-实现真正的闭包) | 约 10 分钟 |
 
@@ -39,9 +39,9 @@
 ## 目录
 
 - [准备工作](#准备工作) — 步骤 1-4
-- [认识"值"](#认识值) — 步骤 5-6
+- [认识"值"](#认识值) — 步骤 5
 - [让程序"算"东西](#让程序算东西) — 步骤 7-8
-- [把句子拆成单词](#把句子拆成单词) — 步骤 9-11
+- [把句子拆成单词](#把句子拆成单词) — 步骤 9
 - [理解单词的意思](#理解单词的意思) — 步骤 12-15
 - [给东西起名字](#给东西起名字) — 步骤 16-19
 - [做真正的计算](#做真正的计算) — 步骤 20-27
@@ -715,7 +715,7 @@ Lisp 里函数跟数字、字符串一样，可以传来传去：
 
 
 ## 准备工作
-⏩ **跳过信号：** 已经装了 Rust 和 IDE？直接跳到[步骤 5](#步骤-5-定义数字类型-number)。
+⏩ **跳过信号：** 已经装了 Rust 和 IDE？直接跳到[步骤 5](#步骤-5-定义核心类型--lispexp-与-lisperr)。
 
 
 为什么要学：在构建解释器之前，你需要一个可用的 Rust 开发环境。这个搭建步骤和专业 Rust 开发者每天使用的基础设施相同 - 一次配置好，后面就畅通无阻。
@@ -835,7 +835,7 @@ cd lisp-rs
       └── lib.rs           ← 我们的代码写在这里
 ```
 
-双击 `src/lib.rs`，中间编辑区会出现默认的示例代码（一个 `add` 函数和一个测试）。**先别动它**——我们下一 步要用它来验证工具链能正常工作，等到[步骤 5](#步骤-5-定义数字类型-number) 再从头写自己的代码。
+双击 `src/lib.rs`，中间编辑区会出现默认的示例代码（一个 `add` 函数和一个测试）。**先别动它**——我们下一 步要用它来验证工具链能正常工作，等到[步骤 5](#步骤-5-定义核心类型--lispexp-与-lisperr) 再从头写自己的代码。
 
 ---
 
@@ -918,7 +918,7 @@ name = "my-lisp"  # 改这里
 </blockquote>
 
 ---
-### 步骤 5: 定义数字类型 `Number`
+### 步骤 5: 定义核心类型 — `LispExp` 与 `LispErr`
 
 我们的 Lisp 解释器要处理的第一样东西就是**数字**。在 Rust 里，我们用 `enum` 列出"世界上有什么"。现在把 `src/lib.rs` 里的默认示例代码**全部删掉**（步骤 3 保留的那个），替换成以下内容：
 
@@ -931,6 +931,24 @@ pub enum LispExp {                   // ← "Lisp表达式"的缩写
     Number(f64),                     // ← 这就是"数字"
 }
 ```
+
+同时，计算可能出错——我们需要一个错误类型来描述"哪里出了问题"：
+
+```rust
+// src/lib.rs — 在 LispExp 下面加:
+
+/// 错误类型 — 当计算出错时,用这个告诉用户
+#[derive(Debug, Clone, PartialEq)]
+pub enum LispErr {
+    Reason(String),  // String = 一段文字,如 "出错了!"
+}
+```
+
+🧠 **大白话 — `String`**：就是"一段文字"。`"你好"` 是一个 String，`"未定义的变量: x"` 也是一个 String。
+
+🔧 **Rust Curve: `String` vs `&str`** — Rust 有两种字符串类型：`String`（拥有所有权、堆分配、可增长）和 `&str`（字符串的借用视图，类似引用）。`Reason(String)` 用拥有所有权的版本，因为错误信息需要独立于其来源存活。我们到了步骤 40-43 讲零拷贝 token 时会再见到 `&str`。
+
+现在两个核心类型都定义好了——`LispExp` 描述"值是什么"，`LispErr` 描述"出了什么错"。接下来的 Rust 深度解析会拆解这些代码背后的概念。
 
 ---
 
@@ -1430,7 +1448,7 @@ test result: ok. 1 passed; 0 failed
 
 ---
 
-#### 📋 步骤 5 的 Rust 知识点清单
+#### 📋 本步骤的 Rust 知识点清单
 
 | 概念 | 关键字/语法 | 说明 |
 |------|-----------|------|
@@ -1457,25 +1475,6 @@ cargo test
 # running 1 test
 # test tests::test_create_number ... ok   ← 看到 ok 就是对的！
 ```
-
----
-
-### 步骤 6: 告诉计算机"可能会出错"
-
-```rust
-// src/lib.rs
-// 在 LispExp 下面加:
-
-/// 错误类型 — 当计算出错时,用这个告诉用户
-#[derive(Debug, Clone, PartialEq)]
-pub enum LispErr {
-    Reason(String),  // String = 一段文字,如 "出错了!"
-}
-```
-
-🧠 **大白话 — `String`**：就是"一段文字"。`"你好"` 是一个 String，`"未定义的变量: x"` 也是一个 String。
-
-🔧 **Rust Curve: `String` vs `&str`** — Rust 有两种字符串类型：`String`（拥有所有权、堆分配、可增长）和 `&str`（字符串的借用视图，类似引用）。`Reason(String)` 用拥有所有权的版本，因为错误信息需要独立于其来源存活。我们到了步骤 40-43 讲零拷贝 token 时会再见到 `&str`。
 
 **当前 `lib.rs` 完整内容**：
 
@@ -1577,6 +1576,11 @@ C 的 `enum` 只是整数别名（`enum Color { RED=0, GREEN=1 }`）。Rust 的 
 
 ---
 ### 步骤 7: 求值函数 `eval`
+
+```text
+📥 输入: Number(42.0)    📤 输出: Ok(Number(42.0))
+         AST 节点              求值结果
+```
 
 ⚠️ **临时安排**：目前项目只有 `lib.rs` 一个文件，`eval` 暂时放在这里。等步骤 43 结束时，`eval` 会搬到新文件 `src/interpreter.rs` 里——它属于「求值器」模块，跟类型定义分开存放更清晰。
 
@@ -1708,6 +1712,12 @@ fn eval(exp: &LispExp) -> Result<LispExp, LispErr>
 
 ### 步骤 8: 从"字符串"到"结果"
 
+```text
+📥 输入: "42"（源码字符串）    📤 输出: Ok(Number(42.0))（求值结果）
+
+  "42" → trim → "42" → parse::<f64> → 42.0 → Number(42.0) → eval → Ok(Number(42.0))
+```
+
 现在我们手工解析，不依赖 lexer/parser：
 
 ```rust
@@ -1801,7 +1811,7 @@ fn eval_str(source: &str) -> Result<LispExp, LispErr> {
 **2. -42 的处理**
 在当前 `eval_str` 中，`"-42".trim().parse::<f64>()` 直接返回 `Ok(-42.0)`——Rust 的 `parse::<f64>()` 本身就能处理负数字符串。所以 `-42` 已经被正确解析为 `Number(-42.0)`，无需修复。
 
-💡 **后续变化**：等到步骤 9-11 实现词法分析器后，`tokenize("-42")` 会把 `-42` 作为一个整体 token 返回（因为 `-` 和 `42` 之间没有空格）。步骤 12 的 `parse_atom` 中 `"-42".parse::<f64>()` 同样返回 `Ok(-42.0)`，仍然正确。但如果写成 `(- 42)`（带空格），则 `-` 被当作减号运算符，`42` 是数字——这是另一种语义（减法调用），不是负数字面量。
+💡 **后续变化**：等到步骤 9 实现词法分析器后，`tokenize("-42")` 会把 `-42` 作为一个整体 token 返回（因为 `-` 和 `42` 之间没有空格）。步骤 12 的 `parse_atom` 中 `"-42".parse::<f64>()` 同样返回 `Ok(-42.0)`，仍然正确。但如果写成 `(- 42)`（带空格），则 `-` 被当作减号运算符，`42` 是数字——这是另一种语义（减法调用），不是负数字面量。
 </details>
 
 
@@ -1840,11 +1850,18 @@ fn eval_str(source: &str) -> Result<LispExp, LispErr> {
 </blockquote>
 
 ---
-### 步骤 9: 创建新文件
+### 步骤 9: 创建词法分析器
+
+```text
+📥 输入: "(+ 1 2)"（源码字符串）    📤 输出: ["(", "+", "1", "2", ")"]（Token 列表）
+         一整段文本                      拆成一个个单词
+```
+
+步骤 8 的 `eval_str("(+ 1 2)")` 会失败——因为 `"(+ 1 2)"` 不是一个合法的数字。要处理多元素表达式，第一步是把字符串**拆成单词**。这就是词法分析器（lexer）的工作。
+
+**① 创建文件 + 注册模块**
 
 在 RustRover 左侧文件列表中，**右键点击 `src` 文件夹** → **New** → **File**，输入 `lexer.rs`，回车。
-
-就像在文件管理器里右键 → 新建文件一样。
 
 在 `lib.rs` 最上面加一行：
 
@@ -1857,7 +1874,7 @@ pub mod lexer;  // "我还有一个文件叫 lexer.rs"
 
 `pub mod` vs `mod`：`pub` 是"公开的"，外面的代码可以看。不加 `pub` 就是"私有的"，只有自己家里能用。
 
-### 步骤 10: 拆分字符串
+**② 写第一版 tokenize — 按空白拆分**
 
 ```rust
 // src/lexer.rs — 完整内容
@@ -1892,7 +1909,7 @@ Vec<String>：  ["+", "1", "2"]
 
 就像流水线工人：每来一个零件，做同样的操作，传给下一道工序。
 
-**测试**（加到文件末尾）：
+**③ 测试基本拆分**
 
 ```rust
 // src/lexer.rs — 文件末尾加测试模块
@@ -1911,10 +1928,6 @@ mod tests {
     }
 }
 ```
-
-`"+ 1 2"` 一个字符串变成了 `["+", "1", "2"]` 三个 token——tokenize 在**拆分**！这正是步骤 8 中 `eval_str("(+ 1 2)")` 失败的原因的第一步解决方案：字符串得先拆成单词，才能进一步理解。
-
-但试试带括号的：`tokenize("(+ 1 2)")` → `["(+", "1", "2)"]`——括号粘在 `+` 和 `2` 上了！因为 `split_whitespace` 只按空白切，括号不是空白，自然跟旁边的字符粘在一起。下一步解决这个问题。
 
 ```bash
 $ cargo test
@@ -1940,11 +1953,17 @@ test tests::test_eval_str_number ... ok
 test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
+`"+ 1 2"` 一个字符串变成了 `["+", "1", "2"]` 三个 token——tokenize 在**拆分**！这正是步骤 8 中 `eval_str("(+ 1 2)")` 失败的第一步解决方案。
+
 🧠 **大白话 — `dead_code` 警告还在？**
 
-**`function 'eval_str' is never used`**：`eval_str` 不是 `pub`，在非测试代码中没人调用它。这是步骤 8 的“老朋友”，完全无害。
+**`function 'eval_str' is never used`**：`eval_str` 不是 `pub`，在非测试代码中没人调用它。这是步骤 8 的"老朋友"，完全无害。
 
-### 步骤 11: 处理括号
+**④ TDD：发现括号问题 → 修复**
+
+基本拆分能工作了，但 Lisp 的源码里到处都是括号。试试带括号的：`tokenize("(+ 1 2)")` → `["(+", "1", "2)"]`——括号粘在 `+` 和 `2` 上了！因为 `split_whitespace` 只按空白切，括号不是空白，自然跟旁边的字符粘在一起。
+
+先写测试，让失败暴露问题（TDD 的 Red 阶段）：
 
 ```rust
 // src/lexer.rs — tests 模块中新增
@@ -1960,18 +1979,6 @@ fn test_tokenize_parens() {
 `cargo test` → ❌ 测试失败：
 
 ```
-warning: function `eval_str` is never used
-  --> src/lib.rs:NN:4
-   |
-NN | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
-   |    ^^^^^^^^
-   |
-   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
-
-warning: `lisp-rs` (lib) generated 1 warning
-    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.46s
-     Running unittests src/lib.rs (target/debug/deps/lisp_rs-5cd87530e74cecce)
-
 running 6 tests
 test lexer::tests::test_tokenize_multi ... ok
 test lexer::tests::test_tokenize_whitespace ... ok
@@ -1986,7 +1993,7 @@ assertion `left == right` failed
 
 括号和旁边的字连在一起了！`(+` 被当成一个 token，`2)` 也是。
 
-**修复**——在括号两边加空格：
+**修复**——在括号两边加空格，让 `split_whitespace` 能把它们分开（TDD 的 Green 阶段）：
 
 ```rust
 // src/lexer.rs
@@ -2162,6 +2169,11 @@ fn test_comment_ignored() {
 ---
 ### 步骤 12: 创建 parser.rs
 
+```text
+📥 输入: ["+", "1", "2"]（Token 列表）    📤 输出: Symbol("+"), Number(1.0), Number(2.0)
+         扁平的字符串                        带类型的 AST 叶子节点
+```
+
 ⚠️ **临时方案**：`Symbol` 目前用 `String` 存名字（简单直观）。项目的最终形态用 `Symbol(u64)`——一个整数 ID，通过「字符串驻留器」把名字映射为数字，比较和哈希都是 O(1)。我们会在步骤 40-41 做这个优化，届时把所有 `String` 替换为 `u64`。现在先用 `String` 把逻辑跑通。
 
 右键 `src` 文件夹 → **New** → **File**，输入 `parser.rs`。
@@ -2237,6 +2249,15 @@ match token.parse::<f64>() {
 ---
 
 ### 步骤 13: 添加 Symbol 类型, 打通管线
+
+```text
+📥 输入: "+"（源码字符串）    📤 输出: Err("暂不支持此类型")
+
+  "+" → tokenize → ["+"] → parse → parse_atom → Symbol("+") → eval → Err
+       词法分析        语法分析         类型识别            求值（暂不支持）
+```
+
+首次串联三个模块！虽然 eval 还不能求值 Symbol，但数据已经能从源码一路流到求值器。
 
 在 `lib.rs` 中加上 `Symbol` 变体：
 
@@ -7918,14 +7939,14 @@ Fork 这个项目，破坏它，修复它，扩展它。这就是学习的方法
   1. 安装 Rust           2. 安装 RustRover
   3. 创建项目            4. 首次测试
 
-步骤 5-6: 认识"值"
-  5. LispExp::Number     6. LispErr
+步骤 5: 认识"值"
+  5. LispExp + LispErr 核心类型
 
 步骤 7-8: 让程序算东西
   7. eval 数字           8. 打通管线 eval_str
 
-步骤 9-11: 词法分析器
-  9. 创建 lexer.rs       10. tokenize      11. 处理括号
+步骤 9: 词法分析器
+  9. 创建 lexer + tokenize + 处理括号
 
 步骤 12-15: 语法分析器
   12. 创建 parser.rs     13. 走完整管线    14. 递归解析列表

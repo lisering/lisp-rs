@@ -27,8 +27,8 @@ You don't have to read everything. Pick the lane that fits you:
 | If you... | Start at | Time to first code |
 |-----------|----------|-------------------|
 | Have **never programmed before** | [What We're Building](#what-were-building) | approx. 15 minutes |
-| Know **Python/JS/Java but not Rust** | [Step 5: Define the Number type](#step-5-define-the-number-type-number) | approx. 5 minutes |
-| Know **Rust basics** (enum, match, HashMap) | [Step 9: Create lexer.rs](#step-9-create-a-new-file) | Right away |
+| Know **Python/JS/Java but not Rust** | [Step 5: Define Core Types](#step-5-define-core-types--lispexp-and-lisperr) | approx. 5 minutes |
+| Know **Rust basics** (enum, match, HashMap) | [Step 9: Create the Lexer](#step-9-create-the-lexer) | Right away |
 | Have **written an interpreter before** | Skim to [Step 37: Closures](#step-37-lambda-captures-environment-implementing-true-closures) and [Step 39: TCO](#step-39-tco-trampoline-loop-implementation) | approx. 30 minutes |
 | Just want to see **how closures are implemented** | Jump to [Step 37: Closures](#step-37-lambda-captures-environment-implementing-true-closures) | approx. 10 minutes |
 
@@ -39,9 +39,9 @@ You don't have to read everything. Pick the lane that fits you:
 ## Table of Contents
 
 - [Preparation](#preparation) — Steps 1-4
-- [Understanding "Values"](#understanding-values) — Steps 5-6
+- [Understanding "Values"](#understanding-values) — Step 5
 - [Making Programs "Compute"](#making-programs-compute) — Steps 7-8
-- [Splitting Sentences into Words](#splitting-sentences-into-words) — Steps 9-11
+- [Splitting Sentences into Words](#splitting-sentences-into-words) — Step 9
 - [Understanding the Meaning of Words](#understanding-the-meaning-of-words) — Steps 12-15
 - [Giving Things Names](#giving-things-names) — Steps 16-19
 - [Doing Real Computation](#doing-real-computation) — Steps 20-27
@@ -860,7 +860,7 @@ A production Lisp implementation. It's a teaching interpreter — tree-walking `
 
 
 ## Preparation
-⏩ **Skip signal:** Already have Rust and an IDE installed? Jump to [Step 5](#step-5-define-the-number-type-number).
+⏩ **Skip signal:** Already have Rust and an IDE installed? Jump to [Step 5](#step-5-define-core-types--lispexp-and-lisperr).
 
 
 Why this matters: Before you can build an interpreter, you need a working Rust environment. This setup is the same foundation professional Rust developers use every day - get it right once, and everything else follows smoothly.
@@ -980,7 +980,7 @@ Left file list:
       └── lib.rs           ← our code goes here
 ```
 
-Double-click `src/lib.rs`, and the default example code will appear in the editing area (an `add` function and a test). **Leave it as-is for now** — we'll use it to verify the toolchain works in the next step. We'll replace it with our own code starting at [Step 5](#step-5-define-the-number-type-number).
+Double-click `src/lib.rs`, and the default example code will appear in the editing area (an `add` function and a test). **Leave it as-is for now** — we'll use it to verify the toolchain works in the next step. We'll replace it with our own code starting at [Step 5](#step-5-define-core-types--lispexp-and-lisperr).
 
 ---
 
@@ -1061,7 +1061,7 @@ The interpreter first needs to be able to "understand" numbers—input `42`, out
 </blockquote>
 
 ---
-### Step 5: Define the Number Type `Number`
+### Step 5: Define Core Types — `LispExp` and `LispErr`
 
 The first thing our Lisp interpreter needs to handle is **numbers**. In Rust, we use `enum` to list "what exists in the world." Now **delete all the default example code** in `src/lib.rs` (the one we kept from Step 3) and replace it with:
 
@@ -1074,6 +1074,24 @@ pub enum LispExp {                   // ← Short for "Lisp Expression"
     Number(f64),                     // ← This is "number"
 }
 ```
+
+Computation can also go wrong — we need an error type to describe "what went wrong":
+
+```rust
+// src/lib.rs — Add below LispExp:
+
+/// Error type — when computation goes wrong, use this to tell the user
+#[derive(Debug, Clone, PartialEq)]
+pub enum LispErr {
+    Reason(String),  // String = a piece of text, e.g. "Something went wrong!"
+}
+```
+
+💡 In short — `String`: a piece of text, any text. `"Hello"`, `"error: x not found"`, you name it.
+
+🔧 **Rust Curve: `String` vs `&str`** — Rust has two string types: `String` (owned, heap-allocated, growable) and `&str` (a borrowed view of a string, like a reference). `Reason(String)` uses the owned version because errors need to live independently of their source. You will see `&str` later when we talk about zero-copy tokens in Steps 40-43.
+
+Both core types are now defined — `LispExp` describes "what a value is," `LispErr` describes "what went wrong." The Rust deep dive below breaks down the concepts behind this code.
 
 ---
 
@@ -1572,7 +1590,7 @@ test result: ok. 1 passed; 0 failed
 
 ---
 
-#### Step 5 Rust Knowledge Checklist
+#### Rust Knowledge Checklist
 
 | Concept | Keyword/Syntax | Explanation |
 |---------|---------------|-------------|
@@ -1603,25 +1621,6 @@ cargo test
 # running 1 test
 # test tests::test_create_number ... ok   ← seeing ok means correct!
 ```
-
----
-
-### Step 6: Tell the Computer "Something Might Go Wrong"
-
-```rust
-// src/lib.rs
-// Add below LispExp:
-
-/// Error type — when computation goes wrong, use this to tell the user
-#[derive(Debug, Clone, PartialEq)]
-pub enum LispErr {
-    Reason(String),  // String = a piece of text, e.g. "Something went wrong!"
-}
-```
-
-💡 In short — `String`: a piece of text, any text. `"Hello"`, `"error: x not found"`, you name it.
-
-🔧 **Rust Curve: `String` vs `&str`** — Rust has two string types: `String` (owned, heap-allocated, growable) and `&str` (a borrowed view of a string, like a reference). `Reason(String)` uses the owned version because errors need to live independently of their source. You will see `&str` later when we talk about zero-copy tokens in Steps 40-43.
 
 **Current complete `lib.rs`**:
 
@@ -1658,6 +1657,8 @@ test tests::test_create_number ... ok
 
 test result: ok. 1 passed; 0 failed
 ```
+
+---
 
 🏋️ **Exercises**
 1. (⭐) Add a `Character(char)` variant to `LispExp` to represent a single character
@@ -1720,6 +1721,11 @@ Now that we have the number type, we also need to "evaluate"—compute results f
 
 ---
 ### Step 7: The `eval` Function
+
+```text
+📥 Input: Number(42.0)    📤 Output: Ok(Number(42.0))
+         AST node              Evaluated result
+```
 
 **Temporary arrangement**: Currently the project only has `lib.rs` as a single file, so `eval` is placed here temporarily. Once the project has more files (around step 40), `eval` will be moved to a new file `src/interpreter.rs`—it belongs to the "evaluator" module, separate from type definitions for better organization.
 
@@ -1843,6 +1849,12 @@ Like checking out a library book — it's still the library's, you're just readi
 ---
 
 ### Step 8: From "String" to "Result"
+
+```text
+📥 Input: "42" (source string)    📤 Output: Ok(Number(42.0)) (evaluated result)
+
+  "42" → trim → "42" → parse::<f64> → 42.0 → Number(42.0) → eval → Ok(Number(42.0))
+```
 
 For now we parse manually, without relying on lexer/parser:
 
@@ -1969,11 +1981,18 @@ Why this matters: The lexer is the interpreter's eyes - it reads raw text and id
 </blockquote>
 
 ---
-### Step 9: Create a New File
+### Step 9: Create the Lexer
+
+```text
+📥 Input: "(+ 1 2)" (source string)    📤 Output: ["(", "+", "1", "2", ")"] (Token list)
+         One block of text                  Split into words
+```
+
+Step 8's `eval_str("(+ 1 2)")` fails — because `"(+ 1 2)"` is not a valid number. To handle multi-element expressions, the first step is to **split the string into words**. That's the lexer's job.
+
+**1. Create the file + register the module**
 
 In RustRover's left file list, **right-click the `src` folder** → **New** → **File**, enter `lexer.rs`, press Enter.
-
-Just like right-clicking → New File in a file manager.
 
 Add a line at the top of `lib.rs`:
 
@@ -1986,7 +2005,7 @@ pub mod lexer;  // "I also have a file called lexer.rs"
 
 `pub mod` vs `mod`: `pub` means "public," code outside can see it. Without `pub`, it's "private," only usable within the module itself.
 
-### Step 10: Split the String
+**2. Write the first tokenize — split by whitespace**
 
 ```rust
 // src/lexer.rs — Complete content
@@ -2013,7 +2032,7 @@ Like a shopping list — add items, remove items, look things up by position.
 
 Like an assembly line — every item gets the same operation before moving on.
 
-**Tests** (add to the end of the file):
+**3. Test basic splitting**
 
 ```rust
 // src/lexer.rs — add test module at end of file
@@ -2031,10 +2050,6 @@ mod tests {
         assert_eq!(tokenize("  +   1   2  "), ["+", "1", "2"]);
     }
 ```
-
-`"+ 1 2"` — one string became `["+", "1", "2"]` — three tokens! tokenize is **splitting**! This is the first step toward solving the `eval_str("(+ 1 2)")` failure from Step 8: the string must be split into words before we can understand it.
-
-But try with parentheses: `tokenize("(+ 1 2)")` → `["(+", "1", "2)"]` — the parens are stuck to `+` and `2`! Because `split_whitespace` only cuts on whitespace, and parens aren't whitespace. Next step fixes this.
 
 ```bash
 $ cargo test
@@ -2060,11 +2075,17 @@ test tests::test_eval_str_number ... ok
 test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
+`"+ 1 2"` — one string became `["+", "1", "2"]` — three tokens! tokenize is **splitting**! This is the first step toward solving the `eval_str("(+ 1 2)")` failure from Step 8.
+
 💡 In short — `dead_code` warning still here?
 
 **`function 'eval_str' is never used`**: `eval_str` isn't `pub`, so nothing in non-test code calls it. Harmless carryover from Step 8.
 
-### Step 11: Handle Parentheses
+**4. TDD: discover the parenthesis problem → fix it**
+
+Basic splitting works, but Lisp source code is full of parentheses. Try with parens: `tokenize("(+ 1 2)")` → `["(+", "1", "2)"]` — the parens are stuck to `+` and `2`! Because `split_whitespace` only cuts on whitespace, and parens aren't whitespace.
+
+First, write a test to expose the problem (TDD's Red phase):
 
 ```rust
 // src/lexer.rs — add to tests module
@@ -2080,18 +2101,6 @@ fn test_tokenize_parens() {
 `cargo test` → ❌ Test failure:
 
 ```
-warning: function `eval_str` is never used
-  --> src/lib.rs:NN:4
-   |
-NN | fn eval_str(source: &str) -> Result<LispExp, LispErr> {
-   |    ^^^^^^^^
-   |
-   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
-
-warning: `lisp-rs` (lib) generated 1 warning
-    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.46s
-     Running unittests src/lib.rs (target/debug/deps/lisp_rs-5cd87530e74cecce)
-
 running 6 tests
 test lexer::tests::test_tokenize_multi ... ok
 test lexer::tests::test_tokenize_whitespace ... ok
@@ -2106,7 +2115,7 @@ assertion `left == right` failed
 
 Parentheses are stuck to the words next to them! `(+` became one token, and `2)` became another.
 
-**Fix**—add spaces around parentheses:
+**Fix** — add spaces around parentheses so `split_whitespace` can separate them (TDD's Green phase):
 
 ```rust
 // src/lexer.rs
@@ -2278,6 +2287,11 @@ Why this matters: The parser transforms a flat token list into a tree structure 
 ---
 ### Step 12: Create parser.rs
 
+```text
+📥 Input: ["+", "1", "2"] (Token list)    📤 Output: Symbol("+"), Number(1.0), Number(2.0)
+         Flat strings                          Typed AST leaf nodes
+```
+
 **Temporary approach**: `Symbol` currently uses `String` to store the name (simple and intuitive). The final form of the project uses `Symbol(u64)`—an integer ID, mapping names to numbers via a "string interner," making comparison and hashing O(1). We'll make this optimization in steps 40-41, replacing all `String` with `u64`. For now, use `String` to get the logic working.
 
 Right-click `src` folder → **New** → **File**, enter `parser.rs`.
@@ -2430,6 +2444,15 @@ test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 ---
 
 ### Step 13: Update eval_str to Use the Full Pipeline
+
+```text
+📥 Input: "+" (source string)    📤 Output: Err("This type is not supported yet")
+
+  "+" → tokenize → ["+"] → parse → parse_atom → Symbol("+") → eval → Err
+       Lexing         Parsing        Type identification       Eval (not yet)
+```
+
+Three modules connected for the first time! eval can't evaluate Symbol yet, but data now flows from source all the way to the evaluator.
 
 ```rust
 // lib.rs top add
@@ -7937,14 +7960,14 @@ Steps 1-4: Preparation
   1. Install Rust          2. Install RustRover
   3. Create project        4. First test
 
-Steps 5-6: Understanding "Values"
-  5. LispExp::Number       6. LispErr
+Step 5: Understanding "Values"
+  5. LispExp + LispErr core types
 
 Steps 7-8: Making Programs Compute
   7. eval numbers          8. Connect pipeline eval_str
 
-Steps 9-11: Lexer
-  9. Create lexer.rs       10. tokenize      11. Handle parentheses
+Step 9: Lexer
+  9. Create lexer + tokenize + handle parentheses
 
 Steps 12-15: Parser
   12. Create parser.rs     13. Full pipeline    14. Recursive list parsing
