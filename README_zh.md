@@ -12,7 +12,7 @@
 
 # 从零构建 Lisp 解释器 — Rust 实战教程
 
-**零基础、零依赖。** 74 步，42 个测试，最终得到一个完整的 Lisp 解释器。每一步先说清楚**要解决什么问题**，再写代码。
+**零基础、零依赖。** 47 步，42 个测试，最终得到一个完整的 Lisp 解释器。每一步先说清楚**要解决什么问题**，再写代码。
 
 ### TCO 效果演示 — 100 万次递归 vs 栈溢出
 
@@ -27,30 +27,30 @@
 | 如果你是... | 从这里开始 | 大约 |
 |-----------|----------|------|
 | **完全没接触过编程** | [我们要做什么](#我们要做什么) | 15 分钟到写代码 |
-| 会 **Python/JS/Java，但不会 Rust** | [步骤 5：定义核心类型](#步骤-5-定义核心类型--lispexp-与-lisperr) | 5 分钟到写代码 |
-| 已懂 **Rust 基础**（enum、match、HashMap） | [步骤 9：词法分析](#步骤-9-创建词法分析器) | 直接开始 |
-| **写过解释器** | 快速跳到[步骤 37：闭包](#步骤-37-lambda-捕获环境-实现真正的闭包)和[步骤 39：TCO](#步骤-39-tco-蹦床循环实现) | 约 30 分钟 |
-| 只想看 **闭包是怎么实现的** | 直接跳到[步骤 37：闭包](#步骤-37-lambda-捕获环境-实现真正的闭包) | 约 10 分钟 |
+| 会 **Python/JS/Java，但不会 Rust** | [步骤 4：定义核心类型](#步骤-4-定义核心类型--lispexp-与-lisperr) | 5 分钟到写代码 |
+| 已懂 **Rust 基础**（enum、match、HashMap） | [步骤 7：词法分析](#步骤-7-创建词法分析器) | 直接开始 |
+| **写过解释器** | 快速跳到[步骤 24：闭包](#步骤-24-lambda-捕获环境-实现真正的闭包)和[步骤 26：TCO](#步骤-26-tco-蹦床循环实现) | 约 30 分钟 |
+| 只想看 **闭包是怎么实现的** | 直接跳到[步骤 24：闭包](#步骤-24-lambda-捕获环境-实现真正的闭包) | 约 10 分钟 |
 
-**已经做过类似项目？** 如果你做过类似项目，仍可能从中找到新东西：闭包的背包追踪（步骤 37）、蹦床循环 TCO 拆解（步骤 39）、三个教学性质的优化步骤（步骤 40-43）。其余可快速浏览。
+**已经做过类似项目？** 如果你做过类似项目，仍可能从中找到新东西：闭包的背包追踪（步骤 24）、蹦床循环 TCO 拆解（步骤 26）、三个教学性质的优化步骤（步骤 27-30）。其余可快速浏览。
 
 ---
 
 ## 目录
 
-- [准备工作](#准备工作) — 步骤 1-4
-- [认识"值"](#认识值) — 步骤 5
-- [让程序"算"东西](#让程序算东西) — 步骤 7-8
-- [把句子拆成单词](#把句子拆成单词) — 步骤 9
-- [理解单词的意思](#理解单词的意思) — 步骤 12-15
-- [给东西起名字](#给东西起名字) — 步骤 16-19
-- [做真正的计算](#做真正的计算) — 步骤 20-27
-- [更多数据类型](#更多数据类型) — 步骤 28-31
-- [让程序做选择](#让程序做选择) — 步骤 32-35
-- [记住过去的事情](#记住过去的事情) — 步骤 36-39
-- [让程序跑得更快](#让程序跑得更快) — 步骤 40-43
-- [更多魔法命令](#更多魔法命令) — 步骤 44-51
-- [内置函数补全 + 挑战关卡](#内置函数补全--挑战关卡) — 步骤 52-74
+- [准备工作](#准备工作) — 步骤 1-3
+- [认识"值"](#认识值) — 步骤 4
+- [让程序"算"东西](#让程序算东西) — 步骤 5-6
+- [把句子拆成单词](#把句子拆成单词) — 步骤 7
+- [理解单词的意思](#理解单词的意思) — 步骤 8-11
+- [给东西起名字](#给东西起名字) — 步骤 12-13
+- [做真正的计算](#做真正的计算) — 步骤 14-17
+- [更多数据类型](#更多数据类型) — 步骤 18-19
+- [让程序做选择](#让程序做选择) — 步骤 20-22
+- [记住过去的事情](#记住过去的事情) — 步骤 23-26
+- [让程序跑得更快](#让程序跑得更快) — 步骤 27-30
+- [更多魔法命令](#更多魔法命令) — 步骤 31-35
+- [内置函数补全 + 挑战关卡](#内置函数补全--挑战关卡) — 步骤 36-47
 
 ---
 
@@ -633,7 +633,7 @@ Lisp 里函数跟数字、字符串一样，可以传来传去：
 输入: (fact 5)  →  输出: 120
 ```
 
-为了实现这个目标，我们把它拆成 **74 个步骤**，按依赖关系逐步实现：
+为了实现这个目标，我们把它拆成 **47 个步骤**，按依赖关系逐步实现：
 
 ```
 能求值数字
@@ -649,26 +649,26 @@ Lisp 里函数跟数字、字符串一样，可以传来传去：
 └── REPL 交互界面
 ```
 
-**本教程严格按照这个顺序，每一步只做一件小事。就像雕塑——先粗胚，再一刀一刀精修。** 共 74 步，每步都能用 `cargo test` 验证。
+**本教程严格按照这个顺序，每一步只做一件小事。就像雕塑——先粗胚，再一刀一刀精修。** 共 47 步，每步都能用 `cargo test` 验证。
 
 ### 🏆 每个阶段学完后你能做什么
 
 | 学完 | 你能... | 验证方式 |
 |------|--------|---------|
-| 步骤 1-4 | 装好 Rust，跑通第一个测试 | `cargo test` |
-| 步骤 5-8 | 让程序"理解"数字 —— `42` → `Number(42.0)` | `eval_str("42")` |
-| 步骤 9-15 | 看懂 `(+ 1 (* 2 3))` 的嵌套结构 | `parse(tokens)` |
-| 步骤 16-19 | 给变量起名字，在环境中查值 | `env.get("x")` |
-| 步骤 20-27 | **`(+ 1 2)` 真的算出 3 了！** | `(+ 1 2)` → `3` |
-| 步骤 28-31 | 布尔判断、字符串、数字比较 | `(> 5 3)` → `#t` |
-| 步骤 32-35 | 条件分支、定义变量、创建和调用函数 | `(define sq (lambda (x) (* x x)))` |
-| 步骤 36-39 | **闭包**（函数记住诞生环境）+ **一万层递归不崩溃** | `(loop 10000)` |
-| 步骤 40-43 | 三项优化：字符串驻留、零拷贝词法分析、FX 哈希 | `cargo test` 全通过 |
-| 步骤 44-51 | 8 种特殊形式（begin/set!/let/cond...） | `(let ((x 1)) (+ x 2))` |
-| 步骤 52-74 | **完整的交互式 REPL** | `cargo run` → 输入 Lisp 代码 |
+| 步骤 1-3 | 装好 Rust，跑通第一个测试 | `cargo test` |
+| 步骤 4-8 | 让程序"理解"数字 —— `42` → `Number(42.0)` | `eval_str("42")` |
+| 步骤 7-15 | 看懂 `(+ 1 (* 2 3))` 的嵌套结构 | `parse(tokens)` |
+| 步骤 12-13 | 给变量起名字，在环境中查值 | `env.get("x")` |
+| 步骤 14-17 | **`(+ 1 2)` 真的算出 3 了！** | `(+ 1 2)` → `3` |
+| 步骤 18-19 | 布尔判断、字符串、数字比较 | `(> 5 3)` → `#t` |
+| 步骤 20-22 | 条件分支、定义变量、创建和调用函数 | `(define sq (lambda (x) (* x x)))` |
+| 步骤 23-26 | **闭包**（函数记住诞生环境）+ **一万层递归不崩溃** | `(loop 10000)` |
+| 步骤 27-30 | 三项优化：字符串驻留、零拷贝词法分析、FX 哈希 | `cargo test` 全通过 |
+| 步骤 31-35 | 8 种特殊形式（begin/set!/let/cond...） | `(let ((x 1)) (+ x 2))` |
+| 步骤 36-47 | **完整的交互式 REPL** | `cargo run` → 输入 Lisp 代码 |
 
 
-**🔍 上图就是整个项目的骨架**——源码从左边进去，经过四个阶段，从右边出来就变成了计算结果。后面 74 个步骤就是对这四个阶段的一刀一刀精修。
+**🔍 上图就是整个项目的骨架**——源码从左边进去，经过四个阶段，从右边出来就变成了计算结果。后面 47 个步骤就是对这四个阶段的一刀一刀精修。
 
 ![pipeline](svgs/pipeline.svg)
 
@@ -683,7 +683,7 @@ Lisp 里函数跟数字、字符串一样，可以传来传去：
 | [*Crafting Interpreters*](https://craftinginterpreters.com/) (Nystrom) | Java / C | 有编程经验的人 | Nystrom 假设你会 Java 和 C，两遍实现（树遍历 + 字节码）。本教程只做一遍（树遍历），但用 Rust，且假设你**零基础** |
 | [*SICP*](https://mitpress.mit.edu/sicp/) (Abelson & Sussman) | Scheme | 数学底子好的人 | SICP 教你"如何思考编程"，本教程教你"如何做一个解释器"。SICP 讲原理，本教程讲实现 |
 | [*mal - Make a Lisp*](https://github.com/kanaka/mal) (Kanaka) | 80+ 种语言 | 中级程序员 | mal 只给测试用例，没有解释。本教程每一步都有"为什么"——不仅告诉你怎么写，还告诉你为什么这么写 |
-| [*Write Yourself a Scheme*](https://en.wikibooks.org/wiki/Write_Yourself_a_Scheme_in_48_Hours) | Haskell | Haskell 程序员 | 48 小时太赶了。本教程 74 步，每步都能停下来跑 `cargo test`，节奏由你控制 |
+| [*Write Yourself a Scheme*](https://en.wikibooks.org/wiki/Write_Yourself_a_Scheme_in_48_Hours) | Haskell | Haskell 程序员 | 48 小时太赶了。本教程 47 步，每步都能停下来跑 `cargo test`，节奏由你控制 |
 
 **一句话：** 如果说 *Crafting Interpreters* 是研究生课程，本教程就是本科入门——同样的主题（写一个解释器），同样的方法（TDD、每步可验证、图解），但从"什么是终端"开始讲。
 
@@ -715,7 +715,7 @@ Lisp 里函数跟数字、字符串一样，可以传来传去：
 
 
 ## 准备工作
-⏩ **跳过信号：** 已经装了 Rust 和 IDE？直接跳到[步骤 5](#步骤-5-定义核心类型--lispexp-与-lisperr)。
+⏩ **跳过信号：** 已经装了 Rust 和 IDE？直接跳到[步骤 4](#步骤-4-定义核心类型--lispexp-与-lisperr)。
 
 
 为什么要学：在构建解释器之前，你需要一个可用的 Rust 开发环境。这个搭建步骤和专业 Rust 开发者每天使用的基础设施相同 - 一次配置好，后面就畅通无阻。
@@ -739,9 +739,11 @@ Lisp 里函数跟数字、字符串一样，可以传来传去：
 </blockquote>
 
 ---
-### 步骤 1: 安装 Rust
+### 步骤 1: 安装 Rust + IDE
 
-Rust 是我们要用的编程语言。先给电脑装上它。
+Rust 是我们要用的编程语言，RustRover 是写代码的 IDE。先给电脑装上它们。
+
+#### 安装 Rust
 
 **系统要求**：任何 4 核 CPU、8 GB 内存、10 GB 可用磁盘的电脑（包括 Mac Apple Silicon 和 Intel）都能流畅运行完整工具链。
 
@@ -765,11 +767,7 @@ Rust 是我们要用的编程语言。先给电脑装上它。
 
 🧠 **大白话**：`rustup` 是 Rust 的"安装管家"，`cargo` 是 Rust 的"项目管家"。`rustup` 会同时安装这两者。
 
----
-
-### 步骤 2: 安装 RustRover
-
-我们要用 **RustRover** 来写代码——它能自动补全、查错、高亮，就像写 Word 有拼写检查一样。
+#### 安装 RustRover
 
 **方式 A — JetBrains Toolbox 应用（推荐）**：访问 <https://www.jetbrains.com/toolbox-app/> → 下载 → 安装 → 打开 Toolbox → 在列表中找到 RustRover → 点 Install。Toolbox 会自动帮你更新 IDE。
 
@@ -781,7 +779,7 @@ Rust 是我们要用的编程语言。先给电脑装上它。
 
 ---
 
-### 步骤 3: 创建项目
+### 步骤 2: 创建项目
 
 **方式一：用 RustRover（推荐新手）**
 
@@ -835,11 +833,11 @@ cd lisp-rs
       └── lib.rs           ← 我们的代码写在这里
 ```
 
-双击 `src/lib.rs`，中间编辑区会出现默认的示例代码（一个 `add` 函数和一个测试）。**先别动它**——我们下一 步要用它来验证工具链能正常工作，等到[步骤 5](#步骤-5-定义核心类型--lispexp-与-lisperr) 再从头写自己的代码。
+双击 `src/lib.rs`，中间编辑区会出现默认的示例代码（一个 `add` 函数和一个测试）。**先别动它**——我们下一 步要用它来验证工具链能正常工作，等到[步骤 4](#步骤-5-定义核心类型--lispexp-与-lisperr) 再从头写自己的代码。
 
 ---
 
-### 步骤 4: 第一次运行测试
+### 步骤 3: 第一次运行测试
 
 在 RustRover 底部，找到 **"终端"** 标签(左下角第三个图标)，点它。这就是 RustRover 内嵌的终端——我们后面都在这里敲命令。
 
@@ -890,7 +888,7 @@ name = "my-lisp"  # 改这里
 
 
 ## 认识值
-⏩ **跳过信号：** 已经知道 Rust 的 enum、`#[derive]` 和 `match`？跳到[步骤 7](#步骤-7-求值函数-eval)。
+⏩ **跳过信号：** 已经知道 Rust 的 enum、`#[derive]` 和 `match`？跳到[步骤 5](#步骤-5-求值函数-eval)。
 
 ⚠️ **慢速通过区** — 本章 Rust 概念密度较高（enum / derive / f64 / pub / #[cfg(test)] / assert_eq!）。
 如果你感到困难，这是正常的——大多数学习者在这里会花更多时间。
@@ -918,9 +916,9 @@ name = "my-lisp"  # 改这里
 </blockquote>
 
 ---
-### 步骤 5: 定义核心类型 — `LispExp` 与 `LispErr`
+### 步骤 4: 定义核心类型 — `LispExp` 与 `LispErr`
 
-我们的 Lisp 解释器要处理的第一样东西就是**数字**。在 Rust 里，我们用 `enum` 列出"世界上有什么"。现在把 `src/lib.rs` 里的默认示例代码**全部删掉**（步骤 3 保留的那个），替换成以下内容：
+我们的 Lisp 解释器要处理的第一样东西就是**数字**。在 Rust 里，我们用 `enum` 列出"世界上有什么"。现在把 `src/lib.rs` 里的默认示例代码**全部删掉**（步骤 2 保留的那个），替换成以下内容：
 
 ```rust
 // src/lib.rs
@@ -946,7 +944,7 @@ pub enum LispErr {
 
 🧠 **大白话 — `String`**：就是"一段文字"。`"你好"` 是一个 String，`"未定义的变量: x"` 也是一个 String。
 
-🔧 **Rust Curve: `String` vs `&str`** — Rust 有两种字符串类型：`String`（拥有所有权、堆分配、可增长）和 `&str`（字符串的借用视图，类似引用）。`Reason(String)` 用拥有所有权的版本，因为错误信息需要独立于其来源存活。我们到了步骤 40-43 讲零拷贝 token 时会再见到 `&str`。
+🔧 **Rust Curve: `String` vs `&str`** — Rust 有两种字符串类型：`String`（拥有所有权、堆分配、可增长）和 `&str`（字符串的借用视图，类似引用）。`Reason(String)` 用拥有所有权的版本，因为错误信息需要独立于其来源存活。我们到了步骤 27-30 讲零拷贝 token 时会再见到 `&str`。
 
 现在两个核心类型都定义好了——`LispExp` 描述"值是什么"，`LispErr` 描述"出了什么错"。接下来的 Rust 深度解析会拆解这些代码背后的概念。
 
@@ -1589,14 +1587,14 @@ C 的 `enum` 只是整数别名（`enum Color { RED=0, GREEN=1 }`）。Rust 的 
 </blockquote>
 
 ---
-### 步骤 7: 求值函数 `eval`
+### 步骤 5: 求值函数 `eval`
 
 ```text
 📥 输入: Number(42.0)    📤 输出: Ok(Number(42.0))
          AST 节点              求值结果
 ```
 
-⚠️ **临时安排**：目前项目只有 `lib.rs` 一个文件，`eval` 暂时放在这里。等步骤 43 结束时，`eval` 会搬到新文件 `src/interpreter.rs` 里——它属于「求值器」模块，跟类型定义分开存放更清晰。
+⚠️ **临时安排**：目前项目只有 `lib.rs` 一个文件，`eval` 暂时放在这里。等步骤 30 结束时，`eval` 会搬到新文件 `src/interpreter.rs` 里——它属于「求值器」模块，跟类型定义分开存放更清晰。
 
 **需求**: 输入 `Number(42.0)`，输出 `Number(42.0)`。数字不需要"计算"——它本身就是答案。
 
@@ -1668,7 +1666,7 @@ LispExp::Number(42.0)    ← 新的,有所有权的 LispExp
 **延伸**：`f64` 是 `Copy` 类型——解引用时自动复制一份，原值不受影响。
 就像你借了朋友的笔记，`*` 就是复印一份——原件还是朋友的，你拿着复印件走。
 
-现在 `LispExp` 只有 `Number` 一种情况，这个 `match` 能通过编译。后面我们会在 `LispExp` 里加更多类型（Symbol、List 等）——到那时，`match` 就需要处理所有变体，否则编译器会报 `non-exhaustive patterns` 错误。我们会在[步骤 13](#步骤-13-添加-symbol-类型-打通管线)添加 `Symbol` 时首次遇到这个问题，届时再加上兜底分支。
+现在 `LispExp` 只有 `Number` 一种情况，这个 `match` 能通过编译。后面我们会在 `LispExp` 里加更多类型（Symbol、List 等）——到那时，`match` 就需要处理所有变体，否则编译器会报 `non-exhaustive patterns` 错误。我们会在[步骤 9](#步骤-13-添加-symbol-类型-打通管线)添加 `Symbol` 时首次遇到这个问题，届时再加上兜底分支。
 
 ```rust
 // src/lib.rs
@@ -1724,7 +1722,7 @@ fn eval(exp: &LispExp) -> Result<LispExp, LispErr>
 
 ---
 
-### 步骤 8: 从"字符串"到"结果"
+### 步骤 6: 从"字符串"到"结果"
 
 ```text
 📥 输入: "42"（源码字符串）    📤 输出: Ok(Number(42.0))（求值结果）
@@ -1825,7 +1823,7 @@ fn eval_str(source: &str) -> Result<LispExp, LispErr> {
 **2. -42 的处理**
 在当前 `eval_str` 中，`"-42".trim().parse::<f64>()` 直接返回 `Ok(-42.0)`——Rust 的 `parse::<f64>()` 本身就能处理负数字符串。所以 `-42` 已经被正确解析为 `Number(-42.0)`，无需修复。
 
-💡 **后续变化**：等到步骤 9 实现词法分析器后，`tokenize("-42")` 会把 `-42` 作为一个整体 token 返回（因为 `-` 和 `42` 之间没有空格）。步骤 12 的 `parse_atom` 中 `"-42".parse::<f64>()` 同样返回 `Ok(-42.0)`，仍然正确。但如果写成 `(- 42)`（带空格），则 `-` 被当作减号运算符，`42` 是数字——这是另一种语义（减法调用），不是负数字面量。
+💡 **后续变化**：等到步骤 7 实现词法分析器后，`tokenize("-42")` 会把 `-42` 作为一个整体 token 返回（因为 `-` 和 `42` 之间没有空格）。步骤 8 的 `parse_atom` 中 `"-42".parse::<f64>()` 同样返回 `Ok(-42.0)`，仍然正确。但如果写成 `(- 42)`（带空格），则 `-` 被当作减号运算符，`42` 是数字——这是另一种语义（减法调用），不是负数字面量。
 </details>
 
 
@@ -1855,7 +1853,7 @@ fn eval_str(source: &str) -> Result<LispExp, LispErr> {
 为什么要学：词法分析器是解释器的眼睛 - 它读取原始文本并识别出有意义的单元 (token)。每个编译器和解释器都从词法分析器开始，这是你在任何语言实现中都能用到的基础技能。
 
 ## 把句子拆成单词
-⏩ **跳过信号：** 了解词法分析/tokenize？跳到[步骤 12](#步骤-12-创建-parserrs)。
+⏩ **跳过信号：** 了解词法分析/tokenize？跳到[步骤 8](#步骤-8-创建-parserrs)。
 
 
 ---
@@ -1878,14 +1876,14 @@ fn eval_str(source: &str) -> Result<LispExp, LispErr> {
 </blockquote>
 
 ---
-### 步骤 9: 创建词法分析器
+### 步骤 7: 创建词法分析器
 
 ```text
 📥 输入: "(+ 1 2)"（源码字符串）    📤 输出: ["(", "+", "1", "2", ")"]（Token 列表）
          一整段文本                      拆成一个个单词
 ```
 
-步骤 8 的 `eval_str("(+ 1 2)")` 会失败——因为 `"(+ 1 2)"` 不是一个合法的数字。要处理多元素表达式，第一步是把字符串**拆成单词**。这就是词法分析器（lexer）的工作。
+步骤 6 的 `eval_str("(+ 1 2)")` 会失败——因为 `"(+ 1 2)"` 不是一个合法的数字。要处理多元素表达式，第一步是把字符串**拆成单词**。这就是词法分析器（lexer）的工作。
 
 🔮 **先猜一猜再往下看**：你觉得 `tokenize("(* 2 (+ 3 4))"` 会返回什么？把你猜的结果写在纸上，然后继续读——看看你猜对了没。
 
@@ -1983,11 +1981,11 @@ test tests::test_eval_str_number ... ok
 test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
-`"+ 1 2"` 一个字符串变成了 `["+", "1", "2"]` 三个 token——tokenize 在**拆分**！这正是步骤 8 中 `eval_str("(+ 1 2)")` 失败的第一步解决方案。
+`"+ 1 2"` 一个字符串变成了 `["+", "1", "2"]` 三个 token——tokenize 在**拆分**！这正是步骤 6 中 `eval_str("(+ 1 2)")` 失败的第一步解决方案。
 
 🧠 **大白话 — `dead_code` 警告还在？**
 
-**`function 'eval_str' is never used`**：`eval_str` 不是 `pub`，在非测试代码中没人调用它。这是步骤 8 的"老朋友"，完全无害。
+**`function 'eval_str' is never used`**：`eval_str` 不是 `pub`，在非测试代码中没人调用它。这是步骤 6 的"老朋友"，完全无害。
 
 **④ TDD：发现括号问题 → 修复**
 
@@ -2031,7 +2029,7 @@ pub fn tokenize(input: &str) -> Vec<String> {
     // 注意：replace 返回的是新的 String（不是 &str），
     // split_whitespace 的 &str 引用的是这个临时 String。
     // 因此必须用 .map(|s| s.to_string()) 将每个 &str 转换为拥有所有权的 String，
-    // 否则引用会在语句结束时悬垂。步骤 42 的零拷贝版本会消除这个分配。
+    // 否则引用会在语句结束时悬垂。步骤 29 的零拷贝版本会消除这个分配。
     input
         .replace("(", " ( ")   // 每个 "(" → " ( "
         .replace(")", " ) ")   // 每个 ")" → " ) "
@@ -2122,7 +2120,7 @@ pub fn tokenize(input: &str) -> Vec<String> {
 }
 ```
 
-💡 **为什么不用逐字符循环？** 当前的 `tokenize` 是「替换 + 切分」的风格，突然引入 `pos`/`len`/`chars` 的字符循环会和已有代码脱节。先用 `lines()` + `find(';')` 去掉注释，再走原来的逻辑，改动最小，读者也容易跟上。步骤 42 改为零拷贝词法分析器时，自然会引入 `char_indices().peekable()` 的逐字符循环。
+💡 **为什么不用逐字符循环？** 当前的 `tokenize` 是「替换 + 切分」的风格，突然引入 `pos`/`len`/`chars` 的字符循环会和已有代码脱节。先用 `lines()` + `find(';')` 去掉注释，再走原来的逻辑，改动最小，读者也容易跟上。步骤 29 改为零拷贝词法分析器时，自然会引入 `char_indices().peekable()` 的逐字符循环。
 
 **2. 测试**
 ```rust
@@ -2157,7 +2155,7 @@ fn test_comment_ignored() {
 - `to_string()` 调用让数据流动可见
 
 **替代方案有哪些？**
-- `&str`（源码切片引用）—— 更快但需要生命周期管理。我们在步骤 42 会切换过去！
+- `&str`（源码切片引用）—— 更快但需要生命周期管理。我们在步骤 29 会切换过去！
 - `enum Token { LParen, RParen, Number(f64), Symbol(String), ... }` —— 类型更安全，但引入了专门的新类型
 - `u64` 驻留 ID —— 最快但多了一层间接访问
 
@@ -2187,7 +2185,7 @@ fn test_comment_ignored() {
 为什么要学：语法分析器把扁平的 token 列表转换成树状结构 (AST)。这棵树代表程序的语法结构 - 没有它，求值器就没有有意义的输入。递归下降解析是最直观的解析技术，适用于大多数真实语言。
 
 ## 理解单词的意思
-⏩ **跳过信号：** 了解递归下降解析？跳到[步骤 16](#步骤-16-创建环境变量名-值的通讯录)。不过步骤 14 的递归解析图值得看一眼。
+⏩ **跳过信号：** 了解递归下降解析？跳到[步骤 12](#步骤-12-创建环境变量名-值的通讯录)。不过步骤 10 的递归解析图值得看一眼。
 
 
 ---
@@ -2210,14 +2208,14 @@ fn test_comment_ignored() {
 </blockquote>
 
 ---
-### 步骤 12: 创建 parser.rs
+### 步骤 8: 创建 parser.rs
 
 ```text
 📥 输入: ["+", "1", "2"]（Token 列表）    📤 输出: Symbol("+"), Number(1.0), Number(2.0)
          扁平的字符串                        带类型的 AST 叶子节点
 ```
 
-⚠️ **临时方案**：`Symbol` 目前用 `String` 存名字（简单直观）。项目的最终形态用 `Symbol(u64)`——一个整数 ID，通过「字符串驻留器」把名字映射为数字，比较和哈希都是 O(1)。我们会在步骤 40-41 做这个优化，届时把所有 `String` 替换为 `u64`。现在先用 `String` 把逻辑跑通。
+⚠️ **临时方案**：`Symbol` 目前用 `String` 存名字（简单直观）。项目的最终形态用 `Symbol(u64)`——一个整数 ID，通过「字符串驻留器」把名字映射为数字，比较和哈希都是 O(1)。我们会在步骤 27-30 做这个优化，届时把所有 `String` 替换为 `u64`。现在先用 `String` 把逻辑跑通。
 
 右键 `src` 文件夹 → **New** → **File**，输入 `parser.rs`。
 
@@ -2291,7 +2289,7 @@ match token.parse::<f64>() {
 
 ---
 
-### 步骤 13: 添加 Symbol 类型, 打通管线
+### 步骤 9: 添加 Symbol 类型, 打通管线
 
 ```text
 📥 输入: "+"（源码字符串）    📤 输出: Err("暂不支持此类型")
@@ -2312,7 +2310,7 @@ pub enum LispExp {
 }
 ```
 
-同时，`eval` 函数也要更新——`LispExp` 现在有两个变体，但 `eval` 只处理了 `Number`。Rust 的 `match` 要求穷尽所有变体，否则编译报错。我们暂时还不知道怎么求值 `Symbol`（要到[步骤 18](#步骤-18-eval-签名加-env-参数)才能查环境变量），所以先加一个兜底分支：
+同时，`eval` 函数也要更新——`LispExp` 现在有两个变体，但 `eval` 只处理了 `Number`。Rust 的 `match` 要求穷尽所有变体，否则编译报错。我们暂时还不知道怎么求值 `Symbol`（要到[步骤 13](#步骤-18-eval-签名加-env-参数)才能查环境变量），所以先加一个兜底分支：
 
 ```rust
 // src/lib.rs — 更新 eval 函数
@@ -2327,13 +2325,13 @@ pub fn eval(exp: &LispExp) -> Result<LispExp, LispErr> {
 
 🧠 **大白话 — 为什么现在要加 `_`？**
 
-步骤 7 时 `LispExp` 只有 `Number` 一个变体，`match` 只写 `Number` 就够了，编译器不会报错。现在加了 `Symbol`，如果 `match` 里不处理它，编译器会报：
+步骤 5 时 `LispExp` 只有 `Number` 一个变体，`match` 只写 `Number` 就够了，编译器不会报错。现在加了 `Symbol`，如果 `match` 里不处理它，编译器会报：
 
 ```text
 error[E0004]: non-exhaustive patterns: `Symbol(_)` not covered
 ```
 
-`_` 是通配符，匹配"剩下所有情况"。现在它会匹配 `Symbol`；后面加更多变体（`List`、`Bool` 等）时，`_` 也会自动兜住——不用每次加类型都来改 `eval`。等所有类型都有显式处理后（[步骤 28](#步骤-28-bool-和-nil)），我们会删掉这个兜底分支，改让编译器帮我们检查穷尽性。
+`_` 是通配符，匹配"剩下所有情况"。现在它会匹配 `Symbol`；后面加更多变体（`List`、`Bool` 等）时，`_` 也会自动兜住——不用每次加类型都来改 `eval`。等所有类型都有显式处理后（[步骤 18](#步骤-28-bool-和-nil)），我们会删掉这个兜底分支，改让编译器帮我们检查穷尽性。
 
 **测试 parser**——验证 parse 能区分数字和符号：
 
@@ -2400,10 +2398,10 @@ fn eval_str(source: &str) -> Result<LispExp, LispErr> {
 "+" → tokenize → ["+"] → parse → Symbol("+") → eval → Err("暂不支持此类型")
 
 注意: 当前 parse 只能处理单个原子（如 "+" → Symbol("+")），
-列表解析在步骤 14 完成，列表求值在步骤 22 完成。
+列表解析在步骤 10 完成，列表求值在步骤 16 完成。
 但管线已经全线贯通——三个模块各司其职。
 
-预览: 等步骤 14 完成列表解析后，完整管线将是:
+预览: 等步骤 10 完成列表解析后，完整管线将是:
 "(+ 1 2)" → tokenize → ["(", "+", "1", "2", ")"] → parse → List([Symbol("+"), Number(1.0), Number(2.0)]) → eval → Number(3.0)
 ```
 
@@ -2428,7 +2426,7 @@ test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 
 ---
 
-### 步骤 14: 解析嵌套列表
+### 步骤 10: 解析嵌套列表
 
 **目标**：`(+ 1 (* 2 3))` 变成树形结构。
 
@@ -2531,7 +2529,7 @@ test tests::test_eval_str_number ... ok
 test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
-🧠 **大白话 — `dead_code` 警告还在！** 步骤 13 加的 `Symbol` 变体和 `_` 兜底分支让编译通过，`eval_str` 的 `dead_code` 警告仍在——等它被 `pub` 标记或被非测试代码调用后消失。
+🧠 **大白话 — `dead_code` 警告还在！** 步骤 9 加的 `Symbol` 变体和 `_` 兜底分支让编译通过，`eval_str` 的 `dead_code` 警告仍在——等它被 `pub` 标记或被非测试代码调用后消失。
 
 
 ![parser seq](svgs/parser-seq.svg)
@@ -2562,9 +2560,9 @@ read_seq(tokens):
 parse("(+ 1 (* 2 3))") → List(Symbol(+), Number(1), List(Symbol(*), Number(2), Number(3)))
 ```
 
-### 步骤 15: 括号错误测试
+### 步骤 11: 括号错误测试
 
-`test_parse_symbol` 已在步骤 12 添加。本步骤只加错误处理测试——在 parser.rs 的 tests 模块中新增：
+`test_parse_symbol` 已在步骤 8 添加。本步骤只加错误处理测试——在 parser.rs 的 tests 模块中新增：
 
 ```rust
 // parser.rs — tests 模块中新增
@@ -2602,7 +2600,7 @@ test parser::tests::test_unexpected_close_error ... ok
 test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
-🧠 **大白话 — `eval_str` 的 `dead_code` 警告还在。** 这条警告会一直跟着我们，直到步骤 74 创建 `main.rs` 并调用 `eval_str`（或者你提前给它加 `pub`）。
+🧠 **大白话 — `eval_str` 的 `dead_code` 警告还在。** 这条警告会一直跟着我们，直到步骤 47 创建 `main.rs` 并调用 `eval_str`（或者你提前给它加 `pub`）。
 
 ---
 
@@ -2700,7 +2698,7 @@ fn parse_atom(token: &str) -> LispExp {
 </blockquote>
 
 ---
-### 步骤 16: 创建"环境"（变量名 → 值的通讯录）
+### 步骤 12: 创建"环境"（变量名 → 值的通讯录）
 
 右键 `src` 文件夹 → **New** → **File**，输入 `env.rs`。
 
@@ -2782,9 +2780,7 @@ Option<LispExp>
 
 `HashMap::get` 返回 `Option`——因为你要找的 key 可能在通讯录里（Some），也可能不在（None）。
 
----
-
-### 步骤 17: env.rs 测试
+#### 测试
 
 把下面测试加到 `src/env.rs` 末尾测试模块：
 
@@ -2818,9 +2814,7 @@ test env::tests::test_env_undefined ... ok
 test result: ok. 11 passed; 0 failed
 ```
 
----
-
-### 步骤 18: eval 签名加 env 参数
+### 步骤 13: eval 加 env 参数
 
 **关键改动**：eval 现在需要环境了。下面是 eval **完整的新版本**（替换原来的）：
 
@@ -2836,11 +2830,9 @@ pub fn eval(exp: &LispExp, env: &LispEnv) -> Result<LispExp, LispErr> {
 }
 ```
 
+#### 更新所有调用处
+
 **⚠️ 改了签名，所有调用 eval 的地方都要改！**
-
----
-
-### 步骤 19: 更新所有调用处
 
 **`eval_str` 更新**（同时需要在 `lib.rs` 顶部加 `use crate::env::LispEnv;`）：
 
@@ -3008,7 +3000,7 @@ y               ; → 10 还是 20？
 </blockquote>
 
 ---
-### 步骤 20: Func 类型
+### 步骤 14: Func 类型
 
 ```rust
 // lib.rs — LispExp 加:
@@ -3035,7 +3027,7 @@ pub fn eval(exp: &LispExp, env: &LispEnv) -> Result<LispExp, LispErr> {
 }
 ```
 
-### 步骤 21: 列表求值逻辑
+### 步骤 15: 列表求值逻辑
 
 **替换 eval 中的 `_ => Err(...)` 那行为 List 处理**。下面是此时 eval 的**完整版本**：
 
@@ -3091,7 +3083,7 @@ pub fn eval(exp: &LispExp, env: &LispEnv) -> Result<LispExp, LispErr> {
             → Ok(Number(3.0))
 ```
 
-### 步骤 22-23: 注册加法 + 测试
+### 步骤 16: 注册加法 + 测试
 
 ```rust
 // lib.rs
@@ -3144,7 +3136,7 @@ test result: ok. 13 passed; 0 failed
 
 🎉 **里程碑：能算 (+ 1 2) = 3 了！**
 
-### 步骤 24-27: 减法、乘法、除法
+### 步骤 17: 减法、乘法、除法
 
 逐一注册——跟在加法后面，写到 `default_env()` 里：
 
@@ -3305,7 +3297,7 @@ if args.len() == 1 {
 </blockquote>
 
 ---
-### 步骤 28: Bool 和 Nil
+### 步骤 18: Bool 和 Nil
 
 ```rust
 // src/lib.rs
@@ -3335,7 +3327,7 @@ pub fn eval(exp: &LispExp, env: &LispEnv) -> Result<LispExp, LispErr> {
 
 🧠 **大白话 — 为什么删掉了 `_` 兜底分支？**
 
-到这一步，`LispExp` 的 6 个变体（`Number`、`Symbol`、`List`、`Func`、`Bool`、`Nil`）全部有显式处理——`_` 已经不可达了。删掉它的好处是：**以后新增变体时（如步骤 29-31 的 `String`、步骤 34 的 `Lambda`），如果忘了在 `eval` 里处理，编译器会立即报错**（`non-exhaustive patterns`），而不是等到运行时才发现。Rust 的穷尽性检查是最好的安全网——但前提是你不写 `_`。
+到这一步，`LispExp` 的 6 个变体（`Number`、`Symbol`、`List`、`Func`、`Bool`、`Nil`）全部有显式处理——`_` 已经不可达了。删掉它的好处是：**以后新增变体时（如步骤 19 的 `String`、步骤 22 的 `Lambda`），如果忘了在 `eval` 里处理，编译器会立即报错**（`non-exhaustive patterns`），而不是等到运行时才发现。Rust 的穷尽性检查是最好的安全网——但前提是你不写 `_`。
 
 在 parser 的 `parse_atom` 中：
 
@@ -3350,7 +3342,7 @@ if token.starts_with('"') && token.ends_with('"') && token.len() >= 2 {
 }
 ```
 
-### 步骤 29-31: 比较函数 + String 类型
+### 步骤 19: 比较函数 + String 类型
 
 逐一注册比较函数（跟在 `=` 后面，模式完全相同）：
 
@@ -3393,7 +3385,7 @@ LispExp::Bool(_) | LispExp::Nil | LispExp::Func(_) => Ok(exp.clone()),
 LispExp::Bool(_) | LispExp::Nil | LispExp::Func(_) | LispExp::String(_) => Ok(exp.clone()),
 ```
 
-💡 如果你忘了加 `String`，编译器会报错：`non-exhaustive patterns: \`String(_)\` not covered`——这正是步骤 28 删掉 `_` 兜底的好处！编译器替你盯着，不放过任何一个漏处理的变体。
+💡 如果你忘了加 `String`，编译器会报错：`non-exhaustive patterns: \`String(_)\` not covered`——这正是步骤 18 删掉 `_` 兜底的好处！编译器替你盯着，不放过任何一个漏处理的变体。
 
 ```bash
 $ cargo test
@@ -3453,9 +3445,9 @@ env.set("string-length".into(), LispExp::Func(|args| {
 
 
 ## 让程序做选择
-⏩ **跳过信号：** 了解 `if`/`define`/`lambda` 语义？快速浏览实现——注意 `lambda` 作为特殊形式的处理（步骤 34）。
+⏩ **跳过信号：** 了解 `if`/`define`/`lambda` 语义？快速浏览实现——注意 `lambda` 作为特殊形式的处理（步骤 22）。
 
-⚠️ **慢速通过区** — 步骤 33 会把 `eval` 的签名从 `&LispEnv` 改成 `&mut LispEnv`，
+⚠️ **慢速通过区** — 步骤 21 会把 `eval` 的签名从 `&LispEnv` 改成 `&mut LispEnv`，
 引发约 6 处编译错误。这是正常的——编译器在帮你找出所有需要同步更新的调用处。
 别慌，逐个修复即可。
 
@@ -3483,7 +3475,7 @@ env.set("string-length".into(), LispExp::Func(|args| {
 ---
 ### 当前进度：我们已经有了什么？
 
-在进入新内容之前，先看清楚 **`src/lib.rs` 中 `eval` 函数现在的完整样子**（步骤 31 结束时的状态）：
+在进入新内容之前，先看清楚 **`src/lib.rs` 中 `eval` 函数现在的完整样子**（步骤 19 结束时的状态）：
 
 ```rust
 // src/lib.rs — eval 函数（当前版本，还没有特殊形式）
@@ -3530,7 +3522,7 @@ pub fn eval(exp: &LispExp, env: &LispEnv) -> Result<LispExp, LispErr> {
 
 ---
 
-### 步骤 32: if — 条件判断
+### 步骤 20: if — 条件判断
 
 **文件：`src/lib.rs`**，修改 `eval` 函数的 `LispExp::List(elements)` 分支。
 
@@ -3619,7 +3611,7 @@ test result: ok. 16 passed; 0 failed
 
 ---
 
-### 步骤 33: define — 变量定义
+### 步骤 21: define — 变量定义
 
 **文件：`src/lib.rs`**
 
@@ -3790,7 +3782,7 @@ test result: ok. 18 passed; 0 failed
 
 ---
 
-### 步骤 34: lambda — 创建匿名函数
+### 步骤 22: lambda — 创建匿名函数
 
 **文件：`src/lib.rs`**
 
@@ -3912,9 +3904,7 @@ test tests::test_lambda_call ... ok
 test result: ok. 19 passed; 0 failed
 ```
 
----
-
-### 步骤 35: lambda — 调用
+#### 调用 Lambda
 
 **文件：`src/lib.rs`**，修改 `eval` 的 `List` 分支中**普通函数调用**部分的 `match func`。
 
@@ -4106,7 +4096,7 @@ eval 判断:                       eval 判断:
 **第 2 层：创建新环境 + 绑定参数 + 求值函数体**
 
 ```
-注意：此时新环境通过 `env.clone()` 克隆调用时的环境来创建。`LispLambda` 的 `env` 字段要到步骤 37 才添加——目前参数绑定直接存在克隆出的环境里。
+注意：此时新环境通过 `env.clone()` 克隆调用时的环境来创建。`LispLambda` 的 `env` 字段要到步骤 24 才添加——目前参数绑定直接存在克隆出的环境里。
 
 ① 创建新环境
   let mut new_env = 全局.clone()
@@ -4208,7 +4198,7 @@ match func → 匹配到 Func(f)!
 
 ---
 
-📋 **步骤 35 结束时的项目状态**
+📋 **步骤 22 结束时的项目状态**
 
 ```
 lisp-rs/
@@ -4324,12 +4314,12 @@ SICP 的核心思想之一是**愿望思维（wishful thinking）**：先写下�
 ## 记住过去的事情
 为什么要学：闭包是 Lisp 对编程界的贡献。闭包是一个能记住创建时作用域中变量的函数——实现了回调、事件处理器和函数式抽象。我们的实现使用 `Rc<RefCell<>>` 共享所有权，这与许多 Rust 程序管理复杂数据的方式相同。
 
-🚫 **核心章节——建议逐行读完。** 闭包（步骤 37）和尾调用优化（步骤 39）是这里讲得最细的部分。逐行读完。
+🚫 **核心章节——建议逐行读完。** 闭包（步骤 24）和尾调用优化（步骤 26）是这里讲得最细的部分。逐行读完。
 
 ⚠️ **慢速通过区 — 全教程最难的 4 步。**
-步骤 36 引入 `Rc<RefCell<LispEnv>>`（三层嵌套智能指针），步骤 37 实现闭包捕获环境，
-步骤 39 用蹦床循环实现 TCO。如果你感到困难，这是正常的——大多数学习者在这里会花 2-3 倍的时间。
-建议：先理解"背包🎒"比喻（步骤 37 开头），再看代码。如果卡住了，跳到步骤 40 看性能优化，
+步骤 23 引入 `Rc<RefCell<LispEnv>>`（三层嵌套智能指针），步骤 24 实现闭包捕获环境，
+步骤 26 用蹦床循环实现 TCO。如果你感到困难，这是正常的——大多数学习者在这里会花 2-3 倍的时间。
+建议：先理解"背包🎒"比喻（步骤 24 开头），再看代码。如果卡住了，跳到步骤 27 看性能优化，
 回头再看闭包也完全可以——闭包不影响后续功能的理解。
 
 
@@ -4355,12 +4345,12 @@ SICP 的核心思想之一是**愿望思维（wishful thinking）**：先写下�
 </blockquote>
 
 ---
-### 当前进度：步骤 35 结束时，eval 函数的样子
+### 当前进度：步骤 22 结束时，eval 函数的样子
 
 在开始改造之前，先看清楚 **`src/lib.rs` 中 `eval` 的 `List` 分支**（只展示 `List` 部分，其他分支不变）：
 
 ```rust
-// src/lib.rs — eval 函数 List 分支（步骤 35 结束时）
+// src/lib.rs — eval 函数 List 分支（步骤 22 结束时）
 
 LispExp::List(elements) => {
     if elements.is_empty() {
@@ -4400,9 +4390,9 @@ LispExp::List(elements) => {
 
 ---
 
-### 步骤 35.5: 理解 Rc 和 RefCell —— 让函数背着背包旅行
+### 步骤 22b: 理解 Rc 和 RefCell —— 让函数背着背包旅行
 
-🧠 **为什么要先学这个？** 下一步（步骤 36）我们要给环境加 `outer` 字段，实现闭包。
+🧠 **为什么要先学这个？** 下一步（步骤 23）我们要给环境加 `outer` 字段，实现闭包。
 这需要两个新的 Rust 概念：`Rc` 和 `RefCell`。先单独理解它们，后面就不会被三件事同时卡住。
 
 #### ① Rc —— 多人共享一本书
@@ -4479,11 +4469,11 @@ println!("{}", lambda2.borrow());  // "x=1, y=2"  ✅
 
 ⚠️ **注意**：`RefCell` 的检查在运行时（不是编译时）。如果你同时 `borrow_mut()` 两次，程序会 panic。但我们的解释器是单线程的，不会出现这种情况。
 
-📝 **下一步预告**：步骤 36 会给 `LispEnv` 加 `outer: Option<Rc<RefCell<LispEnv>>>` 字段。现在你理解了 `Rc` 和 `RefCell`，到时候就不会被三层嵌套吓到。
+📝 **下一步预告**：步骤 23 会给 `LispEnv` 加 `outer: Option<Rc<RefCell<LispEnv>>>` 字段。现在你理解了 `Rc` 和 `RefCell`，到时候就不会被三层嵌套吓到。
 
 ---
 
-### 步骤 36: 环境添加 outer 字段 — 支持嵌套作用域
+### 步骤 23: 环境添加 outer 字段 — 支持嵌套作用域
 
 **文件：`src/env.rs`**
 
@@ -4610,7 +4600,7 @@ test result: ok. 21 passed; 0 failed
 
 ---
 
-### 步骤 37: Lambda 捕获环境, 实现真正的闭包
+### 步骤 24: Lambda 捕获环境, 实现真正的闭包
 
 **已经懂闭包了？** 一句话概括：求值 `lambda` 时，创建一个 `LispLambda`，其中保存对当前 `LispEnv` 的引用。变量查找沿 `env → env.outer → ...` 链式搜索，直到找到。这就是词法作用域。本步骤余下内容是为初学者准备的详细拆解。
 
@@ -5125,7 +5115,7 @@ eval 判断: List! → 首元素 = Symbol("+")
 
 ---
 
-### 步骤 38: TCO — 理解问题
+### 步骤 25: TCO — 理解问题
 
 **问题**：看这段代码：
 
@@ -5210,7 +5200,7 @@ eval(Apply(func, args)) =
 
 
 
-### 步骤 39: TCO, 蹦床循环实现
+### 步骤 26: TCO, 蹦床循环实现
 
 **文件：`src/lib.rs`**，**替换整个 `eval` 函数**。
 
@@ -5474,7 +5464,7 @@ CPS 更强大（支持 call/cc）但：
 - [ ] 测试闭包：`(define c (make-counter 0))` → `(c)` → `1` → `(c)` → `2`
 - [ ] 测试 TCO：`(define (loop n) (if (= n 0) 'done (loop (- n 1))))` → `(loop 10000)` 不崩溃
 
-⏱️ **限时 40 分钟**。这是最难的挑战——`Rc<RefCell<>>` 和蹦床循环都需要深入理解。如果做不到，回去重读步骤 35.5 和 39。
+⏱️ **限时 40 分钟**。这是最难的挑战——`Rc<RefCell<>>` 和蹦床循环都需要深入理解。如果做不到，回去重读步骤 22b 和 26。
 
 
 ## 让程序跑得更快
@@ -5502,7 +5492,7 @@ CPS 更强大（支持 call/cc）但：
 </blockquote>
 
 ---
-### 步骤 40: 字符串驻留
+### 步骤 27: 字符串驻留
 
 **问题**："x" 出现 100 次 → 堆分配 100 次 → 比较要逐字符扫描。
 
@@ -5554,7 +5544,7 @@ pub fn intern(s: &str) -> u64 {
 
 🧠 **大白话 — `RwLock`（读写锁）**：多人可以同时读，但写的时候要独占。就像教室黑板——大家都能看，但只有一个人能写。
 
-### 步骤 41: Symbol 类型改为 u64
+### 步骤 28: Symbol 类型改为 u64
 
 **文件：`src/lib.rs`**
 
@@ -5672,7 +5662,7 @@ if let LispExp::Symbol(name) = &elements[1] {  ← 无需改！匹配的是 Symb
 
 **模式 E：`LispLambda.params`——从 `Vec<String>` 变成 `Vec<u64>`**
 
-步骤 34 定义的 `LispLambda` 里，`params` 字段是 `Vec<String>`。现在 `Symbol` 变成了 `u64`，参数名也应该用驻留 ID：
+步骤 22 定义的 `LispLambda` 里，`params` 字段是 `Vec<String>`。现在 `Symbol` 变成了 `u64`，参数名也应该用驻留 ID：
 
 ```rust
 // src/lib.rs — LispLambda 结构体
@@ -5711,7 +5701,7 @@ test result: ok. 23 passed; 0 failed
 
 ---
 
-### 步骤 42: 零拷贝词法分析器
+### 步骤 29: 零拷贝词法分析器
 
 **文件：`src/lexer.rs`**
 
@@ -5866,7 +5856,7 @@ test lexer::tests::test_tokenize_string_literal ... ok
 test result: ok. 26 passed; 0 failed
 ```
 
-### 步骤 43: FX 哈希器
+### 步骤 30: FX 哈希器
 
 Rust 默认哈希器（SipHash）约 20 条 CPU 指令。实现 FxHasher 约 3 条：
 
@@ -5930,7 +5920,7 @@ pub data: HashMap<u64, LispExp, BuildFxHasher>,  // 用自制的快速哈希器
 
 ---
 
-📋 **步骤 43 结束时的项目状态**
+📋 **步骤 30 结束时的项目状态**
 
 📁 **重要：项目重构** — 项目已经比较大了，现在把 `eval` 函数和 `default_env` 从 `lib.rs` 迁移到新文件 `src/interpreter.rs`：
 1. 右键 `src` → **New** → **File** → `interpreter.rs`
@@ -6008,18 +5998,18 @@ fn intern(&mut self, s: &str) -> u64 {
 ![special forms](svgs/special-forms.svg)
 
 
-🗺️ **特殊形式全景图**：eval 遇到 List 时，先检查第一个元素是不是特殊形式关键字。🟢 绿色 = 尾调用优化的路径（`if`/`let`/`cond`/`and`/`or`/Lambda 调用都走 TCO），🔵 蓝色 = 直接返回（`quote`/`define`/`lambda`）。其余特殊形式（begin/set!/let/cond/and/or/let*/letrec）在步骤 44-51 逐一实现。
+🗺️ **特殊形式全景图**：eval 遇到 List 时，先检查第一个元素是不是特殊形式关键字。🟢 绿色 = 尾调用优化的路径（`if`/`let`/`cond`/`and`/`or`/Lambda 调用都走 TCO），🔵 蓝色 = 直接返回（`quote`/`define`/`lambda`）。其余特殊形式（begin/set!/let/cond/and/or/let*/letrec）在步骤 31-35 逐一实现。
 
 ---
 
-📝 **设计笔记：优化顺序——为什么等到步骤 40**
+📝 **设计笔记：优化顺序——为什么等到步骤 27**
 
 三个优化（字符串驻留、零拷贝词法分析、FX 哈希器）被刻意推迟到闭包和 TCO 之后。
 这不是偶然——而是一个教学原则：
 
 **"先让它能工作，再让它正确，最后让它快"**——这个顺序不能颠倒。
 
-如果我们在步骤 5 就引入驻留，读者将不得不同时处理：
+如果我们在步骤 4 就引入驻留，读者将不得不同时处理：
 - 全局静态 `OnceLock<RwLock<>>`（不熟悉的模式）
 - 符号 ID vs 字符串名称（双重表示）
 - HashMap 生命周期管理
@@ -6030,9 +6020,9 @@ fn intern(&mut self, s: &str) -> u64 {
 | 阶段 | 关注点 | 优化优先级 |
 |------|--------|-----------|
 | 步骤 1-27 | 正确性 | 不需要——用最简单的代码 |
-| 步骤 28-39 | 功能完整性 | 不需要——先加功能 |
-| 步骤 40-43 | 性能 | 现在——功能集已稳定 |
-| 步骤 44-74 | 打磨 | 只在基准测试发现问题时才做 |
+| 步骤 18-39 | 功能完整性 | 不需要——先加功能 |
+| 步骤 27-30 | 性能 | 现在——功能集已稳定 |
+| 步骤 31-47 | 打磨 | 只在基准测试发现问题时才做 |
 
 这也反映了真实项目的演进方式。你无法优化还没建好的东西，
 也不应该优化还没测量过的东西。
@@ -6051,7 +6041,7 @@ fn intern(&mut self, s: &str) -> u64 {
 
 
 ## 更多魔法命令
-⏩ **跳过信号：** 只需要核心语言？跳到[步骤 52](#步骤-52-小于)。这些特殊形式模式相同——检查第一个元素，分支处理。
+⏩ **跳过信号：** 只需要核心语言？跳到[挑战 A](#挑战-a比较运算符步骤-36)。这些特殊形式模式相同——检查第一个元素，分支处理。
 
 
 ---
@@ -6073,11 +6063,11 @@ fn intern(&mut self, s: &str) -> u64 {
 </blockquote>
 
 ---
-### 步骤 44: begin — 顺序求值
+### 步骤 31: begin — 顺序求值
 
 📁 **从现在起，所有修改 `eval` 的代码都写在 `src/interpreter.rs` 里**（上一步刚创建的）。类型定义仍在 `lib.rs`，内置函数注册仍在 `default_env()`（也在 `interpreter.rs` 里）。
 
-📌 **`PredefinedSyms` 结构体**：从本步骤起，特殊形式的关键字（`if`、`define`、`lambda`、`begin` 等）通过 `predefined()` 函数获取预驻留的 `u64` ID，避免每次比较都调用 `interner::intern()`。`PredefinedSyms` 结构体和 `predefined()` 函数定义在 `src/interner.rs` 中（步骤 40 创建的文件），包含所有特殊形式符号的预驻留 ID。使用方式：`predefined().begin`、`predefined().let_sym` 等。
+📌 **`PredefinedSyms` 结构体**：从本步骤起，特殊形式的关键字（`if`、`define`、`lambda`、`begin` 等）通过 `predefined()` 函数获取预驻留的 `u64` ID，避免每次比较都调用 `interner::intern()`。`PredefinedSyms` 结构体和 `predefined()` 函数定义在 `src/interner.rs` 中（步骤 27 创建的文件），包含所有特殊形式符号的预驻留 ID。使用方式：`predefined().begin`、`predefined().let_sym` 等。
 
 **目标**: `(begin (define x 10) (+ x 5))` → `15`。
 
@@ -6126,9 +6116,7 @@ running 27 tests
 test result: ok. 27 passed; 0 failed
 ```
 
----
-
-### 步骤 45: set! — 修改已有绑定
+#### set! — 修改已有绑定
 
 **目标**: `(define x 10) (set! x 20)` → x 变成 20。
 
@@ -6189,9 +6177,9 @@ test result: ok. 28 passed; 0 failed
 
 ---
 
-### 步骤 46: let — 局部绑定
+### 步骤 32: let — 局部绑定
 
-📌 **前置依赖**：`let` 的多表达式 body 会被脱糖为 `begin`（步骤 44）。请确保 `begin` 已实现。
+📌 **前置依赖**：`let` 的多表达式 body 会被脱糖为 `begin`（步骤 31）。请确保 `begin` 已实现。
 
 **目标**: `(let ((x 1) (y 2)) (+ x y))` → `3`。
 
@@ -6272,7 +6260,7 @@ test result: ok. 29 passed; 0 failed
 
 ---
 
-### 步骤 47: cond — 多路分支
+### 步骤 33: cond — 多路分支
 
 **目标**: `(cond ((> 3 5) 1) ((< 3 5) 2) (else 3))` → `2`。
 
@@ -6335,7 +6323,7 @@ test result: ok. 30 passed; 0 failed
 
 ---
 
-### 步骤 48: and — 短路逻辑与
+### 步骤 34: and — 短路逻辑与
 
 **目标**: `(and #t 42)` → `42`, `(and #f (error "x"))` → `#f`（error 不执行）。
 
@@ -6355,9 +6343,7 @@ if *sym_id == predefined().and_sym {
 }
 ```
 
----
-
-### 步骤 49: or — 短路逻辑或
+#### or — 短路逻辑或
 
 **目标**: `(or #f #f 42)` → `42`。
 
@@ -6379,7 +6365,7 @@ if *sym_id == predefined().or_sym {
 
 ---
 
-### 步骤 50: let* — 顺序绑定
+### 步骤 35: let* — 顺序绑定
 
 **目标**: `(let* ((x 1) (y (+ x 1))) (+ x y))` → `3`（y 能看到 x）。
 
@@ -6461,9 +6447,7 @@ running 31 tests
 test result: ok. 31 passed; 0 failed
 ```
 
----
-
-### 步骤 51: letrec — 递归绑定
+#### letrec — 递归绑定
 
 **目标**: 函数可以互相递归引用。
 
@@ -6497,7 +6481,7 @@ if *sym_id == predefined().letrec {
         }
     }
 
-    // 步骤 2-3: 在能看到黑板的环境中求值 lambda，然后替换占位符
+    // 步骤 1-3: 在能看到黑板的环境中求值 lambda，然后替换占位符
     let mut eval_env = LispEnv::with_outer(shared_env.clone());
     if let LispExp::List(binds) = bindings {
         for bind in binds {
@@ -6512,7 +6496,7 @@ if *sym_id == predefined().letrec {
         }
     }
 
-    // 步骤 4: 在共享环境下求值 body (TCO)
+    // 步骤 3: 在共享环境下求值 body (TCO)
     let body = if body_exprs.len() == 1 { body_exprs[0].clone() }
     else {
         LispExp::List(
@@ -6585,7 +6569,7 @@ letrec 用了三个步骤来破解这个"鸡生蛋"问题：
   虽然值还是空的——就像先写名字贴座位, 人还没到。
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📦 步骤 2: 在"能看到黑板"的环境中求值 lambda
+📦 步骤 1: 在"能看到黑板"的环境中求值 lambda
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
   创建求值环境, outer 指向 shared_env:
@@ -6610,7 +6594,7 @@ letrec 用了三个步骤来破解这个"鸡生蛋"问题：
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📦 步骤 3: 用真值替换占位符
+📦 步骤 2: 用真值替换占位符
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
   shared_env 更新:
@@ -6623,7 +6607,7 @@ letrec 用了三个步骤来破解这个"鸡生蛋"问题：
   现在 even? 和 odd? 互为引用, 通过 shared_env 连接!
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📦 步骤 4: 求值 body (even? 10)
+📦 步骤 3: 求值 body (even? 10)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
   body 在 shared_env 下求值 → (even? 10)
@@ -6743,7 +6727,7 @@ letrec 用了三个步骤来破解这个"鸡生蛋"问题：
 
 ## 内置函数补全 + 挑战关卡
 
-⏩ **跳过信号：** 挑战关卡模式：教程给一个参考实现，其余独立完成。如果你是有经验的程序员，可以直接跳到[步骤 70](#步骤-70-变参-lambda)。
+⏩ **跳过信号：** 挑战关卡模式：教程给一个参考实现，其余独立完成。如果你是有经验的程序员，可以直接跳到[步骤 39](#步骤-39-变参-lambda)。
 
 ---
 
@@ -6780,7 +6764,7 @@ letrec 用了三个步骤来破解这个"鸡生蛋"问题：
 
 ---
 
-### 挑战 A：比较运算符（步骤 52-54）
+### 挑战 A：比较运算符（步骤 36）
 
 **📝 你要实现的函数**：`<` `<=` `>=` `not`
 
@@ -6889,7 +6873,7 @@ test result: ok. 30 passed; 0 failed
 
 ---
 
-### 挑战 B：列表操作（步骤 55-62）
+### 挑战 B：列表操作（步骤 37）
 
 **📝 你要实现的函数**：`list` `cons` `car` `cdr` `cadr` `caddr` `append` `length` `reverse` `member`
 
@@ -7110,7 +7094,7 @@ test result: ok. 36 passed; 0 failed
 
 ---
 
-### 挑战 C：谓词与高阶函数（步骤 63-69）
+### 挑战 C：谓词与高阶函数（步骤 38）
 
 **📝 你要实现的函数**：`null?` `number?` `symbol?` `boolean?` `string?` `procedure?` `pair?` `list?` `eq?` `equal?` `map` `apply` `filter`
 
@@ -7331,7 +7315,7 @@ test result: ok. 42 passed; 0 failed
 
 ---
 
-### 步骤 70: 变参 lambda
+### 步骤 39: 变参 lambda
 
 **问题**：到目前为止，我们定义的 lambda 参数个数是固定的——`(lambda (x y) ...)` 接受恰好 2 个参数。但有时候你不知道会传多少个参数，比如 `(+ 1 2 3 4 5)` 的 `+` 就是变参的。Lisp 用**点对语法** `(a . rest)` 来实现：`a` 是固定参数，`rest` 收集剩余参数为一个列表。
 
@@ -7355,7 +7339,7 @@ if let Some(rest_id) = lambda.rest {
 
 ---
 
-### 步骤 71: `'` quote 缩写
+### 步骤 40: `'` quote 缩写
 
 **问题**：每次要阻止求值都要写 `(quote x)`，太啰嗦。Lisp 的传统是用 `'` 作为缩写——`'x` 等价于 `(quote x)`。这是 Lisp“代码即数据”理念的直接体现：一个字符就能在“求值”和“保留”之间切换。
 
@@ -7378,7 +7362,7 @@ if let Some(rest_id) = lambda.rest {
 
 ---
 
-### 步骤 71b: `defmacro` — 定义宏
+### 步骤 41: `defmacro` — 定义宏
 
 **目标**: Lisp 的终极武器——用代码生成代码。
 
@@ -7400,9 +7384,7 @@ Macro(Box<LispLambda>),
 
 **第四步：`eval` 中加 `defmacro` 特殊形式**（`src/interpreter.rs`，紧接 `lambda` 处理之后）。`defmacro` 的处理逻辑和 `lambda` 几乎一样——解析参数、解析函数体、创建函数值——唯一的区别是创建 `LispExp::Macro(...)` 而非 `LispExp::Lambda(...)`，然后把宏绑定到环境中。
 
----
-
-### 步骤 71c: 宏展开器
+#### 宏展开器
 
 **目标**: 当解释器遇到宏调用时，先展开再求值。
 
@@ -7462,7 +7444,7 @@ fn test_defmacro_when() {
 
 ---
 
-### 步骤 71d: `gensym` — 卫生宏
+### 步骤 42: `gensym` — 卫生宏
 
 **问题**: 如果宏内部使用了临时变量名，可能和调用处的变量冲突（变量捕获）。
 
@@ -7491,7 +7473,7 @@ env.set(intern("gensym"), LispExp::Func(|args| {
 
 ---
 
-### 步骤 71e: quasiquote — 用模板写代码
+### 步骤 43: quasiquote — 用模板写代码
 
 **问题**：有了 `defmacro`，写宏要靠 `list`/`cons`/`'` 手动拼接代码，太繁琐：
 
@@ -7657,7 +7639,7 @@ let r = eval_str("`(a ,b c)", &mut env).unwrap();
 
 ---
 
-### 步骤 72: `error` 函数
+### 步骤 44: `error` 函数
 
 ```rust
 // src/interpreter.rs
@@ -7669,7 +7651,7 @@ env.set(intern("error"), LispExp::Func(|args| {
 
 ---
 
-### 步骤 73: Display trait — 让值能打印
+### 步骤 45: Display trait — 让值能打印
 
 ```rust
 // lib.rs
@@ -7703,11 +7685,11 @@ impl fmt::Display for LispExp {
 
 ---
 
-### 步骤 73b: I/O 函数 — `display` / `newline` / `read`
+### 步骤 46: I/O 函数 — `display` / `newline` / `read`
 
 **问题**：到目前为止，我们的解释器只能通过 `cargo test` 验证结果。但如果想在程序运行时打印东西呢？`display` 把值输出到屏幕，`newline` 换行，`read` 从用户输入读取一行。这三个函数让 Lisp 程序有了和外界交互的能力。
 
-这三个函数依赖步骤 73 的 `Display` trait——`display` 内部调用 `format!("{}", val)`，正是通过 Display trait 格式化输出的。
+这三个函数依赖步骤 45 的 `Display` trait——`display` 内部调用 `format!("{}", val)`，正是通过 Display trait 格式化输出的。
 
 #### `display` — 打印值
 
@@ -7789,7 +7771,7 @@ fn test_newline_returns_nil() {
 
 ---
 
-### 步骤 74: 公开模块 + 创建 main.rs
+### 步骤 47: 公开模块 + 创建 main.rs
 
 
 ![repl seq](svgs/repl-seq.svg)
@@ -7962,7 +7944,7 @@ cargo run
 
 ## 🏗️ 架构回顾
 
-经过 74 步，这是我们构建的东西：
+经过 47 步，这是我们构建的东西：
 
 
 ![architecture overview](svgs/architecture-overview.svg)
@@ -8145,64 +8127,62 @@ Fork 这个项目，破坏它，修复它，扩展它。这就是学习的方法
 ## 附录：完整步骤清单
 
 ```
-步骤 1-4: 准备工作
-  1. 安装 Rust           2. 安装 RustRover
-  3. 创建项目            4. 首次测试
+步骤 1-3: 准备工作
+  1. 安装 Rust + IDE     2. 创建项目
+  3. 首次测试
 
-步骤 5: 认识"值"
-  5. LispExp + LispErr 核心类型
+步骤 4: 认识"值"
+  4. LispExp + LispErr 核心类型
 
-步骤 7-8: 让程序算东西
-  7. eval 数字           8. 打通管线 eval_str
+步骤 5-6: 让程序算东西
+  5. eval 数字           6. 打通管线 eval_str
 
-步骤 9: 词法分析器
-  9. 创建 lexer + tokenize + 处理括号
+步骤 7: 词法分析器
+  7. 创建 lexer + tokenize + 处理括号
 
-步骤 12-15: 语法分析器
-  12. 创建 parser.rs     13. 走完整管线    14. 递归解析列表
-  15. 解析符号 + 错误处理
+步骤 8-11: 语法分析器
+  8. 创建 parser.rs     9. 走完整管线    10. 递归解析列表
+  11. 解析符号 + 错误处理
 
-步骤 16-19: 给东西起名字
-  16. 创建 env.rs        17. env 测试
-  18. eval 加 env 参数   19. 更新调用处
+步骤 12-13: 给东西起名字
+  12. 创建 env + 测试
+  13. eval 加 env 参数 + 更新调用处
 
-步骤 20-27: 做真正的计算
-  20. Func 类型          21. 列表求值      22-23. 加法
-  24-27. 减/乘/除
+步骤 14-17: 做真正的计算
+  14. Func 类型          15. 列表求值      16. 加法
+  17. 减/乘/除
 
-步骤 28-31: 更多数据类型
-  28. Bool + Nil         29-31. 比较 + String
+步骤 18-19: 更多数据类型
+  18. Bool + Nil         19. 比较 + String
 
-步骤 32-35: 让程序做选择
-  32. if                 33. define        34. lambda 创建
-  35. lambda 调用
+步骤 20-22: 让程序做选择
+  20. if                 21. define        22. lambda 创建 + 调用
 
-步骤 36-39: 记住过去的事情（闭包 + TCO）
-  36. outer 字段         37. Lambda 捕获环境
-  38. TCO 理解问题       39. TCO 蹦床循环
+步骤 23-26: 记住过去的事情（闭包 + TCO）
+  23. outer 字段         24. Lambda 捕获环境
+  25. TCO 理解问题       26. TCO 蹦床循环
 
-步骤 40-43: 让程序跑得更快（性能优化）
-  40. 字符串驻留器       41. Symbol(u64)
-  42. 零拷贝词法分析     43. FX 哈希器 + 项目重构(interpreter.rs)
+步骤 27-30: 让程序跑得更快（性能优化）
+  27. 字符串驻留器       28. Symbol(u64)
+  29. 零拷贝词法分析     30. FX 哈希器 + 项目重构(interpreter.rs)
 
-步骤 44-51: 更多魔法命令
-  44. begin              45. set!          46. let
-  47. cond               48. and           49. or
-  50. let*               51. letrec
+步骤 31-35: 更多魔法命令
+  31. begin + set!       32. let           33. cond
+  34. and + or           35. let* + letrec
 
-步骤 52-74: 内置函数补全（挑战关卡）+ REPL
-  挑战 A (52-54): <, <=, >=, not — 教程给 <，其余独立完成
-  挑战 B (55-62): list, cons, car, cdr, cadr, caddr, append, length, reverse, member
-  挑战 C (63-69): 类型谓词, eq?/equal?, map, apply, filter
-  70: 变参 lambda        71: quote 缩写
-  71b-71d: defmacro/宏展开/gensym   71e: quasiquote
-  72: error    73: Display trait   73b: I/O 函数(display/newline/read)
-  74: main.rs REPL
+步骤 36-47: 内置函数补全（挑战关卡）+ REPL
+  挑战 A (36): <, <=, >=, not — 教程给 <，其余独立完成
+  挑战 B (37): list, cons, car, cdr, cadr, caddr, append, length, reverse, member
+  挑战 C (38): 类型谓词, eq?/equal?, map, apply, filter
+  39: 变参 lambda        40: quote 缩写
+  41: defmacro + 宏展开  42: gensym         43: quasiquote
+  44: error    45: Display trait   46: I/O 函数(display/newline/read)
+  47: main.rs REPL
 ```
 
 ---
 
-**费曼检验**：把这 74 步讲给你完全不懂编程的朋友听。如果每一步他都能点头说"哦，原来是这样"——你就成功了。
+**费曼检验**：把这 47 步讲给你完全不懂编程的朋友听。如果每一步他都能点头说"哦，原来是这样"——你就成功了。
 
 **运行验证**: `cargo test` (42 个测试), `cargo run` (交互 REPL)
 
@@ -8269,7 +8249,7 @@ Fork 这个项目，破坏它，修复它，扩展它。这就是学习的方法
 
 ## 附录 D：完整程序范例 — 符号求导器
 
-学了 74 步做出了解释器，能用它做什么？这里有一个 约 30 行的 Lisp 程序——对数学表达式求导：
+学了 47 步做出了解释器，能用它做什么？这里有一个 约 30 行的 Lisp 程序——对数学表达式求导：
 
 ```lisp
 ; 符号求导器 — 用你亲手写的解释器运行!
@@ -8299,7 +8279,7 @@ Fork 这个项目，破坏它，修复它，扩展它。这就是学习的方法
 
 🎯 **这展示了 Lisp 的威力**：用你自己的解释器、你自己的语言、约 30 行代码，就能做符号计算——而这一切都是你一行一行写出来的。
 
-💡 **前置函数**：这个程序用到了 `cadr`（取第二个元素）和 `caddr`（取第三个元素）——它们在步骤 58b 中定义。如果你还没实现它们，请先加上。
+💡 **前置函数**：这个程序用到了 `cadr`（取第二个元素）和 `caddr`（取第三个元素）——它们在步骤 48b 中定义。如果你还没实现它们，请先加上。
 
 ---
 

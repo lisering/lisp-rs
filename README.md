@@ -12,7 +12,7 @@
 
 # Building a Lisp Interpreter from Scratch — Rust Hands-On Tutorial
 
-**Zero knowledge required. Zero dependencies.** 74 steps. 42 tests. One working Lisp interpreter at the end. Each step first explains **what problem to solve**, then writes the code.
+**Zero knowledge required. Zero dependencies.** 47 steps. 42 tests. One working Lisp interpreter at the end. Each step first explains **what problem to solve**, then writes the code.
 
 ### TCO in action — 1,000,000 iterations vs. stack overflow
 
@@ -27,30 +27,30 @@ You don't have to read everything. Pick the lane that fits you:
 | If you... | Start at | Time to first code |
 |-----------|----------|-------------------|
 | Have **never programmed before** | [What We're Building](#what-were-building) | approx. 15 minutes |
-| Know **Python/JS/Java but not Rust** | [Step 5: Define Core Types](#step-5-define-core-types--lispexp-and-lisperr) | approx. 5 minutes |
-| Know **Rust basics** (enum, match, HashMap) | [Step 9: Create the Lexer](#step-9-create-the-lexer) | Right away |
-| Have **written an interpreter before** | Skim to [Step 37: Closures](#step-37-lambda-captures-environment-implementing-true-closures) and [Step 39: TCO](#step-39-tco-trampoline-loop-implementation) | approx. 30 minutes |
-| Just want to see **how closures are implemented** | Jump to [Step 37: Closures](#step-37-lambda-captures-environment-implementing-true-closures) | approx. 10 minutes |
+| Know **Python/JS/Java but not Rust** | [Step 4: Define Core Types](#step-4-define-core-types--lispexp-and-lisperr) | approx. 5 minutes |
+| Know **Rust basics** (enum, match, HashMap) | [Step 7: Create the Lexer](#step-7-create-the-lexer) | Right away |
+| Have **written an interpreter before** | Skim to [Step 24: Closures](#step-24-lambda-captures-environment-implementing-true-closures) and [Step 26: TCO](#step-26-tco-trampoline-loop-implementation) | approx. 30 minutes |
+| Just want to see **how closures are implemented** | Jump to [Step 24: Closures](#step-24-lambda-captures-environment-implementing-true-closures) | approx. 10 minutes |
 
-**Already built something like this?** You might still find something new here: the backpack-closure trace (Step 37), the trampoline-loop TCO walkthrough (Step 39), and the three teaching-focused optimization passes (Steps 40–43). Everything else you can skim.
+**Already built something like this?** You might still find something new here: the backpack-closure trace (Step 24), the trampoline-loop TCO walkthrough (Step 26), and the three teaching-focused optimization passes (Steps 40–43). Everything else you can skim.
 
 ---
 
 ## Table of Contents
 
-- [Preparation](#preparation) — Steps 1-4
-- [Understanding "Values"](#understanding-values) — Step 5
-- [Making Programs "Compute"](#making-programs-compute) — Steps 7-8
-- [Splitting Sentences into Words](#splitting-sentences-into-words) — Step 9
-- [Understanding the Meaning of Words](#understanding-the-meaning-of-words) — Steps 12-15
-- [Giving Things Names](#giving-things-names) — Steps 16-19
-- [Doing Real Computation](#doing-real-computation) — Steps 20-27
-- [More Data Types](#more-data-types) — Steps 28-31
-- [Making Programs Choose](#making-programs-choose) — Steps 32-35
-- [Remembering the Past](#remembering-the-past) — Steps 36-39
-- [Making Programs Run Faster](#making-programs-run-faster) — Steps 40-43
-- [More Magic Commands](#more-magic-commands) — Steps 44-51
-- [Built-in Functions + Challenge Levels](#built-in-functions-completion--challenge-levels) — Steps 52-74
+- [Preparation](#preparation) — Steps 1-3
+- [Understanding "Values"](#understanding-values) — Step 4
+- [Making Programs "Compute"](#making-programs-compute) — Steps 5-6
+- [Splitting Sentences into Words](#splitting-sentences-into-words) — Step 7
+- [Understanding the Meaning of Words](#understanding-the-meaning-of-words) — Steps 8-11
+- [Giving Things Names](#giving-things-names) — Steps 12-13
+- [Doing Real Computation](#doing-real-computation) — Steps 14-17
+- [More Data Types](#more-data-types) — Steps 18-19
+- [Making Programs Choose](#making-programs-choose) — Steps 20-22
+- [Remembering the Past](#remembering-the-past) — Steps 23-26
+- [Making Programs Run Faster](#making-programs-run-faster) — Steps 27-30
+- [More Magic Commands](#more-magic-commands) — Steps 31-35
+- [Built-in Functions + Challenge Levels](#built-in-functions-completion--challenge-levels) — Steps 36-47
 
 ---
 
@@ -557,7 +557,7 @@ All this step did was "register a name." Nothing happened yet—make-counter has
 
 ---
 
-**🎎 Step 2: calling (make-counter 0) — the moment the backpack is born**
+**🎎 Step 1: calling (make-counter 0) — the moment the backpack is born**
 
 ```
 Code: (define counter (make-counter 0))
@@ -626,7 +626,7 @@ Global environment now:
 
 ---
 
-**🎎 Step 3: calling (counter) — the backpack in action**
+**🎎 Step 2: calling (counter) — the backpack in action**
 
 The first call says it all. Subsequent calls follow the exact same pattern with different values of `start`. Let's walk through the first call, then check the state after each one.
 
@@ -778,7 +778,7 @@ Input: (define fact (lambda (n) (if (= n 0) 1 (* n (fact (- n 1))))))
 Input: (fact 5)  →  Output: 120
 ```
 
-We'll break this into **74 steps**, each building on the last based on dependencies:
+We'll break this into **47 steps**, each building on the last based on dependencies:
 
 ```
 Can evaluate numbers
@@ -794,26 +794,26 @@ Can evaluate numbers
 └── REPL interactive interface
 ```
 
-**The tutorial follows this order strictly, each step doing only one small thing. Like sculpting—rough out the shape first, then refine cut by cut.** All 74 steps are verifiable with `cargo test`.
+**The tutorial follows this order strictly, each step doing only one small thing. Like sculpting—rough out the shape first, then refine cut by cut.** All 47 steps are verifiable with `cargo test`.
 
 ### 🏆 What you can do after each milestone
 
 | After | You can... | Prove it with |
 |-------|-----------|---------------|
-| Steps 1-4 | Rust + IDE installed, first test passing | `cargo test` |
+| Steps 1-3 | Rust + IDE installed, first test passing | `cargo test` |
 | Steps 5-8 | Make the program "understand" numbers — `42` → `Number(42.0)` | `eval_str("42")` |
 | Steps 9-15 | Parse nested expressions like `(+ 1 (* 2 3))` | `parse(tokens)` |
-| Steps 16-19 | Bind names to values in an environment | `env.get("x")` |
-| Steps 20-27 | **`(+ 1 2)` actually returns 3!** | `(+ 1 2)` → `3` |
-| Steps 28-31 | Booleans, strings, numeric comparisons | `(> 5 3)` → `#t` |
-| Steps 32-35 | Conditionals, variable definitions, creating and calling functions | `(define sq (lambda (x) (* x x)))` |
-| Steps 36-39 | **Closures** (functions that remember their birthplace) + **10,000 levels of recursion without crashing** | `(loop 10000)` |
-| Steps 40-43 | 5× faster interpreter (interning, zero-copy, FX hashing) | benchmarks |
-| Steps 44-51 | 8 special forms (begin, set!, let, cond, etc.) | `(let ((x 1)) (+ x 2))` |
-| Steps 52-74 | **A fully interactive REPL** | `cargo run` → type Lisp code |
+| Steps 12-13 | Bind names to values in an environment | `env.get("x")` |
+| Steps 14-17 | **`(+ 1 2)` actually returns 3!** | `(+ 1 2)` → `3` |
+| Steps 18-19 | Booleans, strings, numeric comparisons | `(> 5 3)` → `#t` |
+| Steps 20-22 | Conditionals, variable definitions, creating and calling functions | `(define sq (lambda (x) (* x x)))` |
+| Steps 23-26 | **Closures** (functions that remember their birthplace) + **10,000 levels of recursion without crashing** | `(loop 10000)` |
+| Steps 27-30 | 5× faster interpreter (interning, zero-copy, FX hashing) | benchmarks |
+| Steps 31-35 | 8 special forms (begin, set!, let, cond, etc.) | `(let ((x 1)) (+ x 2))` |
+| Steps 36-47 | **A fully interactive REPL** | `cargo run` → type Lisp code |
 
 
-**The diagram above is the skeleton of the entire project** — source code enters from the left, passes through four stages, and comes out the right as the computed result. The 74 steps ahead flesh out these four stages in detail.
+**The diagram above is the skeleton of the entire project** — source code enters from the left, passes through four stages, and comes out the right as the computed result. The 47 steps ahead flesh out these four stages in detail.
 
 ![pipeline en](svgs/pipeline-en.svg)
 
@@ -828,7 +828,7 @@ If you've heard of these, here's where this tutorial fits:
 | [*Crafting Interpreters*](https://craftinginterpreters.com/) (Nystrom) | Java / C | Experienced programmers | Nystrom assumes you know Java and C, and builds two interpreters (tree-walk + bytecode). This tutorial does one pass (tree-walk) in Rust, targeting absolute beginners |
 | [*SICP*](https://mitpress.mit.edu/sicp/) (Abelson & Sussman) | Scheme | Math-inclined learners | SICP teaches you *how to think about programming*. This tutorial teaches you *how to build an interpreter*. SICP explains principles; this explains implementations |
 | [*mal - Make a Lisp*](https://github.com/kanaka/mal) (Kanaka) | 80+ languages | Intermediate programmers | mal gives you test cases with zero explanation. This tutorial gives you the *why* behind every step — not just what to write, but why it works |
-| [*Write Yourself a Scheme*](https://en.wikibooks.org/wiki/Write_Yourself_a_Scheme_in_48_Hours) | Haskell | Haskell programmers | 48 hours is a sprint. This tutorial is 74 paced steps — you can stop at any point, run `cargo test`, and everything works |
+| [*Write Yourself a Scheme*](https://en.wikibooks.org/wiki/Write_Yourself_a_Scheme_in_48_Hours) | Haskell | Haskell programmers | 48 hours is a sprint. This tutorial is 47 paced steps — you can stop at any point, run `cargo test`, and everything works |
 
 **Bottom line:** If *Crafting Interpreters* is the graduate-level course, this tutorial is the undergraduate intro — same subject (building an interpreter), same method (TDD, testable milestones, diagrams), but starting from "what's a terminal?"
 
@@ -860,7 +860,7 @@ A production Lisp implementation. It's a teaching interpreter — tree-walking `
 
 
 ## Preparation
-⏩ **Skip signal:** Already have Rust and an IDE installed? Jump to [Step 5](#step-5-define-core-types--lispexp-and-lisperr).
+⏩ **Skip signal:** Already have Rust and an IDE installed? Jump to [Step 4](#step-4-define-core-types--lispexp-and-lisperr).
 
 
 Why this matters: Before you can build an interpreter, you need a working Rust environment. This setup is the same foundation professional Rust developers use every day - get it right once, and everything else follows smoothly.
@@ -884,9 +884,11 @@ Why this matters: Before you can build an interpreter, you need a working Rust e
 </blockquote>
 
 ---
-### Step 1: Install Rust
+### Step 1: Install Rust + IDE
 
-Rust is the programming language we'll use. Let's get it on your machine.
+Rust is the programming language we'll use, RustRover is our IDE. Let's get them on your machine.
+
+#### Install Rust
 
 **System Requirements**: Any computer with a 4-core CPU, 8 GB RAM, and 10 GB free disk space (including Mac Apple Silicon and Intel) will run the full toolchain smoothly.
 
@@ -910,11 +912,7 @@ Rust is the programming language we'll use. Let's get it on your machine.
 
 💡 In short: `rustup` manages Rust installations. `cargo` manages projects — like `npm` for Node or `pip` for Python. `rustup` installs both for you.
 
----
-
-### Step 2: Install RustRover
-
-We'll use **RustRover** to write code—it gives you autocomplete, error checking, syntax highlighting, like having spell-check in Word.
+#### Install RustRover
 
 **Option A — JetBrains Toolbox App (Recommended)**: Go to <https://www.jetbrains.com/toolbox-app/> → Download → Install → Open Toolbox → Find RustRover in the list → Click "Install". Toolbox keeps your IDE automatically updated.
 
@@ -926,7 +924,7 @@ We'll use **RustRover** to write code—it gives you autocomplete, error checkin
 
 ---
 
-### Step 3: Create the Project
+### Step 2: Create the Project
 
 **Method 1: Using RustRover (Recommended for Beginners)**
 
@@ -980,11 +978,11 @@ Left file list:
       └── lib.rs           ← our code goes here
 ```
 
-Double-click `src/lib.rs`, and the default example code will appear in the editing area (an `add` function and a test). **Leave it as-is for now** — we'll use it to verify the toolchain works in the next step. We'll replace it with our own code starting at [Step 5](#step-5-define-core-types--lispexp-and-lisperr).
+Double-click `src/lib.rs`, and the default example code will appear in the editing area (an `add` function and a test). **Leave it as-is for now** — we'll use it to verify the toolchain works in the next step. We'll replace it with our own code starting at [Step 4](#step-4-define-core-types--lispexp-and-lisperr).
 
 ---
 
-### Step 4: First Test Run
+### Step 3: First Test Run
 
 At the bottom of RustRover, find the **"Terminal"** tab (third icon from the bottom-left corner) and click it. This is RustRover's built-in terminal—we'll run commands here from now on.
 
@@ -1033,7 +1031,7 @@ name = "my-lisp"  # change this
 
 
 ## Understanding Values
-⏩ **Skip signal:** Know Rust enums, `#[derive]`, and `match`? Jump to [Step 7](#step-7-the-eval-function).
+⏩ **Skip signal:** Know Rust enums, `#[derive]`, and `match`? Jump to [Step 5](#step-5-the-eval-function).
 
 ⚠️ **Slow zone** — This chapter has high Rust concept density (enum / derive / f64 / pub / #[cfg(test)] / assert_eq!).
 If you're struggling, that's normal—most learners spend extra time here.
@@ -1061,9 +1059,9 @@ The interpreter first needs to be able to "understand" numbers—input `42`, out
 </blockquote>
 
 ---
-### Step 5: Define Core Types — `LispExp` and `LispErr`
+### Step 4: Define Core Types — `LispExp` and `LispErr`
 
-The first thing our Lisp interpreter needs to handle is **numbers**. In Rust, we use `enum` to list "what exists in the world." Now **delete all the default example code** in `src/lib.rs` (the one we kept from Step 3) and replace it with:
+The first thing our Lisp interpreter needs to handle is **numbers**. In Rust, we use `enum` to list "what exists in the world." Now **delete all the default example code** in `src/lib.rs` (the one we kept from Step 2) and replace it with:
 
 ```rust
 // src/lib.rs
@@ -1089,7 +1087,7 @@ pub enum LispErr {
 
 💡 In short — `String`: a piece of text, any text. `"Hello"`, `"error: x not found"`, you name it.
 
-🔧 **Rust Curve: `String` vs `&str`** — Rust has two string types: `String` (owned, heap-allocated, growable) and `&str` (a borrowed view of a string, like a reference). `Reason(String)` uses the owned version because errors need to live independently of their source. You will see `&str` later when we talk about zero-copy tokens in Steps 40-43.
+🔧 **Rust Curve: `String` vs `&str`** — Rust has two string types: `String` (owned, heap-allocated, growable) and `&str` (a borrowed view of a string, like a reference). `Reason(String)` uses the owned version because errors need to live independently of their source. You will see `&str` later when we talk about zero-copy tokens in Steps 27-30.
 
 Both core types are now defined — `LispExp` describes "what a value is," `LispErr` describes "what went wrong." The Rust deep dive below breaks down the concepts behind this code.
 
@@ -1734,7 +1732,7 @@ Now that we have the number type, we also need to "evaluate"—compute results f
 </blockquote>
 
 ---
-### Step 7: The `eval` Function
+### Step 5: The `eval` Function
 
 ```text
 📥 Input: Number(42.0)    📤 Output: Ok(Number(42.0))
@@ -1808,7 +1806,7 @@ LispExp::Number(42.0)  ← fresh, owned LispExp
 
 `f64` is a `Copy` type, so dereferencing auto-copies — like photocopying a friend's notebook. The original stays with them, you take the copy.
 
-Right now `LispExp` only has `Number`, so this `match` compiles. Later we'll add more types to `LispExp` (Symbol, List, etc.)—at that point, `match` will need to handle all variants, or the compiler will throw a `non-exhaustive patterns` error. We'll first encounter this in [Step 12](#step-12-create-parserrs) when we add `Symbol`, and add a catch-all branch then.
+Right now `LispExp` only has `Number`, so this `match` compiles. Later we'll add more types to `LispExp` (Symbol, List, etc.)—at that point, `match` will need to handle all variants, or the compiler will throw a `non-exhaustive patterns` error. We'll first encounter this in [Step 8](#step-8-create-parserrs) when we add `Symbol`, and add a catch-all branch then.
 
 ```rust
 // src/lib.rs
@@ -1862,7 +1860,7 @@ Like checking out a library book — it's still the library's, you're just readi
 
 ---
 
-### Step 8: From "String" to "Result"
+### Step 6: From "String" to "Result"
 
 ```text
 📥 Input: "42" (source string)    📤 Output: Ok(Number(42.0)) (evaluated result)
@@ -1987,7 +1985,7 @@ Close the tutorial. In **20 minutes**, complete:
 Why this matters: The lexer is the interpreter's eyes - it reads raw text and identifies the meaningful units (tokens). Every compiler and interpreter starts with a lexer, making this a transferable skill you'll use in any language implementation.
 
 ## Splitting Sentences into Words
-⏩ **Skip signal:** Know lexing/tokenizing? Jump to [Step 12](#step-12-create-parserrs).
+⏩ **Skip signal:** Know lexing/tokenizing? Jump to [Step 8](#step-8-create-parserrs).
 
 ---
 
@@ -2009,14 +2007,14 @@ Why this matters: The lexer is the interpreter's eyes - it reads raw text and id
 </blockquote>
 
 ---
-### Step 9: Create the Lexer
+### Step 7: Create the Lexer
 
 ```text
 📥 Input: "(+ 1 2)" (source string)    📤 Output: ["(", "+", "1", "2", ")"] (Token list)
          One block of text                  Split into words
 ```
 
-Step 8's `eval_str("(+ 1 2)")` fails — because `"(+ 1 2)"` is not a valid number. To handle multi-element expressions, the first step is to **split the string into words**. That's the lexer's job.
+Step 6's `eval_str("(+ 1 2)")` fails — because `"(+ 1 2)"` is not a valid number. To handle multi-element expressions, the first step is to **split the string into words**. That's the lexer's job.
 
 🔮 **Guess before reading on**: What do you think `tokenize("(* 2 (+ 3 4))")` will return? Write your guess on paper, then keep reading — see if you got it right.
 
@@ -2105,11 +2103,11 @@ test tests::test_eval_str_number ... ok
 test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
-`"+ 1 2"` — one string became `["+", "1", "2"]` — three tokens! tokenize is **splitting**! This is the first step toward solving the `eval_str("(+ 1 2)")` failure from Step 8.
+`"+ 1 2"` — one string became `["+", "1", "2"]` — three tokens! tokenize is **splitting**! This is the first step toward solving the `eval_str("(+ 1 2)")` failure from Step 6.
 
 💡 In short — `dead_code` warning still here?
 
-**`function 'eval_str' is never used`**: `eval_str` isn't `pub`, so nothing in non-test code calls it. Harmless carryover from Step 8.
+**`function 'eval_str' is never used`**: `eval_str` isn't `pub`, so nothing in non-test code calls it. Harmless carryover from Step 6.
 
 **4. TDD: discover the parenthesis problem → fix it**
 
@@ -2154,7 +2152,7 @@ pub fn tokenize(input: &str) -> Vec<String> {
     // split_whitespace returns &str slices referencing that temporary String.
     // Therefore we must use .map(|s| s.to_string()) to convert each &str
     // into an owned String, otherwise the references would dangle.
-    // Step 42's zero-copy version eliminates this allocation.
+    // Step 29's zero-copy version eliminates this allocation.
     input
         .replace("(", " ( ")   // each "(" → " ( "
         .replace(")", " ) ")   // each ")" → " ) "
@@ -2235,7 +2233,7 @@ pub fn tokenize(input: &str) -> Vec<String> {
         .collect::<Vec<_>>()  // collect into Vec<&str>
         .join("\n");  // reassemble into one string
 
-    // Step 2: original tokenize logic
+    // Step 1: original tokenize logic
     without_comments
         .replace("(", " ( ")   // each "(" → " ( "
         .replace(")", " ) ")   // each ")" → " ) "
@@ -2245,7 +2243,7 @@ pub fn tokenize(input: &str) -> Vec<String> {
 }
 ```
 
-💡 **Why not a character-level loop?** The current `tokenize` uses a "replace + split" style. Introducing `pos`/`len`/`chars` character loop variables would clash with the existing code style. Using `lines()` + `find(';')` to strip comments first, then running the original logic, keeps the change minimal and easy to follow. Step 42's zero-copy lexer naturally introduces `char_indices().peekable()` for character-level processing.
+💡 **Why not a character-level loop?** The current `tokenize` uses a "replace + split" style. Introducing `pos`/`len`/`chars` character loop variables would clash with the existing code style. Using `lines()` + `find(';')` to strip comments first, then running the original logic, keeps the change minimal and easy to follow. Step 29's zero-copy lexer naturally introduces `char_indices().peekable()` for character-level processing.
 
 **2. Test**
 ```rust
@@ -2276,7 +2274,7 @@ that means 5 heap allocations for a 7-character expression.
 - The `to_string()` calls make data flow visible
 
 **What about alternatives?**
-- `&str` (slices into the source) — faster but requires lifetime management. We'll switch to this in Step 42!
+- `&str` (slices into the source) — faster but requires lifetime management. We'll switch to this in Step 29!
 - `enum Token { LParen, RParen, Number(f64), Symbol(String), ... }` — more type-safe but introduces a new type just for tokens
 - `u64` interned IDs — fastest but adds an indirection layer
 
@@ -2306,7 +2304,7 @@ Close the tutorial. In **15 minutes**, write a `tokenize` function from scratch:
 Why this matters: The parser transforms a flat token list into a tree structure (AST). This tree represents the program's grammatical structure - without it, the evaluator would have no meaningful input. Recursive descent parsing is the most intuitive parsing technique and works for most real-world languages.
 
 ## Understanding the Meaning of Words
-⏩ **Skip signal:** Know recursive descent parsing? Jump to [Step 16](#step-16-create-environment-variable-name--value-address-book). The recursive parsing diagram in Step 14 is worth a look, though.
+⏩ **Skip signal:** Know recursive descent parsing? Jump to [Step 12](#step-12-create-environment-variable-name--value-address-book). The recursive parsing diagram in Step 10 is worth a look, though.
 
 ---
 
@@ -2328,7 +2326,7 @@ Why this matters: The parser transforms a flat token list into a tree structure 
 </blockquote>
 
 ---
-### Step 12: Create parser.rs
+### Step 8: Create parser.rs
 
 ```text
 📥 Input: ["+", "1", "2"] (Token list)    📤 Output: Symbol("+"), Number(1.0), Number(2.0)
@@ -2414,7 +2412,7 @@ pub enum LispExp {
 }
 ```
 
-You also need to update the `eval` function — `LispExp` now has two variants, but `eval` only handles `Number`. Rust's `match` requires all variants to be covered, otherwise it won't compile. We don't know how to evaluate `Symbol` yet (that comes in [Step 18](#step-18-add-env-parameter-to-eval-signature), when we can look up environment variables), so let's add a catch-all branch:
+You also need to update the `eval` function — `LispExp` now has two variants, but `eval` only handles `Number`. Rust's `match` requires all variants to be covered, otherwise it won't compile. We don't know how to evaluate `Symbol` yet (that comes in [Step 13](#step-13-add-env-parameter-to-eval), when we can look up environment variables), so let's add a catch-all branch:
 
 ```rust
 // src/lib.rs — update eval function
@@ -2429,13 +2427,13 @@ pub fn eval(exp: &LispExp) -> Result<LispExp, LispErr> {
 
 💡 In short — Why add `_` now?
 
-In Step 7, `LispExp` only had `Number`, so matching just `Number` was enough — the compiler was happy. Now that we've added `Symbol`, if `match` doesn't handle it, the compiler will error:
+In Step 5, `LispExp` only had `Number`, so matching just `Number` was enough — the compiler was happy. Now that we've added `Symbol`, if `match` doesn't handle it, the compiler will error:
 
 ```text
 error[E0004]: non-exhaustive patterns: `Symbol(_)` not covered
 ```
 
-`_` is a wildcard that matches "everything else." Right now it catches `Symbol`; later when we add more variants (`List`, `Bool`, etc.), `_` will catch those too — no need to update `eval` every time. Once all types have explicit handling ([Step 28](#step-28-bool-and-nil)), we'll remove this catch-all and let the compiler check exhaustiveness for us.
+`_` is a wildcard that matches "everything else." Right now it catches `Symbol`; later when we add more variants (`List`, `Bool`, etc.), `_` will catch those too — no need to update `eval` every time. Once all types have explicit handling ([Step 18](#step-18-bool-and-nil)), we'll remove this catch-all and let the compiler check exhaustiveness for us.
 
 **Test the parser** — verify parse can distinguish numbers from symbols:
 
@@ -2486,7 +2484,7 @@ test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 
 ---
 
-### Step 13: Update eval_str to Use the Full Pipeline
+### Step 9: Update eval_str to Use the Full Pipeline
 
 ```text
 📥 Input: "+" (source string)    📤 Output: Err("This type is not supported yet")
@@ -2505,8 +2503,8 @@ use crate::parser::parse;
 // Update eval_str
 fn eval_str(source: &str) -> Result<LispExp, LispErr> {
     let tokens = tokenize(source);      // Step 1: tokenize
-    let (exp, _) = parse(&tokens)?;     // Step 2: parse
-    eval(&exp)                          // Step 3: evaluate
+    let (exp, _) = parse(&tokens)?;     // Step 1: parse
+    eval(&exp)                          // Step 2: evaluate
 }
 ```
 
@@ -2515,10 +2513,10 @@ Data pipeline (using the single atom "+" as an example):
 "+" → tokenize → ["+"] → parse → Symbol("+") → eval → Err("This type is not supported yet")
 
 Note: parse can currently only handle single atoms (e.g. "+" → Symbol("+")),
-list parsing is completed in Step 14, list evaluation in Step 22.
+list parsing is completed in Step 10, list evaluation in Step 16.
 But the pipeline is connected — three modules, each with its own job.
 
-Preview: once Step 14 completes list parsing, the full pipeline will be:
+Preview: once Step 10 completes list parsing, the full pipeline will be:
 "(+ 1 2)" → tokenize → ["(", "+", "1", "2", ")"] → parse → List([Symbol("+"), Number(1.0), Number(2.0)]) → eval → Number(3.0)
 ```
 
@@ -2543,7 +2541,7 @@ test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 
 ---
 
-### Step 14: Parse Nested Lists
+### Step 10: Parse Nested Lists
 
 **Goal**: `(+ 1 (* 2 3))` becomes a tree structure.
 
@@ -2671,9 +2669,9 @@ The base case `read_seq` finds `)` — this is what stops infinite recursion.
 parse("(+ 1 (* 2 3))") → List(Symbol(+), Number(1), List(Symbol(*), Number(2), Number(3)))
 ```
 
-### Step 15: Parenthesis Error Tests
+### Step 11: Parenthesis Error Tests
 
-`test_parse_symbol` was already added in Step 12. This step only adds error handling tests — add to parser.rs's tests module:
+`test_parse_symbol` was already added in Step 8. This step only adds error handling tests — add to parser.rs's tests module:
 
 ```rust
 // parser.rs — add to tests module
@@ -2710,7 +2708,7 @@ test parser::tests::test_unexpected_close_error ... ok
 test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
-💡 In short — The `eval_str` `dead_code` warning is still here. It will follow us until Step 74 when `main.rs` is created and calls `eval_str` (or you add `pub` to it earlier).
+💡 In short — The `eval_str` `dead_code` warning is still here. It will follow us until Step 47 when `main.rs` is created and calls `eval_str` (or you add `pub` to it earlier).
 
 ---
 
@@ -2805,7 +2803,7 @@ Why this matters: Variables turn a calculator into a programming language. Envir
 </blockquote>
 
 ---
-### Step 16: Create "Environment" (variable name → value address book)
+### Step 12: Create "Environment" (variable name → value address book)
 
 Right-click `src` folder → **New** → **File**, enter `env.rs`.
 
@@ -2881,9 +2879,7 @@ Option<LispExp> = Some(value)  // box has something
 
 `HashMap::get` returns `Option` because the key might not exist.
 
----
-
-### Step 17: env.rs Tests
+#### Tests
 
 Add the following tests to the end of `src/env.rs` test module:
 
@@ -2917,9 +2913,7 @@ test env::tests::test_env_undefined ... ok
 test result: ok. 11 passed; 0 failed
 ```
 
----
-
-### Step 18: Add env Parameter to eval Signature
+### Step 13: Add env Parameter to eval
 
 **Key change**: eval now needs an environment. Here's the **complete new version** of eval (replace the old one):
 
@@ -2935,11 +2929,9 @@ pub fn eval(exp: &LispExp, env: &LispEnv) -> Result<LispExp, LispErr> {
 }
 ```
 
+#### Update All Call Sites
+
 **Warning: signature changed, all callers of eval must be updated!**
-
----
-
-### Step 19: Update All Call Sites
 
 **`eval_str` update** (also need to add `use crate::env::LispEnv;` at top of `lib.rs`):
 
@@ -3098,7 +3090,7 @@ What we're solving: List evaluation = function call. This is the heart of Lisp�
 </blockquote>
 
 ---
-### Step 20: Func Type
+### Step 14: Func Type
 
 ```rust
 // lib.rs — LispExp add:
@@ -3127,7 +3119,7 @@ pub fn eval(exp: &LispExp, env: &LispEnv) -> Result<LispExp, LispErr> {
 }
 ```
 
-### Step 21: List Evaluation Logic
+### Step 15: List Evaluation Logic
 
 **Replace the `_ => Err(...)` line in eval with List handling**. Here's the **complete version** of eval at this point:
 
@@ -3174,16 +3166,16 @@ Input: List([Symbol("+"), Number(1), Number(2)])
   │          → env.get("+")
   │          → Func(add function pointer)  ← found the add function!
   │
-  ├─ Step 2: eval(Number(1), env) → Number(1.0)   ┐
+  ├─ Step 1: eval(Number(1), env) → Number(1.0)   ┐
   │         eval(Number(2), env) → Number(2.0)   │ all arguments evaluated
   │         → args = [Number(1.0), Number(2.0)]  ┘
   │
-  └─ Step 3: add function(&[1.0, 2.0])
+  └─ Step 2: add function(&[1.0, 2.0])
             → 1.0 + 2.0
             → Ok(Number(3.0))
 ```
 
-### Steps 22-23: Register Addition + Test
+### Step 16: Register Addition + Test
 
 ```rust
 // lib.rs
@@ -3235,7 +3227,7 @@ test result: ok. 13 passed; 0 failed
 
 🎉 **Milestone: Can compute (+ 1 2) = 3!**
 
-### Steps 24-27: Subtraction, Multiplication, Division
+### Step 17: Subtraction, Multiplication, Division
 
 Register them one by one—following addition, write inside `default_env()`:
 
@@ -3403,7 +3395,7 @@ Close the tutorial. In **30 minutes**, complete:
 </blockquote>
 
 ---
-### Step 28: Bool and Nil
+### Step 18: Bool and Nil
 
 ```rust
 // src/lib.rs
@@ -3448,7 +3440,7 @@ if token.starts_with('"') && token.ends_with('"') && token.len() >= 2 {
 }
 ```
 
-### Steps 29-31: Comparison Functions + String Type
+### Step 19: Comparison Functions + String Type
 
 Register comparison functions one by one (following `=`, same pattern):
 
@@ -3549,9 +3541,9 @@ Type panorama: `LispExp`'s 8 variants—self-evaluating types (Number/Bool/Strin
 
 
 ## Making Programs Choose
-⏩ **Skip signal:** Know `if`/`define`/`lambda` semantics? Skim the implementation — note `lambda` as a special form (Step 34).
+⏩ **Skip signal:** Know `if`/`define`/`lambda` semantics? Skim the implementation — note `lambda` as a special form (Step 22).
 
-⚠️ **Slow zone** — Step 33 changes `eval`'s signature from `&LispEnv` to `&mut LispEnv`,
+⚠️ **Slow zone** — Step 21 changes `eval`'s signature from `&LispEnv` to `&mut LispEnv`,
 triggering about 6 compile errors. This is normal—the compiler is helping you find all call sites that need updating.
 Don't panic, fix them one by one.
 
@@ -3578,7 +3570,7 @@ Don't panic, fix them one by one.
 ---
 ### Current Progress: What Do We Have So Far?
 
-Before diving into new content, let's clearly see **`src/lib.rs`'s `eval` function as it currently stands** (at the end of Step 31):
+Before diving into new content, let's clearly see **`src/lib.rs`'s `eval` function as it currently stands** (at the end of Step 19):
 
 ```rust
 // src/lib.rs — eval function (current version, without special forms yet)
@@ -3625,7 +3617,7 @@ But `if`, `define`, `lambda` **are not ordinary functions**—they have special 
 
 ---
 
-### Step 32: if — Conditional
+### Step 20: if — Conditional
 
 **File: `src/lib.rs`**, modify the `LispExp::List(elements)` branch of `eval`.
 
@@ -3705,7 +3697,7 @@ test result: ok. 16 passed; 0 failed
 
 ---
 
-### Step 33: define — Variable Definition
+### Step 21: define — Variable Definition
 
 **File: `src/lib.rs`**
 
@@ -3877,7 +3869,7 @@ test result: ok. 18 passed; 0 failed
 
 ---
 
-### Step 34: lambda — Creating Anonymous Functions
+### Step 22: lambda — Creating Anonymous Functions
 
 **File: `src/lib.rs`**
 
@@ -4001,9 +3993,7 @@ test tests::test_lambda_call ... ok
 test result: ok. 19 passed; 0 failed
 ```
 
----
-
-### Step 35: lambda — Calling
+#### Calling Lambda
 
 **File: `src/lib.rs`**, modify the `match func` part of **ordinary function calls** in eval's `List` branch.
 
@@ -4196,7 +4186,7 @@ Now match func:
 **Layer 2: Create new environment + bind parameters + evaluate function body**
 
 ```
-Note: At this point, the new environment is created by cloning the call-time environment via `env.clone()`. The `env` field on `LispLambda` won't be added until Step 37 — for now, parameter bindings are stored directly in the cloned environment.
+Note: At this point, the new environment is created by cloning the call-time environment via `env.clone()`. The `env` field on `LispLambda` won't be added until Step 24 — for now, parameter bindings are stored directly in the cloned environment.
 
 1 Create new environment
   let mut new_env = global.clone()
@@ -4292,7 +4282,7 @@ Layer 0 → eval(List((add 3 4)))     ← identified as function call
 
 ---
 
-Step 35 end-of-step project status:
+Step 22 end-of-step project status:
 
 ```
 lisp-rs/
@@ -4384,7 +4374,7 @@ already exists, then implement it later. This top-down approach appears througho
 our interpreter:
 
 ```scheme
-;; Step 34: We wrote this test BEFORE implementing lambda
+;; Step 22: We wrote this test BEFORE implementing lambda
 ;; We "wished" for a working lambda, then built it
 (let ((double (lambda (x) (* x 2))))
   (double 5))
@@ -4403,12 +4393,12 @@ you are practicing the same mental discipline that makes Scheme great for protot
 ## Remembering the Past
 Why this matters: Closures are Lisp's gift to programming. A closure is a function that remembers the variables that were in scope when it was created - enabling callbacks, event handlers, and functional abstractions. Our implementation uses `Rc<RefCell<>>` for shared ownership, which mirrors how many Rust programs manage complex data.
 
-🚫 **Core chapter — worth reading in full.** Closures (Step 37) and TCO (Step 39) are the deepest sections here. Read every line.
+🚫 **Core chapter — worth reading in full.** Closures (Step 24) and TCO (Step 26) are the deepest sections here. Read every line.
 
 ⚠️ **Slow zone — the hardest 4 steps in the entire tutorial.**
-Step 36 introduces `Rc<RefCell<LispEnv>>` (three layers of nested smart pointers), Step 37 implements closure capture,
-Step 39 implements TCO with a trampoline loop. If you're struggling, that's normal—most learners spend 2-3x more time here.
-Tip: understand the "backpack🎒" metaphor first (Step 37 opening), then read the code. If stuck, skip to Step 40 (performance),
+Step 23 introduces `Rc<RefCell<LispEnv>>` (three layers of nested smart pointers), Step 24 implements closure capture,
+Step 26 implements TCO with a trampoline loop. If you're struggling, that's normal—most learners spend 2-3x more time here.
+Tip: understand the "backpack🎒" metaphor first (Step 24 opening), then read the code. If stuck, skip to Step 27 (performance),
 come back to closures later—it doesn't block subsequent features.
 
 
@@ -4434,12 +4424,12 @@ come back to closures later—it doesn't block subsequent features.
 </blockquote>
 
 ---
-### Current Progress: What `eval` looks like at the end of Step 35
+### Current Progress: What `eval` looks like at the end of Step 22
 
 Before starting the transformation, let's clearly see **the `List` branch of `eval` in `src/lib.rs`** (showing only the `List` part, other branches unchanged):
 
 ```rust
-// src/lib.rs — eval function List branch (end of Step 35)
+// src/lib.rs — eval function List branch (end of Step 22)
 
 LispExp::List(elements) => {
     if elements.is_empty() {
@@ -4479,9 +4469,9 @@ LispExp::List(elements) => {
 
 ---
 
-### Step 35.5: Understanding Rc and RefCell — Letting Functions Travel with a Backpack
+### Step 22b: Understanding Rc and RefCell — Letting Functions Travel with a Backpack
 
-💡 **Why learn this first?** The next step (Step 36) will add an `outer` field to the environment, enabling closures. This requires two new Rust concepts: `Rc` and `RefCell`. Understanding them separately first means you won't be hit with three things at once.
+💡 **Why learn this first?** The next step (Step 23) will add an `outer` field to the environment, enabling closures. This requires two new Rust concepts: `Rc` and `RefCell`. Understanding them separately first means you won't be hit with three things at once.
 
 #### ① Rc — Sharing One Book Among Many Readers
 
@@ -4557,11 +4547,11 @@ println!("{}", lambda2.borrow());  // "x=1, y=2"  ✅
 
 ⚠️ **Note**: `RefCell` checks at runtime (not compile time). If you call `borrow_mut()` twice simultaneously, the program will panic. But our interpreter is single-threaded, so this won't happen.
 
-📝 **Next step preview**: Step 36 will add `outer: Option<Rc<RefCell<LispEnv>>>` to `LispEnv`. Now that you understand `Rc` and `RefCell`, the three-layer nesting won't be scary.
+📝 **Next step preview**: Step 23 will add `outer: Option<Rc<RefCell<LispEnv>>>` to `LispEnv`. Now that you understand `Rc` and `RefCell`, the three-layer nesting won't be scary.
 
 ---
 
-### Step 36: Add outer Field to Environment — Support Nested Scopes
+### Step 23: Add outer Field to Environment — Support Nested Scopes
 
 **File: `src/env.rs`**
 
@@ -4685,7 +4675,7 @@ test result: ok. 21 passed; 0 failed
 
 ---
 
-### Step 37: Lambda Captures Environment, Implementing True Closures
+### Step 24: Lambda Captures Environment, Implementing True Closures
 
 **Already know what closures are?** Here's the whole idea in one sentence: when a `lambda` is evaluated, we create a `LispLambda` that stores a reference to the current `LispEnv`. Variable lookup chains through `env → env.outer → ...` until found. That's lexical scoping. The rest of this step is a detailed walkthrough for readers who are new to the concept.
 
@@ -5167,7 +5157,7 @@ Lookup "+": CallFrame₂ ❌ → CallFrame₁ ❌ → Global ✅ (3 hops)
 
 ---
 
-### Step 38: TCO — Understanding the Problem
+### Step 25: TCO — Understanding the Problem
 
 **Problem**: Look at this code:
 
@@ -5211,7 +5201,7 @@ into iteration, using O(1) stack space instead of O(n).
 
 ---
 
-### Step 39: TCO, Trampoline Loop Implementation
+### Step 26: TCO, Trampoline Loop Implementation
 
 **File: `src/lib.rs`**, **replace the entire `eval` function**.
 
@@ -5543,7 +5533,7 @@ Close the tutorial. In **40 minutes**, complete:
 </blockquote>
 
 ---
-### Step 40: String Interning
+### Step 27: String Interning
 
 **Problem**: "x" appears 100 times → heap allocation 100 times → comparison requires character-by-character scan.
 
@@ -5595,7 +5585,7 @@ Bidirectional mapping: `id_to_str` for `lookup(id)` to output debug info, `str_t
 
 💡 In short — `RwLock`: many readers, one writer, never both at once. Like a whiteboard — everyone can read it, but only one person writes at a time.
 
-### Step 41: Change Symbol Type to u64
+### Step 28: Change Symbol Type to u64
 
 **File: `src/lib.rs`**
 
@@ -5714,7 +5704,7 @@ Pattern D needs no change—the match syntax for `Symbol(whatever)` remains the 
 
 **Pattern E: `LispLambda.params`—from `Vec<String>` to `Vec<u64>`**
 
-The `LispLambda` struct defined in Step 34 has `params: Vec<String>`. Now that `Symbol` is `u64`, parameter names should also use interned IDs:
+The `LispLambda` struct defined in Step 22 has `params: Vec<String>`. Now that `Symbol` is `u64`, parameter names should also use interned IDs:
 
 ```rust
 // src/lib.rs — LispLambda struct
@@ -5752,7 +5742,7 @@ test result: ok. 23 passed; 0 failed
 
 ---
 
-### Step 42: Zero-Copy Lexer
+### Step 29: Zero-Copy Lexer
 
 **File: `src/lexer.rs`**
 
@@ -5909,7 +5899,7 @@ test lexer::tests::test_tokenize_string_literal ... ok
 test result: ok. 26 passed; 0 failed
 ```
 
-### Step 43: FX Hasher
+### Step 30: FX Hasher
 
 Rust's default hasher (SipHash) takes about 20 CPU instructions. Implementing FxHasher takes about 3:
 
@@ -5973,7 +5963,7 @@ pub data: HashMap<u64, LispExp, BuildFxHasher>,  // use custom fast hasher
 
 ---
 
-Step 43 end-of-step project status:
+Step 30 end-of-step project status:
 
 **Important: Project restructuring** — The project has grown quite large. Now migrate the `eval` function and `default_env` from `lib.rs` to a new file `src/interpreter.rs`:
 1. Right-click `src` → **New** → **File** → `interpreter.rs`
@@ -6053,14 +6043,14 @@ Special form panorama: When eval encounters a List, it first checks if the first
 
 ---
 
-📝 **Design Note: Optimization order — why we waited until Step 40**
+📝 **Design Note: Optimization order — why we waited until Step 27**
 
 The three optimizations (interning, zero-copy lexing, FX hasher) are deliberately postponed until
 after closures and TCO work. This is not an accident — it's a pedagogical principle:
 
 **"Make it work, make it right, make it fast"** — in that order.
 
-If we'd introduced interning in Step 5, the reader would have to juggle:
+If we'd introduced interning in Step 4, the reader would have to juggle:
 - A global static `OnceLock<RwLock<>>` (unfamiliar pattern)
 - Symbol IDs vs. string names (dual representation)
 - HashMap lifetime management
@@ -6072,8 +6062,8 @@ If we'd introduced interning in Step 5, the reader would have to juggle:
 |-------|---------|---------------------|
 | Steps 1-27 | Correctness | None — use the simplest code |
 | Steps 28-39 | Feature completeness | None — add features first |
-| Steps 40-43 | Performance | Now — the feature set is stable |
-| Steps 44-74 | Polish | Only if benchmarks show a problem |
+| Steps 27-30 | Performance | Now — the feature set is stable |
+| Steps 31-47 | Polish | Only if benchmarks show a problem |
 
 This mirrors how real projects evolve. You can't optimize what you haven't built, and you
 shouldn't optimize what you haven't measured.
@@ -6090,7 +6080,7 @@ shouldn't optimize what you haven't measured.
 
 
 ## More Magic Commands
-⏩ **Skip signal:** Only need the core language? Jump to [Step 52](#step-52-less-than). These special forms follow the same pattern — check the first element, branch accordingly.
+⏩ **Skip signal:** Only need the core language? Jump to [Step 42](#challenge-a-comparison-operators-step-36). These special forms follow the same pattern — check the first element, branch accordingly.
 
 
 ---
@@ -6112,11 +6102,11 @@ shouldn't optimize what you haven't measured.
 </blockquote>
 
 ---
-### Step 44: begin — Sequential Evaluation
+### Step 31: begin — Sequential Evaluation
 
 **From now on, all code modifying `eval` goes in `src/interpreter.rs`** (created in the previous step). Type definitions remain in `lib.rs`, built-in function registration remains in `default_env()` (also in `interpreter.rs`).
 
-📌 **`PredefinedSyms` struct**: From this step onward, special form keywords (`if`, `define`, `lambda`, `begin`, etc.) are accessed via the `predefined()` function which returns pre-interned `u64` IDs, avoiding repeated `interner::intern()` calls. The `PredefinedSyms` struct and `predefined()` function are defined in `src/interner.rs` (created in Step 40), containing pre-interned IDs for all special form symbols. Usage: `predefined().begin`, `predefined().let_sym`, etc.
+📌 **`PredefinedSyms` struct**: From this step onward, special form keywords (`if`, `define`, `lambda`, `begin`, etc.) are accessed via the `predefined()` function which returns pre-interned `u64` IDs, avoiding repeated `interner::intern()` calls. The `PredefinedSyms` struct and `predefined()` function are defined in `src/interner.rs` (created in Step 27), containing pre-interned IDs for all special form symbols. Usage: `predefined().begin`, `predefined().let_sym`, etc.
 
 **Goal**: `(begin (define x 10) (+ x 5))` → `15`.
 
@@ -6165,9 +6155,7 @@ running 27 tests
 test result: ok. 27 passed; 0 failed
 ```
 
----
-
-### Step 45: set! — Modify Existing Binding
+#### set! — Modify Existing Binding
 
 **Goal**: `(define x 10) (set! x 20)` → x becomes 20.
 
@@ -6228,9 +6216,9 @@ test result: ok. 28 passed; 0 failed
 
 ---
 
-### Step 46: let — Local Bindings
+### Step 32: let — Local Bindings
 
-📌 **Prerequisite**: `let`'s multi-expression body is desugared to `begin` (Step 44). Make sure `begin` is implemented first.
+📌 **Prerequisite**: `let`'s multi-expression body is desugared to `begin` (Step 31). Make sure `begin` is implemented first.
 
 **Goal**: `(let ((x 1) (y 2)) (+ x y))` → `3`.
 
@@ -6311,7 +6299,7 @@ test result: ok. 29 passed; 0 failed
 
 ---
 
-### Step 47: cond — Multi-way Branch
+### Step 33: cond — Multi-way Branch
 
 **Goal**: `(cond ((> 3 5) 1) ((< 3 5) 2) (else 3))` → `2`.
 
@@ -6374,7 +6362,7 @@ test result: ok. 30 passed; 0 failed
 
 ---
 
-### Step 48: and — Short-circuit Logical AND
+### Step 34: and — Short-circuit Logical AND
 
 **Goal**: `(and #t 42)` → `42`, `(and #f (error "x"))` → `#f` (error not executed).
 
@@ -6394,9 +6382,7 @@ if *sym_id == predefined().and_sym {
 }
 ```
 
----
-
-### Step 49: or — Short-circuit Logical OR
+#### or — Short-circuit Logical OR
 
 **Goal**: `(or #f #f 42)` → `42`.
 
@@ -6418,7 +6404,7 @@ if *sym_id == predefined().or_sym {
 
 ---
 
-### Step 50: let* — Sequential Bindings
+### Step 35: let* — Sequential Bindings
 
 **Goal**: `(let* ((x 1) (y (+ x 1))) (+ x y))` → `3` (y can see x).
 
@@ -6498,9 +6484,7 @@ running 31 tests
 test result: ok. 31 passed; 0 failed
 ```
 
----
-
-### Step 51: letrec — Recursive Bindings
+#### letrec — Recursive Bindings
 
 **Goal**: Functions can reference each other recursively.
 
@@ -6549,7 +6533,7 @@ if *sym_id == predefined().letrec {
         }
     }
 
-    // Step 4: Evaluate body in shared env (TCO)
+    // Step 3: Evaluate body in shared env (TCO)
     let body = if body_exprs.len() == 1 { body_exprs[0].clone() }
     else {
         LispExp::List(
@@ -6620,7 +6604,7 @@ Step 1: Create "shared whiteboard" + write names (placeholders)
   though their values are still empty—like putting name tags on seats before people arrive.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Step 2: Evaluate lambdas in an environment that "can see the whiteboard"
+Step 1: Evaluate lambdas in an environment that "can see the whiteboard"
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
   Create evaluation env, outer points to shared_env:
@@ -6639,7 +6623,7 @@ Step 2: Evaluate lambdas in an environment that "can see the whiteboard"
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Step 3: Replace placeholders with real values
+Step 2: Replace placeholders with real values
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
   shared_env updates:
@@ -6650,7 +6634,7 @@ Step 3: Replace placeholders with real values
   Now even? and odd? reference each other through shared_env!
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Step 4: Evaluate body (even? 10)
+Step 3: Evaluate body (even? 10)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
   Body evaluated in shared_env → (even? 10)
@@ -6769,7 +6753,7 @@ exact same pattern. No more special forms needed.
 
 ## Built-in Functions Completion + Challenge Levels
 
-⏩ **Skip signal:** Challenge mode: tutorial gives one reference, you implement the rest. If you're experienced, jump to [Step 70](#step-70-variadic-lambda).
+⏩ **Skip signal:** Challenge mode: tutorial gives one reference, you implement the rest. If you're experienced, jump to [Step 39](#step-39-variadic-lambda).
 
 ---
 
@@ -6806,7 +6790,7 @@ From now on, the tutorial no longer gives you every function's complete code. In
 
 ---
 
-### Challenge A: Comparison Operators (Steps 52-54)
+### Challenge A: Comparison Operators (Step 36)
 
 **📝 Functions to implement**: `<` `<=` `>=` `not`
 
@@ -6915,7 +6899,7 @@ test result: ok. 30 passed; 0 failed
 
 ---
 
-### Challenge B: List Operations (Steps 55-62)
+### Challenge B: List Operations (Step 37)
 
 **📝 Functions to implement**: `list` `cons` `car` `cdr` `cadr` `caddr` `append` `length` `reverse` `member`
 
@@ -7135,7 +7119,7 @@ test result: ok. 36 passed; 0 failed
 
 ---
 
-### Challenge C: Predicates & Higher-Order Functions (Steps 63-69)
+### Challenge C: Predicates & Higher-Order Functions (Step 38)
 
 **📝 Functions to implement**: `null?` `number?` `symbol?` `boolean?` `string?` `procedure?` `pair?` `list?` `eq?` `equal?` `map` `apply` `filter`
 
@@ -7356,7 +7340,7 @@ test result: ok. 42 passed; 0 failed
 
 ---
 
-### Step 70: Variadic Lambda
+### Step 39: Variadic Lambda
 
 **Problem**: So far, our lambdas have a fixed number of parameters — `(lambda (x y) ...)` takes exactly 2. But sometimes you don't know how many arguments will be passed, like `(+ 1 2 3 4 5)`. Lisp uses **dot-pair syntax** `(a . rest)`: `a` is a fixed parameter, `rest` collects remaining arguments into a list.
 
@@ -7380,7 +7364,7 @@ if let Some(rest_id) = lambda.rest {
 
 ---
 
-### Step 71: `'` Quote Abbreviation
+### Step 40: `'` Quote Abbreviation
 
 **Problem**: Writing `(quote x)` every time you want to prevent evaluation is verbose. Lisp's tradition is to use `'` as shorthand — `'x` is equivalent to `(quote x)`. This is a direct expression of Lisp's "code is data" philosophy: a single character toggles between "evaluate" and "keep as-is."
 
@@ -7403,7 +7387,7 @@ if let Some(rest_id) = lambda.rest {
 
 ---
 
-### Step 71b: `defmacro` — Defining Macros
+### Step 41: `defmacro` — Defining Macros
 
 **Goal**: Lisp's ultimate weapon — generating code with code.
 
@@ -7419,15 +7403,13 @@ if let Some(rest_id) = lambda.rest {
 Macro(Box<LispLambda>),
 ```
 
-**Step 2: Update `Display`**. Make macros display as `#<macro (...)>` instead of `#<lambda (...)>`.
+**Step 1: Update `Display`**. Make macros display as `#<macro (...)>` instead of `#<lambda (...)>`.
 
-**Step 3: Predefine `defmacro` symbol in `interner.rs`**. Add `defmacro: intern("defmacro")` to the `PredefinedSyms` struct and `init_predefined_symbols()`.
+**Step 2: Predefine `defmacro` symbol in `interner.rs`**. Add `defmacro: intern("defmacro")` to the `PredefinedSyms` struct and `init_predefined_symbols()`.
 
-**Step 4: Add `defmacro` special form to `eval`** (`src/interpreter.rs`, right after `lambda` handling). The logic for `defmacro` is almost identical to `lambda` — parse parameters, parse body, create a function value — the only difference is creating `LispExp::Macro(...)` instead of `LispExp::Lambda(...)`, then binding the macro into the environment.
+**Step 3: Add `defmacro` special form to `eval`** (`src/interpreter.rs`, right after `lambda` handling). The logic for `defmacro` is almost identical to `lambda` — parse parameters, parse body, create a function value — the only difference is creating `LispExp::Macro(...)` instead of `LispExp::Lambda(...)`, then binding the macro into the environment.
 
----
-
-### Step 71c: Macro Expander
+#### Macro Expander
 
 **Goal**: When the interpreter encounters a macro call, expand it first, then evaluate.
 
@@ -7487,7 +7469,7 @@ fn test_defmacro_when() {
 
 ---
 
-### Step 71d: `gensym` — Hygienic Macros
+### Step 42: `gensym` — Hygienic Macros
 
 **Problem**: If a macro uses temporary variable names internally, they may conflict with variables at the call site (variable capture).
 
@@ -7514,7 +7496,7 @@ env.set(intern("gensym"), LispExp::Func(|args| {
 
 ---
 
-### Step 71e: `quasiquote` — Template-Based Code Generation
+### Step 43: `quasiquote` — Template-Based Code Generation
 
 **Problem**: With `defmacro`, writing macros requires manually stitching code together with `list`/`cons`/`'` — tedious and error-prone:
 
@@ -7542,14 +7524,14 @@ Quasiquote lets you generate code using a **template** — like a fill-in-the-bl
 
 **Step 1: Lexer recognizes new symbols**. In `src/lexer.rs`, add backtick and comma handling after single-quote. `,` is a single-character token, `,@` is a two-character token.
 
-**Step 2: Parser expands abbreviations**. In `src/parser.rs`, following the pattern of `'expr` → `(quote expr)`:
+**Step 1: Parser expands abbreviations**. In `src/parser.rs`, following the pattern of `'expr` → `(quote expr)`:
 - `` `expr `` → `(quasiquote expr)`
 - `,expr` → `(unquote expr)`
 - `,@expr` → `(unquote-splicing expr)`
 
-**Step 3: Predefine symbols in interner**. Add `quasiquote`, `unquote`, `unquote_splicing` to `PredefinedSyms` in `src/interner.rs`.
+**Step 2: Predefine symbols in interner**. Add `quasiquote`, `unquote`, `unquote_splicing` to `PredefinedSyms` in `src/interner.rs`.
 
-**Step 4: Implement `qq_expand` function** (`src/interpreter.rs`). Core logic:
+**Step 3: Implement `qq_expand` function** (`src/interpreter.rs`). Core logic:
 
 ```
 qq_expand(template):
@@ -7648,7 +7630,7 @@ fn qq_expand(exp: &LispExp, p: &PredefinedSyms) -> LispExp {
 
 💡 **Reading guide**: The core of this code is building the `cons` chain **right-to-left**. Imagine stacking blocks — start from `'()` on the far right, and each step leftward, use `cons` to attach the current element (after expansion). When you hit `,@`, use `append` to splice instead.
 
-**Step 5: Add `quasiquote` special form to `eval`**. Expand the template, then evaluate the result with TCO.
+**Step 4: Add `quasiquote` special form to `eval`**. Expand the template, then evaluate the result with TCO.
 
 ```rust
 // src/interpreter.rs — add to eval's special form checks:
@@ -7680,7 +7662,7 @@ Now macros can be written much more cleanly: `(defmacro when (c . b) \`(if ,c (b
 
 ---
 
-### Step 72: `error` Function
+### Step 44: `error` Function
 
 ```rust
 // src/interpreter.rs
@@ -7692,7 +7674,7 @@ env.set(intern("error"), LispExp::Func(|args| {
 
 ---
 
-### Step 73: Display Trait — Making Values Printable
+### Step 45: Display Trait — Making Values Printable
 
 ```rust
 // lib.rs
@@ -7726,11 +7708,11 @@ impl fmt::Display for LispExp {
 
 ---
 
-### Step 73b: I/O Functions — `display` / `newline` / `read`
+### Step 46: I/O Functions — `display` / `newline` / `read`
 
 **Problem**: So far, our interpreter can only verify results through `cargo test`. But what if you want to print something while the program runs? `display` outputs a value to the screen, `newline` prints a line break, and `read` reads a line of user input. These three functions give Lisp programs the ability to interact with the outside world.
 
-These functions depend on Step 73's `Display` trait — `display` internally calls `format!("{}", val)`, which formats through the Display trait.
+These functions depend on Step 45's `Display` trait — `display` internally calls `format!("{}", val)`, which formats through the Display trait.
 
 #### `display` — Print a Value
 
@@ -7812,7 +7794,7 @@ fn test_newline_returns_nil() {
 
 ---
 
-### Step 74: Make Modules Public + Create main.rs
+### Step 47: Make Modules Public + Create main.rs
 
 
 ![repl seq en](svgs/repl-seq-en.svg)
@@ -7980,7 +7962,7 @@ cargo run
 
 ## 🏗️ Architecture Retrospective
 
-After 74 steps, here's what we built:
+After 47 steps, here's what we built:
 
 
 ![architecture overview en](svgs/architecture-overview-en.svg)
@@ -8166,64 +8148,62 @@ You can copy it into your REPL right now.
 ## Appendix: Complete Step List
 
 ```
-Steps 1-4: Preparation
-  1. Install Rust          2. Install RustRover
-  3. Create project        4. First test
+Steps 1-3: Preparation
+  1. Install Rust + IDE    2. Create project
+  3. First test
 
-Step 5: Understanding "Values"
-  5. LispExp + LispErr core types
+Step 4: Understanding "Values"
+  4. LispExp + LispErr core types
 
-Steps 7-8: Making Programs Compute
-  7. eval numbers          8. Connect pipeline eval_str
+Steps 5-6: Making Programs Compute
+  5. eval numbers          6. Connect pipeline eval_str
 
-Step 9: Lexer
-  9. Create lexer + tokenize + handle parentheses
+Step 7: Lexer
+  7. Create lexer + tokenize + handle parentheses
 
-Steps 12-15: Parser
-  12. Create parser.rs     13. Full pipeline    14. Recursive list parsing
-  15. Parse symbols + error handling
+Steps 8-11: Parser
+  8. Create parser.rs     9. Full pipeline    10. Recursive list parsing
+  11. Parse symbols + error handling
 
-Steps 16-19: Giving Things Names
-  16. Create env.rs        17. env tests
-  18. eval add env param   19. Update call sites
+Steps 12-13: Giving Things Names
+  12. Create env + tests
+  13. eval add env param + update call sites
 
-Steps 20-27: Doing Real Computation
-  20. Func type            21. List evaluation      22-23. Addition
-  24-27. Sub/Mul/Div
+Steps 14-17: Doing Real Computation
+  14. Func type            15. List evaluation      16. Addition
+  17. Sub/Mul/Div
 
-Steps 28-31: More Data Types
-  28. Bool + Nil           29-31. Comparison + String
+Steps 18-19: More Data Types
+  18. Bool + Nil           19. Comparison + String
 
-Steps 32-35: Making Programs Choose
-  32. if                   33. define        34. lambda creation
-  35. lambda call
+Steps 20-22: Making Programs Choose
+  20. if                   21. define        22. lambda creation + call
 
-Steps 36-39: Remembering the Past (Closures + TCO)
-  36. outer field          37. Lambda captures environment
-  38. TCO understand problem       39. TCO trampoline loop
+Steps 23-26: Remembering the Past (Closures + TCO)
+  23. outer field          24. Lambda captures environment
+  25. TCO understand problem       26. TCO trampoline loop
 
-Steps 40-43: Making Programs Run Faster (Performance)
-  40. String interner      41. Symbol(u64)
-  42. Zero-copy lexer      43. FX hasher + project restructure (interpreter.rs)
+Steps 27-30: Making Programs Run Faster (Performance)
+  27. String interner      28. Symbol(u64)
+  29. Zero-copy lexer      30. FX hasher + project restructure (interpreter.rs)
 
-Steps 44-51: More Magic Commands
-  44. begin                45. set!          46. let
-  47. cond                 48. and           49. or
-  50. let*                 51. letrec
+Steps 31-35: More Magic Commands
+  31. begin + set!         32. let           33. cond
+  34. and + or             35. let* + letrec
 
-Steps 52-74: Built-in Functions (Challenge Levels) + REPL
-  Challenge A (52-54): <, <=, >=, not — tutorial gives <, rest independent
-  Challenge B (55-62): list, cons, car, cdr, cadr, caddr, append, length, reverse, member
-  Challenge C (63-69): Type predicates, eq?/equal?, map, apply, filter
-  70: Variadic lambda      71: quote abbreviation
-  71b-71d: defmacro/macro expansion/gensym   71e: quasiquote
-  72: error    73: Display trait   73b: I/O functions(display/newline/read)
-  74: main.rs REPL
+Steps 36-47: Built-in Functions (Challenge Levels) + REPL
+  Challenge A (36): <, <=, >=, not — tutorial gives <, rest independent
+  Challenge B (37): list, cons, car, cdr, cadr, caddr, append, length, reverse, member
+  Challenge C (38): Type predicates, eq?/equal?, map, apply, filter
+  39: Variadic lambda      40: quote abbreviation
+  41: defmacro + macro expansion  42: gensym    43: quasiquote
+  44: error    45: Display trait   46: I/O functions(display/newline/read)
+  47: main.rs REPL
 ```
 
 ---
 
-**Feynman test**: Explain these 74 steps to a friend who knows nothing about programming. If each step makes them nod and say "oh, I see," you've succeeded.
+**Feynman test**: Explain these 47 steps to a friend who knows nothing about programming. If each step makes them nod and say "oh, I see," you've succeeded.
 
 **Verification**: `cargo test` (42 tests), `cargo run` (interactive REPL)
 
@@ -8290,7 +8270,7 @@ Steps 52-74: Built-in Functions (Challenge Levels) + REPL
 
 ## Appendix D: Complete Program Example — Symbolic Differentiator
 
-After 74 steps you've built an interpreter — what can you do with it? Here's an approx. 30-line Lisp program that differentiates mathematical expressions:
+After 47 steps you've built an interpreter — what can you do with it? Here's an approx. 30-line Lisp program that differentiates mathematical expressions:
 
 ```lisp
 ; Symbolic differentiator — run it on your own interpreter!
@@ -8320,7 +8300,7 @@ After 74 steps you've built an interpreter — what can you do with it? Here's a
 
 🎯 **This shows the power of Lisp**: With your own interpreter, your own language, approx. 30 lines of code — you can do symbolic computation. And you wrote every line of it yourself.
 
-💡 **Prerequisite functions**: This program uses `cadr` (second element) and `caddr` (third element) — defined in Step 58b. If you haven't implemented them yet, add them first.
+💡 **Prerequisite functions**: This program uses `cadr` (second element) and `caddr` (third element) — defined in Step 48b. If you haven't implemented them yet, add them first.
 
 ---
 
