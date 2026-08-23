@@ -1,67 +1,58 @@
-<svg width="700" height="420" viewBox="0 0 700 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="900" height="480" viewBox="0 0 900 480" fill="none" xmlns="http://www.w3.org/2000/svg">
 <defs>
 <style>
-.label { font-family: -apple-system, 'Segoe UI', sans-serif; font-size: 13px; fill: #495057; font-weight: 600; }
-.code { font-family: 'SF Mono', monospace; font-size: 11px; fill: #868E96; }
-.step { font-family: -apple-system, sans-serif; font-size: 12px; fill: #0D6EFD; font-weight: 700; }
+.label { font-family: -apple-system, 'Segoe UI', sans-serif; font-size: 17px; fill: #495057; font-weight: 600; }
+.code { font-family: 'SF Mono', monospace; font-size: 14px; fill: #868E96; }
+.step { font-family: -apple-system, sans-serif; font-size: 15px; fill: #0D6EFD; font-weight: 700; }
+.counter { font-family: 'SF Mono', monospace; font-size: 26px; fill: #4CAF50; font-weight: 700; }
 </style>
-<marker id="arr-up" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+<marker id="arr-up" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
 <path d="M 0 0 L 10 5 L 0 10 z" fill="#FF9800"/>
 </marker>
-<marker id="arr-down" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+<marker id="arr-down" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
 <path d="M 0 0 L 10 5 L 0 10 z" fill="#0D6EFD"/>
 </marker>
 </defs>
 
-<!-- Title -->
-<text x="350" y="30" text-anchor="middle" class="label" fill="#0D6EFD">TCO 蹦床循环：尾递归不爆栈</text>
+<text x="450" y="35" text-anchor="middle" class="label" fill="#0D6EFD" font-size="22">TCO 蹦床循环：尾递归不爆栈</text>
 
-<!-- The trampoline (loop) box -->
-<rect x="200" y="70" width="300" height="60" rx="30" fill="#FFF3E0" stroke="#FF9800" stroke-width="2.5"/>
-<text x="350" y="105" text-anchor="middle" class="label" fill="#FF9800">蹦床 loop (trampoline)</text>
+<rect x="250" y="80" width="400" height="65" rx="30" fill="#FFF3E0" stroke="#FF9800" stroke-width="3"/>
+<text x="450" y="120" text-anchor="middle" class="label" fill="#FF9800" font-size="20">蹦床 loop (trampoline)</text>
 
-<!-- Bounce arrows (loop animation) -->
-<!-- Arrow 1: down to eval -->
-<path d="M350 130L350 180" stroke="#0D6EFD" stroke-width="2.5" marker-end="url(#arr-down)" opacity="0">
+<path d="M450 145L450 200" stroke="#0D6EFD" stroke-width="3" marker-end="url(#arr-down)" opacity="0">
 <animate attributeName="opacity" values="1;0;0;0;1" dur="3s" repeatCount="indefinite"/>
 </path>
 
-<!-- Arrow 2: up back to trampoline -->
-<path d="M350 280L350 130" stroke="#FF9800" stroke-width="2.5" marker-end="url(#arr-up)" opacity="0">
+<path d="M450 310L450 145" stroke="#FF9800" stroke-width="3" marker-end="url(#arr-up)" opacity="0">
 <animate attributeName="opacity" values="0;1;0;1;0" dur="3s" repeatCount="indefinite"/>
 </path>
 
-<!-- Eval box -->
-<rect x="200" y="180" width="300" height="100" rx="12" fill="#E3F2FD" stroke="#0D6EFD" stroke-width="2"/>
-<text x="350" y="205" text-anchor="middle" class="label">eval(ast, env)</text>
-<text x="350" y="230" text-anchor="middle" class="code">(loop 10000)</text>
-<text x="350" y="250" text-anchor="middle" class="code">→ 返回 Lambda 调用</text>
-<text x="350" y="270" text-anchor="middle" class="code">（不递归调用，而是返回）</text>
+<rect x="250" y="200" width="400" height="110" rx="12" fill="#E3F2FD" stroke="#0D6EFD" stroke-width="2.5"/>
+<text x="450" y="228" text-anchor="middle" class="label">eval(ast, env)</text>
+<text x="450" y="256" text-anchor="middle" class="code">(loop 10000)</text>
+<text x="450" y="280" text-anchor="middle" class="code">→ 返回 Lambda 调用</text>
+<text x="450" y="302" text-anchor="middle" class="code">（不递归调用，而是返回）</text>
 
-<!-- Animated counter: use multiple text elements with opacity animation -->
-<text x="350" y="320" text-anchor="middle" class="step">迭代次数：</text>
-<text x="350" y="345" text-anchor="middle" font-family="monospace" font-size="20" fill="#4CAF50" font-weight="700" opacity="0">1<animate attributeName="opacity" values="1;0;0;0;0;0" dur="3s" repeatCount="indefinite"/></text>
-<text x="350" y="345" text-anchor="middle" font-family="monospace" font-size="20" fill="#4CAF50" font-weight="700" opacity="0">100<animate attributeName="opacity" values="0;1;0;0;0;0" dur="3s" repeatCount="indefinite"/></text>
-<text x="350" y="345" text-anchor="middle" font-family="monospace" font-size="20" fill="#4CAF50" font-weight="700" opacity="0">1000<animate attributeName="opacity" values="0;0;1;0;0;0" dur="3s" repeatCount="indefinite"/></text>
-<text x="350" y="345" text-anchor="middle" font-family="monospace" font-size="20" fill="#4CAF50" font-weight="700" opacity="0">5000<animate attributeName="opacity" values="0;0;0;1;0;0" dur="3s" repeatCount="indefinite"/></text>
-<text x="350" y="345" text-anchor="middle" font-family="monospace" font-size="20" fill="#4CAF50" font-weight="700" opacity="0">10000<animate attributeName="opacity" values="0;0;0;0;1;0" dur="3s" repeatCount="indefinite"/></text>
-<text x="350" y="345" text-anchor="middle" font-family="monospace" font-size="20" fill="#4CAF50" font-weight="700" opacity="0">✓ 10000<animate attributeName="opacity" values="0;0;0;0;0;1" dur="3s" repeatCount="indefinite"/></text>
+<text x="450" y="355" text-anchor="middle" class="step" font-size="17">迭代次数：</text>
+<text x="450" y="390" text-anchor="middle" class="counter" opacity="0">1<animate attributeName="opacity" values="1;0;0;0;0;0" dur="3s" repeatCount="indefinite"/></text>
+<text x="450" y="390" text-anchor="middle" class="counter" opacity="0">100<animate attributeName="opacity" values="0;1;0;0;0;0" dur="3s" repeatCount="indefinite"/></text>
+<text x="450" y="390" text-anchor="middle" class="counter" opacity="0">1000<animate attributeName="opacity" values="0;0;1;0;0;0" dur="3s" repeatCount="indefinite"/></text>
+<text x="450" y="390" text-anchor="middle" class="counter" opacity="0">5000<animate attributeName="opacity" values="0;0;0;1;0;0" dur="3s" repeatCount="indefinite"/></text>
+<text x="450" y="390" text-anchor="middle" class="counter" opacity="0">10000<animate attributeName="opacity" values="0;0;0;0;1;0" dur="3s" repeatCount="indefinite"/></text>
+<text x="450" y="390" text-anchor="middle" class="counter" opacity="0">✓ 10000<animate attributeName="opacity" values="0;0;0;0;0;1" dur="3s" repeatCount="indefinite"/></text>
 
-<!-- Result -->
-<rect x="200" y="370" width="300" height="40" rx="10" fill="#E8F5E9" stroke="#4CAF50" stroke-width="2" opacity="0">
+<rect x="250" y="420" width="400" height="45" rx="10" fill="#E8F5E9" stroke="#4CAF50" stroke-width="2.5" opacity="0">
 <animate attributeName="opacity" values="0;0;0;0;0;1" dur="3s" repeatCount="indefinite"/>
 </rect>
-<text x="350" y="395" text-anchor="middle" class="label" fill="#4CAF50" opacity="0">✓ 完成！栈深度始终 = 1（不爆栈）<animate attributeName="opacity" values="0;0;0;0;0;1" dur="3s" repeatCount="indefinite"/></text>
+<text x="450" y="448" text-anchor="middle" class="label" fill="#4CAF50" font-size="18" opacity="0">✓ 完成！栈深度始终 = 1（不爆栈）<animate attributeName="opacity" values="0;0;0;0;0;1" dur="3s" repeatCount="indefinite"/></text>
 
-<!-- Without TCO (explosion) -->
-<text x="50" y="200" class="step" fill="#dc3545">无 TCO：</text>
-<text x="50" y="220" class="code">eval 递归 10000 层</text>
-<text x="50" y="240" class="code">→ stack overflow 💥</text>
-<text x="80" y="275" font-size="28" fill="#dc3545"><animate attributeName="opacity" values="1;0.3;1;0.3;1;0.3" dur="0.5s" repeatCount="indefinite"/>💥</text>
+<text x="40" y="230" class="step" fill="#dc3545" font-size="18">无 TCO：</text>
+<text x="40" y="258" class="code">eval 递归 10000 层</text>
+<text x="40" y="282" class="code">→ stack overflow 💥</text>
+<text x="80" y="325" font-size="36" fill="#dc3545"><animate attributeName="opacity" values="1;0.3;1;0.3;1;0.3" dur="0.5s" repeatCount="indefinite"/>💥</text>
 
-<!-- With TCO (bouncing) -->
-<text x="540" y="200" class="step" fill="#4CAF50">有 TCO：</text>
-<text x="540" y="220" class="code">loop 循环 10000 次</text>
-<text x="540" y="240" class="code">→ 每次 bounce 回来</text>
-<text x="570" y="275" font-size="28" fill="#4CAF50"><animate attributeName="opacity" values="0.3;1;0.3;1;0.3;1" dur="0.5s" repeatCount="indefinite"/>✓</text>
+<text x="700" y="230" class="step" fill="#4CAF50" font-size="18">有 TCO：</text>
+<text x="700" y="258" class="code">loop 循环 10000 次</text>
+<text x="700" y="282" class="code">→ 每次 bounce 回来</text>
+<text x="740" y="325" font-size="36" fill="#4CAF50"><animate attributeName="opacity" values="0.3;1;0.3;1;0.3;1" dur="0.5s" repeatCount="indefinite"/>✓</text>
 </svg>

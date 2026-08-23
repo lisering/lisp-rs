@@ -1,73 +1,63 @@
-<svg width="900" height="320" viewBox="0 0 900 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="900" height="360" viewBox="0 0 900 360" fill="none" xmlns="http://www.w3.org/2000/svg">
 <defs>
-<marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+<marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
 <path d="M 0 0 L 10 5 L 0 10 z" fill="#0D6EFD"/>
 </marker>
-<marker id="ah-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-<path d="M 0 0 L 10 5 L 0 10 z" fill="#6C757D"/>
-</marker>
 <style>
-.label { font-family: -apple-system, 'Segoe UI', sans-serif; font-size: 13px; fill: #495057; font-weight: 600; }
-.detail { font-family: 'SF Mono', 'Cascadia Code', monospace; font-size: 11px; fill: #868E96; }
-.flow { font-family: 'SF Mono', 'Cascadia Code', monospace; font-size: 12px; fill: #0D6EFD; font-weight: 700; }
+.label { font-family: -apple-system, 'Segoe UI', sans-serif; font-size: 18px; fill: #495057; font-weight: 600; }
+.detail { font-family: 'SF Mono', 'Cascadia Code', monospace; font-size: 15px; fill: #868E96; }
+.flow { font-family: 'SF Mono', 'Cascadia Code', monospace; font-size: 16px; fill: #0D6EFD; font-weight: 700; }
 </style>
 </defs>
 
-<!-- Stage boxes -->
-<rect x="20" y="60" width="160" height="100" rx="12" fill="#E3F2FD" stroke="#0D6EFD" stroke-width="2"/>
-<text x="100" y="95" text-anchor="middle" class="label">源码 Source</text>
-<text x="100" y="115" text-anchor="middle" class="detail">"(+ 1 2)"</text>
+<rect x="20" y="60" width="190" height="110" rx="12" fill="#E3F2FD" stroke="#0D6EFD" stroke-width="2.5"/>
+<text x="115" y="100" text-anchor="middle" class="label">源码 Source</text>
+<text x="115" y="128" text-anchor="middle" class="detail">"(+ 1 2)"</text>
 
-<rect x="250" y="60" width="160" height="100" rx="12" fill="#E8F5E9" stroke="#4CAF50" stroke-width="2"/>
-<text x="330" y="95" text-anchor="middle" class="label">Tokens 词法</text>
-<text x="330" y="115" text-anchor="middle" class="detail">["(", "+", "1", "2", ")"]</text>
+<rect x="280" y="60" width="190" height="110" rx="12" fill="#E8F5E9" stroke="#4CAF50" stroke-width="2.5"/>
+<text x="375" y="100" text-anchor="middle" class="label">Tokens 词法</text>
+<text x="375" y="128" text-anchor="middle" class="detail">["(", "+", "1", "2", ")"]</text>
 
-<rect x="480" y="60" width="160" height="100" rx="12" fill="#FFF3E0" stroke="#FF9800" stroke-width="2"/>
-<text x="560" y="95" text-anchor="middle" class="label">AST 语法树</text>
-<text x="560" y="115" text-anchor="middle" class="detail">List[+, 1, 2]</text>
+<rect x="540" y="60" width="190" height="110" rx="12" fill="#FFF3E0" stroke="#FF9800" stroke-width="2.5"/>
+<text x="635" y="100" text-anchor="middle" class="label">AST 语法树</text>
+<text x="635" y="128" text-anchor="middle" class="detail">List[+, 1, 2]</text>
 
-<rect x="710" y="60" width="160" height="100" rx="12" fill="#F3E5F5" stroke="#9C27B0" stroke-width="2"/>
-<text x="790" y="95" text-anchor="middle" class="label">Result 结果</text>
-<text x="790" y="115" text-anchor="middle" class="detail">3.0</text>
+<rect x="720" y="60" width="160" height="110" rx="12" fill="#F3E5F5" stroke="#9C27B0" stroke-width="2.5"/>
+<text x="800" y="100" text-anchor="middle" class="label">Result 结果</text>
+<text x="800" y="128" text-anchor="middle" class="detail" font-size="18" fill="#9C27B0" font-weight="700">3.0</text>
 
-<!-- Arrows between stages -->
-<path d="M180 110L248 110" stroke="#0D6EFD" stroke-width="2" marker-end="url(#ah)"/>
-<path d="M410 110L478 110" stroke="#0D6EFD" stroke-width="2" marker-end="url(#ah)"/>
-<path d="M640 110L708 110" stroke="#0D6EFD" stroke-width="2" marker-end="url(#ah)"/>
+<path d="M210 115L278 115" stroke="#0D6EFD" stroke-width="2.5" marker-end="url(#ah)"/>
+<path d="M470 115L538 115" stroke="#0D6EFD" stroke-width="2.5" marker-end="url(#ah)"/>
+<path d="M730 115L718 115" stroke="#0D6EFD" stroke-width="2.5" marker-end="url(#ah)"/>
 
-<!-- Animated data packet -->
-<circle cx="180" cy="110" r="8" fill="#0D6EFD" opacity="0">
+<circle cx="210" cy="115" r="10" fill="#0D6EFD" opacity="0">
 <animate attributeName="opacity" values="0;1;1;1;1;0" dur="4s" repeatCount="indefinite"/>
-<animate attributeName="cx" values="180;180;248;248;410;410;478;478;640;640;708;708" dur="4s" repeatCount="indefinite" keyTimes="0;0.05;0.12;0.18;0.25;0.32;0.38;0.45;0.52;0.58;0.65;0.72"/>
+<animate attributeName="cx" values="210;210;278;278;470;470;538;538;730;730;718;718" dur="4s" repeatCount="indefinite" keyTimes="0;0.05;0.12;0.18;0.25;0.32;0.38;0.45;0.52;0.58;0.65;0.72"/>
 </circle>
 
-<!-- Stage labels -->
-<text x="214" y="100" text-anchor="middle" class="flow">tokenize</text>
-<text x="444" y="100" text-anchor="middle" class="flow">parse</text>
-<text x="674" y="100" text-anchor="middle" class="flow">eval</text>
+<text x="244" y="100" text-anchor="middle" class="flow">tokenize</text>
+<text x="504" y="100" text-anchor="middle" class="flow">parse</text>
+<text x="724" y="100" text-anchor="middle" class="flow">eval</text>
 
-<!-- Bottom: step-by-step explanation -->
-<text x="450" y="200" text-anchor="middle" class="label" fill="#0D6EFD">数据流转过程（蓝点表示数据正在流动）</text>
+<text x="450" y="210" text-anchor="middle" class="label" fill="#0D6EFD" font-size="18">数据流转过程（蓝点表示数据正在流动）</text>
 
-<!-- Timeline boxes at bottom -->
-<rect x="40" y="230" width="160" height="60" rx="8" fill="#F8F9FA" stroke="#DEE2E6" stroke-width="1.5"/>
-<text x="120" y="255" text-anchor="middle" class="detail">tokenize("(+ 1 2)")</text>
-<text x="120" y="275" text-anchor="middle" class="detail">→ Vec&lt;&amp;str&gt;</text>
+<rect x="40" y="250" width="190" height="80" rx="8" fill="#F8F9FA" stroke="#DEE2E6" stroke-width="2"/>
+<text x="135" y="280" text-anchor="middle" class="detail">tokenize("(+ 1 2)")</text>
+<text x="135" y="305" text-anchor="middle" class="detail">→ Vec&lt;&amp;str&gt;</text>
 
-<rect x="270" y="230" width="160" height="60" rx="8" fill="#F8F9FA" stroke="#DEE2E6" stroke-width="1.5"/>
-<text x="350" y="255" text-anchor="middle" class="detail">parse(tokens)</text>
-<text x="350" y="275" text-anchor="middle" class="detail">→ LispExp::List</text>
+<rect x="290" y="250" width="190" height="80" rx="8" fill="#F8F9FA" stroke="#DEE2E6" stroke-width="2"/>
+<text x="385" y="280" text-anchor="middle" class="detail">parse(tokens)</text>
+<text x="385" y="305" text-anchor="middle" class="detail">→ LispExp::List</text>
 
-<rect x="500" y="230" width="160" height="60" rx="8" fill="#F8F9FA" stroke="#DEE2E6" stroke-width="1.5"/>
-<text x="580" y="255" text-anchor="middle" class="detail">eval(ast, env)</text>
-<text x="580" y="275" text-anchor="middle" class="detail">→ 1 + 2 = 3</text>
+<rect x="540" y="250" width="190" height="80" rx="8" fill="#F8F9FA" stroke="#DEE2E6" stroke-width="2"/>
+<text x="635" y="280" text-anchor="middle" class="detail">eval(ast, env)</text>
+<text x="635" y="305" text-anchor="middle" class="detail">→ 1 + 2 = 3</text>
 
-<rect x="730" y="230" width="130" height="60" rx="8" fill="#F8F9FA" stroke="#DEE2E6" stroke-width="1.5"/>
-<text x="795" y="255" text-anchor="middle" class="detail">LispExp::Number</text>
-<text x="795" y="275" text-anchor="middle" class="detail">3.0</text>
+<rect x="790" y="250" width="90" height="80" rx="8" fill="#F8F9FA" stroke="#DEE2E6" stroke-width="2"/>
+<text x="835" y="280" text-anchor="middle" class="detail" font-size="13">LispExp</text>
+<text x="835" y="305" text-anchor="middle" class="detail" font-size="13">::Number 3.0</text>
 
-<!-- Pulsing animation for result box -->
-<rect x="710" y="60" width="160" height="100" rx="12" fill="none" stroke="#9C27B0" stroke-width="2" opacity="0">
+<rect x="720" y="60" width="160" height="110" rx="12" fill="none" stroke="#9C27B0" stroke-width="2" opacity="0">
 <animate attributeName="opacity" values="0;0;0;0;0;0;0;0.8;0.8;0.8;0" dur="4s" repeatCount="indefinite"/>
 <animate attributeName="stroke-width" values="2;2;2;2;2;2;2;2;4;2;2" dur="4s" repeatCount="indefinite"/>
 </rect>
