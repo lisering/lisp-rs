@@ -50,7 +50,7 @@ You don't have to read everything. Pick the lane that fits you:
 - [Remembering the Past](#remembering-the-past) — Steps 36-39
 - [Making Programs Run Faster](#making-programs-run-faster) — Steps 40-43
 - [More Magic Commands](#more-magic-commands) — Steps 44-51
-- [Built-in Functions + REPL](#built-in-functions-completion) — Steps 52-74
+- [Built-in Functions + Challenge Levels](#built-in-functions-completion--challenge-levels) — Steps 52-74
 
 ---
 
@@ -1694,6 +1694,20 @@ C enums are just integer aliases (`enum Color { RED=0, GREEN=1 }`). Rust enum va
 
 ✅ **Summary**: Core types define what values exist in our language; `Result<LispExp, LispErr>` is the universal return type.
 
+---
+
+### 🎯 Blank Paper Checkpoint
+
+Close the tutorial. Open a blank file. In **15 minutes**, complete:
+
+- [ ] Define `LispExp` enum (with `Number(f64)` variant)
+- [ ] Define `LispErr` enum (with `Reason(String)` variant)
+- [ ] Derive `Clone, Debug, PartialEq` on both
+- [ ] Write a test: create `Number(42.0)` and assert it equals itself
+
+⏱️ **Time limit: 15 minutes**. If you can't do it, go back and review.
+**Do NOT look at the tutorial code** — you may look at the plain-English explanations.
+
 
 ## Making Programs Compute
 ⏩ **Skip signal:** Familiar with Rust function signatures and `Result`? Skim this — the key takeaway is the `eval` pipeline.
@@ -1955,6 +1969,20 @@ What we're solving: Break the source string into a list of Tokens. Like reading 
 
 ✅ **Summary**: `eval` takes an expression, returns a value or error. The interpreter pipeline is connected end-to-end.
 
+---
+
+### 🎯 Blank Paper Checkpoint
+
+Close the tutorial. In **20 minutes**, complete:
+
+- [ ] Define `LispExp` (with `Number`, `Symbol`, `Bool`, `Nil`, `String` variants)
+- [ ] Define `LispErr`
+- [ ] Write `eval` function: input `Number(42.0)` returns `Number(42.0)`
+- [ ] Write `eval_str` function: input `"42"` returns `Number(42.0)`
+- [ ] Write tests to verify
+
+⏱️ **Time limit: 20 minutes**. Do NOT look at the tutorial code.
+
 
 Why this matters: The lexer is the interpreter's eyes - it reads raw text and identifies the meaningful units (tokens). Every compiler and interpreter starts with a lexer, making this a transferable skill you'll use in any language implementation.
 
@@ -1989,6 +2017,8 @@ Why this matters: The lexer is the interpreter's eyes - it reads raw text and id
 ```
 
 Step 8's `eval_str("(+ 1 2)")` fails — because `"(+ 1 2)"` is not a valid number. To handle multi-element expressions, the first step is to **split the string into words**. That's the lexer's job.
+
+🔮 **Guess before reading on**: What do you think `tokenize("(* 2 (+ 3 4))")` will return? Write your guess on paper, then keep reading — see if you got it right.
 
 **1. Create the file + register the module**
 
@@ -2258,6 +2288,19 @@ The real bottleneck is eval. So String-based tokens are fine for learning — we
 
 
 ✅ **Summary**: `tokenize()` handles all token types. The lexer is in its own module with its own tests.
+
+---
+
+### 🎯 Blank Paper Checkpoint
+
+Close the tutorial. In **15 minutes**, write a `tokenize` function from scratch:
+
+- [ ] Input `"(+ 1 2)"` → Output `["(", "+", "1", "2", ")"]`
+- [ ] Handle comments (semicolon prefix)
+- [ ] Handle string literals (with spaces)
+- [ ] Write at least 3 tests
+
+⏱️ **Time limit: 15 minutes**. Do NOT look at the tutorial code.
 
 
 Why this matters: The parser transforms a flat token list into a tree structure (AST). This tree represents the program's grammatical structure - without it, the evaluator would have no meaningful input. Recursive descent parsing is the most intuitive parsing technique and works for most real-world languages.
@@ -2710,6 +2753,19 @@ What we're solving: variable name→value mapping (the environment). With enviro
 
 
 ✅ **Summary**: `parse()` + `read_seq()` mutual recursion builds a tree. Nested `(+ 1 (* 2 3))` parses correctly.
+
+---
+
+### 🎯 Blank Paper Checkpoint
+
+Close the tutorial. In **20 minutes**, write a `parse` function from scratch:
+
+- [ ] Input `["(", "+", "1", "2", ")"]` → Output `List([Symbol("+"), Number(1), Number(2)])`
+- [ ] Handle nesting: `(+ 1 (* 2 3))` → correct nested tree
+- [ ] Handle atoms: numbers, symbols
+- [ ] Write at least 2 tests
+
+⏱️ **Time limit: 20 minutes**. Do NOT look at the tutorial code.
 
 
 
@@ -3299,6 +3355,27 @@ began this way. By understanding tree-walking first, you'll understand why bytec
 
 
 ✅ **Summary**: `eval` can call built-in functions. Arithmetic works with variable-length arguments.
+
+🔮 **Predict the Output**: What do the following expressions return? Guess first, then run `cargo test` to verify:
+1. `(+ 1 2 3)` → ? (hint: `+` is variadic)
+2. `(+ (+ 1 2) 3)` → ? (hint: args are evaluated first, then function is applied)
+3. `(- 10 5 2)` → ? (hint: `-` is also variadic, subtracts left to right)
+
+Write down your guesses, then verify with `cargo test`. If you got 3/3, you've understood the core logic of `eval`.
+
+---
+
+### 🎯 Blank Paper Checkpoint
+
+Close the tutorial. In **30 minutes**, complete:
+
+- [ ] Add `Func` and `List` variants to `LispExp`
+- [ ] Modify `eval`: handle `List` → eval first element to get function → eval args → call function
+- [ ] Write `default_env()` function: register `+`, `-`, `*`, `/`
+- [ ] Test: `eval_str("(+ 1 2)")` returns `Number(3.0)`
+- [ ] Test: `eval_str("(* 2 3 4)")` returns `Number(24.0)`
+
+⏱️ **Time limit: 30 minutes**. This is the first milestone where you actually compute results.
 
 
 ## More Data Types
@@ -4280,6 +4357,21 @@ What we're solving: Closures (functions remembering their birth environment) + T
 
 
 ✅ **Summary**: `if` controls evaluation flow, `define` creates top-level bindings, `lambda` creates callable functions.
+
+---
+
+### 🎯 Blank Paper Checkpoint — The Most Important One
+
+Close the tutorial. In **45 minutes**, complete:
+
+- [ ] Add `if` special form to `eval`'s `List` branch
+- [ ] Add `define` special form
+- [ ] Add `lambda` special form (with `LispLambda` struct)
+- [ ] Test: `(if #t 1 2)` → `1`
+- [ ] Test: `(define x 10) (+ x 5)` → `15`
+- [ ] Test: `((lambda (x) (* x x)) 5)` → `25`
+
+⏱️ **Time limit: 45 minutes**. This is the core milestone — special forms are the dividing line between a calculator and an interpreter.
 
 
 
@@ -5354,6 +5446,7 @@ test result: ok. 23 passed; 0 failed
 
 **3. Without TCO**
 Each recursive call allocates a new Rust stack frame. A few thousand calls exhaust the stack. TCO uses `current_exp = new_exp; continue` to reuse the same frame.
+</details>
 
 4. (⭐⭐⭐) **Think before you run**:
    ```lisp
@@ -5365,7 +5458,6 @@ Each recursive call allocates a new Rust stack frame. A few thousand calls exhau
    What does `(f)` return? Write down your answer with reasoning *before* actually testing it.
    Now run it. Were you right? Now change the code to define `a` with `let` instead of `define`.
    Does the result change? Why?
-</details>
 
 What we're solving: Performance optimization—string interning (each name allocated only once), zero-copy lexing (no token copying), FX hasher (5x faster than SipHash). Making the interpreter fast.
 
@@ -5412,6 +5504,20 @@ and it's trivially correct (just `continue` instead of recursive `eval`).
 
 
 ✅ **Summary**: Closures capture their birth environment. TCO lets `(loop 10000)` run without stack overflow.
+
+---
+
+### 🎯 Blank Paper Checkpoint
+
+Close the tutorial. In **40 minutes**, complete:
+
+- [ ] Add `outer` field to `LispEnv` (type `Rc<RefCell<LispEnv>>`)
+- [ ] Modify lambda creation: capture current environment
+- [ ] Modify lambda invocation: create new env with outer pointing to captured env
+- [ ] Test closure: `(define c (make-counter 0))` → `(c)` → `1` → `(c)` → `2`
+- [ ] Test TCO: `(define (loop n) (if (= n 0) 'done (loop (- n 1))))` → `(loop 10000)` doesn't crash
+
+⏱️ **Time limit: 40 minutes**. This is the hardest challenge — `Rc<RefCell<>>` and trampoline loops require deep understanding.
 
 
 ## Making Programs Run Faster
@@ -6655,16 +6761,15 @@ it must be a special form. Everything else can be a function.
 In the next section we'll add ~30 built-in functions — and every single one follows the
 exact same pattern. No more special forms needed.
 
-📖 **Next: [Completing Built-in Functions](#built-in-functions)**
+📖 **Next: [Completing Built-in Functions + Challenge Levels](#built-in-functions-completion--challenge-levels)**
 
 
 ✅ **Summary**: Full special form set. `letrec` solves the chicken-and-egg problem of mutual recursion.
 
 
-## Built-in Functions Completion
-⏩ **Skip signal:** Each function follows the same pattern: write test → register in `default_env()` → `cargo test`. Skim and focus on `map`/`apply`/`filter` (Steps 67-69) and variadic lambda (Step 70).
+## Built-in Functions Completion + Challenge Levels
 
-From this step forward, each function follows the same pattern: **write test first → register in `default_env()` → verify with `cargo test`**.
+⏩ **Skip signal:** Challenge mode: tutorial gives one reference, you implement the rest. If you're experienced, jump to [Step 70](#step-70-variadic-lambda).
 
 ---
 
@@ -6686,12 +6791,41 @@ From this step forward, each function follows the same pattern: **write test fir
 </blockquote>
 
 ---
-### Step 52: `<` Less than
 
-**Test**:
+### 🎯 Challenge Level Instructions
+
+From now on, the tutorial no longer gives you every function's complete code. Instead, we use a **challenge level** format:
+
+1. The tutorial gives **one reference implementation** (you learn the pattern from it)
+2. A list of functions **you must implement independently**
+3. **Test cases** are provided (your implementation must pass these tests)
+4. 💡 **Hints** are in a collapsible section — try yourself first
+5. ✅ **Answers** are in a deeper collapsible section — strongly recommended to try first
+
+**Why this change?** In previous steps, every function's code was handed to you — you just copied, pasted, and ran tests. This leads to a situation where after finishing, you can't write it from scratch. From now on, **you must think, write, and debug yourself** — that's how you truly learn.
+
+---
+
+### Challenge A: Comparison Operators (Steps 52-54)
+
+**📝 Functions to implement**: `<` `<=` `>=` `not`
+
+**📖 Reference: `<` (less than)**
+
+See how one is done, learn the pattern:
 
 ```rust
-// src/interpreter.rs
+// src/interpreter.rs — in default_env()
+env.set(intern("<"), LispExp::Func(|args| {
+    if let (LispExp::Number(a), LispExp::Number(b)) = (&args[0], &args[1]) {
+        Ok(LispExp::Bool(a < b))
+    } else { Err(LispErr::Reason("< needs numbers".into())) }
+}));
+```
+
+**Test** (this test is already written; your `<=`, `>=`, `not` must pass their tests too):
+
+```rust
 #[test]
 fn test_less_than() {
     let mut env = default_env();
@@ -6700,48 +6834,94 @@ fn test_less_than() {
 }
 ```
 
-**Implementation**:
-
-```rust
-// src/interpreter.rs
-env.set(intern("<"), LispExp::Func(|args| {
-    if let (LispExp::Number(a), LispExp::Number(b)) = (&args[0], &args[1]) {
-        Ok(LispExp::Bool(a < b))
-    } else { Err(LispErr::Reason("< needs numbers".into())) }
-}));
-```
-
 ---
 
-### Step 53: `<=` and `>=`
+**🔬 Your tasks**:
+
+| Function | Signature | Example Input | Output |
+|----------|-----------|---------------|--------|
+| `<=` | `(<= a b)` | `(<= 3 3)` | `#t` |
+| `>=` | `(>= a b)` | `(>= 5 3)` | `#t` |
+| `not` | `(not x)` | `(not #f)` | `#t` |
+
+**Your tests** (add these to the test module; your implementation must make them pass):
 
 ```rust
-// src/interpreter.rs
+#[test]
+fn test_leq() {
+    let mut env = default_env();
+    assert_eq!(eval_str("(<= 3 3)", &mut env).unwrap(), LispExp::Bool(true));
+    assert_eq!(eval_str("(<= 5 3)", &mut env).unwrap(), LispExp::Bool(false));
+}
+
+#[test]
+fn test_geq() {
+    let mut env = default_env();
+    assert_eq!(eval_str("(>= 5 3)", &mut env).unwrap(), LispExp::Bool(true));
+    assert_eq!(eval_str("(>= 3 5)", &mut env).unwrap(), LispExp::Bool(false));
+}
+
+#[test]
+fn test_not() {
+    let mut env = default_env();
+    assert_eq!(eval_str("(not #f)", &mut env).unwrap(), LispExp::Bool(true));
+    assert_eq!(eval_str("(not #t)", &mut env).unwrap(), LispExp::Bool(false));
+    assert_eq!(eval_str("(not nil)", &mut env).unwrap(), LispExp::Bool(true));
+    assert_eq!(eval_str("(not 0)", &mut env).unwrap(), LispExp::Bool(false));
+}
+```
+
+<details>
+<summary>💡 Hint (try yourself first)</summary>
+
+- `<=` and `>=` follow the **exact same pattern** as `<` — just change the operator
+- `not` doesn't check numbers — it checks "truthiness". In Lisp only `#f` and `nil` are "false"; everything else is "true". Use the `matches!` macro to check for these two values
+
+</details>
+
+<details>
+<summary>✅ Answer (check after you're done)</summary>
+
+```rust
+// <=
 env.set(intern("<="), LispExp::Func(|args| {
     if let (LispExp::Number(a), LispExp::Number(b)) = (&args[0], &args[1]) {
         Ok(LispExp::Bool(a <= b))
     } else { Err(LispErr::Reason("<= needs numbers".into())) }
 }));
-// >= similarly: a >= b
-```
 
----
+// >=
+env.set(intern(">="), LispExp::Func(|args| {
+    if let (LispExp::Number(a), LispExp::Number(b)) = (&args[0], &args[1]) {
+        Ok(LispExp::Bool(a >= b))
+    } else { Err(LispErr::Reason(">= needs numbers".into())) }
+}));
 
-### Step 54: `not` Logical NOT
-
-```rust
-// src/interpreter.rs
+// not
 env.set(intern("not"), LispExp::Func(|args| {
     let is_false = matches!(args[0], LispExp::Bool(false) | LispExp::Nil);
-    Ok(LispExp::Bool(is_false)) // false→#t, true→#f
+    Ok(LispExp::Bool(is_false))
 }));
 ```
 
-**Test**: `(not #f)` → `#t`, `(not #t)` → `#f`, `(not nil)` → `#t`
+</details>
+
+```bash
+$ cargo test
+running 30 tests
+...
+test result: ok. 30 passed; 0 failed
+```
 
 ---
 
-### Step 55: `list` Create a List
+### Challenge B: List Operations (Steps 55-62)
+
+**📝 Functions to implement**: `list` `cons` `car` `cdr` `cadr` `caddr` `append` `length` `reverse` `member`
+
+This is the largest group — 10 functions. But don't worry, the first two are references and the rest follow similar patterns.
+
+**📖 Reference 1: `list` (create a list)**
 
 ```rust
 // src/interpreter.rs
@@ -6750,11 +6930,9 @@ env.set(intern("list"), LispExp::Func(|args| {
 }));
 ```
 
-**Test**: `(list 1 2 3)` → `(1 2 3)`
+🧠 **In plain terms**: `list` just lines up all its arguments. `(list 1 2 3)` → args are `1`, `2`, `3` → returns `List([1, 2, 3])`.
 
----
-
-### Step 56: `cons` — Prepend to List
+**📖 Reference 2: `cons` (prepend)**
 
 ```rust
 // src/interpreter.rs
@@ -6771,14 +6949,97 @@ env.set(intern("cons"), LispExp::Func(|args| {
 }));
 ```
 
-**Test**: `(cons 1 (list 2 3))` → `(1 2 3)`, `(cons 1 nil)` → `(1)`
+🧠 **In plain terms**: `cons` is short for "construct" — it inserts a new element at the front of a list. `(cons 1 (list 2 3))` → `(1 2 3)`. Using `cons` on `nil` creates a single-element list.
 
 ---
 
-### Step 57: `car` — Get First Element
+**🔬 Your tasks**:
+
+| Function | Description | Example Input | Output |
+|----------|-------------|---------------|--------|
+| `car` | Get first element | `(car (list 1 2 3))` | `1` |
+| `cdr` | Get remaining elements | `(cdr (list 1 2 3))` | `(2 3)` |
+| `cadr` | Get second element | `(cadr (list 1 2 3))` | `2` |
+| `caddr` | Get third element | `(caddr (list 1 2 3))` | `3` |
+| `append` | Concatenate lists | `(append (list 1) (list 2 3))` | `(1 2 3)` |
+| `length` | List length | `(length (list 1 2 3))` | `3` |
+| `reverse` | Reverse a list | `(reverse (list 1 2 3))` | `(3 2 1)` |
+| `member` | Find element, return sublist | `(member 2 (list 1 2 3))` | `(2 3)` |
+
+**Your tests**:
 
 ```rust
-// src/interpreter.rs
+#[test]
+fn test_car_cdr() {
+    let mut env = default_env();
+    assert_eq!(eval_str("(car (list 1 2 3))", &mut env).unwrap(), LispExp::Number(1.0));
+    assert_eq!(eval_str("(cdr (list 1 2 3))", &mut env).unwrap(),
+        LispExp::List(vec![LispExp::Number(2.0), LispExp::Number(3.0)]));
+    assert!(eval_str("(car nil)", &mut env).is_err());
+    assert!(eval_str("(cdr nil)", &mut env).is_err());
+}
+
+#[test]
+fn test_cadr_caddr() {
+    let mut env = default_env();
+    assert_eq!(eval_str("(cadr (list 1 2 3))", &mut env).unwrap(), LispExp::Number(2.0));
+    assert_eq!(eval_str("(caddr (list 1 2 3))", &mut env).unwrap(), LispExp::Number(3.0));
+}
+
+#[test]
+fn test_append() {
+    let mut env = default_env();
+    assert_eq!(eval_str("(append (list 1) (list 2 3))", &mut env).unwrap(),
+        LispExp::List(vec![LispExp::Number(1.0), LispExp::Number(2.0), LispExp::Number(3.0)]));
+    assert_eq!(eval_str("(append nil (list 1))", &mut env).unwrap(),
+        LispExp::List(vec![LispExp::Number(1.0)]));
+}
+
+#[test]
+fn test_length() {
+    let mut env = default_env();
+    assert_eq!(eval_str("(length (list 1 2 3))", &mut env).unwrap(), LispExp::Number(3.0));
+    assert_eq!(eval_str("(length nil)", &mut env).unwrap(), LispExp::Number(0.0));
+    assert_eq!(eval_str("(length (list))", &mut env).unwrap(), LispExp::Number(0.0));
+}
+
+#[test]
+fn test_reverse() {
+    let mut env = default_env();
+    assert_eq!(eval_str("(reverse (list 1 2 3))", &mut env).unwrap(), LispExp::List(vec![
+        LispExp::Number(3.0), LispExp::Number(2.0), LispExp::Number(1.0),
+    ]));
+    assert_eq!(eval_str("(reverse nil)", &mut env).unwrap(), LispExp::Nil);
+}
+
+#[test]
+fn test_member() {
+    let mut env = default_env();
+    assert_eq!(eval_str("(member 2 (list 1 2 3))", &mut env).unwrap(),
+        LispExp::List(vec![LispExp::Number(2.0), LispExp::Number(3.0)]));
+    assert_eq!(eval_str("(member 5 (list 1 2 3))", &mut env).unwrap(),
+        LispExp::Bool(false));
+}
+```
+
+<details>
+<summary>💡 Hint (try yourself first)</summary>
+
+- `car`: use `match` on `LispExp::List(els)`. If `els` is not empty, return `els[0].clone()`. If empty, return an error
+- `cdr`: similar to `car`, but return `LispExp::List(els[1..].to_vec())` — note the slice `[1..]`
+- `cadr`/`caddr`: just get `els[1]` and `els[2]` — but don't forget to check the length
+- `append`: iterate all args, extend each List's elements into a result Vec. Skip `nil`
+- `length`: `els.len() as f64` — remember Rust's `len()` returns `usize`, but Lisp uses `f64`
+- `reverse`: `clone()` first, then `reverse()` — can't modify while borrowed, so clone first
+- `member`: iterate the list, if a match is found return `LispExp::List(els[i..].to_vec())`, else return `Bool(false)`
+
+</details>
+
+<details>
+<summary>✅ Answer (check after you're done)</summary>
+
+```rust
+// car
 env.set(intern("car"), LispExp::Func(|args| {
     match &args[0] {
         LispExp::List(els) if !els.is_empty() => Ok(els[0].clone()),
@@ -6786,14 +7047,8 @@ env.set(intern("car"), LispExp::Func(|args| {
         _ => Err(LispErr::Reason("car needs a list".into())),
     }
 }));
-```
 
----
-
-### Step 58: `cdr` — Get Remaining Elements
-
-```rust
-// src/interpreter.rs
+// cdr
 env.set(intern("cdr"), LispExp::Func(|args| {
     match &args[0] {
         LispExp::List(els) if !els.is_empty() => Ok(LispExp::List(els[1..].to_vec())),
@@ -6801,16 +7056,7 @@ env.set(intern("cdr"), LispExp::Func(|args| {
         _ => Err(LispErr::Reason("cdr needs a list".into())),
     }
 }));
-```
 
----
-
-### Step 58b: `cadr` / `caddr` — Composite Accessors
-
-**Problem**: Lisp programs frequently need the second or third element of a list. Writing `(car (cdr lst))` is verbose — Lisp tradition uses composite abbreviations `cadr` (second element) and `caddr` (third element).
-
-```rust
-// src/interpreter.rs
 // cadr = car of cdr = second element
 env.set(intern("cadr"), LispExp::Func(|args| {
     match &args[0] {
@@ -6826,25 +7072,8 @@ env.set(intern("caddr"), LispExp::Func(|args| {
         _ => Err(LispErr::Reason("caddr needs a list with at least 3 elements".into())),
     }
 }));
-```
 
-💡 In short — `cadr`/`caddr` naming convention: `c` + **sequence of `a`/`d` in the middle** + `r`. `a`=car (take head), `d`=cdr (drop head). Read right-to-left:
-- `cadr` = `c` `a` `d` `r` → first `d` (drop head), then `a` (take head) = second element
-- `caddr` = `c` `a` `d` `d` `r` → first `dd` (drop two), then `a` (take head) = third element
-
-```lisp
-(cadr (list 1 2 3))   ; → 2
-(caddr (list 1 2 3))  ; → 3
-```
-
-💡 **Why add them now?** The symbolic differentiator in Appendix D uses `cadr` and `caddr` to access expression operands. These functions are extremely common in real Scheme programs.
-
----
-
-### Step 59: `append` — Concatenate Lists
-
-```rust
-// src/interpreter.rs
+// append
 env.set(intern("append"), LispExp::Func(|args| {
     let mut result = Vec::new();
     for arg in args {
@@ -6856,18 +7085,8 @@ env.set(intern("append"), LispExp::Func(|args| {
     }
     Ok(LispExp::List(result))
 }));
-```
 
-**Test**: `(append (list 1) (list 2))` → `(1 2)`
-
----
-
-### Step 60: `length` — List Length
-
-**Problem**: We have arithmetic, but list operations still lack a basic capability — telling you how long a list is. `length` takes a list and returns a number.
-
-```rust
-// src/interpreter.rs
+// length
 env.set(intern("length"), LispExp::Func(|args| {
     match &args[0] {
         LispExp::List(els) => Ok(LispExp::Number(els.len() as f64)),
@@ -6875,32 +7094,8 @@ env.set(intern("length"), LispExp::Func(|args| {
         _ => Err(LispErr::Reason("length needs a list".into())),
     }
 }));
-```
 
-**Why `as f64`?** Rust's `Vec::len()` returns `usize`, but our Lisp only has `f64` numbers — we must cast explicitly.
-
-💡 In short: `length` counts items. Empty list `nil` counts as 0.
-
-**Tests**:
-
-```rust
-#[test]
-fn test_length() {
-    let mut env = default_env();
-    assert_eq!(eval_str("(length (list 1 2 3))", &mut env).unwrap(), LispExp::Number(3.0));
-    assert_eq!(eval_str("(length nil)", &mut env).unwrap(), LispExp::Number(0.0));
-    assert_eq!(eval_str("(length (list))", &mut env).unwrap(), LispExp::Number(0.0));
-}
-```
-
----
-
-### Step 61: `reverse` — Reverse a List
-
-**Problem**: Sometimes the order is wrong — timestamps old-to-new but you want new-to-old. `reverse` flips the list end-to-end.
-
-```rust
-// src/interpreter.rs
+// reverse
 env.set(intern("reverse"), LispExp::Func(|args| {
     match &args[0] {
         LispExp::List(els) => { let mut r = els.clone(); r.reverse(); Ok(LispExp::List(r)) }
@@ -6908,33 +7103,8 @@ env.set(intern("reverse"), LispExp::Func(|args| {
         _ => Err(LispErr::Reason("reverse needs a list".into())),
     }
 }));
-```
 
-**Note the `.clone()`**: `els` is borrowed from `&args[0]` — we can't modify it while borrowed. So we clone first, then reverse the clone. This is a standard Rust ownership pattern: **clone before mutate**.
-
-💡 In short: `reverse` flips the list like a pancake. `[1, 2, 3]` becomes `[3, 2, 1]`.
-
-**Tests**:
-
-```rust
-#[test]
-fn test_reverse() {
-    let mut env = default_env();
-    assert_eq!(eval_str("(reverse (list 1 2 3))", &mut env).unwrap(), LispExp::List(vec![
-        LispExp::Number(3.0), LispExp::Number(2.0), LispExp::Number(1.0),
-    ]));
-    assert_eq!(eval_str("(reverse nil)", &mut env).unwrap(), LispExp::Nil);
-}
-```
-
----
-
-### Step 62: `member` — Member Lookup
-
-**Problem**: Is something in the list? If so, what comes after it? `member` doesn't just answer yes/no — it returns **the sublist starting from the match**. This is Lisp's traditional design: if found, give back the rest; if not, return `#f`.
-
-```rust
-// src/interpreter.rs
+// member
 env.set(intern("member"), LispExp::Func(|args| {
     match &args[1] {
         LispExp::List(els) => {
@@ -6948,120 +7118,39 @@ env.set(intern("member"), LispExp::Func(|args| {
 }));
 ```
 
-**Why return a sublist instead of `#t`?** Because a non-empty list is truthy in `if` — you get both "does it exist?" and "what's after it?" in one call.
+🧠 **In plain terms — `cadr`/`caddr` naming convention**: `c` + **sequence of `a`/`d` in the middle** + `r`. `a`=car (take head), `d`=cdr (drop head). Read right-to-left:
+- `cadr` = `c` `a` `d` `r` → first `d` (drop head), then `a` (take head) = second element
+- `caddr` = `c` `a` `d` `d` `r` → first `dd` (drop two), then `a` (take head) = third element
 
-💡 In short: `member` is like searching through a deck of cards — find the hearts, and from that card onward, you get them all. Not found? You get `#f`.
+💡 **Why add them now?** The symbolic differentiator in Appendix D uses `cadr` and `caddr` to access expression operands. These functions are extremely common in real Scheme programs.
 
-**Tests**:
+</details>
 
-```rust
-#[test]
-fn test_member() {
-    let mut env = default_env();
-    assert_eq!(eval_str("(member 2 (list 1 2 3))", &mut env).unwrap(),
-        LispExp::List(vec![LispExp::Number(2.0), LispExp::Number(3.0)]));
-    assert_eq!(eval_str("(member 5 (list 1 2 3))", &mut env).unwrap(),
-        LispExp::Bool(false));
-}
+```bash
+$ cargo test
+running 36 tests
+...
+test result: ok. 36 passed; 0 failed
 ```
 
 ---
 
-### Steps 63-65: Type Predicates
+### Challenge C: Predicates & Higher-Order Functions (Steps 63-69)
 
-**Problem**: When writing complex programs, you constantly need to ask "what type is this thing?" — is it a number? a list? empty? Type predicates answer these questions with `#t` or `#f`.
+**📝 Functions to implement**: `null?` `number?` `symbol?` `boolean?` `string?` `procedure?` `pair?` `list?` `eq?` `equal?` `map` `apply` `filter`
 
-Each is 3 lines, using `matches!` to check type:
+**📖 Reference 1: `null?` (check if nil)**
 
 ```rust
 // src/interpreter.rs
-// null?
 env.set(intern("null?"), LispExp::Func(|args| {
     Ok(LispExp::Bool(matches!(args[0], LispExp::Nil)))
 }));
-// number?
-env.set(intern("number?"), LispExp::Func(|args| {
-    Ok(LispExp::Bool(matches!(args[0], LispExp::Number(_))))
-}));
-// symbol?
-env.set(intern("symbol?"), LispExp::Func(|args| {
-    Ok(LispExp::Bool(matches!(args[0], LispExp::Symbol(_))))
-}));
-// boolean? string? procedure? pair? list? same logic
 ```
 
-**Why `matches!` instead of `match`?** `matches!` is a Rust macro for concise type checking. It's equivalent to:
-```rust
-// matches!(args[0], LispExp::Number(_))
-// equivalent to:
-match args[0] { LispExp::Number(_) => true, _ => false }
-```
-But in one line — cleaner.
+**📖 Reference 2: `map` (higher-order function)**
 
-🧠 **In plain terms**: Type predicates are like the security checkpoint asking "are you a passenger or staff?" — different types go through different channels. `null?` asks "is it empty?", `number?` asks "is it a number?".
-
-**Tests**:
-
-```rust
-#[test]
-fn test_type_predicates() {
-    let mut env = default_env();
-    assert_eq!(eval_str("(null? nil)", &mut env).unwrap(), LispExp::Bool(true));
-    assert_eq!(eval_str("(null? 0)", &mut env).unwrap(), LispExp::Bool(false));
-    assert_eq!(eval_str("(number? 42)", &mut env).unwrap(), LispExp::Bool(true));
-    assert_eq!(eval_str("(number? \"hello\")", &mut env).unwrap(), LispExp::Bool(false));
-    assert_eq!(eval_str("(symbol? 'x)", &mut env).unwrap(), LispExp::Bool(true));
-}
-```
-
----
-
-### Step 66: `eq?` and `equal?`
-
-**Problem**: What does "equal" mean? Lisp has two kinds:
-- **`eq?`**: identity equality — are two values the same thing (number 5 and 5 are the same number)
-- **`equal?`**: structural equality — two lists are equal if their elements match, even if they're not the same object
-
-Think: "is this the same photo?" (`eq?`) vs "do these two photos show the same thing?" (`equal?`).
-
-`eq?` — value equality (direct comparison of numbers/symbols/booleans/nil):
-
-```rust
-// src/interpreter.rs
-env.set(intern("eq?"), LispExp::Func(|args| {
-    Ok(LispExp::Bool(args[0] == args[1]))
-}));
-```
-
-`equal?` — structural equality (recursive comparison of nested lists):
-
-```rust
-// src/interpreter.rs
-env.set(intern("equal?"), LispExp::Func(|args| {
-    Ok(LispExp::Bool(lisp_equal(&args[0], &args[1])))
-}));
-// Helper function
-fn lisp_equal(a: &LispExp, b: &LispExp) -> bool {
-    match (a, b) {
-        (LispExp::List(a_els), LispExp::List(b_els)) => {
-            a_els.len() == b_els.len() && a_els.iter().zip(b_els).all(|(x,y)| lisp_equal(x,y))
-        }
-        _ => a == b,
-    }
-}
-```
-
-**Test**: `(equal? (list 1 (list 2)) (list 1 (list 2)))` → `#t`
-
----
-
-### Step 67: `map` — Higher-Order Function
-
-**Problem**: You have a list `[1, 2, 3]` and want to square each element to get `[1, 4, 9]`. You could write recursion, but Lisp has a more elegant way — `map`: give it a function and a list, and it applies the function to every element.
-
-`map` is the first **higher-order function** — a function that takes another function as an argument. This is the core capability of functional programming.
-
-**Goal**: `(map (lambda (x) (* x x)) (list 1 2 3))` → `(1 4 9)`
+`map` is the first **higher-order function** — a function that takes another function as an argument. This is a core capability of functional programming.
 
 ```rust
 // src/interpreter.rs
@@ -7088,16 +7177,137 @@ env.set(intern("map"), LispExp::Func(|args| {
 }));
 ```
 
+🧠 **In plain terms**: `map` is like an assembly line — each item goes through the same machine and comes out transformed.
+
 ---
 
-### Step 68: `apply` — Unpack Argument List
+**🔬 Your tasks**:
 
-**Problem**: Sometimes your arguments are already packed into a list, but the function expects individual arguments. You have `(list 1 2 3)` but want to call `(+ 1 2 3)`. `apply` is the unpacker — it takes a list and spreads it into individual arguments.
+| Function | Description | Example Input | Output |
+|----------|-------------|---------------|--------|
+| `number?` | Check if number | `(number? 42)` | `#t` |
+| `symbol?` | Check if symbol | `(symbol? 'x)` | `#t` |
+| `boolean?` | Check if boolean | `(boolean? #t)` | `#t` |
+| `string?` | Check if string | `(string? "hi")` | `#t` |
+| `procedure?` | Check if callable | `(procedure? +)` | `#t` |
+| `pair?` | Check if non-empty list | `(pair? (list 1))` | `#t` |
+| `list?` | Check if list or nil | `(list? (list 1))` | `#t` |
+| `eq?` | Identity equality | `(eq? 'x 'x)` | `#t` |
+| `equal?` | Structural equality (recursive) | `(equal? (list 1) (list 1))` | `#t` |
+| `apply` | Unpack list as args to function | `(apply + (list 1 2 3))` | `6` |
+| `filter` | Filter list by predicate | `(filter (lambda (x) (> x 0)) (list -1 2))` | `(2)` |
 
-**Goal**: `(apply + (list 1 2 3))` → `6`
+**Your tests**:
 
 ```rust
-// src/interpreter.rs
+#[test]
+fn test_type_predicates() {
+    let mut env = default_env();
+    assert_eq!(eval_str("(null? nil)", &mut env).unwrap(), LispExp::Bool(true));
+    assert_eq!(eval_str("(null? 0)", &mut env).unwrap(), LispExp::Bool(false));
+    assert_eq!(eval_str("(number? 42)", &mut env).unwrap(), LispExp::Bool(true));
+    assert_eq!(eval_str("(number? \"hello\")", &mut env).unwrap(), LispExp::Bool(false));
+    assert_eq!(eval_str("(symbol? 'x)", &mut env).unwrap(), LispExp::Bool(true));
+    assert_eq!(eval_str("(boolean? #t)", &mut env).unwrap(), LispExp::Bool(true));
+    assert_eq!(eval_str("(string? \"hi\")", &mut env).unwrap(), LispExp::Bool(true));
+    assert_eq!(eval_str("(procedure? +)", &mut env).unwrap(), LispExp::Bool(true));
+    assert_eq!(eval_str("(pair? (list 1))", &mut env).unwrap(), LispExp::Bool(true));
+    assert_eq!(eval_str("(pair? nil)", &mut env).unwrap(), LispExp::Bool(false));
+    assert_eq!(eval_str("(list? (list 1 2))", &mut env).unwrap(), LispExp::Bool(true));
+    assert_eq!(eval_str("(list? nil)", &mut env).unwrap(), LispExp::Bool(true));
+}
+
+#[test]
+fn test_eq_equal() {
+    let mut env = default_env();
+    assert_eq!(eval_str("(eq? 'x 'x)", &mut env).unwrap(), LispExp::Bool(true));
+    assert_eq!(eval_str("(eq? 1 1)", &mut env).unwrap(), LispExp::Bool(true));
+    assert_eq!(eval_str("(equal? (list 1 (list 2)) (list 1 (list 2)))", &mut env).unwrap(), LispExp::Bool(true));
+    assert_eq!(eval_str("(equal? (list 1 2) (list 1 3))", &mut env).unwrap(), LispExp::Bool(false));
+}
+
+#[test]
+fn test_apply() {
+    let mut env = default_env();
+    assert_eq!(eval_str("(apply + (list 1 2 3))", &mut env).unwrap(), LispExp::Number(6.0));
+    assert_eq!(eval_str("(apply (lambda (x y) (* x y)) (list 3 4))", &mut env).unwrap(), LispExp::Number(12.0));
+}
+
+#[test]
+fn test_filter() {
+    let mut env = default_env();
+    assert_eq!(eval_str("(filter (lambda (x) (> x 0)) (list -1 2 -3 4))", &mut env).unwrap(),
+        LispExp::List(vec![LispExp::Number(2.0), LispExp::Number(4.0)]));
+    assert_eq!(eval_str("(filter (lambda (x) #f) (list 1 2 3))", &mut env).unwrap(),
+        LispExp::List(vec![]));
+}
+```
+
+<details>
+<summary>💡 Hint (try yourself first)</summary>
+
+- Type predicates all use the `matches!` macro — same pattern as `null?`, just different variants:
+  - `number?` → `LispExp::Number(_)`
+  - `symbol?` → `LispExp::Symbol(_)`
+  - `boolean?` → `LispExp::Bool(_)`
+  - `string?` → `LispExp::String(_)`
+  - `procedure?` → `LispExp::Func(_) | LispExp::Lambda(_) | LispExp::Macro(_)`
+  - `pair?` → `LispExp::List(els) if !els.is_empty()` (non-empty list)
+  - `list?` → `LispExp::List(_) | LispExp::Nil` (list or nil)
+
+- `eq?`: just `args[0] == args[1]` — leveraging `PartialEq` derive
+- `equal?`: needs recursion — if both are Lists, compare element by element; otherwise use `==`
+- `apply`: extract list from second arg, then call the first arg (Func or Lambda)
+- `filter`: almost identical structure to `map` — iterate list, call function, but only keep elements where result is "truthy". Truthy means: `!matches!(result, LispExp::Bool(false) | LispExp::Nil)`
+
+</details>
+
+<details>
+<summary>✅ Answer (check after you're done)</summary>
+
+```rust
+// Type predicates
+env.set(intern("number?"), LispExp::Func(|args| {
+    Ok(LispExp::Bool(matches!(args[0], LispExp::Number(_))))
+}));
+env.set(intern("symbol?"), LispExp::Func(|args| {
+    Ok(LispExp::Bool(matches!(args[0], LispExp::Symbol(_))))
+}));
+env.set(intern("boolean?"), LispExp::Func(|args| {
+    Ok(LispExp::Bool(matches!(args[0], LispExp::Bool(_))))
+}));
+env.set(intern("string?"), LispExp::Func(|args| {
+    Ok(LispExp::Bool(matches!(args[0], LispExp::String(_))))
+}));
+env.set(intern("procedure?"), LispExp::Func(|args| {
+    Ok(LispExp::Bool(matches!(args[0], LispExp::Func(_) | LispExp::Lambda(_) | LispExp::Macro(_))))
+}));
+env.set(intern("pair?"), LispExp::Func(|args| {
+    Ok(LispExp::Bool(matches!(&args[0], LispExp::List(els) if !els.is_empty())))
+}));
+env.set(intern("list?"), LispExp::Func(|args| {
+    Ok(LispExp::Bool(matches!(&args[0], LispExp::List(_) | LispExp::Nil)))
+}));
+
+// eq? — value equality
+env.set(intern("eq?"), LispExp::Func(|args| {
+    Ok(LispExp::Bool(args[0] == args[1]))
+}));
+
+// equal? — structural equality (recursive)
+env.set(intern("equal?"), LispExp::Func(|args| {
+    Ok(LispExp::Bool(lisp_equal(&args[0], &args[1])))
+}));
+fn lisp_equal(a: &LispExp, b: &LispExp) -> bool {
+    match (a, b) {
+        (LispExp::List(a_els), LispExp::List(b_els)) => {
+            a_els.len() == b_els.len() && a_els.iter().zip(b_els).all(|(x,y)| lisp_equal(x,y))
+        }
+        _ => a == b,
+    }
+}
+
+// apply
 env.set(intern("apply"), LispExp::Func(|args| {
     let arg_list = match &args[1] { LispExp::List(els) => els.clone(), _ => vec![] };
     match &args[0] {
@@ -7110,23 +7320,14 @@ env.set(intern("apply"), LispExp::Func(|args| {
         _ => Err(LispErr::Reason("apply first argument must be a function".into())),
     }
 }));
-```
 
----
-
-### Step 69: `filter` — Filter by Predicate
-
-**Problem**: Some elements in a list are useful, some aren't. From `[-1, 2, -3, 4]` you want only the positives. `filter` takes a predicate function (returns `#t`/`#f`) and a list, keeping only elements where the predicate returns `#t`.
-
-`filter` is, like `map`, a higher-order function — one of the three pillars of functional programming (map, filter, reduce).
-
-**Goal**: `(filter (lambda (x) (> x 0)) (list -1 2 -3 4))` → `(2 4)`
-
-```rust
-// src/interpreter.rs
+// filter
 env.set(intern("filter"), LispExp::Func(|args| {
     let pred = &args[0];
-    let list = match &args[1] { LispExp::List(els) => els, _ => return Err(/*...*/) };
+    let list = match &args[1] {
+        LispExp::List(els) => els,
+        _ => return Err(LispErr::Reason("filter second argument must be a list".into())),
+    };
     let mut results = Vec::new();
     for el in list {
         let keep = match pred {
@@ -7142,6 +7343,15 @@ env.set(intern("filter"), LispExp::Func(|args| {
     }
     Ok(LispExp::List(results))
 }));
+```
+
+</details>
+
+```bash
+$ cargo test
+running 42 tests
+...
+test result: ok. 42 passed; 0 failed
 ```
 
 ---
@@ -8001,11 +8211,10 @@ Steps 44-51: More Magic Commands
   47. cond                 48. and           49. or
   50. let*                 51. letrec
 
-Steps 52-74: Built-in Functions + REPL
-  52-57: <, <=, >=, not, list, cons
-  58: car, cdr    58b: cadr/caddr    59-62: append, length, reverse, member
-  63-66: Type predicates + eq?/equal?
-  67-69: map, apply, filter
+Steps 52-74: Built-in Functions (Challenge Levels) + REPL
+  Challenge A (52-54): <, <=, >=, not — tutorial gives <, rest independent
+  Challenge B (55-62): list, cons, car, cdr, cadr, caddr, append, length, reverse, member
+  Challenge C (63-69): Type predicates, eq?/equal?, map, apply, filter
   70: Variadic lambda      71: quote abbreviation
   71b-71d: defmacro/macro expansion/gensym   71e: quasiquote
   72: error    73: Display trait   73b: I/O functions(display/newline/read)

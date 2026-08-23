@@ -50,7 +50,7 @@
 - [记住过去的事情](#记住过去的事情) — 步骤 36-39
 - [让程序跑得更快](#让程序跑得更快) — 步骤 40-43
 - [更多魔法命令](#更多魔法命令) — 步骤 44-51
-- [内置函数补全 + 宏 + REPL](#内置函数补全) — 步骤 52-74
+- [内置函数补全 + 挑战关卡](#内置函数补全--挑战关卡) — 步骤 52-74
 
 ---
 
@@ -1548,6 +1548,20 @@ C 的 `enum` 只是整数别名（`enum Color { RED=0, GREEN=1 }`）。Rust 的 
 
 ✅ **本章总结**: 核心类型定义语言中的所有值；`Result<LispExp, LispErr>` 是统一的返回类型。
 
+---
+
+### 🎯 白纸复现检查点
+
+关掉教程。打开一个空文件。在 **15 分钟**内完成以下任务：
+
+- [ ] 定义 `LispExp` 枚举（含 `Number(f64)` 变体）
+- [ ] 定义 `LispErr` 枚举（含 `Reason(String)` 变体）
+- [ ] 为两者派生 `Clone, Debug, PartialEq`
+- [ ] 写一个测试：创建 `Number(42.0)` 并断言它等于自身
+
+⏱️ **限时 15 分钟**。如果做不到，回去复习本章，然后再试一次。
+**不要翻看教程的代码**——可以翻看"大白话"解释。
+
 
 ## 让程序算东西
 ⏩ **跳过信号：** 熟悉 Rust 函数签名和 `Result`？快速浏览即可——核心收获是 `eval` 管线。
@@ -1821,7 +1835,21 @@ fn eval_str(source: &str) -> Result<LispExp, LispErr> {
 📖 **下一章：[把句子拆成单词](#把句子拆成单词)**
 
 
-✅ **本章总结**: `eval` 接收表达式，返回值或错误。解释器管线已全线贯通。
+✅ **本章总结**: `eval` 接收表达式，返回值或错误。解释器管线已全线贯通.
+
+---
+
+### 🎯 白纸复现检查点
+
+关掉教程。在 **20 分钟**内完成：
+
+- [ ] 定义 `LispExp`（含 `Number`、`Symbol`、`Bool`、`Nil`、`String` 变体）
+- [ ] 定义 `LispErr`
+- [ ] 写 `eval` 函数：输入 `Number(42.0)` 返回 `Number(42.0)`
+- [ ] 写 `eval_str` 函数：输入 `"42"` 返回 `Number(42.0)`
+- [ ] 写测试验证
+
+⏱️ **限时 20 分钟**。不要看教程代码。
 
 
 为什么要学：词法分析器是解释器的眼睛 - 它读取原始文本并识别出有意义的单元 (token)。每个编译器和解释器都从词法分析器开始，这是你在任何语言实现中都能用到的基础技能。
@@ -1858,6 +1886,8 @@ fn eval_str(source: &str) -> Result<LispExp, LispErr> {
 ```
 
 步骤 8 的 `eval_str("(+ 1 2)")` 会失败——因为 `"(+ 1 2)"` 不是一个合法的数字。要处理多元素表达式，第一步是把字符串**拆成单词**。这就是词法分析器（lexer）的工作。
+
+🔮 **先猜一猜再往下看**：你觉得 `tokenize("(* 2 (+ 3 4))"` 会返回什么？把你猜的结果写在纸上，然后继续读——看看你猜对了没。
 
 **① 创建文件 + 注册模块**
 
@@ -2138,7 +2168,20 @@ fn test_comment_ignored() {
 
 
 
-✅ **本章总结**: `tokenize()` 处理所有 token 类型。词法分析器拥有独立模块和独立测试。
+✅ **本章总结**: `tokenize()` 处理所有 token 类型。词法分析器拥有独立模块和独立测试.
+
+---
+
+### 🎯 白纸复现检查点
+
+关掉教程。在 **15 分钟**内从零写一个 `tokenize` 函数：
+
+- [ ] 输入 `"(+ 1 2)"` → 输出 `["(", "+", "1", "2", ")"]`
+- [ ] 处理注释（分号开头）
+- [ ] 处理字符串字面量（含空格）
+- [ ] 写至少 3 个测试
+
+⏱️ **限时 15 分钟**。不要看教程代码。
 
 
 为什么要学：语法分析器把扁平的 token 列表转换成树状结构 (AST)。这棵树代表程序的语法结构 - 没有它，求值器就没有有意义的输入。递归下降解析是最直观的解析技术，适用于大多数真实语言。
@@ -2604,7 +2647,20 @@ fn parse_atom(token: &str) -> LispExp {
 
 
 
-✅ **本章总结**: `parse()` + `read_seq()` 互递归构建语法树，嵌套 `(+ 1 (* 2 3))` 正确解析。
+✅ **本章总结**: `parse()` + `read_seq()` 互递归构建语法树，嵌套 `(+ 1 (* 2 3))` 正确解析.
+
+---
+
+### 🎯 白纸复现检查点
+
+关掉教程。在 **20 分钟**内从零写一个 `parse` 函数：
+
+- [ ] 输入 `["(", "+", "1", "2", ")"]` → 输出 `List([Symbol("+"), Number(1), Number(2)])`
+- [ ] 处理嵌套：`(+ 1 (* 2 3))` → 正确的嵌套树
+- [ ] 处理原子：数字、符号
+- [ ] 写至少 2 个测试
+
+⏱️ **限时 20 分钟**。不要看教程代码。
 
 
 
@@ -2911,6 +2967,13 @@ y               ; → 10 还是 20？
 
 🎯 **解决的问题**: 列表求值=函数调用。这是 Lisp 的核心——`(+ 1 2)` 中的 `+` 查环境得到函数，`1` 和 `2` 作为参数传给它。
 
+🔮 **执行结果预测**：以下表达式会返回什么？先猜，再运行 `cargo test` 验证：
+1. `(+ 1 2 3)` → ?（提示：`+` 是变参的）
+2. `(+ (+ 1 2) 3)` → ?（提示：先求值参数，再应用函数）
+3. `(- 10 5 2)` → ?（提示：`-` 也是变参的，从左到右减）
+
+把你的猜测写下来，然后用 `cargo test` 验证。如果你猜对了 3/3，说明你已经理解了 `eval` 的核心逻辑。
+
 📖 **下一章：[做真正的计算](#做真正的计算)**
 
 🧠 **心智模型检查点**：本章之后，你应该把 `eval` 看作一张派发表：检查表达式类型，相应处理。`Number` -> 原样返回。`Symbol` -> 环境中查找。`List` -> 求值操作符、求值操作数、应用。
@@ -3200,7 +3263,21 @@ if args.len() == 1 {
 理解树遍历之后，你才能理解为什么需要字节码 VM（性能）以及它牺牲了什么（简单性）。
 
 
-✅ **本章总结**: `eval` 可以调用内置函数。算术运算支持可变参数。
+✅ **本章总结**: `eval` 可以调用内置函数。算术运算支持可变参数.
+
+---
+
+### 🎯 白纸复现检查点
+
+关掉教程。在 **30 分钟**内完成：
+
+- [ ] 给 `LispExp` 加 `Func` 和 `List` 变体
+- [ ] 修改 `eval`：处理 `List` → 求值首元素得到函数 → 求值参数 → 调用函数
+- [ ] 写 `default_env()` 函数：注册 `+`、`-`、`*`、`/`
+- [ ] 测试：`eval_str("(+ 1 2)")` 返回 `Number(3.0)`
+- [ ] 测试：`eval_str("(* 2 3 4)")` 返回 `Number(24.0)`
+
+⏱️ **限时 30 分钟**。这是第一个"真算出结果"的里程碑——如果你能独立写出来，说明你真正理解了 eval 的核心逻辑。
 
 
 ## 更多数据类型
@@ -4201,7 +4278,22 @@ test result: ok. 20 passed; 0 failed
 📖 **下一章：[记住过去的事情](#记住过去的事情)**
 
 
-✅ **本章总结**: `if` 控制求值流程，`define` 创建顶层绑定，`lambda` 创建可调用函数。
+✅ **本章总结**: `if` 控制求值流程，`define` 创建顶层绑定，`lambda` 创建可调用函数.
+
+---
+
+### 🎯 白纸复现检查点 — 最重要的一次
+
+关掉教程。在 **45 分钟**内完成：
+
+- [ ] 在 `eval` 的 `List` 分支中加 `if` 特殊形式
+- [ ] 加 `define` 特殊形式
+- [ ] 加 `lambda` 特殊形式（含 `LispLambda` 结构体）
+- [ ] 测试：`(if #t 1 2)` → `1`
+- [ ] 测试：`(define x 10) (+ x 5)` → `15`
+- [ ] 测试：`((lambda (x) (* x x)) 5)` → `25`
+
+⏱️ **限时 45 分钟**。这是整个教程的核心里程碑——特殊形式是解释器和计算器之间的分水岭。如果你能独立写出这三个，你就真正理解了解释器的核心。
 
 
 
@@ -5368,7 +5460,21 @@ CPS 更强大（支持 call/cc）但：
 🧠 **心智模型检查点**：本章之后，你应该理解函数不只是代码——而是代码加环境。当你调用闭包时，它可以访问已不在调用栈上的变量，因为环境在定义时就被捕获了。
 
 
-✅ **本章总结**: 闭包捕获其诞生环境，TCO 让 `(loop 10000)` 不会栈溢出。
+✅ **本章总结**: 闭包捕获其诞生环境，TCO 让 `(loop 10000)` 不会栈溢出.
+
+---
+
+### 🎯 白纸复现检查点
+
+关掉教程。在 **40 分钟**内完成：
+
+- [ ] 给 `LispEnv` 加 `outer` 字段（`Rc<RefCell<LispEnv>>` 类型）
+- [ ] 修改 lambda 创建逻辑：捕获当前环境
+- [ ] 修改 lambda 调用逻辑：创建新环境，outer 指向捕获的环境
+- [ ] 测试闭包：`(define c (make-counter 0))` → `(c)` → `1` → `(c)` → `2`
+- [ ] 测试 TCO：`(define (loop n) (if (= n 0) 'done (loop (- n 1))))` → `(loop 10000)` 不崩溃
+
+⏱️ **限时 40 分钟**。这是最难的挑战——`Rc<RefCell<>>` 和蹦床循环都需要深入理解。如果做不到，回去重读步骤 35.5 和 39。
 
 
 ## 让程序跑得更快
@@ -6635,11 +6741,9 @@ letrec 用了三个步骤来破解这个"鸡生蛋"问题：
 ✅ **本章总结**: 特殊形式完整。`letrec` 解决了相互递归的鸡生蛋问题。
 
 
-## 内置函数补全
-⏩ **跳过信号：** 每个函数模式相同：写测试 → 在 `default_env()` 注册 → `cargo test`。快速浏览，重点读 `map`/`apply`/`filter`（步骤 67-69）和变参 lambda（步骤 70）。
+## 内置函数补全 + 挑战关卡
 
-
-从这一步开始，每个函数遵循同样模式：**先写测试 → 在 `default_env()` 中注册 → `cargo test` 验证**。
+⏩ **跳过信号：** 挑战关卡模式：教程给一个参考实现，其余独立完成。如果你是有经验的程序员，可以直接跳到[步骤 70](#步骤-70-变参-lambda)。
 
 ---
 
@@ -6661,12 +6765,41 @@ letrec 用了三个步骤来破解这个"鸡生蛋"问题：
 </blockquote>
 
 ---
-### 步骤 52: `<` 小于
 
-**测试**:
+### 🎯 挑战关卡说明
+
+从现在起，教程不再逐步给你每个函数的完整代码。而是采用**挑战关卡模式**：
+
+1. 教程给出**一个参考实现**（你照着学模式）
+2. 列出你**需要独立实现**的函数清单
+3. 给出**测试用例**（你的实现必须通过这些测试）
+4. 💡 **提示**在折叠区里——先试着自己写，实在写不出再看
+5. ✅ **答案**在更深的折叠区里——强烈建议先自己写完再看
+
+**为什么这样改？** 前面的步骤里，每个函数的代码都直接给你了——你只是复制粘贴跑测试。这导致做完一遍后，脱离教程就写不出来。从现在起，**你必须自己思考、自己写、自己调试**——这才是真正学会的方式。
+
+---
+
+### 挑战 A：比较运算符（步骤 52-54）
+
+**📝 你要实现的函数**：`<` `<=` `>=` `not`
+
+**📖 参考实现：`<`（小于）**
+
+先看一个怎么写，照着学模式：
 
 ```rust
-// src/interpreter.rs
+// src/interpreter.rs — default_env() 中
+env.set(intern("<"), LispExp::Func(|args| {
+    if let (LispExp::Number(a), LispExp::Number(b)) = (&args[0], &args[1]) {
+        Ok(LispExp::Bool(a < b))
+    } else { Err(LispErr::Reason("< 需要数字".into())) }
+}));
+```
+
+**测试**（这个测试已经写好了，你的 `<=`、`>=`、`not` 也要通过对应测试）：
+
+```rust
 #[test]
 fn test_less_than() {
     let mut env = default_env();
@@ -6675,48 +6808,94 @@ fn test_less_than() {
 }
 ```
 
-**实现**:
-
-```rust
-// src/interpreter.rs
-env.set(intern("<"), LispExp::Func(|args| {
-    if let (LispExp::Number(a), LispExp::Number(b)) = (&args[0], &args[1]) {
-        Ok(LispExp::Bool(a < b))
-    } else { Err(LispErr::Reason("< 需要数字".into())) }
-}));
-```
-
 ---
 
-### 步骤 53: `<=` 和 `>=`
+**🔬 你要独立完成的**：
+
+| 函数 | 签名 | 输入示例 | 输出 |
+|------|------|---------|------|
+| `<=` | `(<= a b)` | `(<= 3 3)` | `#t` |
+| `>=` | `(>= a b)` | `(>= 5 3)` | `#t` |
+| `not` | `(not x)` | `(not #f)` | `#t` |
+
+**你的测试**（把这些测试加到测试模块，你的实现必须让它们通过）：
 
 ```rust
-// src/interpreter.rs
+#[test]
+fn test_leq() {
+    let mut env = default_env();
+    assert_eq!(eval_str("(<= 3 3)", &mut env).unwrap(), LispExp::Bool(true));
+    assert_eq!(eval_str("(<= 5 3)", &mut env).unwrap(), LispExp::Bool(false));
+}
+
+#[test]
+fn test_geq() {
+    let mut env = default_env();
+    assert_eq!(eval_str("(>= 5 3)", &mut env).unwrap(), LispExp::Bool(true));
+    assert_eq!(eval_str("(>= 3 5)", &mut env).unwrap(), LispExp::Bool(false));
+}
+
+#[test]
+fn test_not() {
+    let mut env = default_env();
+    assert_eq!(eval_str("(not #f)", &mut env).unwrap(), LispExp::Bool(true));
+    assert_eq!(eval_str("(not #t)", &mut env).unwrap(), LispExp::Bool(false));
+    assert_eq!(eval_str("(not nil)", &mut env).unwrap(), LispExp::Bool(true));
+    assert_eq!(eval_str("(not 0)", &mut env).unwrap(), LispExp::Bool(false));
+}
+```
+
+<details>
+<summary>💡 提示（先自己写，写不出再展开）</summary>
+
+- `<=` 和 `>=` 和 `<` 的模式**一模一样**——只是运算符从 `<` 换成 `<=` 或 `>=`
+- `not` 不需要判断数字——它判断"真假"。在 Lisp 里只有 `#f` 和 `nil` 是"假"，其他都是"真"。用 `matches!` 宏检查这两个值
+
+</details>
+
+<details>
+<summary>✅ 答案（写完后对照）</summary>
+
+```rust
+// <=
 env.set(intern("<="), LispExp::Func(|args| {
     if let (LispExp::Number(a), LispExp::Number(b)) = (&args[0], &args[1]) {
         Ok(LispExp::Bool(a <= b))
     } else { Err(LispErr::Reason("<= 需要数字".into())) }
 }));
-// >= 同理: a >= b
-```
 
----
+// >=
+env.set(intern(">="), LispExp::Func(|args| {
+    if let (LispExp::Number(a), LispExp::Number(b)) = (&args[0], &args[1]) {
+        Ok(LispExp::Bool(a >= b))
+    } else { Err(LispErr::Reason(">= 需要数字".into())) }
+}));
 
-### 步骤 54: `not` 逻辑非
-
-```rust
-// src/interpreter.rs
+// not
 env.set(intern("not"), LispExp::Func(|args| {
     let is_false = matches!(args[0], LispExp::Bool(false) | LispExp::Nil);
-    Ok(LispExp::Bool(is_false)) // 假→#t, 真→#f
+    Ok(LispExp::Bool(is_false))
 }));
 ```
 
-**测试**: `(not #f)` → `#t`, `(not #t)` → `#f`, `(not nil)` → `#t`
+</details>
+
+```bash
+$ cargo test
+running 30 tests
+...
+test result: ok. 30 passed; 0 failed
+```
 
 ---
 
-### 步骤 55: `list` 创建列表
+### 挑战 B：列表操作（步骤 55-62）
+
+**📝 你要实现的函数**：`list` `cons` `car` `cdr` `cadr` `caddr` `append` `length` `reverse` `member`
+
+这是最大的一组——10 个函数。但别怕，前两个是参考，后面的模式类似。
+
+**📖 参考实现 1：`list`（创建列表）**
 
 ```rust
 // src/interpreter.rs
@@ -6725,11 +6904,9 @@ env.set(intern("list"), LispExp::Func(|args| {
 }));
 ```
 
-**测试**: `(list 1 2 3)` → `(1 2 3)`
+🧠 **大白话**：`list` 就是"把我收到的所有参数排成一排"。`(list 1 2 3)` → 参数是 `1`、`2`、`3` → 返回 `List([1, 2, 3])`。
 
----
-
-### 步骤 56: `cons` — 头部插入
+**📖 参考实现 2：`cons`（头部插入）**
 
 ```rust
 // src/interpreter.rs
@@ -6746,14 +6923,98 @@ env.set(intern("cons"), LispExp::Func(|args| {
 }));
 ```
 
-**测试**: `(cons 1 (list 2 3))` → `(1 2 3)`, `(cons 1 nil)` → `(1)`
+🧠 **大白话**：`cons` 是"construct"的缩写——把一个新元素插到列表最前面。`(cons 1 (list 2 3))` → `(1 2 3)`。对 `nil` 用 `cons` 会创建一个单元素列表。
 
 ---
 
-### 步骤 57: `car` — 取第一个元素
+**🔬 你要独立完成的**：
+
+| 函数 | 功能 | 输入示例 | 输出 |
+|------|------|---------|------|
+| `car` | 取列表第一个元素 | `(car (list 1 2 3))` | `1` |
+| `cdr` | 取列表剩余元素（去掉第一个） | `(cdr (list 1 2 3))` | `(2 3)` |
+| `cadr` | 取第二个元素 | `(cadr (list 1 2 3))` | `2` |
+| `caddr` | 取第三个元素 | `(caddr (list 1 2 3))` | `3` |
+| `append` | 拼接多个列表 | `(append (list 1) (list 2 3))` | `(1 2 3)` |
+| `length` | 列表长度 | `(length (list 1 2 3))` | `3` |
+| `reverse` | 反转列表 | `(reverse (list 1 2 3))` | `(3 2 1)` |
+| `member` | 查找元素，返回子列表 | `(member 2 (list 1 2 3))` | `(2 3)` |
+
+**你的测试**：
 
 ```rust
-// src/interpreter.rs
+#[test]
+fn test_car_cdr() {
+    let mut env = default_env();
+    assert_eq!(eval_str("(car (list 1 2 3))", &mut env).unwrap(), LispExp::Number(1.0));
+    assert_eq!(eval_str("(cdr (list 1 2 3))", &mut env).unwrap(),
+        LispExp::List(vec![LispExp::Number(2.0), LispExp::Number(3.0)]));
+    // 空列表应该报错
+    assert!(eval_str("(car nil)", &mut env).is_err());
+    assert!(eval_str("(cdr nil)", &mut env).is_err());
+}
+
+#[test]
+fn test_cadr_caddr() {
+    let mut env = default_env();
+    assert_eq!(eval_str("(cadr (list 1 2 3))", &mut env).unwrap(), LispExp::Number(2.0));
+    assert_eq!(eval_str("(caddr (list 1 2 3))", &mut env).unwrap(), LispExp::Number(3.0));
+}
+
+#[test]
+fn test_append() {
+    let mut env = default_env();
+    assert_eq!(eval_str("(append (list 1) (list 2 3))", &mut env).unwrap(),
+        LispExp::List(vec![LispExp::Number(1.0), LispExp::Number(2.0), LispExp::Number(3.0)]));
+    assert_eq!(eval_str("(append nil (list 1))", &mut env).unwrap(),
+        LispExp::List(vec![LispExp::Number(1.0)]));
+}
+
+#[test]
+fn test_length() {
+    let mut env = default_env();
+    assert_eq!(eval_str("(length (list 1 2 3))", &mut env).unwrap(), LispExp::Number(3.0));
+    assert_eq!(eval_str("(length nil)", &mut env).unwrap(), LispExp::Number(0.0));
+    assert_eq!(eval_str("(length (list))", &mut env).unwrap(), LispExp::Number(0.0));
+}
+
+#[test]
+fn test_reverse() {
+    let mut env = default_env();
+    assert_eq!(eval_str("(reverse (list 1 2 3))", &mut env).unwrap(), LispExp::List(vec![
+        LispExp::Number(3.0), LispExp::Number(2.0), LispExp::Number(1.0),
+    ]));
+    assert_eq!(eval_str("(reverse nil)", &mut env).unwrap(), LispExp::Nil);
+}
+
+#[test]
+fn test_member() {
+    let mut env = default_env();
+    assert_eq!(eval_str("(member 2 (list 1 2 3))", &mut env).unwrap(),
+        LispExp::List(vec![LispExp::Number(2.0), LispExp::Number(3.0)]));
+    assert_eq!(eval_str("(member 5 (list 1 2 3))", &mut env).unwrap(),
+        LispExp::Bool(false));
+}
+```
+
+<details>
+<summary>💡 提示（先自己写，写不出再展开）</summary>
+
+- `car`：用 `match` 匹配 `LispExp::List(els)`，如果 `els` 不为空就返回 `els[0].clone()`，为空就报错
+- `cdr`：和 `car` 类似，但返回 `LispExp::List(els[1..].to_vec())`——注意是切片 `[1..]`
+- `cadr`/`caddr`：就是取 `els[1]` 和 `els[2]`——但别忘了检查长度
+- `append`：遍历所有参数，把每个 List 的元素 extend 到一个结果 Vec 里。`nil` 跳过
+- `length`：`els.len() as f64`——别忘了 Rust 的 `len()` 返回 `usize`，Lisp 用 `f64`
+- `reverse`：先 `clone()` 再 `reverse()`——不能在借用期间修改，所以必须先克隆
+- `member`：遍历列表，找到匹配的就返回 `LispExp::List(els[i..].to_vec())`，找不到返回 `Bool(false)`
+
+</details>
+
+<details>
+<summary>✅ 答案（写完后对照）</summary>
+
+```rust
+// car
 env.set(intern("car"), LispExp::Func(|args| {
     match &args[0] {
         LispExp::List(els) if !els.is_empty() => Ok(els[0].clone()),
@@ -6761,14 +7022,8 @@ env.set(intern("car"), LispExp::Func(|args| {
         _ => Err(LispErr::Reason("car 需要列表".into())),
     }
 }));
-```
 
----
-
-### 步骤 58: `cdr` — 取剩余元素
-
-```rust
-// src/interpreter.rs
+// cdr
 env.set(intern("cdr"), LispExp::Func(|args| {
     match &args[0] {
         LispExp::List(els) if !els.is_empty() => Ok(LispExp::List(els[1..].to_vec())),
@@ -6776,17 +7031,8 @@ env.set(intern("cdr"), LispExp::Func(|args| {
         _ => Err(LispErr::Reason("cdr 需要列表".into())),
     }
 }));
-```
 
----
-
-### 步骤 58b: `cadr` / `caddr` — 组合访问器
-
-**问题**：Lisp 程序经常需要访问列表的第二个、第三个元素。用 `(car (cdr lst))` 太啰嗦——Lisp 传统用组合缩写 `cadr`（取第二个）和 `caddr`（取第三个）。
-
-```rust
-// src/interpreter.rs
-// cadr = car of cdr = 第二个元素
+// cadr = car of cdr = 第二个
 env.set(intern("cadr"), LispExp::Func(|args| {
     match &args[0] {
         LispExp::List(els) if els.len() >= 2 => Ok(els[1].clone()),
@@ -6794,32 +7040,15 @@ env.set(intern("cadr"), LispExp::Func(|args| {
     }
 }));
 
-// caddr = car of cdr of cdr = 第三个元素
+// caddr = car of cdr of cdr = 第三个
 env.set(intern("caddr"), LispExp::Func(|args| {
     match &args[0] {
         LispExp::List(els) if els.len() >= 3 => Ok(els[2].clone()),
         _ => Err(LispErr::Reason("caddr 需要至少 3 个元素的列表".into())),
     }
 }));
-```
 
-🧠 **大白话 — `cadr`/`caddr` 命名规律**：`c` + **中间的 `a`/`d` 序列** + `r`。`a`=car（取头），`d`=cdr（去尾）。从右往左读：
-- `cadr` = `c` `a` `d` `r` → 先 `d`（去头），再 `a`（取头）= 第二个元素
-- `caddr` = `c` `a` `d` `d` `r` → 先 `dd`（去两个），再 `a`（取头）= 第三个元素
-
-```lisp
-(cadr (list 1 2 3))   ; → 2
-(caddr (list 1 2 3))  ; → 3
-```
-
-💡 **为什么现在加？** 附录 D 的符号求导器用到了 `cadr` 和 `caddr` 来访问表达式的操作数。这两个函数在真实的 Scheme 程序中极其常见。
-
----
-
-### 步骤 59: `append` — 拼接列表
-
-```rust
-// src/interpreter.rs
+// append
 env.set(intern("append"), LispExp::Func(|args| {
     let mut result = Vec::new();
     for arg in args {
@@ -6831,18 +7060,8 @@ env.set(intern("append"), LispExp::Func(|args| {
     }
     Ok(LispExp::List(result))
 }));
-```
 
-**测试**: `(append (list 1) (list 2))` → `(1 2)`
-
----
-
-### 步骤 60: `length` — 列表长度
-
-**问题**：我们在算术里有了加乘除，但列表操作还缺少一个基本能力——告诉你列表有多长。`length` 就是干这个的：给它一个列表，返回数字。
-
-```rust
-// src/interpreter.rs
+// length
 env.set(intern("length"), LispExp::Func(|args| {
     match &args[0] {
         LispExp::List(els) => Ok(LispExp::Number(els.len() as f64)),
@@ -6850,32 +7069,8 @@ env.set(intern("length"), LispExp::Func(|args| {
         _ => Err(LispErr::Reason("length 需要列表".into())),
     }
 }));
-```
 
-**为什么 `els.len()` 返回 `usize`，却要写 `as f64`？** 因为我们的 Lisp 只有 `f64` 这一种数字类型。Rust 的 `Vec::len()` 返回 `usize`，必须显式转换。
-
-🧠 **大白话**：`length` 就是数手指头——列表里有几个东西，就报几。空列表 `nil` 算 0 个。
-
-**测试**：
-
-```rust
-#[test]
-fn test_length() {
-    let mut env = default_env();
-    assert_eq!(eval_str("(length (list 1 2 3))", &mut env).unwrap(), LispExp::Number(3.0));
-    assert_eq!(eval_str("(length nil)", &mut env).unwrap(), LispExp::Number(0.0));
-    assert_eq!(eval_str("(length (list))", &mut env).unwrap(), LispExp::Number(0.0));
-}
-```
-
----
-
-### 步骤 61: `reverse` — 反转列表
-
-**问题**：有时候列表的顺序不对，比如时间戳从旧到新排了，但你想从新到旧看。`reverse` 把列表首尾翻转。
-
-```rust
-// src/interpreter.rs
+// reverse
 env.set(intern("reverse"), LispExp::Func(|args| {
     match &args[0] {
         LispExp::List(els) => { let mut r = els.clone(); r.reverse(); Ok(LispExp::List(r)) }
@@ -6883,33 +7078,8 @@ env.set(intern("reverse"), LispExp::Func(|args| {
         _ => Err(LispErr::Reason("reverse 需要列表".into())),
     }
 }));
-```
 
-**注意 `.clone()` 的位置**：`els` 是从 `&args[0]` 借用的，我们不能在借用期间修改它。所以先 `clone()` 出一份副本，再在副本上 `reverse()`。这是 Rust 所有权模型的典型模式——**需要修改时，先克隆**。
-
-🧠 **大白话**：`reverse` 就像翻饼——把列表倒扣过来。`[1, 2, 3]` 变成 `[3, 2, 1]`。空列表翻转还是空列表。
-
-**测试**：
-
-```rust
-#[test]
-fn test_reverse() {
-    let mut env = default_env();
-    assert_eq!(eval_str("(reverse (list 1 2 3))", &mut env).unwrap(), LispExp::List(vec![
-        LispExp::Number(3.0), LispExp::Number(2.0), LispExp::Number(1.0),
-    ]));
-    assert_eq!(eval_str("(reverse nil)", &mut env).unwrap(), LispExp::Nil);
-}
-```
-
----
-
-### 步骤 62: `member` — 成员查找
-
-**问题**：列表里有没有某个东西？如果有的话，从它开始往后还有什么？`member` 不只是回答"有/没有"——它返回**从匹配位置开始的子列表**。这是 Lisp 的传统设计：找到就给你剩下的，找不到就告诉你 `#f`。
-
-```rust
-// src/interpreter.rs
+// member
 env.set(intern("member"), LispExp::Func(|args| {
     match &args[1] {
         LispExp::List(els) => {
@@ -6923,120 +7093,39 @@ env.set(intern("member"), LispExp::Func(|args| {
 }));
 ```
 
-**为什么返回子列表而不是 `#t`？** 因为这样可以直接当条件用——非空列表在 `if` 里为真，`#f` 为假。你既知道了"有没有"，又拿到了"后面的东西"，一步到位。
+🧠 **大白话 — `cadr`/`caddr` 命名规律**：`c` + **中间的 `a`/`d` 序列** + `r`。`a`=car（取头），`d`=cdr（去尾）。从右往左读：
+- `cadr` = `c` `a` `d` `r` → 先 `d`（去头），再 `a`（取头）= 第二个元素
+- `caddr` = `c` `a` `d` `d` `r` → 先 `dd`（去两个），再 `a`（取头）= 第三个元素
 
-🧠 **大白话**：`member` 像在一叠扑克牌里找红心——找到就从那张开始全给你，找不到就说没有。
+💡 **为什么现在加？** 附录 D 的符号求导器用到了 `cadr` 和 `caddr` 来访问表达式的操作数。这两个函数在真实的 Scheme 程序中极其常见。
 
-**测试**：
+</details>
 
-```rust
-#[test]
-fn test_member() {
-    let mut env = default_env();
-    assert_eq!(eval_str("(member 2 (list 1 2 3))", &mut env).unwrap(),
-        LispExp::List(vec![LispExp::Number(2.0), LispExp::Number(3.0)]));
-    assert_eq!(eval_str("(member 5 (list 1 2 3))", &mut env).unwrap(),
-        LispExp::Bool(false));
-}
+```bash
+$ cargo test
+running 36 tests
+...
+test result: ok. 36 passed; 0 failed
 ```
 
 ---
 
-### 步骤 63-65: 类型谓词
+### 挑战 C：谓词与高阶函数（步骤 63-69）
 
-**问题**：在写复杂程序时，你经常需要判断“这个东西是什么类型”——它是数字吗？是列表吗？是空吗？类型谓词就是回答这些问题的函数，返回 `#t` 或 `#f`。
+**📝 你要实现的函数**：`null?` `number?` `symbol?` `boolean?` `string?` `procedure?` `pair?` `list?` `eq?` `equal?` `map` `apply` `filter`
 
-每个 3 行，用 `matches!` 判断类型：
+**📖 参考实现 1：`null?`（判断是否为空值）**
 
 ```rust
 // src/interpreter.rs
-// null? — 判断是否为空值
 env.set(intern("null?"), LispExp::Func(|args| {
     Ok(LispExp::Bool(matches!(args[0], LispExp::Nil)))
 }));
-// number? — 判断是否为数字
-env.set(intern("number?"), LispExp::Func(|args| {
-    Ok(LispExp::Bool(matches!(args[0], LispExp::Number(_))))
-}));
-// symbol? — 判断是否为符号
-env.set(intern("symbol?"), LispExp::Func(|args| {
-    Ok(LispExp::Bool(matches!(args[0], LispExp::Symbol(_))))
-}));
-// boolean? string? procedure? pair? list? 同理
 ```
 
-**为什么用 `matches!` 而不是 `match`？** `matches!` 是 Rust 的一个宏，用于简洁的类型判断。它等价于：
-```rust
-// matches!(args[0], LispExp::Number(_))
-// 等价于：
-match args[0] { LispExp::Number(_) => true, _ => false }
-```
-但只需一行代码，更清晰。
-
-🧠 **大白话**：类型谓词就像安检口的“你是旅客还是工作人员？”检查——不同类型走不同通道。`null?` 问“是不是空的”，`number?` 问“是不是数字”。
-
-**测试**：
-
-```rust
-#[test]
-fn test_type_predicates() {
-    let mut env = default_env();
-    assert_eq!(eval_str("(null? nil)", &mut env).unwrap(), LispExp::Bool(true));
-    assert_eq!(eval_str("(null? 0)", &mut env).unwrap(), LispExp::Bool(false));
-    assert_eq!(eval_str("(number? 42)", &mut env).unwrap(), LispExp::Bool(true));
-    assert_eq!(eval_str("(number? \"hello\")", &mut env).unwrap(), LispExp::Bool(false));
-    assert_eq!(eval_str("(symbol? 'x)", &mut env).unwrap(), LispExp::Bool(true));
-}
-```
-
----
-
-### 步骤 66: `eq?` 和 `equal?`
-
-**问题**：两个值“相等”是什么意思？在 Lisp 中有两种相等：
-- **`eq?`**：身份相等——两个值是否是同一个东西（数字 5 和 5 是同一个数字）
-- **`equal?`**：结构相等——两个列表即使不是同一个对象，但元素一一对应也算相等
-
-这就像问“这两张照片是同一张？”（`eq?`）vs “这两张照片内容一样？”（`equal?`）。
-
-`eq?` — 值相等（整数/符号/布尔/nil 的直接比较）:
-
-```rust
-// src/interpreter.rs
-env.set(intern("eq?"), LispExp::Func(|args| {
-    Ok(LispExp::Bool(args[0] == args[1]))
-}));
-```
-
-`equal?` — 结构相等（递归比较嵌套列表）:
-
-```rust
-// src/interpreter.rs
-env.set(intern("equal?"), LispExp::Func(|args| {
-    Ok(LispExp::Bool(lisp_equal(&args[0], &args[1])))
-}));
-// 辅助函数
-fn lisp_equal(a: &LispExp, b: &LispExp) -> bool {
-    match (a, b) {
-        (LispExp::List(a_els), LispExp::List(b_els)) => {
-            a_els.len() == b_els.len() && a_els.iter().zip(b_els).all(|(x,y)| lisp_equal(x,y))
-        }
-        _ => a == b,
-    }
-}
-```
-
-**测试**: `(equal? (list 1 (list 2)) (list 1 (list 2)))` → `#t`
-
----
-
-### 步骤 67: `map` — 高阶函数
-
-**问题**：你有一个列表 `[1, 2, 3]`，想把每个元素都平方，得到 `[1, 4, 9]`。你当然可以写递归，但 Lisp 有更优雅的方式——`map`：给它一个函数和一个列表，它把函数应用到每个元素上。
+**📖 参考实现 2：`map`（高阶函数）**
 
 `map` 是第一个**高阶函数**——接受函数作为参数的函数。这是函数式编程的核心能力。
-
-**目标**: `(map (lambda (x) (* x x)) (list 1 2 3))` → `(1 4 9)`
 
 ```rust
 // src/interpreter.rs
@@ -7063,16 +7152,137 @@ env.set(intern("map"), LispExp::Func(|args| {
 }));
 ```
 
+🧠 **大白话**：`map` 就像流水线——每个产品经过同一台机器，出来变成加工后的版本。
+
 ---
 
-### 步骤 68: `apply` — 参数列表解包
+**🔬 你要独立完成的**：
 
-**问题**：有时候你的参数已经打包在一个列表里了，但你要调用的函数期望的是独立参数。比如你有 `(list 1 2 3)`，想调用 `(+ 1 2 3)`。`apply` 就是拆包器——把列表拆成独立参数传给函数。
+| 函数 | 功能 | 输入示例 | 输出 |
+|------|------|---------|------|
+| `number?` | 判断是否为数字 | `(number? 42)` | `#t` |
+| `symbol?` | 判断是否为符号 | `(symbol? 'x)` | `#t` |
+| `boolean?` | 判断是否为布尔 | `(boolean? #t)` | `#t` |
+| `string?` | 判断是否为字符串 | `(string? "hi")` | `#t` |
+| `procedure?` | 判断是否为函数 | `(procedure? +)` | `#t` |
+| `pair?` | 判断是否为非空列表 | `(pair? (list 1))` | `#t` |
+| `list?` | 判断是否为列表或 nil | `(list? (list 1))` | `#t` |
+| `eq?` | 身份相等 | `(eq? 'x 'x)` | `#t` |
+| `equal?` | 结构相等（递归比较） | `(equal? (list 1) (list 1))` | `#t` |
+| `apply` | 把列表拆成参数传给函数 | `(apply + (list 1 2 3))` | `6` |
+| `filter` | 按谓词过滤列表 | `(filter (lambda (x) (> x 0)) (list -1 2))` | `(2)` |
 
-**目标**: `(apply + (list 1 2 3))` → `6`
+**你的测试**：
 
 ```rust
-// src/interpreter.rs
+#[test]
+fn test_type_predicates() {
+    let mut env = default_env();
+    assert_eq!(eval_str("(null? nil)", &mut env).unwrap(), LispExp::Bool(true));
+    assert_eq!(eval_str("(null? 0)", &mut env).unwrap(), LispExp::Bool(false));
+    assert_eq!(eval_str("(number? 42)", &mut env).unwrap(), LispExp::Bool(true));
+    assert_eq!(eval_str("(number? \"hello\")", &mut env).unwrap(), LispExp::Bool(false));
+    assert_eq!(eval_str("(symbol? 'x)", &mut env).unwrap(), LispExp::Bool(true));
+    assert_eq!(eval_str("(boolean? #t)", &mut env).unwrap(), LispExp::Bool(true));
+    assert_eq!(eval_str("(string? \"hi\")", &mut env).unwrap(), LispExp::Bool(true));
+    assert_eq!(eval_str("(procedure? +)", &mut env).unwrap(), LispExp::Bool(true));
+    assert_eq!(eval_str("(pair? (list 1))", &mut env).unwrap(), LispExp::Bool(true));
+    assert_eq!(eval_str("(pair? nil)", &mut env).unwrap(), LispExp::Bool(false));
+    assert_eq!(eval_str("(list? (list 1 2))", &mut env).unwrap(), LispExp::Bool(true));
+    assert_eq!(eval_str("(list? nil)", &mut env).unwrap(), LispExp::Bool(true));
+}
+
+#[test]
+fn test_eq_equal() {
+    let mut env = default_env();
+    assert_eq!(eval_str("(eq? 'x 'x)", &mut env).unwrap(), LispExp::Bool(true));
+    assert_eq!(eval_str("(eq? 1 1)", &mut env).unwrap(), LispExp::Bool(true));
+    assert_eq!(eval_str("(equal? (list 1 (list 2)) (list 1 (list 2)))", &mut env).unwrap(), LispExp::Bool(true));
+    assert_eq!(eval_str("(equal? (list 1 2) (list 1 3))", &mut env).unwrap(), LispExp::Bool(false));
+}
+
+#[test]
+fn test_apply() {
+    let mut env = default_env();
+    assert_eq!(eval_str("(apply + (list 1 2 3))", &mut env).unwrap(), LispExp::Number(6.0));
+    assert_eq!(eval_str("(apply (lambda (x y) (* x y)) (list 3 4))", &mut env).unwrap(), LispExp::Number(12.0));
+}
+
+#[test]
+fn test_filter() {
+    let mut env = default_env();
+    assert_eq!(eval_str("(filter (lambda (x) (> x 0)) (list -1 2 -3 4))", &mut env).unwrap(),
+        LispExp::List(vec![LispExp::Number(2.0), LispExp::Number(4.0)]));
+    assert_eq!(eval_str("(filter (lambda (x) #f) (list 1 2 3))", &mut env).unwrap(),
+        LispExp::List(vec![]));
+}
+```
+
+<details>
+<summary>💡 提示（先自己写，写不出再展开）</summary>
+
+- 类型谓词都用 `matches!` 宏——和 `null?` 一模一样的模式，只是匹配的变体不同：
+  - `number?` → `LispExp::Number(_)`
+  - `symbol?` → `LispExp::Symbol(_)`
+  - `boolean?` → `LispExp::Bool(_)`
+  - `string?` → `LispExp::String(_)`
+  - `procedure?` → `LispExp::Func(_) | LispExp::Lambda(_) | LispExp::Macro(_)`
+  - `pair?` → `LispExp::List(els) if !els.is_empty()`（非空列表）
+  - `list?` → `LispExp::List(_) | LispExp::Nil`（列表或空）
+
+- `eq?`：直接 `args[0] == args[1]`——利用 `PartialEq` derive
+- `equal?`：需要递归——如果两个都是 List，逐元素比较；否则用 `==`
+- `apply`：从第二个参数取出列表，然后调用第一个参数（Func 或 Lambda）
+- `filter`：和 `map` 结构几乎一样——遍历列表，调用函数，但只在结果为"真"时保留元素。判断"真"：`!matches!(result, LispExp::Bool(false) | LispExp::Nil)`
+
+</details>
+
+<details>
+<summary>✅ 答案（写完后对照）</summary>
+
+```rust
+// 类型谓词
+env.set(intern("number?"), LispExp::Func(|args| {
+    Ok(LispExp::Bool(matches!(args[0], LispExp::Number(_))))
+}));
+env.set(intern("symbol?"), LispExp::Func(|args| {
+    Ok(LispExp::Bool(matches!(args[0], LispExp::Symbol(_))))
+}));
+env.set(intern("boolean?"), LispExp::Func(|args| {
+    Ok(LispExp::Bool(matches!(args[0], LispExp::Bool(_))))
+}));
+env.set(intern("string?"), LispExp::Func(|args| {
+    Ok(LispExp::Bool(matches!(args[0], LispExp::String(_))))
+}));
+env.set(intern("procedure?"), LispExp::Func(|args| {
+    Ok(LispExp::Bool(matches!(args[0], LispExp::Func(_) | LispExp::Lambda(_) | LispExp::Macro(_))))
+}));
+env.set(intern("pair?"), LispExp::Func(|args| {
+    Ok(LispExp::Bool(matches!(&args[0], LispExp::List(els) if !els.is_empty())))
+}));
+env.set(intern("list?"), LispExp::Func(|args| {
+    Ok(LispExp::Bool(matches!(&args[0], LispExp::List(_) | LispExp::Nil)))
+}));
+
+// eq? — 值相等
+env.set(intern("eq?"), LispExp::Func(|args| {
+    Ok(LispExp::Bool(args[0] == args[1]))
+}));
+
+// equal? — 结构相等（递归）
+env.set(intern("equal?"), LispExp::Func(|args| {
+    Ok(LispExp::Bool(lisp_equal(&args[0], &args[1])))
+}));
+fn lisp_equal(a: &LispExp, b: &LispExp) -> bool {
+    match (a, b) {
+        (LispExp::List(a_els), LispExp::List(b_els)) => {
+            a_els.len() == b_els.len() && a_els.iter().zip(b_els).all(|(x,y)| lisp_equal(x,y))
+        }
+        _ => a == b,
+    }
+}
+
+// apply
 env.set(intern("apply"), LispExp::Func(|args| {
     let arg_list = match &args[1] { LispExp::List(els) => els.clone(), _ => vec![] };
     match &args[0] {
@@ -7085,23 +7295,14 @@ env.set(intern("apply"), LispExp::Func(|args| {
         _ => Err(LispErr::Reason("apply 第一个参数需要函数".into())),
     }
 }));
-```
 
----
-
-### 步骤 69: `filter` — 按谓词过滤
-
-**问题**：列表里有些元素你想要，有些不想要。比如从 `[-1, 2, -3, 4]` 里只留正数。`filter` 接受一个谓词函数（返回 `#t`/`#f` 的函数）和一个列表，只保留谓词返回 `#t` 的元素。
-
-`filter` 和 `map` 一样是高阶函数，是函数式编程的三大法宝之一（map、filter、reduce）。
-
-**目标**: `(filter (lambda (x) (> x 0)) (list -1 2 -3 4))` → `(2 4)`
-
-```rust
-// src/interpreter.rs
+// filter
 env.set(intern("filter"), LispExp::Func(|args| {
     let pred = &args[0];
-    let list = match &args[1] { LispExp::List(els) => els, _ => return Err(/*...*/) };
+    let list = match &args[1] {
+        LispExp::List(els) => els,
+        _ => return Err(LispErr::Reason("filter 第二个参数需要列表".into())),
+    };
     let mut results = Vec::new();
     for el in list {
         let keep = match pred {
@@ -7117,6 +7318,15 @@ env.set(intern("filter"), LispExp::Func(|args| {
     }
     Ok(LispExp::List(results))
 }));
+```
+
+</details>
+
+```bash
+$ cargo test
+running 42 tests
+...
+test result: ok. 42 passed; 0 failed
 ```
 
 ---
@@ -7980,11 +8190,10 @@ Fork 这个项目，破坏它，修复它，扩展它。这就是学习的方法
   47. cond               48. and           49. or
   50. let*               51. letrec
 
-步骤 52-74: 内置函数补全 + REPL
-  52-57: <, <=, >=, not, list, cons
-  58: car, cdr    58b: cadr/caddr    59-62: append, length, reverse, member
-  63-66: 类型谓词 + eq?/equal?
-  67-69: map, apply, filter
+步骤 52-74: 内置函数补全（挑战关卡）+ REPL
+  挑战 A (52-54): <, <=, >=, not — 教程给 <，其余独立完成
+  挑战 B (55-62): list, cons, car, cdr, cadr, caddr, append, length, reverse, member
+  挑战 C (63-69): 类型谓词, eq?/equal?, map, apply, filter
   70: 变参 lambda        71: quote 缩写
   71b-71d: defmacro/宏展开/gensym   71e: quasiquote
   72: error    73: Display trait   73b: I/O 函数(display/newline/read)
