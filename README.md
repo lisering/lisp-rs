@@ -32,7 +32,7 @@ You don't have to read everything. Pick the lane that fits you:
 | Have **written an interpreter before** | Skim to [Step 24: Closures](#step-24-lambda-captures-environment-implementing-true-closures) and [Step 26: TCO](#step-26-tco-trampoline-loop-implementation) | approx. 30 minutes |
 | Just want to see **how closures are implemented** | Jump to [Step 24: Closures](#step-24-lambda-captures-environment-implementing-true-closures) | approx. 10 minutes |
 
-**Already built something like this?** You might still find something new here: the backpack-closure trace (Step 24), the trampoline-loop TCO walkthrough (Step 26), and the three teaching-focused optimization passes (Steps 40–43). Everything else you can skim.
+**Already built something like this?** You might still find something new here: the backpack-closure trace (Step 24), the trampoline-loop TCO walkthrough (Step 26), and the three teaching-focused optimization passes (Steps 27–30). Everything else you can skim.
 
 ---
 
@@ -8324,7 +8324,7 @@ After 47 steps you've built an interpreter — what can you do with it? Here's a
 
 🎯 **This shows the power of Lisp**: With your own interpreter, your own language, approx. 30 lines of code — you can do symbolic computation. And you wrote every line of it yourself.
 
-💡 **Prerequisite functions**: This program uses `cadr` (second element) and `caddr` (third element) — defined in Step 48b. If you haven't implemented them yet, add them first.
+💡 **Prerequisite functions**: This program uses `cadr` (second element) and `caddr` (third element) — defined in Step 37. If you haven't implemented them yet, add them first.
 
 ---
 
