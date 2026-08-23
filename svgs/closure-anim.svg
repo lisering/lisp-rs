@@ -1,0 +1,83 @@
+<svg width="700" height="400" viewBox="0 0 700 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<style>
+.box-label { font-family: -apple-system, 'Segoe UI', sans-serif; font-size: 14px; fill: #495057; font-weight: 600; }
+.code { font-family: 'SF Mono', monospace; font-size: 12px; fill: #868E96; }
+.comment { font-family: -apple-system, sans-serif; font-size: 12px; fill: #0D6EFD; font-weight: 600; }
+</style>
+</defs>
+
+<!-- Title -->
+<text x="350" y="30" text-anchor="middle" class="box-label" fill="#0D6EFD">闭包：Lambda 创建时捕获环境（背包🎒）</text>
+
+<!-- Global Environment box -->
+<rect x="50" y="60" width="200" height="120" rx="12" fill="#E3F2FD" stroke="#0D6EFD" stroke-width="2"/>
+<text x="150" y="85" text-anchor="middle" class="box-label">全局环境</text>
+<text x="150" y="110" text-anchor="middle" class="code">x = 10</text>
+<text x="150" y="130" text-anchor="middle" class="code">y = 20</text>
+
+<!-- Animated highlight of captured variable -->
+<rect x="100" y="95" width="100" height="22" rx="4" fill="none" stroke="#FF9800" stroke-width="2" opacity="0">
+<animate attributeName="opacity" values="0;0;1;1;0;0;0" dur="6s" repeatCount="indefinite"/>
+</rect>
+<text x="150" y="165" text-anchor="middle" class="comment" opacity="0">↑ 被捕获<animate attributeName="opacity" values="0;0;1;1;0;0;0" dur="6s" repeatCount="indefinite"/></text>
+
+<!-- Lambda function box -->
+<rect x="350" y="60" width="250" height="120" rx="12" fill="#E8F5E9" stroke="#4CAF50" stroke-width="2"/>
+<text x="475" y="85" text-anchor="middle" class="box-label">Lambda 函数</text>
+<text x="475" y="110" text-anchor="middle" class="code">(lambda (a) (+ a x))</text>
+<text x="475" y="130" text-anchor="middle" class="code">params: [a]</text>
+<text x="475" y="150" text-anchor="middle" class="code">env: ?</text>
+
+<!-- Backpack emoji animation -->
+<text x="475" y="50" text-anchor="middle" font-size="28" opacity="0">🎒<animate attributeName="opacity" values="0;0;0;0;1;1;1;1;1;1" dur="6s" repeatCount="indefinite"/></text>
+
+<!-- Arrow from env to lambda (backpack capture) -->
+<path d="M250 120C300 120 320 120 348 120" stroke="#FF9800" stroke-width="3" stroke-dasharray="6 4" marker-end="url(#arrow-orange)" opacity="0">
+<defs>
+<marker id="arrow-orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+<path d="M 0 0 L 10 5 L 0 10 z" fill="#FF9800"/>
+</marker>
+</defs>
+<animate attributeName="opacity" values="0;0;1;1;1;0;0" dur="6s" repeatCount="indefinite"/>
+</path>
+
+<!-- After capture: env field updated -->
+<rect x="430" y="140" width="90" height="22" rx="4" fill="#FFF3E0" stroke="#FF9800" stroke-width="1.5" opacity="0">
+<text x="475" y="155" text-anchor="middle" class="code" fill="#FF9800">env: ✓</text>
+<animate attributeName="opacity" values="0;0;0;0;0;1;1;1;1;1" dur="6s" repeatCount="indefinite"/>
+</rect>
+
+<!-- Calling the closure -->
+<text x="350" y="230" text-anchor="middle" class="box-label" fill="#0D6EFD" opacity="0">调用闭包 (f 5)
+<animate attributeName="opacity" values="0;0;0;0;0;0;0;1;1;0" dur="6s" repeatCount="indefinite"/>
+</text>
+
+<!-- Call environment -->
+<rect x="200" y="260" width="150" height="80" rx="10" fill="#F3E5F5" stroke="#9C27B0" stroke-width="2" opacity="0">
+<text x="275" y="285" text-anchor="middle" class="box-label">调用环境</text>
+<text x="275" y="310" text-anchor="middle" class="code">a = 5</text>
+<text x="275" y="330" text-anchor="middle" class="comment">←背包里的 x=10</text>
+<animate attributeName="opacity" values="0;0;0;0;0;0;0;1;1;0" dur="6s" repeatCount="indefinite"/>
+</rect>
+
+<!-- Result -->
+<rect x="450" y="260" width="150" height="80" rx="10" fill="#E8F5E9" stroke="#4CAF50" stroke-width="2" opacity="0">
+<text x="525" y="285" text-anchor="middle" class="box-label">结果</text>
+<text x="525" y="315" text-anchor="middle" font-family="monospace" font-size="22" fill="#4CAF50" font-weight="700">15</text>
+<animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;0" dur="6s" repeatCount="indefinite"/>
+</rect>
+
+<!-- Arrow from call env to result -->
+<path d="M350 300L448 300" stroke="#9C27B0" stroke-width="2" marker-end="url(#arrow-purple)" opacity="0">
+<defs>
+<marker id="arrow-purple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+<path d="M 0 0 L 10 5 L 0 10 z" fill="#9C27B0"/>
+</marker>
+</defs>
+<animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;0" dur="6s" repeatCount="indefinite"/>
+</path>
+
+<!-- Steps text at bottom -->
+<text x="20" y="380" class="comment" opacity="0.3">① 定义变量 ② 创建 lambda（背包捕获环境）③ 调用闭包 ④ 计算结果</text>
+</svg>

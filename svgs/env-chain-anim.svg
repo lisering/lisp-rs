@@ -1,0 +1,66 @@
+<svg width="700" height="350" viewBox="0 0 700 350" fill="none" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<style>
+.label { font-family: -apple-system, 'Segoe UI', sans-serif; font-size: 13px; fill: #495057; font-weight: 600; }
+.code { font-family: 'SF Mono', monospace; font-size: 11px; fill: #868E96; }
+.found { font-family: -apple-system, sans-serif; font-size: 12px; fill: #4CAF50; font-weight: 700; }
+</style>
+<marker id="arr-r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+<path d="M 0 0 L 10 5 L 0 10 z" fill="#0D6EFD"/>
+</marker>
+</defs>
+
+<!-- Title -->
+<text x="350" y="30" text-anchor="middle" class="label" fill="#0D6EFD">环境链：变量查找沿 outer 链向上搜索</text>
+
+<!-- Inner environment (lambda call env) -->
+<rect x="30" y="60" width="180" height="100" rx="12" fill="#E3F2FD" stroke="#0D6EFD" stroke-width="2"/>
+<text x="120" y="85" text-anchor="middle" class="label">调用环境</text>
+<text x="120" y="110" text-anchor="middle" class="code">a = 5</text>
+<text x="120" y="135" text-anchor="middle" class="code">（没有 x）</text>
+<text x="120" y="155" text-anchor="middle" class="code" fill="#dc3545">x? → 不在这里</text>
+
+<!-- outer arrow -->
+<path d="M210 110L270 110" stroke="#6C757D" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arr-r)"/>
+<text x="240" y="100" text-anchor="middle" class="code">outer</text>
+
+<!-- Middle environment (lambda creation env) -->
+<rect x="270" y="60" width="180" height="100" rx="12" fill="#FFF3E0" stroke="#FF9800" stroke-width="2"/>
+<text x="360" y="85" text-anchor="middle" class="label">捕获环境</text>
+<text x="360" y="110" text-anchor="middle" class="code">b = 10</text>
+<text x="360" y="135" text-anchor="middle" class="code">（没有 x）</text>
+<text x="360" y="155" text-anchor="middle" class="code" fill="#dc3545">x? → 不在这里</text>
+
+<!-- outer arrow -->
+<path d="M450 110L510 110" stroke="#6C757D" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arr-r)"/>
+<text x="480" y="100" text-anchor="middle" class="code">outer</text>
+
+<!-- Global environment -->
+<rect x="510" y="60" width="180" height="100" rx="12" fill="#E8F5E9" stroke="#4CAF50" stroke-width="2"/>
+<text x="600" y="85" text-anchor="middle" class="label">全局环境</text>
+<text x="600" y="110" text-anchor="middle" class="code">x = 42</text>
+<text x="600" y="130" text-anchor="middle" class="code">y = 20</text>
+<text x="600" y="155" text-anchor="middle" class="found">x? → ✓ 找到了！</text>
+
+<!-- Animated search dot traveling through the chain -->
+<circle cx="120" cy="110" r="10" fill="#0D6EFD" opacity="0">
+<animate attributeName="opacity" values="0;1;1;1;1;1;1;1;1;0" dur="4s" repeatCount="indefinite"/>
+<animate attributeName="cx" values="120;120;200;270;360;450;510;600;600;600" dur="4s" repeatCount="indefinite" keyTimes="0;0.1;0.15;0.2;0.4;0.45;0.5;0.65;0.8;1"/>
+</circle>
+
+<!-- Pulsing effect on found variable -->
+<rect x="555" y="95" width="90" height="22" rx="4" fill="none" stroke="#4CAF50" stroke-width="2" opacity="0">
+<animate attributeName="opacity" values="0;0;0;0;0;0;0.8;1;0;0" dur="4s" repeatCount="indefinite"/>
+<animate attributeName="stroke-width" values="2;2;2;2;2;2;2;4;2;2" dur="4s" repeatCount="indefinite"/>
+</rect>
+
+<!-- Explanation at bottom -->
+<text x="350" y="210" text-anchor="middle" class="label">查找 x 的过程：调用环境 → 捕获环境 → 全局环境</text>
+<text x="350" y="235" text-anchor="middle" class="code">每一层都先检查自己有没有 x，没有就沿 outer 指针往上找</text>
+<text x="350" y="260" text-anchor="middle" class="found">最终在全局环境找到 x = 42</text>
+
+<!-- Performance note -->
+<rect x="150" y="285" width="400" height="45" rx="10" fill="#F8F9FA" stroke="#DEE2E6" stroke-width="1.5"/>
+<text x="350" y="310" text-anchor="middle" class="code">Symbol 改为 u64 后，每层查找是 O(1) 哈希查找</text>
+<text x="350" y="325" text-anchor="middle" class="code">N 层环境链 = 最坏 O(N)，但通常 N 很小（1-3 层）</text>
+</svg>

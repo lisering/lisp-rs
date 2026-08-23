@@ -1,0 +1,81 @@
+<svg width="700" height="380" viewBox="0 0 700 380" fill="none" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<style>
+.label { font-family: -apple-system, 'Segoe UI', sans-serif; font-size: 13px; fill: #495057; font-weight: 600; }
+.code { font-family: 'SF Mono', monospace; font-size: 12px; fill: #868E96; }
+.id { font-family: 'SF Mono', monospace; font-size: 16px; fill: #4CAF50; font-weight: 700; }
+.step { font-family: -apple-system, sans-serif; font-size: 11px; fill: #0D6EFD; font-weight: 600; }
+</style>
+<marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+<path d="M 0 0 L 10 5 L 0 10 z" fill="#0D6EFD"/>
+</marker>
+</defs>
+
+<!-- Title -->
+<text x="350" y="30" text-anchor="middle" class="label" fill="#0D6EFD">字符串驻留：String → u64 映射</text>
+
+<!-- Interner box -->
+<rect x="250" y="60" width="200" height="200" rx="12" fill="#F8F9FA" stroke="#6C757D" stroke-width="2"/>
+<text x="350" y="85" text-anchor="middle" class="label">Interner 驻留器</text>
+<text x="350" y="105" text-anchor="middle" class="code">HashMap&lt;String, u64&gt;</text>
+
+<!-- Interner entries -->
+<rect x="270" y="120" width="160" height="24" rx="4" fill="#E3F2FD" stroke="#0D6EFD" stroke-width="1"/>
+<text x="350" y="136" text-anchor="middle" class="code">"if" → 0</text>
+
+<rect x="270" y="150" width="160" height="24" rx="4" fill="#E3F2FD" stroke="#0D6EFD" stroke-width="1"/>
+<text x="350" y="166" text-anchor="middle" class="code">"+" → 1</text>
+
+<rect x="270" y="180" width="160" height="24" rx="4" fill="#E3F2FD" stroke="#0D6EFD" stroke-width="1"/>
+<text x="350" y="196" text-anchor="middle" class="code">"define" → 2</text>
+
+<rect x="270" y="210" width="160" height="24" rx="4" fill="#FFF3E0" stroke="#FF9800" stroke-width="2" opacity="0.7">
+<animate attributeName="stroke-width" values="2;3;2" dur="2s" repeatCount="indefinite"/>
+</rect>
+<text x="350" y="226" text-anchor="middle" class="code">"lambda" → 3</text>
+
+<!-- Input strings on the left -->
+<text x="100" y="140" text-anchor="middle" class="label">输入</text>
+<text x="100" y="165" text-anchor="middle" class="code">"if"</text>
+<text x="100" y="185" text-anchor="middle" class="code">"+"</text>
+<text x="100" y="205" text-anchor="middle" class="code">"define"</text>
+<text x="100" y="225" text-anchor="middle" class="code">"lambda"</text>
+
+<!-- Arrows from input to interner -->
+<path d="M140 160L268 132" stroke="#0D6EFD" stroke-width="1.5" marker-end="url(#arr)" opacity="0.5"/>
+<path d="M140 180L268 162" stroke="#0D6EFD" stroke-width="1.5" marker-end="url(#arr)" opacity="0.5"/>
+<path d="M140 200L268 192" stroke="#0D6EFD" stroke-width="1.5" marker-end="url(#arr)" opacity="0.5"/>
+<path d="M140 220L268 222" stroke="#FF9800" stroke-width="2" marker-end="url(#arr)">
+<animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite"/>
+</path>
+
+<!-- Output u64 on the right -->
+<text x="600" y="140" text-anchor="middle" class="label">输出</text>
+<text x="600" y="165" text-anchor="middle" class="id">0u64</text>
+<text x="600" y="185" text-anchor="middle" class="id">1u64</text>
+<text x="600" y="205" text-anchor="middle" class="id">2u64</text>
+<text x="600" y="225" text-anchor="middle" class="id" fill="#FF9800">
+  3u64
+  <animate attributeName="opacity" values="0;1;1" dur="2s" repeatCount="indefinite"/>
+</text>
+
+<!-- Arrows from interner to output -->
+<path d="M430 132L560 160" stroke="#4CAF50" stroke-width="1.5" marker-end="url(#arr)" opacity="0.5"/>
+<path d="M430 162L560 180" stroke="#4CAF50" stroke-width="1.5" marker-end="url(#arr)" opacity="0.5"/>
+<path d="M430 192L560 200" stroke="#4CAF50" stroke-width="1.5" marker-end="url(#arr)" opacity="0.5"/>
+<path d="M430 222L560 220" stroke="#FF9800" stroke-width="2" marker-end="url(#arr)">
+<animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite"/>
+</path>
+
+<!-- Animated data packet flowing through -->
+<circle cx="140" cy="222" r="6" fill="#FF9800" opacity="0">
+<animate attributeName="opacity" values="0;1;1;1;1;0;0" dur="2s" repeatCount="indefinite"/>
+<animate attributeName="cx" values="140;140;268;268;430;560;560" dur="2s" repeatCount="indefinite" keyTimes="0;0.1;0.25;0.4;0.55;0.7;1"/>
+</circle>
+
+<!-- Benefits section at bottom -->
+<text x="350" y="295" text-anchor="middle" class="label" fill="#0D6EFD">为什么用 u64？</text>
+<rect x="80" y="310" width="540" height="55" rx="10" fill="#F8F9FA" stroke="#DEE2E6" stroke-width="1.5"/>
+<text x="350" y="330" text-anchor="middle" class="code">比较 Symbol：String 是 O(n) 逐字节比较，u64 是 O(1) 整数比较</text>
+<text x="350" y="350" text-anchor="middle" class="code">哈希 Symbol：String 要逐字节算哈希，u64 的哈希是恒等函数（直接返回自己）</text>
+</svg>

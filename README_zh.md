@@ -672,6 +672,8 @@ Lisp 里函数跟数字、字符串一样，可以传来传去：
 
 ![pipeline](svgs/pipeline.svg)
 
+🎬 **[点击查看动态流程图](svgs/pipeline-anim.svg)** — 蓝点表示数据从源码流经 tokenize → parse → eval 最终变成结果的过程。
+
 ---
 
 ### 📚 跟其他经典教程有什么区别？
@@ -2533,6 +2535,8 @@ test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 
 
 ![parser seq](svgs/parser-seq.svg)
+
+🎬 **[点击查看解析动画](svgs/parser-anim.svg)** — Token 指针从左到右移动，逐步构建 AST 的过程。
 
 
 🔄 **递归解析的调用过程**：`parse()` 和 `read_seq()` 互相调用——`parse` 遇到 `(` 委托给 `read_seq`，`read_seq` 遇到子元素又调用 `parse`，形成递归下降。每次遇到 `)` 就"弹出一层"，最终构建出完整的嵌套 AST 树。
@@ -4514,6 +4518,8 @@ pub struct LispEnv {
 
 ![env chain](svgs/env-chain.svg)
 
+🎬 **[点击查看环境链查找动画](svgs/env-chain-anim.svg)** — 蓝点沿 outer 链从调用环境到全局环境搜索变量 x。
+
 
 🔗 **环境链 = 单向链表**：每个环境帧都有一个 `outer` 指针指向外层。查找变量时沿着这条链从内向外搜索——这就是词法作用域的运行时实现。`Rc<RefCell<>>` 允许多个地方共享同一帧（比如两个闭包捕获同一个外层环境）。
 
@@ -4717,6 +4723,8 @@ test result: ok. 22 passed; 0 failed
 
 
 ![closure](svgs/closure.svg)
+
+🎬 **[点击查看闭包动画](svgs/closure-anim.svg)** — Lambda 创建时背包🎒捕获环境，调用时从背包取出变量的过程。
 
 
 🎯 **闭包 = 函数体 + 诞生时的环境**。所谓"函数记住了它诞生时的环境"，技术上就是 `Lambda.env` 字段指向定义时的 `CallFrame`。调用时创建的新帧以这个捕获的帧为 `outer`——所以内层函数能"看见"外层函数的变量。
@@ -5371,6 +5379,8 @@ pub fn eval(exp: &LispExp, env: &mut LispEnv) -> Result<LispExp, LispErr> {
 
 ![tco trampoline](svgs/tco-trampoline.svg)
 
+🎬 **[点击查看蹦床循环动画](svgs/tco-anim.svg)** — eval 返回 Lambda 调用 → 蹦床接住 → bounce 回 loop → 重复 10000 次不爆栈。
+
 
 🔑 **图中的颜色含义**：🟢 绿色 = TCO 路径（`continue` 不增栈），🔵 蓝色 = 返回路径（出结果）。注意所有尾调用位置（`if` 分支、`lambda` 体调用）都走绿色路径。
 
@@ -5534,6 +5544,8 @@ pub fn intern(s: &str) -> u64 {
 
 
 ![string interning](svgs/string-interning.svg)
+
+🎬 **[点击查看字符串驻留动画](svgs/string-interning-anim.svg)** — String 输入驻留器后映射为 u64 整数 ID。
 
 
 🏗️ **双向映射**：`id_to_str` 用于 `lookup(id)` 输出调试信息，`str_to_id` 用于 `intern(str)` 快速去重。`OnceLock<RwLock<>>` 保证了全局唯一实例且线程安全。
