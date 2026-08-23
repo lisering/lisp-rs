@@ -20,11 +20,11 @@
 <text x="450" y="120" text-anchor="middle" class="label" fill="#FF9800" font-size="20">蹦床 loop (trampoline)</text>
 
 <path d="M450 145L450 200" stroke="#0D6EFD" stroke-width="3" marker-end="url(#arr-down)" opacity="0">
-<animate attributeName="opacity" values="1;0;0;0;1" dur="3s" repeatCount="indefinite"/>
+<animate attributeName="opacity" values="1;0;0;0;1" dur="9s" repeatCount="indefinite" keyTimes="0;0.08;0.16;0.24;1"/>
 </path>
 
 <path d="M450 310L450 145" stroke="#FF9800" stroke-width="3" marker-end="url(#arr-up)" opacity="0">
-<animate attributeName="opacity" values="0;1;0;1;0" dur="3s" repeatCount="indefinite"/>
+<animate attributeName="opacity" values="0;1;0;1;0" dur="9s" repeatCount="indefinite" keyTimes="0;0.08;0.16;0.24;1"/>
 </path>
 
 <rect x="250" y="200" width="400" height="110" rx="12" fill="#E3F2FD" stroke="#0D6EFD" stroke-width="2.5"/>
@@ -34,17 +34,17 @@
 <text x="450" y="302" text-anchor="middle" class="code">（不递归调用，而是返回）</text>
 
 <text x="450" y="355" text-anchor="middle" class="step" font-size="17">迭代次数：</text>
-<text x="450" y="390" text-anchor="middle" class="counter" opacity="0">1<animate attributeName="opacity" values="1;0;0;0;0;0" dur="3s" repeatCount="indefinite"/></text>
-<text x="450" y="390" text-anchor="middle" class="counter" opacity="0">100<animate attributeName="opacity" values="0;1;0;0;0;0" dur="3s" repeatCount="indefinite"/></text>
-<text x="450" y="390" text-anchor="middle" class="counter" opacity="0">1000<animate attributeName="opacity" values="0;0;1;0;0;0" dur="3s" repeatCount="indefinite"/></text>
-<text x="450" y="390" text-anchor="middle" class="counter" opacity="0">5000<animate attributeName="opacity" values="0;0;0;1;0;0" dur="3s" repeatCount="indefinite"/></text>
-<text x="450" y="390" text-anchor="middle" class="counter" opacity="0">10000<animate attributeName="opacity" values="0;0;0;0;1;0" dur="3s" repeatCount="indefinite"/></text>
-<text x="450" y="390" text-anchor="middle" class="counter" opacity="0">✓ 10000<animate attributeName="opacity" values="0;0;0;0;0;1" dur="3s" repeatCount="indefinite"/></text>
+<text x="450" y="390" text-anchor="middle" class="counter" opacity="0">1<animate attributeName="opacity" values="1;1;0;0;0;0;0;0;0;0" dur="9s" repeatCount="indefinite" keyTimes="0;0.08;0.10;0.16;0.18;0.24;0.26;0.48;0.50;1"/></text>
+<text x="450" y="390" text-anchor="middle" class="counter" opacity="0">100<animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0" dur="9s" repeatCount="indefinite" keyTimes="0;0.08;0.10;0.16;0.18;0.24;0.26;0.48;0.50;1"/></text>
+<text x="450" y="390" text-anchor="middle" class="counter" opacity="0">1000<animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0;0" dur="9s" repeatCount="indefinite" keyTimes="0;0.08;0.10;0.16;0.18;0.24;0.26;0.48;0.50;1"/></text>
+<text x="450" y="390" text-anchor="middle" class="counter" opacity="0">5000<animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" dur="9s" repeatCount="indefinite" keyTimes="0;0.08;0.10;0.16;0.18;0.24;0.26;0.48;0.50;1"/></text>
+<text x="450" y="390" text-anchor="middle" class="counter" opacity="0">10000<animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0;0" dur="9s" repeatCount="indefinite" keyTimes="0;0.08;0.10;0.16;0.18;0.24;0.26;0.48;0.50;1"/></text>
+<text x="450" y="390" text-anchor="middle" class="counter" opacity="0">✓ 10000<animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1" dur="9s" repeatCount="indefinite" keyTimes="0;0.08;0.10;0.16;0.18;0.24;0.26;0.48;0.50;1"/></text>
 
 <rect x="250" y="420" width="400" height="45" rx="10" fill="#E8F5E9" stroke="#4CAF50" stroke-width="2.5" opacity="0">
-<animate attributeName="opacity" values="0;0;0;0;0;1" dur="3s" repeatCount="indefinite"/>
+<animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1;0" dur="9s" repeatCount="indefinite" keyTimes="0;0.08;0.10;0.16;0.18;0.24;0.26;0.48;0.50;0.90;1"/>
 </rect>
-<text x="450" y="448" text-anchor="middle" class="label" fill="#4CAF50" font-size="18" opacity="0">✓ 完成！栈深度始终 = 1（不爆栈）<animate attributeName="opacity" values="0;0;0;0;0;1" dur="3s" repeatCount="indefinite"/></text>
+<text x="450" y="448" text-anchor="middle" class="label" fill="#4CAF50" font-size="18" opacity="0">✓ 完成！栈深度始终 = 1（不爆栈）<animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;1;0" dur="9s" repeatCount="indefinite" keyTimes="0;0.08;0.10;0.16;0.18;0.24;0.26;0.48;0.50;0.90;1"/></text>
 
 <text x="40" y="230" class="step" fill="#dc3545" font-size="18">无 TCO：</text>
 <text x="40" y="258" class="code">eval 递归 10000 层</text>

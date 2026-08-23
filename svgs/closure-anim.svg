@@ -21,44 +21,44 @@
 <text x="165" y="152" text-anchor="middle" class="code">y = 20</text>
 
 <rect x="115" y="112" width="100" height="24" rx="4" fill="none" stroke="#FF9800" stroke-width="2.5" opacity="0">
-<animate attributeName="opacity" values="0;0;1;1;0;0;0" dur="6s" repeatCount="indefinite"/>
+<animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0" dur="13s" repeatCount="indefinite" keyTimes="0;0.07;0.09;0.18;0.20;0.35;0.38;0.50;0.90;1"/>
 </rect>
-<text x="165" y="195" text-anchor="middle" class="comment" opacity="0">↑ 被捕获<animate attributeName="opacity" values="0;0;1;1;0;0;0" dur="6s" repeatCount="indefinite"/></text>
+<text x="165" y="195" text-anchor="middle" class="comment" opacity="0">↑ 被捕获<animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0;0" dur="13s" repeatCount="indefinite" keyTimes="0;0.07;0.09;0.18;0.20;0.35;0.38;0.50;0.90;1"/></text>
 
 <rect x="450" y="70" width="290" height="140" rx="12" fill="#E8F5E9" stroke="#4CAF50" stroke-width="2.5"/>
 <text x="595" y="100" text-anchor="middle" class="box-label">Lambda 函数</text>
 <text x="595" y="128" text-anchor="middle" class="code">(lambda (a) (+ a x))</text>
 <text x="595" y="152" text-anchor="middle" class="code">params: [a]</text>
-<text x="595" y="176" text-anchor="middle" class="code" opacity="1">env: ?<animate attributeName="opacity" values="1;1;1;1;1;0;0;0;0;0" dur="6s" repeatCount="indefinite"/></text>
+<text x="595" y="176" text-anchor="middle" class="code" opacity="1">env: ?<animate attributeName="opacity" values="1;1;1;0;0;0;0;0;0;0;0" dur="13s" repeatCount="indefinite" keyTimes="0;0.07;0.09;0.18;0.20;0.35;0.38;0.50;0.55;0.90;1"/></text>
 
-<text x="780" y="55" text-anchor="middle" font-size="28" opacity="0">🎒<animate attributeName="opacity" values="0;0;0;0;1;1;1;1;1;1" dur="6s" repeatCount="indefinite"/></text>
+<text x="780" y="55" text-anchor="middle" font-size="28" opacity="0">🎒<animate attributeName="opacity" values="0;0;0;0;1;1;1;1;1;1;1" dur="13s" repeatCount="indefinite" keyTimes="0;0.07;0.09;0.18;0.20;0.35;0.38;0.50;0.55;0.90;1"/></text>
 
 <path d="M290 140C350 140 380 140 448 140" stroke="#FF9800" stroke-width="3.5" stroke-dasharray="8 5" marker-end="url(#arrow-orange)" opacity="0">
-<animate attributeName="opacity" values="0;0;1;1;1;0;0" dur="6s" repeatCount="indefinite"/>
+<animate attributeName="opacity" values="0;0;1;1;1;0;0;0;0;0" dur="13s" repeatCount="indefinite" keyTimes="0;0.07;0.09;0.18;0.20;0.35;0.38;0.50;0.90;1"/>
 </path>
 
 <rect x="550" y="165" width="100" height="26" rx="4" fill="#FFF3E0" stroke="#FF9800" stroke-width="2" opacity="0">
-<animate attributeName="opacity" values="0;0;0;0;0;1;1;1;1;1" dur="6s" repeatCount="indefinite"/>
+<animate attributeName="opacity" values="0;0;0;0;0;1;1;1;1;1;1" dur="13s" repeatCount="indefinite" keyTimes="0;0.07;0.09;0.18;0.20;0.35;0.38;0.50;0.55;0.90;1"/>
 </rect>
-<text x="595" y="183" text-anchor="middle" class="code" fill="#FF9800" opacity="0">env: ✓<animate attributeName="opacity" values="0;0;0;0;0;1;1;1;1;1" dur="6s" repeatCount="indefinite"/></text>
+<text x="595" y="183" text-anchor="middle" class="code" fill="#FF9800" opacity="0">env: ✓<animate attributeName="opacity" values="0;0;0;0;0;1;1;1;1;1;1" dur="13s" repeatCount="indefinite" keyTimes="0;0.07;0.09;0.18;0.20;0.35;0.38;0.50;0.55;0.90;1"/></text>
 
-<text x="450" y="265" text-anchor="middle" class="box-label" fill="#0D6EFD" font-size="18" opacity="0">调用闭包 (f 5)<animate attributeName="opacity" values="0;0;0;0;0;0;0;1;1;0" dur="6s" repeatCount="indefinite"/></text>
+<text x="450" y="265" text-anchor="middle" class="box-label" fill="#0D6EFD" font-size="18" opacity="0">调用闭包 (f 5)<animate attributeName="opacity" values="0;0;0;0;0;0;0;1;1;1;0" dur="13s" repeatCount="indefinite" keyTimes="0;0.07;0.09;0.18;0.20;0.35;0.38;0.42;0.50;0.90;1"/></text>
 
 <rect x="230" y="300" width="200" height="100" rx="10" fill="#F3E5F5" stroke="#9C27B0" stroke-width="2.5" opacity="0">
-<animate attributeName="opacity" values="0;0;0;0;0;0;0;1;1;0" dur="6s" repeatCount="indefinite"/>
+<animate attributeName="opacity" values="0;0;0;0;0;0;0;1;1;1;0" dur="13s" repeatCount="indefinite" keyTimes="0;0.07;0.09;0.18;0.20;0.35;0.38;0.42;0.50;0.90;1"/>
 </rect>
-<text x="330" y="330" text-anchor="middle" class="box-label" opacity="0">调用环境<animate attributeName="opacity" values="0;0;0;0;0;0;0;1;1;0" dur="6s" repeatCount="indefinite"/></text>
-<text x="330" y="358" text-anchor="middle" class="code" opacity="0">a = 5<animate attributeName="opacity" values="0;0;0;0;0;0;0;1;1;0" dur="6s" repeatCount="indefinite"/></text>
-<text x="330" y="382" text-anchor="middle" class="comment" opacity="0">←背包里的 x=10<animate attributeName="opacity" values="0;0;0;0;0;0;0;1;1;0" dur="6s" repeatCount="indefinite"/></text>
+<text x="330" y="330" text-anchor="middle" class="box-label" opacity="0">调用环境<animate attributeName="opacity" values="0;0;0;0;0;0;0;1;1;1;0" dur="13s" repeatCount="indefinite" keyTimes="0;0.07;0.09;0.18;0.20;0.35;0.38;0.42;0.50;0.90;1"/></text>
+<text x="330" y="358" text-anchor="middle" class="code" opacity="0">a = 5<animate attributeName="opacity" values="0;0;0;0;0;0;0;1;1;1;0" dur="13s" repeatCount="indefinite" keyTimes="0;0.07;0.09;0.18;0.20;0.35;0.38;0.42;0.50;0.90;1"/></text>
+<text x="330" y="382" text-anchor="middle" class="comment" opacity="0">←背包里的 x=10<animate attributeName="opacity" values="0;0;0;0;0;0;0;1;1;1;0" dur="13s" repeatCount="indefinite" keyTimes="0;0.07;0.09;0.18;0.20;0.35;0.38;0.42;0.50;0.90;1"/></text>
 
 <rect x="560" y="300" width="200" height="100" rx="10" fill="#E8F5E9" stroke="#4CAF50" stroke-width="2.5" opacity="0">
-<animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;0" dur="6s" repeatCount="indefinite"/>
+<animate attributeName="opacity" values="0;0;0;0;0;0;0;0;0;0;1;0" dur="13s" repeatCount="indefinite" keyTimes="0;0.07;0.09;0.18;0.20;0.35;0.38;0.42;0.50;0.55;0.90;1"/>
 </rect>
-<text x="660" y="330" text-anchor="middle" class="box-label" opacity="0">结果<animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;0" dur="6s" repeatCount="indefinite"/></text>
-<text x="660" y="370" text-anchor="middle" font-family="monospace" font-size="28" fill="#4CAF50" font-weight="700" opacity="0">15<animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;0" dur="6s" repeatCount="indefinite"/></text>
+<text x="660" y="330" text-anchor="middle" class="box-label" opacity="0">结果<animate attributeName="opacity" values="0;0;0;0;0;0;0;0;0;0;1;0" dur="13s" repeatCount="indefinite" keyTimes="0;0.07;0.09;0.18;0.20;0.35;0.38;0.42;0.50;0.55;0.90;1"/></text>
+<text x="660" y="370" text-anchor="middle" font-family="monospace" font-size="28" fill="#4CAF50" font-weight="700" opacity="0">15<animate attributeName="opacity" values="0;0;0;0;0;0;0;0;0;0;1;0" dur="13s" repeatCount="indefinite" keyTimes="0;0.07;0.09;0.18;0.20;0.35;0.38;0.42;0.50;0.55;0.90;1"/></text>
 
 <path d="M430 350L558 350" stroke="#9C27B0" stroke-width="2.5" marker-end="url(#arrow-purple)" opacity="0">
-<animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;0" dur="6s" repeatCount="indefinite"/>
+<animate attributeName="opacity" values="0;0;0;0;0;0;0;0;0;0;1;0" dur="13s" repeatCount="indefinite" keyTimes="0;0.07;0.09;0.18;0.20;0.35;0.38;0.42;0.50;0.55;0.90;1"/>
 </path>
 
 <text x="20" y="435" class="comment" font-size="15" opacity="0.3">① 定义变量 ② 创建 lambda（背包捕获环境）③ 调用闭包 ④ 计算结果</text>

@@ -35,8 +35,8 @@
 <text x="679" y="115" text-anchor="middle" class="flow">eval</text>
 
 <circle cx="190" cy="125" r="10" fill="#0D6EFD" opacity="0">
-<animate attributeName="opacity" values="0;1;1;1;1;0" dur="4s" repeatCount="indefinite"/>
-<animate attributeName="cx" values="190;190;248;248;420;420;478;478;650;650;708;708" dur="4s" repeatCount="indefinite" keyTimes="0;0.05;0.12;0.18;0.25;0.32;0.38;0.45;0.52;0.58;0.65;0.72"/>
+<animate attributeName="opacity" values="0;1;1;1;1;0" dur="10s" repeatCount="indefinite" keyTimes="0;0.04;0.07;0.50;0.90;1"/>
+<animate attributeName="cx" values="190;190;248;248;420;420;478;478;650;650;708;708;708" dur="10s" repeatCount="indefinite" keyTimes="0;0.04;0.07;0.11;0.15;0.19;0.23;0.27;0.31;0.35;0.39;0.90;1"/>
 </circle>
 
 <text x="450" y="220" text-anchor="middle" class="label" fill="#0D6EFD" font-size="18">数据流转过程（蓝点表示数据正在流动）</text>
@@ -58,7 +58,7 @@
 <text x="805" y="305" text-anchor="middle" class="detail" font-size="13">::Number 3.0</text>
 
 <rect x="710" y="70" width="170" height="110" rx="12" fill="none" stroke="#9C27B0" stroke-width="2" opacity="0">
-<animate attributeName="opacity" values="0;0;0;0;0;0;0;0.8;0.8;0.8;0" dur="4s" repeatCount="indefinite"/>
-<animate attributeName="stroke-width" values="2;2;2;2;2;2;2;2;4;2;2" dur="4s" repeatCount="indefinite"/>
+<animate attributeName="opacity" values="0;0;0;0;0;0;0;0.8;1;1;0" dur="10s" repeatCount="indefinite" keyTimes="0;0.04;0.07;0.11;0.15;0.19;0.23;0.27;0.31;0.90;1"/>
+<animate attributeName="stroke-width" values="2;2;2;2;2;2;2;2;4;4;2" dur="10s" repeatCount="indefinite" keyTimes="0;0.04;0.07;0.11;0.15;0.19;0.23;0.27;0.31;0.90;1"/>
 </rect>
 </svg>

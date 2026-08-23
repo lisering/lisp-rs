@@ -27,7 +27,7 @@
 <text x="450" y="234" text-anchor="middle" class="code">"define" → 2</text>
 
 <rect x="345" y="250" width="210" height="28" rx="4" fill="#FFF3E0" stroke="#FF9800" stroke-width="2.5">
-<animate attributeName="stroke-width" values="2;4;2" dur="2s" repeatCount="indefinite"/>
+<animate attributeName="stroke-width" values="2;4;2" dur="6s" repeatCount="indefinite" keyTimes="0;0.5;1"/>
 </rect>
 <text x="450" y="269" text-anchor="middle" class="code">"lambda" → 3</text>
 
@@ -41,25 +41,25 @@
 <path d="M170 212L343 194" stroke="#0D6EFD" stroke-width="2" marker-end="url(#arr)" opacity="0.5"/>
 <path d="M170 238L343 229" stroke="#0D6EFD" stroke-width="2" marker-end="url(#arr)" opacity="0.5"/>
 <path d="M170 264L343 264" stroke="#FF9800" stroke-width="2.5" marker-end="url(#arr)">
-<animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite"/>
+<animate attributeName="opacity" values="0.3;1;0.3" dur="6s" repeatCount="indefinite" keyTimes="0;0.5;1"/>
 </path>
 
 <text x="770" y="160" text-anchor="middle" class="label">输出</text>
 <text x="770" y="195" text-anchor="middle" class="id">0u64</text>
 <text x="770" y="222" text-anchor="middle" class="id">1u64</text>
 <text x="770" y="249" text-anchor="middle" class="id">2u64</text>
-<text x="770" y="276" text-anchor="middle" class="id" fill="#FF9800" opacity="0">3u64<animate attributeName="opacity" values="0;1;1" dur="2s" repeatCount="indefinite"/></text>
+<text x="770" y="276" text-anchor="middle" class="id" fill="#FF9800" opacity="0">3u64<animate attributeName="opacity" values="0;0;1;1" dur="6s" repeatCount="indefinite" keyTimes="0;0.35;0.40;1"/></text>
 
 <path d="M555 159L740 190" stroke="#4CAF50" stroke-width="2" marker-end="url(#arr)" opacity="0.5"/>
 <path d="M555 194L740 217" stroke="#4CAF50" stroke-width="2" marker-end="url(#arr)" opacity="0.5"/>
 <path d="M555 229L740 244" stroke="#4CAF50" stroke-width="2" marker-end="url(#arr)" opacity="0.5"/>
 <path d="M555 264L740 270" stroke="#FF9800" stroke-width="2.5" marker-end="url(#arr)">
-<animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite"/>
+<animate attributeName="opacity" values="0.3;1;0.3" dur="6s" repeatCount="indefinite" keyTimes="0;0.5;1"/>
 </path>
 
 <circle cx="170" cy="264" r="8" fill="#FF9800" opacity="0">
-<animate attributeName="opacity" values="0;1;1;1;1;0;0" dur="2s" repeatCount="indefinite"/>
-<animate attributeName="cx" values="170;170;343;343;555;740;740" dur="2s" repeatCount="indefinite" keyTimes="0;0.1;0.25;0.4;0.55;0.7;1"/>
+<animate attributeName="opacity" values="0;1;1;1;0" dur="6s" repeatCount="indefinite" keyTimes="0;0.04;0.07;0.90;1"/>
+<animate attributeName="cx" values="170;170;343;343;555;740;740;740" dur="6s" repeatCount="indefinite" keyTimes="0;0.04;0.07;0.15;0.30;0.35;0.90;1"/>
 </circle>
 
 <text x="450" y="335" text-anchor="middle" class="label" fill="#0D6EFD" font-size="18">为什么用 u64？</text>

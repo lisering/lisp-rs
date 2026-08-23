@@ -37,13 +37,13 @@
 <text x="710" y="175" text-anchor="middle" class="found">x? → ✓ 找到了！</text>
 
 <circle cx="130" cy="125" r="12" fill="#0D6EFD" opacity="0">
-<animate attributeName="opacity" values="0;1;1;1;1;1;1;1;1;0" dur="4s" repeatCount="indefinite"/>
-<animate attributeName="cx" values="130;130;240;310;420;530;600;710;710;710" dur="4s" repeatCount="indefinite" keyTimes="0;0.1;0.15;0.2;0.4;0.45;0.5;0.65;0.8;1"/>
+<animate attributeName="opacity" values="0;1;1;1;1;1;1;1;0" dur="10s" repeatCount="indefinite" keyTimes="0;0.04;0.07;0.13;0.15;0.25;0.28;0.90;1"/>
+<animate attributeName="cx" values="130;130;240;310;420;530;600;710;710;710" dur="10s" repeatCount="indefinite" keyTimes="0;0.04;0.07;0.13;0.15;0.25;0.28;0.35;0.90;1"/>
 </circle>
 
 <rect x="660" y="112" width="100" height="24" rx="4" fill="none" stroke="#4CAF50" stroke-width="3" opacity="0">
-<animate attributeName="opacity" values="0;0;0;0;0;0;0.8;1;0;0" dur="4s" repeatCount="indefinite"/>
-<animate attributeName="stroke-width" values="2;2;2;2;2;2;2;4;2;2" dur="4s" repeatCount="indefinite"/>
+<animate attributeName="opacity" values="0;0;0;0;0;0;0;0.8;1;1;0" dur="10s" repeatCount="indefinite" keyTimes="0;0.04;0.07;0.13;0.15;0.25;0.28;0.31;0.35;0.90;1"/>
+<animate attributeName="stroke-width" values="2;2;2;2;2;2;2;2;4;4;2" dur="10s" repeatCount="indefinite" keyTimes="0;0.04;0.07;0.13;0.15;0.25;0.28;0.31;0.35;0.90;1"/>
 </rect>
 
 <text x="450" y="235" text-anchor="middle" class="label" font-size="17">查找 x 的过程：调用环境 → 捕获环境 → 全局环境</text>
