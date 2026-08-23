@@ -29,9 +29,9 @@
 <text x="595" y="100" text-anchor="middle" class="box-label">Lambda 函数</text>
 <text x="595" y="128" text-anchor="middle" class="code">(lambda (a) (+ a x))</text>
 <text x="595" y="152" text-anchor="middle" class="code">params: [a]</text>
-<text x="595" y="176" text-anchor="middle" class="code">env: ?</text>
+<text x="595" y="176" text-anchor="middle" class="code" opacity="1">env: ?<animate attributeName="opacity" values="1;1;1;1;1;0;0;0;0;0" dur="6s" repeatCount="indefinite"/></text>
 
-<text x="595" y="60" text-anchor="middle" font-size="32" opacity="0">🎒<animate attributeName="opacity" values="0;0;0;0;1;1;1;1;1;1" dur="6s" repeatCount="indefinite"/></text>
+<text x="780" y="55" text-anchor="middle" font-size="28" opacity="0">🎒<animate attributeName="opacity" values="0;0;0;0;1;1;1;1;1;1" dur="6s" repeatCount="indefinite"/></text>
 
 <path d="M290 140C350 140 380 140 448 140" stroke="#FF9800" stroke-width="3.5" stroke-dasharray="8 5" marker-end="url(#arrow-orange)" opacity="0">
 <animate attributeName="opacity" values="0;0;1;1;1;0;0" dur="6s" repeatCount="indefinite"/>
