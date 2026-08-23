@@ -52,7 +52,7 @@
 <!-- Timeline boxes at bottom -->
 <rect x="40" y="230" width="160" height="60" rx="8" fill="#F8F9FA" stroke="#DEE2E6" stroke-width="1.5"/>
 <text x="120" y="255" text-anchor="middle" class="detail">tokenize("(+ 1 2)")</text>
-<text x="120" y="275" text-anchor="middle" class="detail">→ Vec&lt;String&gt;</text>
+<text x="120" y="275" text-anchor="middle" class="detail">→ Vec&lt;&amp;str&gt;</text>
 
 <rect x="270" y="230" width="160" height="60" rx="8" fill="#F8F9FA" stroke="#DEE2E6" stroke-width="1.5"/>
 <text x="350" y="255" text-anchor="middle" class="detail">parse(tokens)</text>

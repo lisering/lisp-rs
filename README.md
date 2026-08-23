@@ -817,7 +817,9 @@ Can evaluate numbers
 
 ![pipeline en](svgs/pipeline-en.svg)
 
-🎬 **[Click for animated flow](svgs/pipeline-anim.svg)** — Blue dot shows data flowing from source through tokenize → parse → eval to result.
+![pipeline animation](svgs/pipeline.gif)
+
+🎬 Blue dot shows data flowing from source through tokenize → parse → eval to result. [View SVG animation](svgs/pipeline-anim.svg)
 
 ---
 
@@ -2645,7 +2647,9 @@ test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 
 ![parser seq en](svgs/parser-seq-en.svg)
 
-🎬 **[Click for parsing animation](svgs/parser-anim.svg)** — Token pointer moves left to right, building the AST step by step.
+![parser animation](svgs/parser.gif)
+
+🎬 Token pointer moves left to right, building the AST step by step. [View SVG animation](svgs/parser-anim.svg)
 
 
 Recursive parsing call flow: `parse()` and `read_seq()` call each other—`parse` encountering `(` delegates to `read_seq`, `read_seq` encountering a child element calls `parse` again, forming recursive descent. Each time `)` is encountered, "pop one layer," ultimately building the complete nested AST tree.
@@ -4596,7 +4600,9 @@ pub struct LispEnv {
 
 ![env chain en](svgs/env-chain-en.svg)
 
-🎬 **[Click for env chain lookup animation](svgs/env-chain-anim.svg)** — Blue dot searches along outer chain from call env to global env for variable x.
+![env-chain animation](svgs/env-chain.gif)
+
+🎬 Blue dot searches along outer chain from call env to global env for variable x. [View SVG animation](svgs/env-chain-anim.svg)
 
 
 Environment chain = singly linked list: each environment frame has an `outer` pointer to the outer environment. Variable lookup follows this chain from inside to outside—this is the runtime implementation of lexical scoping. `Rc<RefCell<>>` allows multiple places to share the same frame (e.g., two closures capturing the same outer environment).
@@ -4800,7 +4806,9 @@ test result: ok. 22 passed; 0 failed
 
 ![closure en](svgs/closure-en.svg)
 
-🎬 **[Click for closure animation](svgs/closure-anim.svg)** — Lambda captures environment (backpack🎒) at creation, retrieves variables at call time.
+![closure animation](svgs/closure.gif)
+
+🎬 Lambda captures environment (backpack🎒) at creation, retrieves variables at call time. [View SVG animation](svgs/closure-anim.svg)
 
 
 Closure = function body + birth environment. Technically, "a function remembers the environment it was born in" means `Lambda.env` points to the definition-time `CallFrame`. When calling, the new frame uses this captured frame as its `outer`—so the inner function can "see" the outer function's variables.
@@ -5380,7 +5388,9 @@ pub fn eval(exp: &LispExp, env: &mut LispEnv) -> Result<LispExp, LispErr> {
 
 ![tco trampoline en](svgs/tco-trampoline-en.svg)
 
-🎬 **[Click for trampoline animation](svgs/tco-anim.svg)** — eval returns Lambda call → trampoline catches → bounce back to loop → 10000 iterations without stack overflow.
+![tco animation](svgs/tco.gif)
+
+🎬 eval returns Lambda call → trampoline catches → bounce back to loop → 10000 iterations without stack overflow. [View SVG animation](svgs/tco-anim.svg)
 
 
 Color meanings: Green = TCO path (continue, no stack growth), Blue = return path (result produced). Note all tail call positions (if branches, lambda body calls) follow the green path.
@@ -5586,7 +5596,9 @@ String interning:
 
 ![string interning en](svgs/string-interning-en.svg)
 
-🎬 **[Click for string interning animation](svgs/string-interning-anim.svg)** — String input enters interner, maps to u64 integer ID.
+![string-interning animation](svgs/string-interning.gif)
+
+🎬 String input enters interner, maps to u64 integer ID. [View SVG animation](svgs/string-interning-anim.svg)
 
 
 Bidirectional mapping: `id_to_str` for `lookup(id)` to output debug info, `str_to_id` for `intern(str)` fast deduplication. `OnceLock<RwLock<>>` ensures a single global instance and thread safety.

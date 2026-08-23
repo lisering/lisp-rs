@@ -38,35 +38,30 @@
 <text x="350" y="250" text-anchor="middle" class="code">→ 返回 Lambda 调用</text>
 <text x="350" y="270" text-anchor="middle" class="code">（不递归调用，而是返回）</text>
 
-<!-- Animated counter showing iterations -->
-<text x="350" y="320" text-anchor="middle" class="step" opacity="0.6">
-  迭代次数：
-  <animate attributeName="opacity" values="0.6;0.6;0.6" dur="3s" repeatCount="indefinite"/>
-</text>
-<text x="350" y="345" text-anchor="middle" font-family="monospace" font-size="20" fill="#4CAF50" font-weight="700">
-  <animate attributeName="textContent" values="1;100;1000;5000;10000;10000" dur="3s" repeatCount="indefinite"/>
-  <set attributeName="textContent" to="1" begin="0s"/>
-</text>
+<!-- Animated counter: use multiple text elements with opacity animation -->
+<text x="350" y="320" text-anchor="middle" class="step">迭代次数：</text>
+<text x="350" y="345" text-anchor="middle" font-family="monospace" font-size="20" fill="#4CAF50" font-weight="700" opacity="0">1<animate attributeName="opacity" values="1;0;0;0;0;0" dur="3s" repeatCount="indefinite"/></text>
+<text x="350" y="345" text-anchor="middle" font-family="monospace" font-size="20" fill="#4CAF50" font-weight="700" opacity="0">100<animate attributeName="opacity" values="0;1;0;0;0;0" dur="3s" repeatCount="indefinite"/></text>
+<text x="350" y="345" text-anchor="middle" font-family="monospace" font-size="20" fill="#4CAF50" font-weight="700" opacity="0">1000<animate attributeName="opacity" values="0;0;1;0;0;0" dur="3s" repeatCount="indefinite"/></text>
+<text x="350" y="345" text-anchor="middle" font-family="monospace" font-size="20" fill="#4CAF50" font-weight="700" opacity="0">5000<animate attributeName="opacity" values="0;0;0;1;0;0" dur="3s" repeatCount="indefinite"/></text>
+<text x="350" y="345" text-anchor="middle" font-family="monospace" font-size="20" fill="#4CAF50" font-weight="700" opacity="0">10000<animate attributeName="opacity" values="0;0;0;0;1;0" dur="3s" repeatCount="indefinite"/></text>
+<text x="350" y="345" text-anchor="middle" font-family="monospace" font-size="20" fill="#4CAF50" font-weight="700" opacity="0">✓ 10000<animate attributeName="opacity" values="0;0;0;0;0;1" dur="3s" repeatCount="indefinite"/></text>
 
 <!-- Result -->
 <rect x="200" y="370" width="300" height="40" rx="10" fill="#E8F5E9" stroke="#4CAF50" stroke-width="2" opacity="0">
-<text x="350" y="395" text-anchor="middle" class="label" fill="#4CAF50">✓ 完成！栈深度始终 = 1（不爆栈）</text>
-<animate attributeName="opacity" values="0;0;0;1" dur="3s" repeatCount="indefinite"/>
+<animate attributeName="opacity" values="0;0;0;0;0;1" dur="3s" repeatCount="indefinite"/>
 </rect>
+<text x="350" y="395" text-anchor="middle" class="label" fill="#4CAF50" opacity="0">✓ 完成！栈深度始终 = 1（不爆栈）<animate attributeName="opacity" values="0;0;0;0;0;1" dur="3s" repeatCount="indefinite"/></text>
 
 <!-- Without TCO (explosion) -->
 <text x="50" y="200" class="step" fill="#dc3545">无 TCO：</text>
 <text x="50" y="220" class="code">eval 递归 10000 层</text>
 <text x="50" y="240" class="code">→ stack overflow 💥</text>
-<text x="50" y="270" font-size="28" fill="#dc3545">
-  <animate attributeName="opacity" values="1;0.3;1;0.3;1" dur="0.5s" repeatCount="indefinite"/>💥
-</text>
+<text x="80" y="275" font-size="28" fill="#dc3545"><animate attributeName="opacity" values="1;0.3;1;0.3;1;0.3" dur="0.5s" repeatCount="indefinite"/>💥</text>
 
 <!-- With TCO (bouncing) -->
 <text x="540" y="200" class="step" fill="#4CAF50">有 TCO：</text>
 <text x="540" y="220" class="code">loop 循环 10000 次</text>
 <text x="540" y="240" class="code">→ 每次 bounce 回来</text>
-<text x="540" y="270" font-size="28" fill="#4CAF50">
-  <animate attributeName="opacity" values="0.3;1;0.3;1;0.3" dur="0.5s" repeatCount="indefinite"/>✓
-</text>
+<text x="570" y="275" font-size="28" fill="#4CAF50"><animate attributeName="opacity" values="0.3;1;0.3;1;0.3;1" dur="0.5s" repeatCount="indefinite"/>✓</text>
 </svg>

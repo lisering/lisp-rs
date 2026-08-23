@@ -5,6 +5,12 @@
 .code { font-family: 'SF Mono', monospace; font-size: 12px; fill: #868E96; }
 .comment { font-family: -apple-system, sans-serif; font-size: 12px; fill: #0D6EFD; font-weight: 600; }
 </style>
+<marker id="arrow-orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+<path d="M 0 0 L 10 5 L 0 10 z" fill="#FF9800"/>
+</marker>
+<marker id="arrow-purple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+<path d="M 0 0 L 10 5 L 0 10 z" fill="#9C27B0"/>
+</marker>
 </defs>
 
 <!-- Title -->
@@ -34,47 +40,35 @@
 
 <!-- Arrow from env to lambda (backpack capture) -->
 <path d="M250 120C300 120 320 120 348 120" stroke="#FF9800" stroke-width="3" stroke-dasharray="6 4" marker-end="url(#arrow-orange)" opacity="0">
-<defs>
-<marker id="arrow-orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-<path d="M 0 0 L 10 5 L 0 10 z" fill="#FF9800"/>
-</marker>
-</defs>
 <animate attributeName="opacity" values="0;0;1;1;1;0;0" dur="6s" repeatCount="indefinite"/>
 </path>
 
 <!-- After capture: env field updated -->
 <rect x="430" y="140" width="90" height="22" rx="4" fill="#FFF3E0" stroke="#FF9800" stroke-width="1.5" opacity="0">
-<text x="475" y="155" text-anchor="middle" class="code" fill="#FF9800">env: ✓</text>
 <animate attributeName="opacity" values="0;0;0;0;0;1;1;1;1;1" dur="6s" repeatCount="indefinite"/>
 </rect>
+<text x="475" y="155" text-anchor="middle" class="code" fill="#FF9800" opacity="0">env: ✓<animate attributeName="opacity" values="0;0;0;0;0;1;1;1;1;1" dur="6s" repeatCount="indefinite"/></text>
 
 <!-- Calling the closure -->
-<text x="350" y="230" text-anchor="middle" class="box-label" fill="#0D6EFD" opacity="0">调用闭包 (f 5)
-<animate attributeName="opacity" values="0;0;0;0;0;0;0;1;1;0" dur="6s" repeatCount="indefinite"/>
-</text>
+<text x="350" y="230" text-anchor="middle" class="box-label" fill="#0D6EFD" opacity="0">调用闭包 (f 5)<animate attributeName="opacity" values="0;0;0;0;0;0;0;1;1;0" dur="6s" repeatCount="indefinite"/></text>
 
 <!-- Call environment -->
 <rect x="200" y="260" width="150" height="80" rx="10" fill="#F3E5F5" stroke="#9C27B0" stroke-width="2" opacity="0">
-<text x="275" y="285" text-anchor="middle" class="box-label">调用环境</text>
-<text x="275" y="310" text-anchor="middle" class="code">a = 5</text>
-<text x="275" y="330" text-anchor="middle" class="comment">←背包里的 x=10</text>
 <animate attributeName="opacity" values="0;0;0;0;0;0;0;1;1;0" dur="6s" repeatCount="indefinite"/>
 </rect>
+<text x="275" y="285" text-anchor="middle" class="box-label" opacity="0">调用环境<animate attributeName="opacity" values="0;0;0;0;0;0;0;1;1;0" dur="6s" repeatCount="indefinite"/></text>
+<text x="275" y="310" text-anchor="middle" class="code" opacity="0">a = 5<animate attributeName="opacity" values="0;0;0;0;0;0;0;1;1;0" dur="6s" repeatCount="indefinite"/></text>
+<text x="275" y="330" text-anchor="middle" class="comment" opacity="0">←背包里的 x=10<animate attributeName="opacity" values="0;0;0;0;0;0;0;1;1;0" dur="6s" repeatCount="indefinite"/></text>
 
 <!-- Result -->
 <rect x="450" y="260" width="150" height="80" rx="10" fill="#E8F5E9" stroke="#4CAF50" stroke-width="2" opacity="0">
-<text x="525" y="285" text-anchor="middle" class="box-label">结果</text>
-<text x="525" y="315" text-anchor="middle" font-family="monospace" font-size="22" fill="#4CAF50" font-weight="700">15</text>
 <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;0" dur="6s" repeatCount="indefinite"/>
 </rect>
+<text x="525" y="285" text-anchor="middle" class="box-label" opacity="0">结果<animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;0" dur="6s" repeatCount="indefinite"/></text>
+<text x="525" y="315" text-anchor="middle" font-family="monospace" font-size="22" fill="#4CAF50" font-weight="700" opacity="0">15<animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;0" dur="6s" repeatCount="indefinite"/></text>
 
 <!-- Arrow from call env to result -->
 <path d="M350 300L448 300" stroke="#9C27B0" stroke-width="2" marker-end="url(#arrow-purple)" opacity="0">
-<defs>
-<marker id="arrow-purple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-<path d="M 0 0 L 10 5 L 0 10 z" fill="#9C27B0"/>
-</marker>
-</defs>
 <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;1;0" dur="6s" repeatCount="indefinite"/>
 </path>
 
