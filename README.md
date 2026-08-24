@@ -3660,7 +3660,7 @@ But `if`, `define`, `lambda` **are not ordinary functions**—they have special 
 
 **File: `src/lib.rs`**, modify the `LispExp::List(elements)` branch of `eval`.
 
-⚠️ **Rust Version Requirement**: This step uses `if let ... &&` syntax (let-chains), which requires **Rust 1.88+** and `edition = "2024"` (set in `Cargo.toml`). If you're using an older Rust version, rewrite as nested `if let` + `if` instead.
+⚠️ **Rust Version Requirement**: This step uses `if let` with nested `if` to check for special forms. If you're familiar with Rust 1.88+ let-chains (`if let ... &&`), you could also write it more concisely, but we use the nested form here so that adding more special forms later (define, lambda) doesn't require restructuring.
 
 **Problem**: `(if (= x 0) 1 2)` — if `(= x 0)` is true, return `1`, otherwise return `2`.
 Why can't `if` be an ordinary function? Because ordinary functions **evaluate all their arguments first** before running. But `if` should only evaluate the condition, and then only **one** of the two branches.
@@ -3757,30 +3757,35 @@ pub fn eval(exp: &LispExp, env: &mut LispEnv) -> Result<LispExp, LispErr>
 //                            readable+writable            readable+writable
 ```
 
-**Second step: In the special form check area of the `List` branch, add `define`**. Insert right after the `}` closing the `if` check, **before** `// ========== Special form check ends ==========`:
+**Second step: In the special form check area of the `List` branch, add `define`**.
+
+⚠️ **Small refactor first**: In Step 20, `if` is already inside an `if let LispExp::Symbol(s) = &elements[0] { ... }` block, so `s` is only in scope **inside that block**. To add `define`, just put it right after the `if` check, **still inside the same `if let` block**:
 
 ```rust
-// src/lib.rs — eval's List branch, right after the } of the if check:
+// src/lib.rs — eval's List branch, inside the if let Symbol(s) block,
+// right after the if check:
 
-if s == "if" {
-    // ... if logic (existing, don't move)...
-}
-
-// ========== New: define special form ==========
-if s == "define" && elements.len() == 3 {
-    // (define variable-name value) — 3 elements total
-    if let LispExp::Symbol(name) = &elements[1] {
-        let value = eval(&elements[2], env)?;   // evaluate
-        env.set(name.clone(), value);           // &mut env → can write!
-        return Ok(LispExp::Nil);                // define itself returns nil
-    } else {
-        return Err(LispErr::Reason(
-            "The first argument of define must be a symbol".to_string()
-        ));
+if let LispExp::Symbol(s) = &elements[0] {
+    if s == "if" && elements.len() == 4 {
+        // ... if logic (existing, don't touch)...
     }
+
+    // ========== New: define special form ==========
+    if s == "define" && elements.len() == 3 {
+        // (define variable-name value) — 3 elements total
+        if let LispExp::Symbol(name) = &elements[1] {
+            let value = eval(&elements[2], env)?;   // evaluate
+            env.set(name.clone(), value);           // &mut env → can write!
+            return Ok(LispExp::Nil);                // define itself returns nil
+        } else {
+            return Err(LispErr::Reason(
+                "The first argument of define must be a symbol".to_string()
+            ));
+        }
+    }
+    // ========== define ends ==========
 }
-// ========== define ends ==========
-```
+// ========== Special form check ends ==========
 
 💡 In short: `define` writes a name-value pair into the environment. Like adding a contact to your phone: "Name: x, Value: 10."
 
@@ -3981,45 +3986,51 @@ LispExp::Bool(_) | LispExp::Nil | LispExp::Func(_)
 }
 ```
 
-**Fourth step: Add `lambda` creation logic to the special form check area of the `List` branch**. Right after the `}` closing the `define` check:
+**Fourth step: Add `lambda` creation logic to the special form check area of the `List` branch**. Right after the `define` check, **still inside the `if let LispExp::Symbol(s)` block**:
 
 ```rust
-// src/lib.rs — eval's List branch, after define check, before special form check ends:
+// src/lib.rs — eval's List branch, after define check, still inside if let Symbol(s):
 
-if s == "define" {
-    // ... define logic (existing, don't move)...
+if let LispExp::Symbol(s) = &elements[0] {
+    if s == "if" && elements.len() == 4 {
+        // ... if logic (existing, don't touch)...
+    }
+
+    if s == "define" && elements.len() == 3 {
+        // ... define logic (existing, don't touch)...
+    }
+
+    // ========== New: lambda special form ==========
+    if s == "lambda" && elements.len() >= 3 {
+        // (lambda (parameter-list) function-body) — at least 3 elements
+        let params: Vec<String> = match &elements[1] {
+            LispExp::List(param_list) => param_list
+                .iter()
+                .map(|p| {
+                    if let LispExp::Symbol(name) = p {
+                        name.clone()
+                    } else {
+                        "?".to_string() // parameters must be symbols
+                    }
+                })
+                .collect(),
+            _ => return Err(LispErr::Reason(
+                "lambda's parameter must be a list".to_string()
+            )),
+        };
+
+        let body = elements[2].clone();  // function body
+
+        let lambda = LispExp::Lambda(Box::new(LispLambda {
+            params,
+            body: Box::new(body),
+        }));
+
+        return Ok(lambda);  // lambda created, return this "function value"
+    }
+    // ========== lambda ends ==========
 }
-
-// ========== New: lambda special form ==========
-if s == "lambda" && elements.len() >= 3 {
-    // (lambda (parameter-list) function-body) — at least 3 elements
-    let params: Vec<String> = match &elements[1] {
-        LispExp::List(param_list) => param_list
-            .iter()
-            .map(|p| {
-                if let LispExp::Symbol(name) = p {
-                    name.clone()
-                } else {
-                    "?".to_string() // parameters must be symbols
-                }
-            })
-            .collect(),
-        _ => return Err(LispErr::Reason(
-            "lambda's parameter must be a list".to_string()
-        )),
-    };
-
-    let body = elements[2].clone();  // function body
-
-    let lambda = LispExp::Lambda(Box::new(LispLambda {
-        params,
-        body: Box::new(body),
-    }));
-
-    return Ok(lambda);  // lambda created, return this "function value"
-}
-// ========== lambda ends ==========
-```
+// ========== Special form check ends ==========
 
 💡 In short: `lambda` doesn't run anything — it packages parameters and body into a value and returns it. Like getting a recipe: you haven't cooked yet, you need to "call" it.
 

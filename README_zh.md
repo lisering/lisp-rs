@@ -3603,8 +3603,8 @@ LispExp::List(elements) => {
     // 将来添加更多特殊形式时（如 define、lambda），需要改成多个分支：
     // if let LispExp::Symbol(s) = &elements[0] {
     //     if s == "if" { ... }
-    //     else if s == "define" { ... }   ← 用 else if 避免 collapsible_if
-    //     else if s == "lambda" { ... }
+    //     if s == "define" { ... }    ← 每个特殊形式都会 return，不会 fall-through
+    //     if s == "lambda" { ... }
     // }
 
     // ① 求值第一个元素 → 得到函数（已有代码，不要动）
@@ -3671,29 +3671,43 @@ pub fn eval(exp: &LispExp, env: &mut LispEnv) -> Result<LispExp, LispErr>
 //                           可读可写                     可读可写
 ```
 
-**第二步：在 `List` 分支的特殊形式检查区，加入 `define`**。插入位置：紧接在 `if` 检查的 `}` 后面、`// ========== 特殊形式检查结束 ==========` 之前：
+**第二步：在 `List` 分支的特殊形式检查区，加入 `define`**。
+
+⚠️ **先做一个小重构**：步骤 20 中 `if` 用的是 `if let LispExp::Symbol(s) = &elements[0] && s == "if" && ...` 这种 let-chains 语法，`s` 的作用域**仅限于那个 `if let` 块内部**。现在要加 `define`，`s` 需要在多个分支间共享，所以要先把结构改成"先 `if let` 解包 `s`，再在内部用 `if s == ...` 分发"：
 
 ```rust
-// src/lib.rs — eval 的 List 分支中，紧接着 if 检查的 } 之后：
+// src/lib.rs — eval 的 List 分支中，把步骤 20 的 if let 结构改成这样：
 
-if s == "if" {
-    // ... if 逻辑（已有，不要动）...
-}
+// 旧版（步骤 20，只有 if，s 被锁在 let-chains 里）：
+// if let LispExp::Symbol(s) = &elements[0]
+//     && s == "if"
+//     && elements.len() == 4
+// {
+//     ...if 逻辑...
+// }
 
-// ========== 新增：define 特殊形式 ==========
-if s == "define" && elements.len() == 3 {
-    // (define 变量名 值) — 共 3 个元素
-    if let LispExp::Symbol(name) = &elements[1] {
-        let value = eval(&elements[2], env)?;   // 求值
-        env.set(name.clone(), value);           // &mut env → 可以写入！
-        return Ok(LispExp::Nil);                // define 本身返回 nil
-    } else {
-        return Err(LispErr::Reason(
-            "define 的第一个参数必须是符号".to_string()
-        ));
+// 新版（把 if let 和 s == "if" 拆开，s 就能在后续分支中复用）：
+if let LispExp::Symbol(s) = &elements[0] {
+    if s == "if" && elements.len() == 4 {
+        // ... if 逻辑（已有，不要动）...
     }
+
+    // ========== 新增：define 特殊形式 ==========
+    if s == "define" && elements.len() == 3 {
+        // (define 变量名 值) — 共 3 个元素
+        if let LispExp::Symbol(name) = &elements[1] {
+            let value = eval(&elements[2], env)?;   // 求值
+            env.set(name.clone(), value);           // &mut env → 可以写入！
+            return Ok(LispExp::Nil);                // define 本身返回 nil
+        } else {
+            return Err(LispErr::Reason(
+                "define 的第一个参数必须是符号".to_string()
+            ));
+        }
+    }
+    // ========== define 结束 ==========
 }
-// ========== define 结束 ==========
+// ========== 特殊形式检查结束 ==========
 ```
 
 🧠 **大白话**：`define` 就像在通讯录里写："名字 = 张三，电话 = 138xxxx"。`set` 方法把变量名和值存进环境。
@@ -3893,44 +3907,51 @@ LispExp::Bool(_) | LispExp::Nil | LispExp::Func(_)
 }
 ```
 
-**第四步：在 `List` 分支的特殊形式检查区，加入 `lambda` 创建逻辑**。紧接着 `define` 检查的 `}` 之后：
+**第四步：在 `List` 分支的特殊形式检查区，加入 `lambda` 创建逻辑**。在 `define` 检查的 `}` 之后（仍在 `if let LispExp::Symbol(s)` 块内部）：
 
 ```rust
-// src/lib.rs — eval 的 List 分支中，define 检查之后，特殊形式检查结束之前：
+// src/lib.rs — eval 的 List 分支中，define 检查之后，仍在 if let Symbol(s) 块内：
 
-if s == "define" {
-    // ... define 逻辑（已有，不要动）...
+if let LispExp::Symbol(s) = &elements[0] {
+    if s == "if" && elements.len() == 4 {
+        // ... if 逻辑（已有，不要动）...
+    }
+
+    if s == "define" && elements.len() == 3 {
+        // ... define 逻辑（已有，不要动）...
+    }
+
+    // ========== 新增：lambda 特殊形式 ==========
+    if s == "lambda" && elements.len() >= 3 {
+        // (lambda (参数列表) 函数体) — 至少 3 个元素
+        let params: Vec<String> = match &elements[1] {
+            LispExp::List(param_list) => param_list
+                .iter()
+                .map(|p| {
+                    if let LispExp::Symbol(name) = p {
+                        name.clone()
+                    } else {
+                        "?".to_string() // 参数必须是符号
+                    }
+                })
+                .collect(),
+            _ => return Err(LispErr::Reason(
+                "lambda 的参数必须是列表".to_string()
+            )),
+        };
+
+        let body = elements[2].clone();  // 函数体
+
+        let lambda = LispExp::Lambda(Box::new(LispLambda {
+            params,
+            body: Box::new(body),
+        }));
+
+        return Ok(lambda);  // lambda 创建完毕，返回这个"函数值"
+    }
+    // ========== lambda 结束 ==========
 }
-
-// ========== 新增：lambda 特殊形式 ==========
-if s == "lambda" && elements.len() >= 3 {
-    // (lambda (参数列表) 函数体) — 至少 3 个元素
-    let params: Vec<String> = match &elements[1] {
-        LispExp::List(param_list) => param_list
-            .iter()
-            .map(|p| {
-                if let LispExp::Symbol(name) = p {
-                    name.clone()
-                } else {
-                    "?".to_string() // 参数必须是符号
-                }
-            })
-            .collect(),
-        _ => return Err(LispErr::Reason(
-            "lambda 的参数必须是列表".to_string()
-        )),
-    };
-
-    let body = elements[2].clone();  // 函数体
-
-    let lambda = LispExp::Lambda(Box::new(LispLambda {
-        params,
-        body: Box::new(body),
-    }));
-
-    return Ok(lambda);  // lambda 创建完毕，返回这个"函数值"
-}
-// ========== lambda 结束 ==========
+// ========== 特殊形式检查结束 ==========
 ```
 
 🧠 **大白话**：`lambda` 不执行函数体——它只是把参数名和函数体"打包"成一个值，返回给调用者。就像一个菜谱——你拿到菜谱不代表菜已经做好了，你得"调用"这个菜谱才行。
