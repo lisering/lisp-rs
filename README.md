@@ -2952,7 +2952,7 @@ fn eval_str(source: &str, env: &LispEnv) -> Result<LispExp, LispErr> {
 }
 ```
 
-**Old tests also need updating**—`test_eval_number` and `test_eval_str_number` need signature updates: `eval(&exp)` → `eval(&exp, &mut env)`, `eval_str("42")` → `eval_str("42", &mut env)`, `let env = LispEnv::new()` → `let mut env = LispEnv::new()`, `&env` → `&mut env`. The compiler will report each error — follow the hints to fix.
+**Old tests also need updating**—`test_eval_number` and `test_eval_str_number` need signature updates: `eval(&exp)` → `eval(&exp, &env)`, `eval_str("42")` → `eval_str("42", &env)`, and add `let env = LispEnv::new()` to create the environment. Note that at this point `eval` takes `&LispEnv` (immutable reference), so `&env` is sufficient — **no `mut` needed**. The compiler will report each error — follow the hints to fix.
 
 **New test**—symbol evaluation:
 
@@ -3282,26 +3282,26 @@ Now add tests — same pattern as `test_eval_addition`, but covering binary, var
 ```rust
 #[test]
 fn test_subtraction() {
-    let mut env = default_env();
-    assert_eq!(eval_str("(- 10 3)", &mut env).unwrap(), LispExp::Number(7.0));
-    assert_eq!(eval_str("(- 10 2 3)", &mut env).unwrap(), LispExp::Number(5.0));  // 10-2-3 = 5
-    assert_eq!(eval_str("(- 5)", &mut env).unwrap(), LispExp::Number(-5.0));    // unary negation
+    let env = default_env();
+    assert_eq!(eval_str("(- 10 3)", &env).unwrap(), LispExp::Number(7.0));
+    assert_eq!(eval_str("(- 10 2 3)", &env).unwrap(), LispExp::Number(5.0));  // 10-2-3 = 5
+    assert_eq!(eval_str("(- 5)", &env).unwrap(), LispExp::Number(-5.0));    // unary negation
 }
 
 #[test]
 fn test_multiplication() {
-    let mut env = default_env();
-    assert_eq!(eval_str("(* 2 3)", &mut env).unwrap(), LispExp::Number(6.0));
-    assert_eq!(eval_str("(* 2 3 4)", &mut env).unwrap(), LispExp::Number(24.0));  // 2*3*4 = 24
-    assert_eq!(eval_str("(* 5)", &mut env).unwrap(), LispExp::Number(5.0));      // single arg
+    let env = default_env();
+    assert_eq!(eval_str("(* 2 3)", &env).unwrap(), LispExp::Number(6.0));
+    assert_eq!(eval_str("(* 2 3 4)", &env).unwrap(), LispExp::Number(24.0));  // 2*3*4 = 24
+    assert_eq!(eval_str("(* 5)", &env).unwrap(), LispExp::Number(5.0));      // single arg
 }
 
 #[test]
 fn test_division() {
-    let mut env = default_env();
-    assert_eq!(eval_str("(/ 10 2)", &mut env).unwrap(), LispExp::Number(5.0));
-    assert_eq!(eval_str("(/ 100 5 2)", &mut env).unwrap(), LispExp::Number(10.0));  // 100/5/2 = 10
-    assert_eq!(eval_str("(/ 5)", &mut env).unwrap(), LispExp::Number(0.2));        // reciprocal
+    let env = default_env();
+    assert_eq!(eval_str("(/ 10 2)", &env).unwrap(), LispExp::Number(5.0));
+    assert_eq!(eval_str("(/ 100 5 2)", &env).unwrap(), LispExp::Number(10.0));  // 100/5/2 = 10
+    assert_eq!(eval_str("(/ 5)", &env).unwrap(), LispExp::Number(0.2));        // reciprocal
 }
 ```
 
@@ -3553,9 +3553,9 @@ What we're solving: Implement the special forms if/define/lambda—they aren't o
 ```rust
 #[test]
 fn test_comparisons() {
-    let mut env = default_env();
-    assert_eq!(eval_str("(> 5 3)", &mut env).unwrap(), LispExp::Bool(true));
-    assert_eq!(eval_str("(> 3 5)", &mut env).unwrap(), LispExp::Bool(false));
+    let env = default_env();
+    assert_eq!(eval_str("(> 5 3)", &env).unwrap(), LispExp::Bool(true));
+    assert_eq!(eval_str("(> 3 5)", &env).unwrap(), LispExp::Bool(false));
 }
 ```
 

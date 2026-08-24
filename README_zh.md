@@ -2853,7 +2853,7 @@ fn eval_str(source: &str, env: &LispEnv) -> Result<LispExp, LispErr> {
 }
 ```
 
-**旧测试需要更新签名**——`test_eval_number` 和 `test_eval_str_number` 中的 `eval(&exp)` → `eval(&exp, &env)`、`eval_str("42")` → `eval_str("42", &env)`，同时 `let env = LispEnv::new()` → `let mut env = LispEnv::new()`、`&env` → `&mut env`。编译器会逐处报错，按提示修复即可。
+**旧测试需要更新签名**——`test_eval_number` 和 `test_eval_str_number` 中的 `eval(&exp)` → `eval(&exp, &env)`、`eval_str("42")` → `eval_str("42", &env)`，同时需要加 `let env = LispEnv::new()` 创建环境。注意此时 `eval` 的参数是 `&LispEnv`（只读引用），所以传入 `&env` 即可，**不需要** `mut`。编译器会逐处报错，按提示修复即可。
 
 **新测试**——符号求值：
 
@@ -3191,26 +3191,26 @@ env.set("/".into(), LispExp::Func(|args| {
 ```rust
 #[test]
 fn test_subtraction() {
-    let mut env = default_env();
-    assert_eq!(eval_str("(- 10 3)", &mut env).unwrap(), LispExp::Number(7.0));
-    assert_eq!(eval_str("(- 10 2 3)", &mut env).unwrap(), LispExp::Number(5.0));  // 10-2-3 = 5
-    assert_eq!(eval_str("(- 5)", &mut env).unwrap(), LispExp::Number(-5.0));    // 单参数取负
+    let env = default_env();
+    assert_eq!(eval_str("(- 10 3)", &env).unwrap(), LispExp::Number(7.0));
+    assert_eq!(eval_str("(- 10 2 3)", &env).unwrap(), LispExp::Number(5.0));  // 10-2-3 = 5
+    assert_eq!(eval_str("(- 5)", &env).unwrap(), LispExp::Number(-5.0));    // 单参数取负
 }
 
 #[test]
 fn test_multiplication() {
-    let mut env = default_env();
-    assert_eq!(eval_str("(* 2 3)", &mut env).unwrap(), LispExp::Number(6.0));
-    assert_eq!(eval_str("(* 2 3 4)", &mut env).unwrap(), LispExp::Number(24.0));  // 2*3*4 = 24
-    assert_eq!(eval_str("(* 5)", &mut env).unwrap(), LispExp::Number(5.0));      // 单参数
+    let env = default_env();
+    assert_eq!(eval_str("(* 2 3)", &env).unwrap(), LispExp::Number(6.0));
+    assert_eq!(eval_str("(* 2 3 4)", &env).unwrap(), LispExp::Number(24.0));  // 2*3*4 = 24
+    assert_eq!(eval_str("(* 5)", &env).unwrap(), LispExp::Number(5.0));      // 单参数
 }
 
 #[test]
 fn test_division() {
-    let mut env = default_env();
-    assert_eq!(eval_str("(/ 10 2)", &mut env).unwrap(), LispExp::Number(5.0));
-    assert_eq!(eval_str("(/ 100 5 2)", &mut env).unwrap(), LispExp::Number(10.0));  // 100/5/2 = 10
-    assert_eq!(eval_str("(/ 5)", &mut env).unwrap(), LispExp::Number(0.2));        // 单参数取倒数
+    let env = default_env();
+    assert_eq!(eval_str("(/ 10 2)", &env).unwrap(), LispExp::Number(5.0));
+    assert_eq!(eval_str("(/ 100 5 2)", &env).unwrap(), LispExp::Number(10.0));  // 100/5/2 = 10
+    assert_eq!(eval_str("(/ 5)", &env).unwrap(), LispExp::Number(0.2));        // 单参数取倒数
 }
 ```
 
@@ -3449,9 +3449,9 @@ test result: ok. 16 passed; 0 failed
 ```rust
 #[test]
 fn test_comparisons() {
-    let mut env = default_env();
-    assert_eq!(eval_str("(> 5 3)", &mut env).unwrap(), LispExp::Bool(true));
-    assert_eq!(eval_str("(> 3 5)", &mut env).unwrap(), LispExp::Bool(false));
+    let env = default_env();
+    assert_eq!(eval_str("(> 5 3)", &env).unwrap(), LispExp::Bool(true));
+    assert_eq!(eval_str("(> 3 5)", &env).unwrap(), LispExp::Bool(false));
 }
 ```
 
