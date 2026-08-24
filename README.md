@@ -3754,7 +3754,7 @@ pub fn eval(exp: &LispExp, env: &LispEnv) -> Result<LispExp, LispErr>
 // New (change to this):
 pub fn eval(exp: &LispExp, env: &mut LispEnv) -> Result<LispExp, LispErr>
 //                           ^^^^                         ^^^^
-//                            readable+writable            readable+writable
+//                            read-only                   readable+writable
 ```
 
 **Second step: In the special form check area of the `List` branch, add `define`**.

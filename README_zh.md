@@ -3668,7 +3668,7 @@ pub fn eval(exp: &LispExp, env: &LispEnv) -> Result<LispExp, LispErr>
 // 新版（改成这样）:
 pub fn eval(exp: &LispExp, env: &mut LispEnv) -> Result<LispExp, LispErr>
 //                           ^^^^                         ^^^^
-//                           可读可写                     可读可写
+//                           只读                        可读可写
 ```
 
 **第二步：在 `List` 分支的特殊形式检查区，加入 `define`**。
