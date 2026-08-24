@@ -3186,6 +3186,34 @@ env.set("/".into(), LispExp::Func(|args| {
 }));
 ```
 
+现在添加测试——和 `test_eval_addition` 同样的模式，但覆盖二元、多参数和单参数三种情况：
+
+```rust
+#[test]
+fn test_subtraction() {
+    let mut env = default_env();
+    assert_eq!(eval_str("(- 10 3)", &mut env).unwrap(), LispExp::Number(7.0));
+    assert_eq!(eval_str("(- 10 2 3)", &mut env).unwrap(), LispExp::Number(5.0));  // 10-2-3 = 5
+    assert_eq!(eval_str("(- 5)", &mut env).unwrap(), LispExp::Number(-5.0));    // 单参数取负
+}
+
+#[test]
+fn test_multiplication() {
+    let mut env = default_env();
+    assert_eq!(eval_str("(* 2 3)", &mut env).unwrap(), LispExp::Number(6.0));
+    assert_eq!(eval_str("(* 2 3 4)", &mut env).unwrap(), LispExp::Number(24.0));  // 2*3*4 = 24
+    assert_eq!(eval_str("(* 5)", &mut env).unwrap(), LispExp::Number(5.0));      // 单参数
+}
+
+#[test]
+fn test_division() {
+    let mut env = default_env();
+    assert_eq!(eval_str("(/ 10 2)", &mut env).unwrap(), LispExp::Number(5.0));
+    assert_eq!(eval_str("(/ 100 5 2)", &mut env).unwrap(), LispExp::Number(10.0));  // 100/5/2 = 10
+    assert_eq!(eval_str("(/ 5)", &mut env).unwrap(), LispExp::Number(0.2));        // 单参数取倒数
+}
+```
+
 ```bash
 $ cargo test
 running 16 tests

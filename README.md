@@ -3277,6 +3277,34 @@ env.set("/".into(), LispExp::Func(|args| {
 }));
 ```
 
+Now add tests — same pattern as `test_eval_addition`, but covering binary, variadic, and unary cases:
+
+```rust
+#[test]
+fn test_subtraction() {
+    let mut env = default_env();
+    assert_eq!(eval_str("(- 10 3)", &mut env).unwrap(), LispExp::Number(7.0));
+    assert_eq!(eval_str("(- 10 2 3)", &mut env).unwrap(), LispExp::Number(5.0));  // 10-2-3 = 5
+    assert_eq!(eval_str("(- 5)", &mut env).unwrap(), LispExp::Number(-5.0));    // unary negation
+}
+
+#[test]
+fn test_multiplication() {
+    let mut env = default_env();
+    assert_eq!(eval_str("(* 2 3)", &mut env).unwrap(), LispExp::Number(6.0));
+    assert_eq!(eval_str("(* 2 3 4)", &mut env).unwrap(), LispExp::Number(24.0));  // 2*3*4 = 24
+    assert_eq!(eval_str("(* 5)", &mut env).unwrap(), LispExp::Number(5.0));      // single arg
+}
+
+#[test]
+fn test_division() {
+    let mut env = default_env();
+    assert_eq!(eval_str("(/ 10 2)", &mut env).unwrap(), LispExp::Number(5.0));
+    assert_eq!(eval_str("(/ 100 5 2)", &mut env).unwrap(), LispExp::Number(10.0));  // 100/5/2 = 10
+    assert_eq!(eval_str("(/ 5)", &mut env).unwrap(), LispExp::Number(0.2));        // reciprocal
+}
+```
+
 ```bash
 $ cargo test
 running 16 tests
