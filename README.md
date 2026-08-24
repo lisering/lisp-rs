@@ -12,7 +12,7 @@
 
 # Building a Lisp Interpreter from Scratch — Rust Hands-On Tutorial
 
-**Zero knowledge required. Zero dependencies.** 47 steps. 42 tests. One working Lisp interpreter at the end. Each step first explains **what problem to solve**, then writes the code.
+**Zero knowledge required. Zero dependencies.** 47 steps. 45 tests. One working Lisp interpreter at the end. Each step first explains **what problem to solve**, then writes the code.
 
 ### TCO in action — 1,000,000 iterations vs. stack overflow
 
@@ -3279,10 +3279,13 @@ env.set("/".into(), LispExp::Func(|args| {
 
 ```bash
 $ cargo test
-running 13 tests
+running 16 tests
 test tests::test_eval_addition ... ok
+test tests::test_subtraction ... ok
+test tests::test_multiplication ... ok
+test tests::test_division ... ok
 ...
-test result: ok. 13 passed; 0 failed
+test result: ok. 16 passed; 0 failed
 ```
 
 But—numbers can be computed, but **boolean values and "empty" still don't work**. The `if` later needs booleans to make decisions, so let's fill in those types first:
@@ -3495,9 +3498,9 @@ If you forgot to add `String`, the compiler will error: `non-exhaustive patterns
 
 ```bash
 $ cargo test
-running 13 tests
+running 16 tests
 ...
-test result: ok. 13 passed; 0 failed
+test result: ok. 16 passed; 0 failed
 ```
 
 Types are now complete—`Number` can compute, `Bool` and `Nil` represent truth/falseness and emptiness, `String` holds text. But the interpreter still lacks its most critical ability: **making choices**. `(+ 1 2)` can only compute left to right, it can't choose different branches based on conditions. Next, implementing `if`:
@@ -3695,12 +3698,12 @@ fn test_if_with_comparison() {
 
 ```bash
 $ cargo test
-running 16 tests
+running 19 tests
 test tests::test_if_true_branch ... ok
 test tests::test_if_false_branch ... ok
 ...
 
-test result: ok. 16 passed; 0 failed
+test result: ok. 19 passed; 0 failed
 ```
 
 ---
@@ -3826,7 +3829,7 @@ Make the same change to all other test functions. Fix each one the compiler repo
 
 ```bash
 $ cargo test
-running 16 tests
+running 19 tests
 test env::tests::test_env_set_get ... ok
 test env::tests::test_env_undefined ... ok
 test lexer::tests::test_tokenize_multi ... ok
@@ -3844,7 +3847,7 @@ test tests::test_if_true_branch ... ok
 test tests::test_if_false_branch ... ok
 test tests::test_if_with_comparison ... ok
 
-test result: ok. 16 passed; 0 failed
+test result: ok. 19 passed; 0 failed
 ```
 
 **Test define**:
@@ -3868,11 +3871,11 @@ fn test_define_then_use_in_calc() {
 
 ```bash
 $ cargo test
-running 18 tests
+running 21 tests
 test tests::test_define_and_lookup ... ok
 ...
 
-test result: ok. 18 passed; 0 failed
+test result: ok. 21 passed; 0 failed
 ```
 
 ---
@@ -3994,11 +3997,11 @@ if s == "lambda" && elements.len() >= 3 {
 
 ```bash
 $ cargo test
-running 19 tests
+running 22 tests
 test tests::test_lambda_call ... ok
 ...
 
-test result: ok. 19 passed; 0 failed
+test result: ok. 22 passed; 0 failed
 ```
 
 #### Calling Lambda
@@ -4076,12 +4079,12 @@ fn test_lambda_direct_call() {
 
 ```bash
 $ cargo test
-running 20 tests
+running 23 tests
 test tests::test_lambda_call ... ok
 test tests::test_lambda_direct_call ... ok
 ...
 
-test result: ok. 20 passed; 0 failed
+test result: ok. 23 passed; 0 failed
 ```
 
 ---
@@ -4309,9 +4312,9 @@ lisp-rs/
 
 ```text
 $ cargo test
-running 20 tests
+running 23 tests
 ... all ok
-test result: ok. 20 passed; 0 failed
+test result: ok. 23 passed; 0 failed
 ```
 
 ---
@@ -4678,11 +4681,11 @@ Environment created when calling (lambda (y) (+ x y)) (outer = Global)
 
 ```bash
 $ cargo test
-running 21 tests
+running 24 tests
 test env::tests::test_nested_env_lookup ... ok
 ...
 
-test result: ok. 21 passed; 0 failed
+test result: ok. 24 passed; 0 failed
 ```
 
 ---
@@ -4796,11 +4799,11 @@ fn test_closure() {
 
 ```bash
 $ cargo test
-running 22 tests
+running 25 tests
 test tests::test_closure ... ok
 ...
 
-test result: ok. 22 passed; 0 failed
+test result: ok. 25 passed; 0 failed
 ```
 
 
@@ -5414,10 +5417,10 @@ fn test_tail_call_optimization() {
 
 ```bash
 $ cargo test
-running 23 tests
+running 26 tests
 test tests::test_tail_call_optimization ... ok
 ...
-test result: ok. 23 passed; 0 failed
+test result: ok. 26 passed; 0 failed
 ```
 
 🎉 **Milestone: Closures + infinite recursion supported! The core capabilities of the interpreter are all in place.**
@@ -5758,10 +5761,10 @@ name.clone()                →  interner::intern(name)
 
 ```bash
 $ cargo test
-running 23 tests
+running 26 tests
 test tests::test_eval_number ... ok
 ...
-test result: ok. 23 passed; 0 failed
+test result: ok. 26 passed; 0 failed
 ```
 
 ---
@@ -5911,7 +5914,7 @@ New version `token: &str`, `== "("` works directly.
 
 ```bash
 $ cargo test
-running 26 tests
+running 29 tests
 test lexer::tests::test_tokenize_multi ... ok
 test lexer::tests::test_tokenize_whitespace ... ok
 test lexer::tests::test_tokenize_parens ... ok
@@ -5920,7 +5923,7 @@ test lexer::tests::test_tokenize_comment ... ok
 test lexer::tests::test_tokenize_string_literal ... ok
 ...
 
-test result: ok. 26 passed; 0 failed
+test result: ok. 29 passed; 0 failed
 ```
 
 ### Step 30: FX Hasher
@@ -6173,10 +6176,10 @@ if *sym_id == predefined().begin {
 
 ```bash
 $ cargo test
-running 27 tests
+running 30 tests
 ...
 
-test result: ok. 27 passed; 0 failed
+test result: ok. 30 passed; 0 failed
 ```
 
 #### set! — Modify Existing Binding
@@ -6232,10 +6235,10 @@ fn test_set_bang() {
 
 ```bash
 $ cargo test
-running 28 tests
+running 31 tests
 ...
 
-test result: ok. 28 passed; 0 failed
+test result: ok. 31 passed; 0 failed
 ```
 
 ---
@@ -6315,10 +6318,10 @@ fn test_let() {
 
 ```bash
 $ cargo test
-running 29 tests
+running 32 tests
 ...
 
-test result: ok. 29 passed; 0 failed
+test result: ok. 32 passed; 0 failed
 ```
 
 ---
@@ -6378,10 +6381,10 @@ fn test_cond() {
 
 ```bash
 $ cargo test
-running 30 tests
+running 33 tests
 ...
 
-test result: ok. 30 passed; 0 failed
+test result: ok. 33 passed; 0 failed
 ```
 
 ---
@@ -6502,10 +6505,10 @@ fn test_let_star() {
 
 ```bash
 $ cargo test
-running 31 tests
+running 34 tests
 ...
 
-test result: ok. 31 passed; 0 failed
+test result: ok. 34 passed; 0 failed
 ```
 
 #### letrec — Recursive Bindings
@@ -6592,10 +6595,10 @@ fn test_letrec() {
 
 ```bash
 $ cargo test
-running 32 tests
+running 35 tests
 ...
 
-test result: ok. 32 passed; 0 failed
+test result: ok. 35 passed; 0 failed
 ```
 
 ---
@@ -6916,9 +6919,9 @@ env.set(intern("not"), LispExp::Func(|args| {
 
 ```bash
 $ cargo test
-running 30 tests
+running 33 tests
 ...
-test result: ok. 30 passed; 0 failed
+test result: ok. 33 passed; 0 failed
 ```
 
 ---
@@ -7136,9 +7139,9 @@ env.set(intern("member"), LispExp::Func(|args| {
 
 ```bash
 $ cargo test
-running 36 tests
+running 39 tests
 ...
-test result: ok. 36 passed; 0 failed
+test result: ok. 39 passed; 0 failed
 ```
 
 ---
@@ -7357,9 +7360,9 @@ env.set(intern("filter"), LispExp::Func(|args| {
 
 ```bash
 $ cargo test
-running 42 tests
+running 45 tests
 ...
-test result: ok. 42 passed; 0 failed
+test result: ok. 45 passed; 0 failed
 ```
 
 ---
@@ -8086,11 +8089,11 @@ Each test is an **executable documentation** artifact — it documents what a fe
 should do, and `cargo test` verifies it actually works. When adding a feature,
 the standard workflow is: **test first → implement → verify → document**.
 
-Our 42 tests cover:
+Our 45 tests cover:
 - **Lexer** (7 tests) — every token type, edge cases (empty input, comments)
 - **Parser** (3 tests) — nested lists, atom types, error handling
 - **Environment** (3 tests) — variable access, undefined lookup
-- **Eval** (29 tests) — all special forms, built-in functions, closures, TCO
+- **Eval** (32 tests) — all special forms, built-in functions, closures, TCO
 
 The high test count is not accidental — it's because each line of the tutorial
 is backed by a concrete, runnable example.
@@ -8229,7 +8232,7 @@ Steps 36-47: Built-in Functions (Challenge Levels) + REPL
 
 **Feynman test**: Explain these 47 steps to a friend who knows nothing about programming. If each step makes them nod and say "oh, I see," you've succeeded.
 
-**Verification**: `cargo test` (42 tests), `cargo run` (interactive REPL)
+**Verification**: `cargo test` (45 tests), `cargo run` (interactive REPL)
 
 ---
 

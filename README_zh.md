@@ -12,7 +12,7 @@
 
 # 从零构建 Lisp 解释器 — Rust 实战教程
 
-**零基础、零依赖。** 47 步，42 个测试，最终得到一个完整的 Lisp 解释器。每一步先说清楚**要解决什么问题**，再写代码。
+**零基础、零依赖。** 47 步，45 个测试，最终得到一个完整的 Lisp 解释器。每一步先说清楚**要解决什么问题**，再写代码。
 
 ### TCO 效果演示 — 100 万次递归 vs 栈溢出
 
@@ -3188,10 +3188,13 @@ env.set("/".into(), LispExp::Func(|args| {
 
 ```bash
 $ cargo test
-running 13 tests
+running 16 tests
 test tests::test_eval_addition ... ok
+test tests::test_subtraction ... ok
+test tests::test_multiplication ... ok
+test tests::test_division ... ok
 ...
-test result: ok. 13 passed; 0 failed
+test result: ok. 16 passed; 0 failed
 ```
 
 但是——数字能算了，**真假值和"空"还不行**。后面的 `if` 需要布尔值才能判断，所以先补齐类型：
@@ -3397,9 +3400,9 @@ LispExp::Bool(_) | LispExp::Nil | LispExp::Func(_) | LispExp::String(_) => Ok(ex
 
 ```bash
 $ cargo test
-running 13 tests
+running 16 tests
 ...
-test result: ok. 13 passed; 0 failed
+test result: ok. 16 passed; 0 failed
 ```
 
 类型补全了——`Number` 能算、`Bool` 和 `Nil` 能表示真假和空、`String` 能存文本。但解释器还缺最关键的能力：**做选择**。`(+ 1 2)` 只能从左算到右，没法根据条件选不同分支。接下来实现 `if`：
@@ -3609,12 +3612,12 @@ fn test_if_with_comparison() {
 
 ```bash
 $ cargo test
-running 16 tests
+running 19 tests
 test tests::test_if_true_branch ... ok
 test tests::test_if_false_branch ... ok
 ...
 
-test result: ok. 16 passed; 0 failed
+test result: ok. 19 passed; 0 failed
 ```
 
 ---
@@ -3740,7 +3743,7 @@ let result = eval(&exp, &mut env).unwrap();  // ← 这里 & → &mut
 
 ```bash
 $ cargo test
-running 16 tests
+running 19 tests
 test env::tests::test_env_set_get ... ok
 test env::tests::test_env_undefined ... ok
 test lexer::tests::test_tokenize_multi ... ok
@@ -3758,7 +3761,7 @@ test tests::test_if_true_branch ... ok
 test tests::test_if_false_branch ... ok
 test tests::test_if_with_comparison ... ok
 
-test result: ok. 16 passed; 0 failed
+test result: ok. 19 passed; 0 failed
 ```
 
 **测试 define**：
@@ -3782,10 +3785,10 @@ fn test_define_then_use_in_calc() {
 
 ```bash
 $ cargo test
-running 18 tests
+running 21 tests
 test tests::test_define_and_lookup ... ok
 ...
-test result: ok. 18 passed; 0 failed
+test result: ok. 21 passed; 0 failed
 ```
 
 ---
@@ -3906,10 +3909,10 @@ if s == "lambda" && elements.len() >= 3 {
 
 ```bash
 $ cargo test
-running 19 tests
+running 22 tests
 test tests::test_lambda_call ... ok
 ...
-test result: ok. 19 passed; 0 failed
+test result: ok. 22 passed; 0 failed
 ```
 
 #### 调用 Lambda
@@ -3987,11 +3990,11 @@ fn test_lambda_direct_call() {
 
 ```bash
 $ cargo test
-running 20 tests
+running 23 tests
 test tests::test_lambda_call ... ok
 test tests::test_lambda_direct_call ... ok
 ...
-test result: ok. 20 passed; 0 failed
+test result: ok. 23 passed; 0 failed
 ```
 
 ---
@@ -4225,9 +4228,9 @@ lisp-rs/
 
 ```text
 $ cargo test
-running 20 tests
+running 23 tests
 ... all ok
-test result: ok. 20 passed; 0 failed
+test result: ok. 23 passed; 0 failed
 ```
 
 ---
@@ -4604,10 +4607,10 @@ pub fn get(&self, key: &str) -> Result<LispExp, LispErr> {
 
 ```bash
 $ cargo test
-running 21 tests
+running 24 tests
 test env::tests::test_nested_env_lookup ... ok
 ...
-test result: ok. 21 passed; 0 failed
+test result: ok. 24 passed; 0 failed
 ```
 
 ---
@@ -4721,10 +4724,10 @@ fn test_closure() {
 
 ```bash
 $ cargo test
-running 22 tests
+running 25 tests
 test tests::test_closure ... ok
 ...
-test result: ok. 22 passed; 0 failed
+test result: ok. 25 passed; 0 failed
 ```
 
 
@@ -5413,11 +5416,11 @@ fn test_tail_call_optimization() {
 
 ```bash
 $ cargo test
-running 23 tests
+running 26 tests
 test tests::test_tail_call_optimization ... ok
 ...
 
-test result: ok. 23 passed; 0 failed
+test result: ok. 26 passed; 0 failed
 ```
 
 🎉 **里程碑：支持闭包 + 无限递归！解释器的核心能力全部到位。**
@@ -5716,11 +5719,11 @@ name.clone()                →  interner::intern(name)
 
 ```bash
 $ cargo test
-running 23 tests
+running 26 tests
 test tests::test_eval_number ... ok
 ...
 
-test result: ok. 23 passed; 0 failed
+test result: ok. 26 passed; 0 failed
 ```
 
 ---
@@ -5868,7 +5871,7 @@ if token == "(" {     // token 已经是 &str，不需要 .as_str()
 
 ```bash
 $ cargo test
-running 26 tests
+running 29 tests
 test lexer::tests::test_tokenize_multi ... ok
 test lexer::tests::test_tokenize_whitespace ... ok
 test lexer::tests::test_tokenize_parens ... ok
@@ -5877,7 +5880,7 @@ test lexer::tests::test_tokenize_comment ... ok
 test lexer::tests::test_tokenize_string_literal ... ok
 ...
 
-test result: ok. 26 passed; 0 failed
+test result: ok. 29 passed; 0 failed
 ```
 
 ### 步骤 30: FX 哈希器
@@ -6134,10 +6137,10 @@ if *sym_id == predefined().begin {
 
 ```bash
 $ cargo test
-running 27 tests
+running 30 tests
 ...
 
-test result: ok. 27 passed; 0 failed
+test result: ok. 30 passed; 0 failed
 ```
 
 #### set! — 修改已有绑定
@@ -6193,10 +6196,10 @@ fn test_set_bang() {
 
 ```bash
 $ cargo test
-running 28 tests
+running 31 tests
 ...
 
-test result: ok. 28 passed; 0 failed
+test result: ok. 31 passed; 0 failed
 ```
 
 ---
@@ -6276,10 +6279,10 @@ fn test_let() {
 
 ```bash
 $ cargo test
-running 29 tests
+running 32 tests
 ...
 
-test result: ok. 29 passed; 0 failed
+test result: ok. 32 passed; 0 failed
 ```
 
 ---
@@ -6339,10 +6342,10 @@ fn test_cond() {
 
 ```bash
 $ cargo test
-running 30 tests
+running 33 tests
 ...
 
-test result: ok. 30 passed; 0 failed
+test result: ok. 33 passed; 0 failed
 ```
 
 ---
@@ -6465,10 +6468,10 @@ fn test_let_star() {
 
 ```bash
 $ cargo test
-running 31 tests
+running 34 tests
 ...
 
-test result: ok. 31 passed; 0 failed
+test result: ok. 34 passed; 0 failed
 ```
 
 #### letrec — 递归绑定
@@ -6555,10 +6558,10 @@ fn test_letrec() {
 
 ```bash
 $ cargo test
-running 32 tests
+running 35 tests
 ...
 
-test result: ok. 32 passed; 0 failed
+test result: ok. 35 passed; 0 failed
 ```
 
 ---
@@ -6890,9 +6893,9 @@ env.set(intern("not"), LispExp::Func(|args| {
 
 ```bash
 $ cargo test
-running 30 tests
+running 33 tests
 ...
-test result: ok. 30 passed; 0 failed
+test result: ok. 33 passed; 0 failed
 ```
 
 ---
@@ -7111,9 +7114,9 @@ env.set(intern("member"), LispExp::Func(|args| {
 
 ```bash
 $ cargo test
-running 36 tests
+running 39 tests
 ...
-test result: ok. 36 passed; 0 failed
+test result: ok. 39 passed; 0 failed
 ```
 
 ---
@@ -7332,9 +7335,9 @@ env.set(intern("filter"), LispExp::Func(|args| {
 
 ```bash
 $ cargo test
-running 42 tests
+running 45 tests
 ...
-test result: ok. 42 passed; 0 failed
+test result: ok. 45 passed; 0 failed
 ```
 
 ---
@@ -8067,11 +8070,11 @@ fn test_closure() {
 而 `cargo test` 验证它确实做到了。添加功能时的标准流程是：
 **测试先行 → 实现 → 验证 → 文档化**。
 
-我们的 42 个测试覆盖：
+我们的 45 个测试覆盖：
 - **词法分析器**（7 个）——所有 token 类型、边界情况（空输入、注释）
 - **语法分析器**（3 个）——嵌套列表、原子类型、错误处理
 - **环境**（3 个）——变量存取、未定义查找
-- **求值器**（29 个）——所有特殊形式、内置函数、闭包、TCO
+- **求值器**（32 个）——所有特殊形式、内置函数、闭包、TCO
 
 测试数量不是偶然的——因为教程的每一行都有具体、可运行的例子支撑。
 
@@ -8208,7 +8211,7 @@ Fork 这个项目，破坏它，修复它，扩展它。这就是学习的方法
 
 **费曼检验**：把这 47 步讲给你完全不懂编程的朋友听。如果每一步他都能点头说"哦，原来是这样"——你就成功了。
 
-**运行验证**: `cargo test` (42 个测试), `cargo run` (交互 REPL)
+**运行验证**: `cargo test` (45 个测试), `cargo run` (交互 REPL)
 
 ---
 

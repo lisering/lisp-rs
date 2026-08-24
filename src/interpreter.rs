@@ -1018,6 +1018,69 @@ mod tests {
         assert_eq!(eval_str("(+ 1 2)", &mut env).unwrap(), LispExp::Number(3.0));
     }
 
+    // ── 步骤 17: 减法 ──
+    #[test]
+    fn test_subtraction() {
+        let mut env = default_env();
+        // 二元减法
+        assert_eq!(
+            eval_str("(- 10 3)", &mut env).unwrap(),
+            LispExp::Number(7.0)
+        );
+        // 多参数减法: 10 - 2 - 3 = 5
+        assert_eq!(
+            eval_str("(- 10 2 3)", &mut env).unwrap(),
+            LispExp::Number(5.0)
+        );
+        // 单参数取负: (- 5) = -5
+        assert_eq!(
+            eval_str("(- 5)", &mut env).unwrap(),
+            LispExp::Number(-5.0)
+        );
+    }
+
+    // ── 步骤 17: 乘法 ──
+    #[test]
+    fn test_multiplication() {
+        let mut env = default_env();
+        // 二元乘法
+        assert_eq!(
+            eval_str("(* 2 3)", &mut env).unwrap(),
+            LispExp::Number(6.0)
+        );
+        // 多参数乘法: 2 * 3 * 4 = 24
+        assert_eq!(
+            eval_str("(* 2 3 4)", &mut env).unwrap(),
+            LispExp::Number(24.0)
+        );
+        // 单参数乘法: (* 5) = 5
+        assert_eq!(
+            eval_str("(* 5)", &mut env).unwrap(),
+            LispExp::Number(5.0)
+        );
+    }
+
+    // ── 步骤 17: 除法 ──
+    #[test]
+    fn test_division() {
+        let mut env = default_env();
+        // 二元除法
+        assert_eq!(
+            eval_str("(/ 10 2)", &mut env).unwrap(),
+            LispExp::Number(5.0)
+        );
+        // 多参数除法: 100 / 5 / 2 = 10
+        assert_eq!(
+            eval_str("(/ 100 5 2)", &mut env).unwrap(),
+            LispExp::Number(10.0)
+        );
+        // 单参数取倒数: (/ 5) = 0.2
+        assert_eq!(
+            eval_str("(/ 5)", &mut env).unwrap(),
+            LispExp::Number(0.2)
+        );
+    }
+
     #[test]
     fn test_if_true_branch() {
         let mut env = default_env();
