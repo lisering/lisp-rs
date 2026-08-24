@@ -3662,13 +3662,13 @@ test result: ok. 19 passed; 0 failed
 // src/lib.rs — eval 函数签名
 // 旧版（删掉）:
 pub fn eval(exp: &LispExp, env: &LispEnv) -> Result<LispExp, LispErr>
-//                           ^^^^                         ^
-//                           只读                        只读
+//               ^^^^           ^
+//               只读           只读
 
 // 新版（改成这样）:
 pub fn eval(exp: &LispExp, env: &mut LispEnv) -> Result<LispExp, LispErr>
-//                           ^^^^                         ^^^^
-//                           只读                        可读可写
+//               ^^^^           ^^^^
+//               只读           可读可写
 ```
 
 **第二步：在 `List` 分支的特殊形式检查区，加入 `define`**。
