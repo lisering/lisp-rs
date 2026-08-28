@@ -12,7 +12,7 @@
 
 # Building a Lisp Interpreter from Scratch — Rust Hands-On Tutorial
 
-**Zero knowledge required. Zero dependencies.** 47 steps. 45 tests. One working Lisp interpreter at the end. Each step first explains **what problem to solve**, then writes the code.
+**Zero knowledge required. Zero dependencies.** 47 steps. 46 tests. One working Lisp interpreter at the end. Each step first explains **what problem to solve**, then writes the code.
 
 ### TCO in action — 1,000,000 iterations vs. stack overflow
 
@@ -4033,7 +4033,30 @@ if let LispExp::Symbol(s) = &elements[0] {
 
 💡 In short: `lambda` doesn't run anything — it packages parameters and body into a value and returns it. Like getting a recipe: you haven't cooked yet, you need to "call" it.
 
-> 📌 Right now we've only implemented lambda **creation**, not calling yet. The test count stays at 21 (from Step 21) because no new tests were added here. Once we implement "Calling Lambda" and add two tests in the next section, it becomes 23.
+> 📌 So far we've only implemented lambda **creation**. To confirm "creation" works, let's add a test for it (`test_lambda_creation` below), then the next subsection implements "Calling Lambda" and adds call tests.
+
+**Test lambda creation** — verify that `lambda` really packages a function value:
+
+```rust
+// src/lib.rs — new in mod tests
+#[test]
+fn test_lambda_creation() {
+    let mut env = default_env();
+    // After creating a lambda, the result is a LispExp::Lambda (a function value)
+    match eval_str("(lambda (x) (* x x))", &mut env).unwrap() {
+        LispExp::Lambda(_) => {}                 // ✅ correct: it's a function
+        other => panic!("expected Lambda, got {:?}", other),
+    }
+}
+```
+
+```bash
+$ cargo test
+running 22 tests
+test tests::test_lambda_creation ... ok
+...
+test result: ok. 22 passed; 0 failed
+```
 
 #### Calling Lambda
 
@@ -4110,12 +4133,12 @@ fn test_lambda_direct_call() {
 
 ```bash
 $ cargo test
-running 23 tests
+running 24 tests
 test tests::test_lambda_call ... ok
 test tests::test_lambda_direct_call ... ok
 ...
 
-test result: ok. 23 passed; 0 failed
+test result: ok. 24 passed; 0 failed
 ```
 
 ---
@@ -4343,9 +4366,9 @@ lisp-rs/
 
 ```text
 $ cargo test
-running 23 tests
+running 24 tests
 ... all ok
-test result: ok. 23 passed; 0 failed
+test result: ok. 24 passed; 0 failed
 ```
 
 ---
@@ -4712,11 +4735,11 @@ Environment created when calling (lambda (y) (+ x y)) (outer = Global)
 
 ```bash
 $ cargo test
-running 24 tests
+running 25 tests
 test env::tests::test_nested_env_lookup ... ok
 ...
 
-test result: ok. 24 passed; 0 failed
+test result: ok. 25 passed; 0 failed
 ```
 
 ---
@@ -4830,11 +4853,11 @@ fn test_closure() {
 
 ```bash
 $ cargo test
-running 25 tests
+running 26 tests
 test tests::test_closure ... ok
 ...
 
-test result: ok. 25 passed; 0 failed
+test result: ok. 26 passed; 0 failed
 ```
 
 
@@ -5448,10 +5471,10 @@ fn test_tail_call_optimization() {
 
 ```bash
 $ cargo test
-running 26 tests
+running 27 tests
 test tests::test_tail_call_optimization ... ok
 ...
-test result: ok. 26 passed; 0 failed
+test result: ok. 27 passed; 0 failed
 ```
 
 🎉 **Milestone: Closures + infinite recursion supported! The core capabilities of the interpreter are all in place.**
@@ -5792,10 +5815,10 @@ name.clone()                →  interner::intern(name)
 
 ```bash
 $ cargo test
-running 26 tests
+running 27 tests
 test tests::test_eval_number ... ok
 ...
-test result: ok. 26 passed; 0 failed
+test result: ok. 27 passed; 0 failed
 ```
 
 ---
@@ -5945,7 +5968,7 @@ New version `token: &str`, `== "("` works directly.
 
 ```bash
 $ cargo test
-running 29 tests
+running 30 tests
 test lexer::tests::test_tokenize_multi ... ok
 test lexer::tests::test_tokenize_whitespace ... ok
 test lexer::tests::test_tokenize_parens ... ok
@@ -5954,7 +5977,7 @@ test lexer::tests::test_tokenize_comment ... ok
 test lexer::tests::test_tokenize_string_literal ... ok
 ...
 
-test result: ok. 29 passed; 0 failed
+test result: ok. 30 passed; 0 failed
 ```
 
 ### Step 30: FX Hasher
@@ -6207,10 +6230,10 @@ if *sym_id == predefined().begin {
 
 ```bash
 $ cargo test
-running 30 tests
+running 31 tests
 ...
 
-test result: ok. 30 passed; 0 failed
+test result: ok. 31 passed; 0 failed
 ```
 
 #### set! — Modify Existing Binding
@@ -6266,10 +6289,10 @@ fn test_set_bang() {
 
 ```bash
 $ cargo test
-running 31 tests
+running 32 tests
 ...
 
-test result: ok. 31 passed; 0 failed
+test result: ok. 32 passed; 0 failed
 ```
 
 ---
@@ -6349,10 +6372,10 @@ fn test_let() {
 
 ```bash
 $ cargo test
-running 32 tests
+running 33 tests
 ...
 
-test result: ok. 32 passed; 0 failed
+test result: ok. 33 passed; 0 failed
 ```
 
 ---
@@ -6412,10 +6435,10 @@ fn test_cond() {
 
 ```bash
 $ cargo test
-running 33 tests
+running 34 tests
 ...
 
-test result: ok. 33 passed; 0 failed
+test result: ok. 34 passed; 0 failed
 ```
 
 ---
@@ -6536,10 +6559,10 @@ fn test_let_star() {
 
 ```bash
 $ cargo test
-running 34 tests
+running 35 tests
 ...
 
-test result: ok. 34 passed; 0 failed
+test result: ok. 35 passed; 0 failed
 ```
 
 #### letrec — Recursive Bindings
@@ -6626,10 +6649,10 @@ fn test_letrec() {
 
 ```bash
 $ cargo test
-running 35 tests
+running 36 tests
 ...
 
-test result: ok. 35 passed; 0 failed
+test result: ok. 36 passed; 0 failed
 ```
 
 ---
@@ -6950,9 +6973,9 @@ env.set(intern("not"), LispExp::Func(|args| {
 
 ```bash
 $ cargo test
-running 33 tests
+running 34 tests
 ...
-test result: ok. 33 passed; 0 failed
+test result: ok. 34 passed; 0 failed
 ```
 
 ---
@@ -7170,9 +7193,9 @@ env.set(intern("member"), LispExp::Func(|args| {
 
 ```bash
 $ cargo test
-running 39 tests
+running 40 tests
 ...
-test result: ok. 39 passed; 0 failed
+test result: ok. 40 passed; 0 failed
 ```
 
 ---
@@ -7391,9 +7414,9 @@ env.set(intern("filter"), LispExp::Func(|args| {
 
 ```bash
 $ cargo test
-running 45 tests
+running 46 tests
 ...
-test result: ok. 45 passed; 0 failed
+test result: ok. 46 passed; 0 failed
 ```
 
 ---
@@ -8120,7 +8143,7 @@ Each test is an **executable documentation** artifact — it documents what a fe
 should do, and `cargo test` verifies it actually works. When adding a feature,
 the standard workflow is: **test first → implement → verify → document**.
 
-Our 45 tests cover:
+Our 46 tests cover:
 - **Lexer** (7 tests) — every token type, edge cases (empty input, comments)
 - **Parser** (3 tests) — nested lists, atom types, error handling
 - **Environment** (3 tests) — variable access, undefined lookup
@@ -8263,7 +8286,7 @@ Steps 36-47: Built-in Functions (Challenge Levels) + REPL
 
 **Feynman test**: Explain these 47 steps to a friend who knows nothing about programming. If each step makes them nod and say "oh, I see," you've succeeded.
 
-**Verification**: `cargo test` (45 tests), `cargo run` (interactive REPL)
+**Verification**: `cargo test` (46 tests), `cargo run` (interactive REPL)
 
 ---
 

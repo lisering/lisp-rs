@@ -1126,6 +1126,15 @@ mod tests {
     }
 
     #[test]
+    fn test_lambda_creation() {
+        // lambda 创建后，返回的是一个函数值 LispExp::Lambda
+        match eval_str("(lambda (x) (* x x))", &mut default_env()).unwrap() {
+            LispExp::Lambda(_) => {}
+            other => panic!("expected LispExp::Lambda, got {:?}", other),
+        }
+    }
+
+    #[test]
     fn test_lambda_call() {
         let mut env = default_env();
         eval_str("(define add (lambda (a b) (+ a b)))", &mut env).unwrap();
