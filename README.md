@@ -4033,14 +4033,7 @@ if let LispExp::Symbol(s) = &elements[0] {
 
 💡 In short: `lambda` doesn't run anything — it packages parameters and body into a value and returns it. Like getting a recipe: you haven't cooked yet, you need to "call" it.
 
-```bash
-$ cargo test
-running 22 tests
-test tests::test_lambda_call ... ok
-...
-
-test result: ok. 22 passed; 0 failed
-```
+> 📌 Right now we've only implemented lambda **creation**, not calling yet. The test count stays at 21 (from Step 21) because no new tests were added here. Once we implement "Calling Lambda" and add two tests in the next section, it becomes 23.
 
 #### Calling Lambda
 

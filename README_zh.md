@@ -3955,13 +3955,7 @@ if let LispExp::Symbol(s) = &elements[0] {
 
 🧠 **大白话**：`lambda` 不执行函数体——它只是把参数名和函数体"打包"成一个值，返回给调用者。就像一个菜谱——你拿到菜谱不代表菜已经做好了，你得"调用"这个菜谱才行。
 
-```bash
-$ cargo test
-running 22 tests
-test tests::test_lambda_call ... ok
-...
-test result: ok. 22 passed; 0 failed
-```
+> 📌 目前只实现了 lambda 的**创建**，还没实现调用。测试数暂时仍为 21（步骤 21 的数量），因为这里没有新增测试。等下一小节实现"调用 Lambda"并补两个测试后，就会变成 23。
 
 #### 调用 Lambda
 
