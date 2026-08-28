@@ -3699,11 +3699,10 @@ if let LispExp::Symbol(s) = &elements[0] {
             let value = eval(&elements[2], env)?;   // 求值
             env.set(name.clone(), value);           // &mut env → 可以写入！
             return Ok(LispExp::Nil);                // define 本身返回 nil
-        } else {
-            return Err(LispErr::Reason(
-                "define 的第一个参数必须是符号".to_string()
-            ));
         }
+        return Err(LispErr::Reason(
+            "define 的第一个参数必须是符号".to_string()
+        ));
     }
     // ========== define 结束 ==========
 }

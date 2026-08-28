@@ -3777,11 +3777,10 @@ if let LispExp::Symbol(s) = &elements[0] {
             let value = eval(&elements[2], env)?;   // evaluate
             env.set(name.clone(), value);           // &mut env → can write!
             return Ok(LispExp::Nil);                // define itself returns nil
-        } else {
-            return Err(LispErr::Reason(
-                "The first argument of define must be a symbol".to_string()
-            ));
         }
+        return Err(LispErr::Reason(
+            "The first argument of define must be a symbol".to_string()
+        ));
     }
     // ========== define ends ==========
 }
